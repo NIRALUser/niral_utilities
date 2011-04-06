@@ -1,0 +1,15 @@
+PROJECT(convertITKformats)
+
+FIND_PACKAGE(ITK REQUIRED)
+IF (ITK_FOUND)
+   INCLUDE(${USE_ITK_FILE})
+ELSE(ITK_FOUND)
+   MESSAGE(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
+ENDIF (ITK_FOUND)
+
+ADD_EXECUTABLE( convertITKformats convertITKformats.cxx)
+ADD_EXECUTABLE( convertITKformats4D convertITKformats4D.cxx)
+
+TARGET_LINK_LIBRARIES( convertITKformats ${ITK_LIBRARIES} )
+TARGET_LINK_LIBRARIES( convertITKformats4D ${ITK_LIBRARIES} )
+
