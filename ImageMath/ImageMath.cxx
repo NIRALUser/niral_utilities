@@ -184,7 +184,9 @@ int main(const int argc, const char **argv)
     cout << "-mul infile2           apply the following operation to the image: I1 * I2" << endl;
     cout << "-div infile2           apply the following operation to the image: I1 / I2" << endl;
     cout << "-pwr arg               compute each voxels to power arg" << endl;
-    cout << "-normalizeEMS count -EMSfile pro_1,prob_2,...,prob_count(infile should be grayscale template) normalizes the EMS prob maps" << endl;
+    cout << "-normalizeEMS count -EMSfile prob_1,prob_2,...,prob_count(infile should be grayscale template) normalizes the EMS prob maps" << endl;
+    cout << "-Normalize prob_1 prob_2 ...   normalizes input probability maps using input image as a mask (sum of probability maps equals to NormValue)" << endl;
+    cout << "  -NormValue Value         normalization value (default:255)" << endl;
     cout << "-editPixdims px,py,pz   simply change the pixdims (without reslicing) of the image" << endl;
     cout << "-dilate radius,val      apply isotropic dilation with ball element of given radius and value" << endl;
     cout << "-erode radius,val       apply isotropic erosion with ball element of given radius and value" << endl;
@@ -195,7 +197,7 @@ int main(const int argc, const char **argv)
     cout << "                       smoothing of image using any of the mentioned smoothing filters" << endl;
     cout << "                       size is stuctural element size, variance, or timestep depending on the filter choice" << endl;
     cout << "                       iter is number of iterations" << endl;
-    cout << "-v                     verbose mode " << endl;
+    cout << "-verbose               verbose mode " << endl;
     cout << "-type byte|short|float Type of processing image (computations are always done with float images), default is short" << endl; 
     cout << "-extension ext         Extension of the output (determines output format)" << endl; 
     cout << "-conComp Lbl           For a binary image, rank all the connected components according to their sizes and create a binary image with the 'Lbl' biggest ones" << endl;
@@ -218,6 +220,11 @@ int main(const int argc, const char **argv)
 
   const int BGVAL = 0;
   const int FGVAL = 1;
+
+  const unsigned int MaxNumFiles = 1000;
+  unsigned int NbFiles = 0;
+  char *files[MaxNumFiles];
+  vector<string> InputFiles;
 
   char *inputFileName = strdup(argv[1]);
   char *outputFileName = ipGetStringArgument(argv, "-outfile", NULL);  
@@ -247,7 +254,7 @@ int main(const int argc, const char **argv)
     format = string(formatChar);
   }
 
-  debug      = ipExistsArgument(argv, "-v");
+  debug      = ipExistsArgument(argv, "-verbose");
 
   bool nocompOn = false;
   nocompOn = ipExistsArgument(argv, "-nocomp");
@@ -371,14 +378,12 @@ int main(const int argc, const char **argv)
   }
 
   bool normalizeEMSOn    = ipExistsArgument(argv, "-normalizeEMS"); 
-  unsigned int EMScount = ipGetIntArgument(argv,"-normalizeEMS",1); 
-  
+  int EMScount = ipGetIntArgument(argv,"-normalizeEMS",1);   
   tmp_str      = ipGetStringArgument(argv, "-EMSfile", NULL);
-  if(debug) cout<<"tmp_str is "<<tmp_str<<endl;
   char * probFiles[EMScount];
   vector<string>  EMSFiles;
-  if(debug) cout<<"there are "<<EMScount<<" files"<<endl;
   if (tmp_str) {
+    if(debug) cout<<"there are "<<EMScount<<" files"<<endl;
     int num = ipExtractStringTokens(probFiles, tmp_str, EMScount);
     if (EMScount != num) {
       cerr << "normalizeEMS needs "<<EMScount<<" comma separated entries" << endl;
@@ -390,7 +395,21 @@ int main(const int argc, const char **argv)
 	EMSFiles.push_back(probFiles[i]);}
     }
   }
-  
+
+  bool NormalizeOn = ipExistsArgument(argv, "-Normalize"); 
+  vector<string>  NormalizeFiles;
+  if (NormalizeOn)
+    { 
+      NbFiles = ipGetStringMultipArgument(argv, "-Normalize", files, MaxNumFiles);
+      for(unsigned int i = 0 ; i < NbFiles ; i++)
+	{
+	  if(debug) cout<<"reading file name "<<files[i]<<endl;
+	  NormalizeFiles.push_back(files[i]);
+	}
+    }
+  bool NormValueOn = ipExistsArgument(argv, "-NormValue");
+  double NormValue = ipGetDoubleArgument(argv,"-NormValue",255);
+
   bool changeOrigOn    = ipExistsArgument(argv, "-changeOrig"); 
   tmp_str      = ipGetStringArgument(argv, "-changeOrig", NULL); 
   float origCoor[3];
@@ -502,16 +521,12 @@ int main(const int argc, const char **argv)
     }
   }
 
-  const int MaxNumFiles = 1000;
-  int NbFiles = 0;
-  char *files[MaxNumFiles];
-  vector<string> InputFiles;
 
   bool AvgOn = ipExistsArgument(argv, "-avg");
   if (AvgOn)
     {
       NbFiles = ipGetStringMultipArgument(argv, "-avg", files, MaxNumFiles);
-      for(int i = 0 ; i < NbFiles ; i++)
+      for(unsigned int i = 0 ; i < NbFiles ; i++)
 	InputFiles.push_back(files[i]);
     }
   
@@ -519,14 +534,14 @@ int main(const int argc, const char **argv)
   if (MajorityVotingOn)
     {
       NbFiles = ipGetStringMultipArgument(argv, "-majorityVoting", files, MaxNumFiles);
-      for(int i = 0 ; i < NbFiles ; i++)
+      for(unsigned int i = 0 ; i < NbFiles ; i++)
 	InputFiles.push_back(files[i]);
     }
     bool StdOn = ipExistsArgument(argv, "-std");
   if (StdOn)
   {
       NbFiles = ipGetStringMultipArgument(argv, "-std", files, MaxNumFiles);
-      for(int i = 0 ; i < NbFiles ; i++)
+      for(unsigned int i = 0 ; i < NbFiles ; i++)
 	InputFiles.push_back(files[i]);
   }
   bool flip   = ipExistsArgument(argv, "-flip"); 
@@ -1572,7 +1587,125 @@ int main(const int argc, const char **argv)
       writer->SetInput(castFilter->GetOutput());
       writer->Write();
     }
-    
+    exit(0);
+  } else if (NormalizeOn) {
+
+    VolumeReaderType::Pointer imageReader = VolumeReaderType::New();
+    imageReader->SetFileName(inputFileName) ;
+    try {
+      imageReader->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;	
+    }
+    inputImage = imageReader->GetOutput();
+
+    vector<ImagePointer> NormalizeImages;
+    for (unsigned int i = 0; i< NbFiles; i++){
+      if (debug) cout << "Loading image " << NormalizeFiles[i]  << endl;
+      VolumeReaderType::Pointer imageReader = VolumeReaderType::New();
+      imageReader->SetFileName(NormalizeFiles[i].c_str()) ;
+      try {
+	imageReader->Update();
+      }
+      catch (ExceptionObject & err) {
+	cerr << "ExceptionObject caught!" << endl;
+	cerr << err << endl;
+	return EXIT_FAILURE;	
+      }    
+      NormalizeImages.push_back(imageReader->GetOutput());
+    }
+
+    if (debug) cout << "normalizing images  " << endl;
+    ImagePointer addImage;
+    if(NbFiles > 1){
+      //add files together
+      addFilterType::Pointer addFilter = addFilterType::New();
+      addFilter->SetInput1(NormalizeImages[0]);
+      addFilter->SetInput2(NormalizeImages[1]);
+      try {
+	addFilter->Update();
+      }
+      catch (ExceptionObject & err) {
+	cerr << "ExceptionObject caught!" << endl;
+	cerr << err << endl;
+	return EXIT_FAILURE;	
+      }    
+      if(debug) cout << "adding first two images done " << endl;
+      addImage = addFilter->GetOutput(); 
+      
+      for (unsigned int i = 2; i < NbFiles; i++){
+	addFilterType::Pointer add2Filter = addFilterType::New();
+	add2Filter->SetInput1(addImage);
+	add2Filter->SetInput2(NormalizeImages[i]);
+	try {
+	  add2Filter->Update();
+	}
+	catch (ExceptionObject & err) {
+	  cerr << "ExceptionObject caught!" << endl;
+	  cerr << err << endl;
+	  return EXIT_FAILURE;	
+	}    
+	addImage = add2Filter->GetOutput();
+	if(debug) cout << "adding on the "<<i<<"th image "<< NormalizeFiles[i]<<" done " << endl;
+      }
+    }
+    else{
+      addImage = NormalizeImages[0];}
+
+    vector<IteratorType> NormalizeIters;
+    IteratorType addIter (addImage, addImage->GetBufferedRegion());
+    IteratorType inputIter (inputImage, inputImage->GetBufferedRegion());
+
+    for (unsigned int i = 0; i < NbFiles; i++){
+      if(debug) cout << "NormalizeImage_" <<i << endl;
+      IteratorType NormalizeIter (NormalizeImages[i], inputImage->GetBufferedRegion());
+      NormalizeIters.push_back(NormalizeIter);}
+
+    if(debug) cout << "NormValue: "<<NormValue<<endl;
+
+    while ( !inputIter.IsAtEnd() )  {
+      PixelType inputVal = inputIter.Get();
+      if (inputVal != 0)
+	{
+	  PixelType addVal = addIter.Get();
+	  double factor = NormValue/addVal;
+	  for (unsigned int i = 0; i < NbFiles; i++)
+	    NormalizeIters[i].Set(NormalizeIters[i].Get() * factor);
+	}
+      for (unsigned int i = 0; i < NbFiles; i++)
+	++NormalizeIters[i];
+      ++addIter;
+      ++inputIter;
+    }
+  
+    for (unsigned int i = 0; i < NbFiles; i++){
+      std::stringstream ss;
+      ss << (i+1);
+      outFileName.erase();
+      if(debug) cout<<"base string is "<<base_string<<endl;
+      outFileName.append(base_string);
+      outFileName.append(ss.str());
+      outFileName.append("_normalized");
+      outFileName.append(format);
+      castShortFilterType::Pointer castFilter = castShortFilterType::New();
+      castFilter->SetInput(NormalizeImages[i]);
+      try {
+	castFilter->Update();
+      }
+      catch (ExceptionObject & err) {
+	cerr << "ExceptionObject caught!" << endl;
+	cerr << err << endl;
+	return EXIT_FAILURE;	
+      }    
+      ShortVolumeWriterType::Pointer writer = ShortVolumeWriterType::New();
+      if(!nocompOn) writer->UseCompressionOn();
+      writer->SetFileName(outFileName.c_str()); 
+      writer->SetInput(castFilter->GetOutput());
+      writer->Write();
+    }
     exit(0);
   } else if (editPixdimsOn) {
     outFileName.erase();
@@ -1702,7 +1835,7 @@ int main(const int argc, const char **argv)
 
     VolumeReaderType::Pointer ImageReader = VolumeReaderType::New();
     addFilterType::Pointer addFilter = addFilterType::New();
-    for (int FileNumber = 0; FileNumber < NbFiles; FileNumber++)
+    for (unsigned int FileNumber = 0; FileNumber < NbFiles; FileNumber++)
       {
 	// Reading image
 	ImageReader->SetFileName(InputFiles[FileNumber].c_str());
@@ -1757,7 +1890,7 @@ int main(const int argc, const char **argv)
      addFilterType::Pointer addFilter = addFilterType::New();
      addFilterType::Pointer addFilterSquare = addFilterType::New();
     
-     for (int FileNumber = 0; FileNumber < NbFiles; FileNumber++)
+     for (unsigned int FileNumber = 0; FileNumber < NbFiles; FileNumber++)
      {
 	// Reading image
         ImageReader->SetFileName(InputFiles[FileNumber].c_str());
@@ -1870,7 +2003,7 @@ int main(const int argc, const char **argv)
 
     // Reading label images
     vector<ImagePointer> vLabelImages;
-    for (int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
+    for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
       {
 	VolumeReaderType::Pointer LabelImageReader = VolumeReaderType::New();
 	if (debug) cout << "Loading file " << InputFiles[LabelFileNumber] << endl;
@@ -1900,7 +2033,7 @@ int main(const int argc, const char **argv)
     
     ConstInputIterator.GoToBegin();
     OutputIterator.GoToBegin();      
-    for (int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
+    for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
       {
 	ConstIteratorType ConstLabelIterator(vLabelImages[LabelFileNumber],inputImage->GetRequestedRegion());
 	vConstLabelIterator.push_back(ConstLabelIterator);
@@ -1924,7 +2057,7 @@ int main(const int argc, const char **argv)
 	for (int Label = 0; Label < MaxLabel; Label++)
 	  LabelArray[Label] = 0;
 	
-	for (int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
+	for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
 	  LabelArray[(ShortPixelType)vConstLabelIterator[LabelFileNumber].Get()]++;
 	
 	for (int Label = 1; Label < MaxLabel; Label++)
@@ -1941,7 +2074,7 @@ int main(const int argc, const char **argv)
 	
 	++ConstInputIterator;
 	++OutputIterator;
-	for (int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
+	for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
 	  ++vConstLabelIterator[LabelFileNumber];
       }
 
