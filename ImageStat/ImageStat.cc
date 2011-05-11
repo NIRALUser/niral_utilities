@@ -487,6 +487,11 @@ int main(const int argc, const char **argv)
 
 		if (labelOn){
 
+		  	MinMaxCalcType::Pointer minmaxCalc = MinMaxCalcType::New();
+			minmaxCalc->SetImage(labelImage);
+			minmaxCalc->Compute();
+			int maxLabel = minmaxCalc->GetMaximum();
+
 			ImageSampleType::Pointer labelSample = ImageSampleType::New();
 			labelSample->SetImage(labelImage);
 			PixelType label;
@@ -721,16 +726,28 @@ int main(const int argc, const char **argv)
 				efile.precision(6);
 				efile << inputFileNameTail << ",VOLUME";
 				if(displayOn)
-					cout << inputFileNameTail << ",VOLUME";
-				for (int j=0; j<(int)labelList.size() ; j++ )
+				  cout << inputFileNameTail << ",VOLUME";
+				// display results for all labels, even if some of them are empty
+				int i = 0;
+				for (int Label = 1; Label <= maxLabel; Label++)
 				{
-					efile <<","<< tab[0][j];
-					if(displayOn)
-						cout <<","<< tab[0][j];
+				  if (labelList[i] == Label)
+				    {
+				      efile <<","<< tab[0][i];
+				      if(displayOn)
+					cout <<","<< tab[0][i];
+				      i++;
+				    }
+				  else
+				    {
+				      efile <<",0";
+				      if(displayOn)
+					cout <<",0";
+				    }
 				}
 				efile << endl;
 				if(displayOn)
-					cout<<endl;
+				  cout<<endl;
 				efile.close();
 			}
 			if(intensitySummaryOn){
@@ -745,41 +762,65 @@ int main(const int argc, const char **argv)
 				std::string rowname [11]={"MEAN","STD","MIN","MAX","QUANTILES 1%","QUANTILES 5%","QUANTILES 33%","QUANTILES 50%","QUANTILES 66%","QUANTILES 95%","QUANTILES 99%"};
 				for (int i=0;i<4;i++)
 				{
-					efile << inputFileNameTail;
-					efile<<","<<rowname [i];
-					if(displayOn)
+				  efile << inputFileNameTail;
+				  efile<<","<<rowname [i];
+				  if(displayOn)
+				    {
+				      cout << inputFileNameTail;
+				      cout<<","<<rowname [i];
+				    }
+				  // display results for all labels, even if some of them are empty
+				  int j = 0;
+				  for (int Label = 1; Label <= maxLabel; Label++ )
+				    {
+				      if (labelList[j] == Label)
 					{
-						cout << inputFileNameTail;
-						cout<<","<<rowname [i];
+					  efile<<","<<tab[i+1][j];
+					  if(displayOn)
+					    cout<<","<<tab[i+1][j];
+					  j++;
 					}
-					for (int j=0; j<(int)labelList.size() ; j++ )
+				      else
 					{
-						efile<<","<<tab[i+1][j];
-						if(displayOn)
-							cout<<","<<tab[i+1][j];
+					  efile<<",0";
+					  if(displayOn)
+					    cout<<",0";
 					}
-					efile<<endl;
-					if(displayOn)
-						cout<<endl;
+				    }
+				  efile<<endl;
+				  if(displayOn)
+				    cout<<endl;
 				}
 				for(int k=0; k<tabSize; k++)
 				{
-					efile << inputFileNameTail;
-					efile<<","<<rowname [k+4];
-					if(displayOn)
+				  efile << inputFileNameTail;
+				  efile<<","<<rowname [k+4];
+				  if(displayOn)
+				    {
+				      cout << inputFileNameTail;
+				      cout<<","<<rowname [k+4];
+				    }
+				  // display results for all labels, even if some of them are empty
+				  int j = 0;
+				  for (int Label = 1; Label <= maxLabel; Label++ )
+				    {
+				      if (labelList[j] == Label)
 					{
-						cout << inputFileNameTail;
-						cout<<","<<rowname [k+4];
+					  efile<<","<<quantiles_tab[j][k];
+					  if(displayOn)
+					    cout<<","<<quantiles_tab[j][k];
+					  j++;
 					}
-					for (int j=0; j<(int)labelList.size() ; j++ )
+				      else
 					{
-						efile<<","<<quantiles_tab[j][k];
-						if(displayOn)
-							cout<<","<<quantiles_tab[j][k];
+					  efile<<",0";
+					  if(displayOn)
+					    cout<<",0";
 					}
-					efile<<endl;
-					if(displayOn)
-						cout<<endl;
+				    }
+				  efile<<endl;
+				  if(displayOn)
+				    cout<<endl;
 				}
 				efile.close();
 			}
