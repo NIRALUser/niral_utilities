@@ -13,8 +13,8 @@ ELSE(VTK_FOUND)
   MESSAGE(FATAL_ERROR, "VTK not found. Please set VTK_DIR.")
 ENDIF (VTK_FOUND)
 
-include(${AUTOSEG_SOURCE_DIR}/CMake/qtSetup.cmake)
-include(${AUTOSEG_SOURCE_DIR}/CMake/glutSetup.cmake)
+include(${NIRAL_UTILITIES_SOURCE_DIR}/CMake/qtSetup.cmake)
+include(${NIRAL_UTILITIES_SOURCE_DIR}/CMake/glutSetup.cmake)
 INCLUDE (${CMAKE_ROOT}/Modules/FindOpenGL.cmake)
 INCLUDE (${CMAKE_ROOT}/Modules/FindGLU.cmake)
 
@@ -22,13 +22,13 @@ INCLUDE (${CMAKE_ROOT}/Modules/FindGLU.cmake)
 INCLUDE_DIRECTORIES(
   ${QT_INCLUDE_DIR}
   ${GLUT_INCLUDE_DIR}
-  ${AUTOSEG_SOURCE_DIR}/Libraries/Display/Plot
-  ${AUTOSEG_SOURCE_DIR}/Libraries/Datatypes
-  ${AUTOSEG_SOURCE_DIR}/Libraries/IO/Qt
-  ${AUTOSEG_SOURCE_DIR}/Libraries/IO/Common
-  ${AUTOSEG_SOURCE_DIR}/Libraries/Algorithms
-  ${AUTOSEG_SOURCE_DIR}/Libraries/Display/Common
-  ${AUTOSEG_SOURCE_DIR}/Libraries/Display/Window2D
+  ${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Display/Plot
+  ${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Datatypes
+  ${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/IO/Qt
+  ${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/IO/Common
+  ${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Algorithms
+  ${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Display/Common
+  ${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Display/Window2D
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
   )
