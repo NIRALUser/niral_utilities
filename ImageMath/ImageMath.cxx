@@ -131,9 +131,8 @@ typedef GrayscaleDilateImageFilter<ImageType, ImageType, StructuringElementType>
 typedef GrayscaleFillholeImageFilter<ImageType, ImageType> fillholegrayFilterType;
 typedef GradientAnisotropicDiffusionImageFilter< ImageType, ImageType > anisoDiffFilterType;
 
-//typedef ConnectedComponentImageFilter<ImageType,ImageType> ConnectiveFilterType;
 typedef ConnectedComponentImageFilter<ImageType,ShortImageType> ConnectiveFilterType;
-typedef RelabelComponentImageFilter<ShortImageType,ShortImageType> RelabelFilterType;
+typedef RelabelComponentImageFilter<ShortImageType,ImageType> RelabelFilterType;
 
 typedef ExtractImageFilter<ImageType, ImageType> CropFilterType;
 
@@ -407,7 +406,6 @@ int main(const int argc, const char **argv)
 	  NormalizeFiles.push_back(files[i]);
 	}
     }
-  bool NormValueOn = ipExistsArgument(argv, "-NormValue");
   double NormValue = ipGetDoubleArgument(argv,"-NormValue",255);
 
   bool changeOrigOn    = ipExistsArgument(argv, "-changeOrig"); 
@@ -1088,7 +1086,8 @@ int main(const int argc, const char **argv)
 
     ConnectiveFilterType::Pointer Connective = ConnectiveFilterType::New();
     RelabelFilterType::Pointer relabelFilter = RelabelFilterType::New();
-    ShortthreshFilterType::Pointer ThresFilter = ShortthreshFilterType::New();
+    threshFilterType::Pointer threshFilter = threshFilterType::New();
+
     //Get the connectivity map of the image
     Connective->SetInput(inputImage);
     try {
@@ -1100,31 +1099,37 @@ int main(const int argc, const char **argv)
       return EXIT_FAILURE;	
     } 
     
-    ShortImageType::Pointer binImage = Connective->GetOutput();
-    ShortIteratorType it (binImage, binImage->GetLargestPossibleRegion());
-    IteratorType itout (inputImage, inputImage->GetLargestPossibleRegion());      
-    it.GoToBegin();
-    itout.GoToBegin();
-    while(! it.IsAtEnd())
+    //Sort the labels according to their size, each labeled object has a different value
+    relabelFilter->SetInput(Connective->GetOutput());
+    try {
+      relabelFilter->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;
+    }
+
+    if(Lbl == 0)
+      inputImage = relabelFilter->GetOutput();
+    else
       {
-	ShortPixelType pix = it.Get();
-	PixelType outpix = static_cast<PixelType>(pix);	   
-	if(Lbl == 0)
-	  itout.Set(outpix);
-	else {	      
-	  if(pix <= Lbl && pix > 0)
-	    {
-	      itout.Set(outpix);
-	      if(debug && pix != 0)
-		std::cout << "Pix: " << pix << " Lbl: " << Lbl << " Outputval: " << outpix << std::endl;
-	    }
-	  else
-	    itout.Set(0);
+	threshFilterType::Pointer threshFilter = threshFilterType::New();
+	threshFilter->SetInput(relabelFilter->GetOutput());
+	threshFilter->SetLowerThreshold(0.1);
+	threshFilter->SetUpperThreshold(Lbl);
+	threshFilter->SetOutsideValue(0);
+	threshFilter->SetInsideValue(1);
+	try {
+	  threshFilter->Update();
 	}
-	
-	++it;
-	++itout;
-      }       
+	catch (ExceptionObject & err) {
+	  cerr << "ExceptionObject caught!" << endl;
+	  cerr << err << endl;
+	  return EXIT_FAILURE;
+	}
+	inputImage = threshFilter->GetOutput();
+      }
   } else if (dilateOn) {
     outFileName.erase();
     outFileName.append(base_string);
