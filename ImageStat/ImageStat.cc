@@ -32,7 +32,7 @@ using namespace std;
 #include <itkImageIOBase.h>
 
 #include "itkVector.h"
-#include "itkScalarImageToListAdaptor.h"
+#include "itkImageToListSampleAdaptor.h"
 #include "itkMembershipSample.h"
 #include "itkMinimumMaximumImageCalculator.h"
 
@@ -50,8 +50,8 @@ using namespace std;
 using namespace std;
 using namespace itk;
 
-typedef float PixelType;
-typedef float ExtractPixelType;
+typedef short PixelType;
+typedef short ExtractPixelType;
 typedef unsigned char Write2DPixelType;
 typedef unsigned char BinaryPixelType;
 enum { ImageDimension3 = 3, ImageDimension2 = 2 };
@@ -71,14 +71,15 @@ typedef Image<Write2DPixelType,ImageDimension2>      Write2DImageType;
 typedef RescaleIntensityImageFilter< ExtractImageType , Write2DImageType > RescaleIntImageType;
 typedef ImageFileWriter< Write2DImageType >   ExtractImageWriterType;
 
-typedef itk::Statistics::ScalarImageToListAdaptor<ImageType>	ImageSampleType;
+//typedef itk::Statistics::ScalarImageToListAdaptor<ImageType>	ImageSampleType;
+typedef itk::Statistics::ImageToListSampleAdaptor<ImageType>	ImageSampleType;
 typedef ImageSampleType::Iterator				ImageSampleIterator;
 
-typedef itk::Vector<PixelType,2> MeasurementVectorType;
+typedef itk::Vector<short,2> MeasurementVectorType;
 typedef itk::Statistics::ListSample <MeasurementVectorType> SampleType;
 typedef itk::Statistics::MembershipSample< SampleType >	MembershipSampleType;
 
-typedef itk::Vector<PixelType, 3 > VectorType;
+typedef itk::Vector<float, 3 > VectorType;
 typedef itk::MinimumMaximumImageCalculator<ImageType > MinMaxCalcType;
 typedef itk::Statistics::Subsample<MembershipSampleType::ClassSampleType> SubsampleType;
 		
@@ -341,9 +342,6 @@ int main(const int argc, const char **argv)
     
 			if (maskImage.IsNotNull()) {
 				BinaryIterator iterMask (maskImage, maskImage->GetBufferedRegion());
-				if(debug){
-				  bool a = iterMask.IsAtBegin();
-				}
 				while ( !iterImage.IsAtEnd() )  {
 					PixelType value =  iterImage.Get();
 					BinaryPixelType Maskvalue =  iterMask.Get();
@@ -589,7 +587,7 @@ int main(const int argc, const char **argv)
 			for (int j=0; j<(int)labelList.size() ; j++ )
 			{
 				l=labelList[j];
-				nbPix = membershipSample->GetClassSampleSize(l);
+				nbPix =membershipSample->GetClassSample(l)->Size(); 
 				MembershipSampleType::ClassSampleType::ConstPointer classSample;
 				classSample = membershipSample->GetClassSample(l);
 		
@@ -600,13 +598,13 @@ int main(const int argc, const char **argv)
 		
 				SubsampleType::Iterator SubsampleIter = Subsample->Begin();
 	
-				itk::Statistics::HeapSort<SubsampleType>(Subsample,0,0,Subsample->Size());
+				itk::Statistics::Algorithm::HeapSort<SubsampleType>(Subsample,0,0,Subsample->Size());
 				SubsampleIter = Subsample->Begin();
 
 				// mean computation
 				double totalProb = 0;
 				double meanSum = 0;
-				for (int k=0; k<(Subsample->Size()); k++)
+				for (unsigned int k=0; k<(Subsample->Size()); k++)
 				{
 					totalProb = totalProb + (Subsample->GetMeasurementVectorByIndex(k)[1]);
 					meanSum = meanSum + ((Subsample->GetMeasurementVectorByIndex(k)[0])*(Subsample->GetMeasurementVectorByIndex(k)[1]));
@@ -616,7 +614,7 @@ int main(const int argc, const char **argv)
 				// standart deviation computation
 		
 				double sdSum = 0;
-				for (int k=0; k<(Subsample->Size()); k++)
+				for (unsigned int k=0; k<(Subsample->Size()); k++)
 				{
 					sdSum = sdSum + ((Subsample->GetMeasurementVectorByIndex(k)[0]) - mean)*((Subsample->GetMeasurementVectorByIndex(k)[0]) - mean)*(Subsample->GetMeasurementVectorByIndex(k)[1]);
 				}
@@ -953,7 +951,6 @@ static void histo_vol(ImagePointer inputImage, BinaryImagePointer maskImage,char
     
 	if (maskImage.IsNotNull()) {
 		BinaryIterator iterMask (maskImage, maskImage->GetBufferedRegion());
-		bool a = iterMask.IsAtBegin();
 		while ( !iterImage.IsAtEnd() )  {
 			PixelType value =  iterImage.Get();
 			BinaryPixelType Maskvalue =  iterMask.Get();
@@ -1145,9 +1142,6 @@ static void histo_probvol(ImagePointer inputImage, ImagePointer maskImage, short
 				cerr << "index !!!! " << index << " " << inc;
 				cerr << " " << value << " " << smax << " " << smin << endl;
 			} else {
-			  if(Maskvalue>0){
-			    //FOR DEBUGGING
-			    bool lalala = 1;}
 			  
 				histogram[index] += (double) Maskvalue;
 			}
