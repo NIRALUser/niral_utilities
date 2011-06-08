@@ -65,6 +65,7 @@ using namespace std;
 #include <itkMaximumImageFilter.h>
 #include <itkMinimumImageFilter.h>
 #include <itkMinimumMaximumImageCalculator.h>
+#include <itkRescaleIntensityImageFilter.h>
 
 #include <itkDiffusionTensor3D.h>
 #include <itkResampleImageFilter.h>
@@ -213,6 +214,7 @@ int main(const int argc, const char **argv)
     cout << "-flip [x,][y,][z]      Flip image" << endl;
     cout << "-NaNCor val    Removes NaN and set the value of those voxels to the given value" << endl;
     cout << "-std infile2 infile3...             Compute the standard deviation from a set of images (one image has to be specified for the input, but it's not included in the process)" << endl;
+    cout << "-rescale min,max       Applies a linear transformation to the intensity levels of the input Image" << endl;
     cout << endl << endl;
     exit(0);
   }
@@ -594,6 +596,23 @@ int main(const int argc, const char **argv)
   }
   bool nan   = ipExistsArgument(argv, "-NaNCor"); 
   float nan_value   = ipGetFloatArgument( argv , "-NaNCor", 0 ) ;
+
+  bool rescalingOn    = ipExistsArgument(argv, "-rescale"); 
+  tmp_str      = ipGetStringArgument(argv, "-rescale", NULL);
+  PixelType rmin = 0;
+  PixelType rmax = 0;
+  float rescaling[2];
+  if (tmp_str) {
+    int num = ipExtractFloatTokens(rescaling, tmp_str, 2);
+    if (2 != num) {
+      cerr << "Rescale needs 2 comma separated entries: min,max" << endl;
+      exit(1);
+    } else {
+      rmin = (PixelType) rescaling[0];
+      rmax = (PixelType) rescaling[1];
+    }
+  }
+
   // **********************************************
   // **********************************************
   // **********************************************
@@ -2165,6 +2184,9 @@ int main(const int argc, const char **argv)
     resampler->SetTransform( flipTransform ) ;
     resampler->Update() ;
     inputImage = resampler->GetOutput() ;
+    outFileName.erase();
+    outFileName.append(base_string);
+    outFileName.append("_flip");
   }else if( nan )
   {
      typedef itk::ImageRegionIterator< ImageType > IteratorType ;
@@ -2179,6 +2201,21 @@ int main(const int argc, const char **argv)
         }
      }
      std::cout<< "Number Of NaN found: " << counter << std::endl ;
+     outFileName.erase();
+     outFileName.append(base_string);
+     outFileName.append("_NaN");
+  }else if( rescalingOn )
+  {
+     typedef itk::RescaleIntensityImageFilter< ImageType, ImageType > RescalingType ;
+     RescalingType::Pointer rescalingFilter=RescalingType::New() ;
+     rescalingFilter->SetInput( inputImage ) ;
+     rescalingFilter->SetOutputMinimum( rescaling[ 0 ] ) ;
+     rescalingFilter->SetOutputMaximum( rescaling[ 1 ] ) ;
+     rescalingFilter->Update() ;
+     inputImage = rescalingFilter->GetOutput() ;
+     outFileName.erase();
+     outFileName.append(base_string);
+     outFileName.append("_rescale");
   }else {
     cout << "NOTHING TO DO, no operation selected..." << endl;
     exit(1);
