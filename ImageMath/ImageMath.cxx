@@ -202,7 +202,7 @@ int main(const int argc, const char **argv)
     cout << "-extension ext         Extension of the output (determines output format)" << endl; 
     cout << "-conComp Lbl           For a binary image, rank all the connected components according to their sizes and create a binary image with the 'Lbl' biggest ones" << endl;
     cout << "                       if Lbl=0 outputs the labeled image with all the components labeled according to their size" << endl;
-    cout << "-changeOrig px,py,pz   Change the orgine of the image" << endl;
+    cout << "-changeOrig px,py,pz [or filename]   Change the origin of the image" << endl;
     cout << "-createIm X,Y,Z,px,py,pz Create an empty image with the specified parameters: image dimensions X,Y,Z, image resolution px,py,pz" << endl;
     cout << " -crop px,py,pz,w,h,d   cropimage: origin px,py,pz (startindex is 0) dimensions width(w),height(h), depth(d)" << endl;
     cout << "-changeSp spx,spy,spz  Change the spacing of the image" << endl;
@@ -414,15 +414,32 @@ int main(const int argc, const char **argv)
   tmp_str      = ipGetStringArgument(argv, "-changeOrig", NULL); 
   float origCoor[3];
   if (tmp_str) { 
-    int num = ipExtractFloatTokens(textend, tmp_str, 3);
-    if (3 != num) {
-      cerr << "changeOrig needs 3 comma separated entries: px,py,pz " << endl;
-      exit(1); 
-    } else {
-      origCoor[0] = textend[0];
-      origCoor[1] = textend[1];
-      origCoor[2] = textend[2];
-    } 
+    VolumeReaderType::Pointer imageReader = VolumeReaderType::New();
+    imageReader->SetFileName(tmp_str) ;
+    try
+    {
+      imageReader->UpdateOutputInformation();
+      ImageType::PointType origin = imageReader->GetOutput()->GetOrigin() ;
+      for( unsigned i = 0 ; i < 3 ; i++ )
+      {
+        origCoor[ i ] = origin[ i ] ;
+      }
+    }
+    catch (ExceptionObject & err)
+    {
+      int num = ipExtractFloatTokens(textend, tmp_str, 3);
+      if (3 == num)
+      {
+        origCoor[0] = textend[0];
+        origCoor[1] = textend[1];
+        origCoor[2] = textend[2];
+      }
+      else
+      {
+        cerr << "changeOrig needs 3 comma separated entries: px,py,pz " << endl;
+        exit(1); 
+      } 
+    }
   }
   bool changeSpOn    = ipExistsArgument(argv, "-changeSp");
   tmp_str      = ipGetStringArgument(argv, "-changeSp", NULL);
