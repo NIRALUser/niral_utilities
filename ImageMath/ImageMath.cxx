@@ -2064,6 +2064,11 @@ int main(const int argc, const char **argv)
     
     // Creating output image
     ImagePointer MajVotingImage = ImageType::New();
+    ImageType::SpacingType spacing;
+    spacing[0] = inputImage->GetSpacing()[0];
+    spacing[1] = inputImage->GetSpacing()[1];
+    spacing[2] = inputImage->GetSpacing()[2];
+    MajVotingImage->SetSpacing(spacing);
     MajVotingImage->SetRegions(inputImage->GetRequestedRegion());
     MajVotingImage->Allocate();
     
