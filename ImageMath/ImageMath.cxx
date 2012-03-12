@@ -2106,7 +2106,7 @@ int main(const int argc, const char **argv)
 	for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
 	  LabelArray[(ShortPixelType)vConstLabelIterator[LabelFileNumber].Get()]++;
 	
-	for (int Label = 1; Label < MaxLabel; Label++)
+	for (int Label = 0; Label < MaxLabel; Label++)
 	  {
 	    if (LabelArray[Label] > MaxVoxelValue)
 	      {
@@ -2116,7 +2116,7 @@ int main(const int argc, const char **argv)
 	  }
 	
 	OutputIterator.Set(MaxLabelValue);
-	delete[] LabelArray;	  
+	delete[] LabelArray;
 	
 	++ConstInputIterator;
 	++OutputIterator;
