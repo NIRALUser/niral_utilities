@@ -145,6 +145,53 @@ typedef itk::MinimumMaximumImageCalculator<ImageType> MaxFilterType;
 static int debug = 0;
 
 
+double Average( vector< double > vec )
+{
+  double Av = 0 ;
+  for(unsigned int i = 0 ; i < vec.size() ; i++ )
+  {
+    Av += vec[ i ] ;
+  }
+  Av /= (double)vec.size() ;
+  return Av ;
+}
+
+
+
+double DistanceToMean( std::vector< double > vec1 , std::vector< double > vec2 )
+{
+    double Av1 = Average( vec1 ) ;
+    double Av2 = Average( vec2 ) ;
+    double var = 0 ;
+    for(unsigned int i = 0 ; i < vec1.size() ; i++ )
+    {
+      var += ( vec1[ i ] - Av1 ) * ( vec2[ i ] - Av2 ) ;
+    }
+    return var ;
+}
+
+double ImagesCorrelation( ImageType::Pointer image1 , ImageType::Pointer image2 , ShortImageType::Pointer mask )
+{
+  typedef ImageType::IndexType IndexType ;
+  IndexType index ;
+  ShortIteratorType it( mask , mask->GetLargestPossibleRegion() ) ;
+  std::vector< double > val1 ;
+  std::vector< double > val2 ;
+  for( it.GoToBegin() ; !it.IsAtEnd() ; ++it )
+  {
+    if( it.Get() )
+    {
+      index = it.GetIndex() ;
+      val1.push_back( image1->GetPixel( index ) ) ;
+      val2.push_back( image2->GetPixel( index ) ) ;
+    }
+  }
+  double s1 = DistanceToMean( val1 , val1 ) ;
+  double s2 = DistanceToMean( val2, val2 ) ;
+  double s12 = DistanceToMean( val1 , val2 ) ;
+  return s12/sqrt(s1*s2) ;
+}
+
 //What pixeltype is the image 
 void GetImageType( char* fileName ,
                    itk::ImageIOBase::IOPixelType &pixelType ,
@@ -205,7 +252,7 @@ int main(const int argc, const char **argv)
     cout << "-changeOrig px,py,pz [or filename]   Change the origin of the image" << endl;
     cout << "-createIm X,Y,Z,px,py,pz Create an empty image with the specified parameters: image dimensions X,Y,Z, image resolution px,py,pz" << endl;
     cout << " -crop px,py,pz,w,h,d   cropimage: origin px,py,pz (startindex is 0) dimensions width(w),height(h), depth(d)" << endl;
-    cout << "-changeSp spx,spy,spz  Change the spacing of the image" << endl;
+    cout << "-changeSp spx,spy,spz [or filename] Change the spacing of the image" << endl;
     cout << "-max infile2           Compute the maximum between the corresponding pixels of the two input images" << endl;
     cout << "-min infile2           Compute the minimum between the corresponding pixels of the two input images" << endl;
     cout << "-avg infile2 infile3...       Compute the average image" << endl;
@@ -215,6 +262,7 @@ int main(const int argc, const char **argv)
     cout << "-NaNCor val    Removes NaN and set the value of those voxels to the given value" << endl;
     cout << "-std infile2 infile3...             Compute the standard deviation from a set of images (one image has to be specified for the input, but it's not included in the process)" << endl;
     cout << "-rescale min,max       Applies a linear transformation to the intensity levels of the input Image" << endl;
+    cout << "-correl images2,mask   Computes the correlation between 2 images voxelwize" << endl;
     cout << endl << endl;
     exit(0);
   }
@@ -242,6 +290,26 @@ int main(const int argc, const char **argv)
   }
   string outFileName ("dummy");
   char *typeChat       = ipGetStringArgument(argv, "-type", NULL);
+  bool correlOn = ipExistsArgument(argv, "-correl"); 
+  char *correl_str = ipGetStringArgument( argv, "-correl" , NULL ) ;
+  vector< string > correlFiles ;
+  if( correlOn )
+  {
+    char *correlFiles_tmp[ 2 ] ;
+    int num = ipExtractStringTokens(correlFiles_tmp, correl_str, 2);
+    if ( num != 2 )
+    {
+      cerr << "correl needs 2 comma separated entries" << endl;
+      exit(1);
+    }
+    // read in the names of the ems files
+    else{
+      for(int i = 0 ; i < 2 ; i++){
+	if(debug) cout << "reading file name " << correlFiles_tmp[ i ] << endl ;
+	correlFiles.push_back(correlFiles_tmp[i]) ; }
+    }
+  }
+
   bool writeFloat= false;
   bool writeByte = false;
   if (typeChat && !strcmp(typeChat,"byte")) writeByte = true;
@@ -445,17 +513,33 @@ int main(const int argc, const char **argv)
   tmp_str      = ipGetStringArgument(argv, "-changeSp", NULL);
   float spacingval[3];
   if (tmp_str) {
-    int num = ipExtractFloatTokens(textend, tmp_str, 3);
-    if (3 != num) {
-      cerr << "changeSp needs 3 comma separated entries: spx,spy,spz " << endl;
-      exit(1);
-    } else {
-      spacingval[0] = static_cast<float>(textend[0]);
-      spacingval[1] = static_cast<float>(textend[1]);
-      spacingval[2] = static_cast<float>(textend[2]);
+    VolumeReaderType::Pointer imageReader = VolumeReaderType::New();
+    imageReader->SetFileName(tmp_str) ;
+    try
+    {
+      imageReader->UpdateOutputInformation();
+      ImageType::SpacingType spacing = imageReader->GetOutput()->GetSpacing() ;
+      for( unsigned i = 0 ; i < 3 ; i++ )
+      {
+        spacingval[ i ] = spacing[ i ] ;
+      }
+    }
+    catch (ExceptionObject & err)
+    {
+      int num = ipExtractFloatTokens(textend, tmp_str, 3);
+      if (3 != num)
+      {
+        cerr << "changeSp needs 3 comma separated entries: spx,spy,spz " << endl;
+        exit(1);
+      }
+      else
+      {
+        spacingval[0] = static_cast<float>(textend[0]);
+        spacingval[1] = static_cast<float>(textend[1]);
+        spacingval[2] = static_cast<float>(textend[2]);
+      }
     }
   }
-
   bool matchHistogramOn = ipExistsArgument(argv, "-matchHistogram");
   char *matchHistogramFile    = ipGetStringArgument(argv, "-matchHistogram", NULL); 
   tmp_str      = ipGetStringArgument(argv, "-matchHistoPara", NULL);
@@ -784,6 +868,29 @@ int main(const int argc, const char **argv)
       ++iterImage1;
       ++iterImage2;
     }
+  }
+  else if( correlOn )
+  {
+    VolumeReaderType::Pointer image2Reader = VolumeReaderType::New();
+    image2Reader->SetFileName( correlFiles[ 0 ] ) ;
+    VolumeReaderType::Pointer maskReader = VolumeReaderType::New();
+    maskReader->SetFileName(correlFiles[ 1 ] ) ;
+    try
+    {
+      image2Reader->Update() ;
+      maskReader->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;
+    } 
+    castShortFilterType::Pointer castMask = castShortFilterType::New() ;
+    castMask->SetInput( maskReader->GetOutput() ) ;
+    castMask->Update() ;
+    double corr_value = ImagesCorrelation( inputImage , image2Reader->GetOutput() , castMask->GetOutput() ) ;
+    cout << "Images correlation: " << corr_value << endl ;
+    return EXIT_SUCCESS ;
   } else if (extractLabelOn) {
     outFileName.erase();
     outFileName.append(base_string);
