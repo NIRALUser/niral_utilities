@@ -730,7 +730,8 @@ int main(const int argc, const char **argv)
   GetImageType( inputFileName , pixelType , componentType ) ;
   bool diffusionImage = false ;
   //If tensor image
-  typedef itk::Image< itk::DiffusionTensor3D< PixelType > , 3 > DiffusionImageType ;
+//  typedef itk::Image< itk::DiffusionTensor3D< PixelType > , 3 > DiffusionImageType ;
+  typedef itk::VectorImage< PixelType , 3 > VectorImageType ;
   if (debug) cout << "Loading file " << inputFileName << endl;
   if( pixelType == itk::ImageIOBase::SYMMETRICSECONDRANKTENSOR
    || pixelType == itk::ImageIOBase::DIFFUSIONTENSOR3D
@@ -742,12 +743,14 @@ int main(const int argc, const char **argv)
       std::cerr << "The only operations supported on Diffusion Tensor Images are: -editPixdims, -changeSp, -changeOrig, -crop , -mask and -center"<< std::endl ;
       return EXIT_FAILURE;
     }
-    typedef itk::ImageFileReader< DiffusionImageType > DiffusionReaderType ;
-    DiffusionReaderType::Pointer diffusionReader = DiffusionReaderType::New() ;
-    diffusionReader->SetFileName( inputFileName ) ;
+    typedef itk::ImageFileReader< VectorImageType > VectorReaderType ;
+    VectorReaderType::Pointer vectorImageReader = VectorReaderType::New() ;
+//    typedef itk::ImageFileReader< DiffusionImageType > DiffusionReaderType ;
+//    DiffusionReaderType::Pointer diffusionReader = DiffusionReaderType::New() ;
+    vectorImageReader->SetFileName( inputFileName ) ;
     try
     {
-      diffusionReader->Update();
+      vectorImageReader->Update();
     }
     catch (ExceptionObject & err)
     {
@@ -755,7 +758,7 @@ int main(const int argc, const char **argv)
       cerr << err << endl;
       return EXIT_FAILURE;	
     }
-    inputBaseImage = diffusionReader->GetOutput() ;
+    inputBaseImage = vectorImageReader->GetOutput() ;
     diffusionImage = true ;
   }
   else
@@ -971,40 +974,50 @@ int main(const int argc, const char **argv)
       return EXIT_FAILURE;
     } 
     inputImage2 = imageReader->GetOutput();
-    if (debug) cout << "masking images  " << endl;
+    if (debug) cout << "masking images" << endl;
 
     if( diffusionImage )
     {
-      DiffusionImageType::Pointer inputDiffusionImage =
-          dynamic_cast< DiffusionImageType* >( inputBaseImage.GetPointer() ) ;
+      if (debug) cout << "diffusion image" << endl;
+      VectorImageType::Pointer inputVectorImage =
+          dynamic_cast< VectorImageType* >( inputBaseImage.GetPointer() ) ;
       ImageType::SizeType maskSize ;
       maskSize = inputImage2->GetLargestPossibleRegion().GetSize() ; 
+      if (debug) cout << "mask size:"<< maskSize << endl;
       ImageType::SizeType size ;
-      size = inputDiffusionImage->GetLargestPossibleRegion().GetSize() ;
+      size = inputVectorImage->GetLargestPossibleRegion().GetSize() ;
+      if (debug) cout << "Image size:"<< size << endl;
       //Check that diffusion input volume and mask volume have the same size
       for( int i = 0 ; i < 3 ; i++ )
       {
         if( size[ i ] != maskSize[ i ] )
         {
-          std::cout<<"Mask and input diffusion volume must have the same size"<<std::endl ;
+          std::cout<<"Mask and input vector volume must have the same size"<<std::endl ;
           return EXIT_FAILURE ;
         }
       }
+      if (debug) cout << "Mask and image have same size" << endl ;
       //Create output volume and fill it with null tensors
-      DiffusionImageType::Pointer outputVolume = DiffusionImageType::New() ;
-      outputVolume->CopyInformation( inputDiffusionImage ) ;
+      if (debug) cout << "Number of elements: "<< inputVectorImage->GetVectorLength() << endl ;
+      VectorImageType::Pointer outputVolume = VectorImageType::New() ;
+      outputVolume->CopyInformation( inputVectorImage ) ;
       outputVolume->SetRegions( size ) ;
+      outputVolume->SetVectorLength( inputVectorImage->GetVectorLength() ) ;
       outputVolume->Allocate() ;
-      itk::DiffusionTensor3D< PixelType > pixel ;
+      if (debug) cout << "Image memory allocated "<< endl ;
+      //itk::DiffusionTensor3D< PixelType > pixel ;
+      VectorImageType::PixelType pixel ;
+      pixel.SetSize( inputVectorImage->GetVectorLength() ) ;
       pixel.Fill( (PixelType)0.0 ) ;
       outputVolume->FillBuffer( pixel ) ;
       //Create iterators
-      typedef itk::ImageRegionIterator< DiffusionImageType > DiffusionIterator ;
+      typedef itk::ImageRegionIterator< VectorImageType > VectorIterator ;
       typedef itk::ImageRegionIterator< ImageType > MaskIterator ;
-      DiffusionIterator it( inputDiffusionImage , inputDiffusionImage->GetLargestPossibleRegion() ) ;
+      VectorIterator it( inputVectorImage , inputVectorImage->GetLargestPossibleRegion() ) ;
       MaskIterator maskIt(  inputImage2 ,  inputImage2->GetLargestPossibleRegion() ) ;
-      DiffusionIterator out( outputVolume , outputVolume->GetLargestPossibleRegion() ) ;
+      VectorIterator out( outputVolume , outputVolume->GetLargestPossibleRegion() ) ;
       //Copy tensors where mask is not null
+      if (debug) cout << "Masking..."<< endl ;
       for( it.GoToBegin() , maskIt.GoToBegin() , out.GoToBegin() ;
            !it.IsAtEnd() ; ++it , ++maskIt , ++out )
       {
@@ -1015,6 +1028,7 @@ int main(const int argc, const char **argv)
       }
       outputVolume->SetMetaDataDictionary( inputBaseImage->GetMetaDataDictionary() ) ;
       inputBaseImage = outputVolume ;
+      if (debug) cout << "Masking done"<< endl ;
     }
     else
     {
@@ -1381,9 +1395,9 @@ int main(const int argc, const char **argv)
 		    << extractRegion.GetSize(2) <<  endl;
     if( diffusionImage )
     {
-      typedef ExtractImageFilter< DiffusionImageType , DiffusionImageType > DiffusionCropFilterType ;
-      DiffusionCropFilterType::Pointer cropFilter = DiffusionCropFilterType::New() ;
-      cropFilter->SetInput( dynamic_cast< DiffusionImageType* >( inputBaseImage.GetPointer() ) ) ;
+      typedef ExtractImageFilter< VectorImageType , VectorImageType > VectorCropFilterType ;
+      VectorCropFilterType::Pointer cropFilter = VectorCropFilterType::New() ;
+      cropFilter->SetInput( dynamic_cast< VectorImageType* >( inputBaseImage.GetPointer() ) ) ;
       cropFilter->SetExtractionRegion( extractRegion ) ;
       try
       {
@@ -2313,6 +2327,7 @@ int main(const int argc, const char **argv)
     resampler->SetTransform( flipTransform ) ;
     resampler->Update() ;
     inputImage = resampler->GetOutput() ;
+    inputImage->SetOrigin( origin ) ;
     outFileName.erase();
     outFileName.append(base_string);
     outFileName.append("_flip");
@@ -2363,21 +2378,21 @@ int main(const int argc, const char **argv)
 
 if( diffusionImage )
 {
-    typedef itk::ImageFileWriter< DiffusionImageType > DiffusionImageWriter ;
-    DiffusionImageType::Pointer outputDiffusionImage ;
-    outputDiffusionImage = dynamic_cast< DiffusionImageType* >( inputBaseImage.GetPointer() ) ;
-    if( !outputDiffusionImage ) 
+    typedef itk::ImageFileWriter< VectorImageType > VectorImageWriter ;
+    VectorImageType::Pointer outputVectorImage ;
+    outputVectorImage = dynamic_cast< VectorImageType* >( inputBaseImage.GetPointer() ) ;
+    if( !outputVectorImage ) 
     {
-       std::cerr << "Error saving output diffusion image" << std::endl ;
+       std::cerr << "Error saving output vector/diffusion image" << std::endl ;
        return EXIT_FAILURE ;
     }
-    DiffusionImageWriter::Pointer writer = DiffusionImageWriter::New() ;
+    VectorImageWriter::Pointer writer = VectorImageWriter::New() ;
     if( !nocompOn )
     {
       writer->UseCompressionOn() ;
     }
     writer->SetFileName( outFileName.c_str() ); 
-    writer->SetInput( outputDiffusionImage ) ;
+    writer->SetInput( outputVectorImage ) ;
     try
     {
       writer->Write() ;
