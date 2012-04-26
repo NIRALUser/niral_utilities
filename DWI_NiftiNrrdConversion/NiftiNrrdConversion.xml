@@ -1,0 +1,54 @@
+<?xml version="1.2" encoding="utf-8"?>
+<executable>
+	<title>
+		NiftiNrrdConversion
+	</title>
+	<description>
+		This command line perform the conversion from Nifti image to Nrrd image.
+	</description>
+	<version>1.0</version>
+	<documentation-url></documentation-url>
+	<license></license>
+	<contributor>
+		Jean-Baptiste Berger
+	</contributor>
+	<acknowledgements></acknowledgements>
+	<parameters advanced="false">
+		<file>
+			<name>input</name>
+			<longflag>--input</longflag>
+			<label>Input File</label>
+			<flag>i</flag>
+			<description>Image to convert</description>
+			<channel>input</channel>
+			<default></default>
+		</file> 
+		<file>
+			<name>b_vals</name>
+			<flag>b</flag>
+			<longflag>--b_vals</longflag>
+			<label>B-Values Input File</label>
+			<description>B-Values file that contains list of each B-Values describing the image</description>
+			<channel>input</channel>
+			<default></default>
+		</file>
+		<file>
+			<name>b_vects</name>
+			<flag>g</flag>
+			<longflag>--b_vects</longflag>
+			<label>B-Vectors Input File</label>
+			<description>B-Vectors file that contains list of each B-Vectors describing the image</description>
+			<channel>input</channel>
+			<default></default>
+		</file>
+		<file>
+			<name>output</name>
+			<flag>o</flag>
+			<longflag>--output</longflag>
+			<label>Output File</label>
+			<description>Image that will be created</description>
+			<channel>output</channel>
+			<default></default>
+		</file>
+	</parameters>
+</executable>
