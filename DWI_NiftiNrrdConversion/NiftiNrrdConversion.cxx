@@ -309,7 +309,6 @@ int main(int argc, char* argv[])
 		BVectFileName=PathOut+FileNameOut+"_bvects";
 		std::ofstream BValFile(BValFileName.c_str(), std::ios::out);
 		std::ofstream BVectFile(BVectFileName.c_str(), std::ios::out);
-		
 		std::vector<std::string> Keys=DictIn.GetKeys();
 		for(unsigned int i=0; i<Keys.size(); i++)
 		{
@@ -337,10 +336,21 @@ int main(int argc, char* argv[])
 				iss>>XYZ[2];
 				
 				Norm=sqrt(XYZ[0]*XYZ[0]+XYZ[1]*XYZ[1]+XYZ[2]*XYZ[2]);
-				XYZNorm[0]=XYZ[0]/Norm;
-				XYZNorm[1]=XYZ[1]/Norm;
-				XYZNorm[2]=XYZ[2]/Norm;
-				B=((XYZ[0]*XYZ[0])/(XYZNorm[0]*XYZNorm[0]))*BValueMax;
+				if(Norm!=0)
+				{
+					XYZNorm[0]=XYZ[0]/Norm;
+					XYZNorm[1]=XYZ[1]/Norm;
+					XYZNorm[2]=XYZ[2]/Norm;
+					B=((XYZ[0]*XYZ[0])/(XYZNorm[0]*XYZNorm[0]))*BValueMax;
+				}
+				else
+				{
+					XYZNorm[0]=0;
+					XYZNorm[1]=0;
+					XYZNorm[2]=0;
+					B=0;
+				}
+				
 				BValFile<<B<<" ";
 				
 				oss<<XYZNorm[0]<<" ";
