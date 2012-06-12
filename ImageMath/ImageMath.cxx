@@ -263,6 +263,7 @@ int main(const int argc, const char **argv)
     cout << "-std infile2 infile3...             Compute the standard deviation from a set of images (one image has to be specified for the input, but it's not included in the process)" << endl;
     cout << "-rescale min,max       Applies a linear transformation to the intensity levels of the input Image" << endl;
     cout << "-correl images2,mask   Computes the correlation between 2 images voxelwize" << endl;
+    cout << "-pixelLookup x,y,z     Outputs the pixel intensity for a given coordinate" << endl ;
     cout << endl << endl;
     exit(0);
   }
@@ -597,6 +598,26 @@ int main(const int argc, const char **argv)
   bool grayFillHoleOn = ipExistsArgument(argv, "-grayFillHole");
   bool meanFilterOn = ipExistsArgument(argv,"-meanFilter"); 
   bool anisoDiffOn = ipExistsArgument(argv,"-anisoDiff"); 
+  bool pixelLookupOn = ipExistsArgument(argv,"-pixelLookup"); 
+
+  tmp_str      = ipGetStringArgument(argv, "-pixelLookup", NULL);
+  float pixelLookupIndex[3];
+  if (tmp_str) {
+      int num = ipExtractFloatTokens(textend, tmp_str, 3);
+      if (3 != num)
+      {
+        cerr << "pixelLookup needs 3 comma separated entries: x,y,z " << endl;
+        exit(1);
+      }
+      else
+      {
+        pixelLookupIndex[0] = static_cast<float>(textend[0]);
+        pixelLookupIndex[1] = static_cast<float>(textend[1]);
+        pixelLookupIndex[2] = static_cast<float>(textend[2]);
+      }
+    }
+
+
   if (smoothOn && !gaussianOn && !curveEvolOn 
 		&& !grayOpenOn && !grayCloseOn && !grayDilateOn && !grayErodeOn && !grayFillHoleOn
 		&& !meanFilterOn && !anisoDiffOn) { 
@@ -2346,7 +2367,19 @@ int main(const int argc, const char **argv)
      outFileName.erase();
      outFileName.append(base_string);
      outFileName.append("_rescale");
-  }else {
+  } else if (pixelLookupOn )
+    {
+      // IO 2012
+      ImageType::IndexType idx ;
+      idx[0] = pixelLookupIndex[0] ;
+      idx[1] = pixelLookupIndex[1] ;
+      idx[2] = pixelLookupIndex[2] ;
+      std::cout << "Image value at pixel " << idx[0] << " " << idx[1] << " " << idx[2] << " is: " << std::endl ;
+      std::cout <<  inputImage->GetPixel ( idx ) << std::endl ;
+      exit ( 0 ) ;
+
+    }
+  else {
     cout << "NOTHING TO DO, no operation selected..." << endl;
     exit(1);
   }
