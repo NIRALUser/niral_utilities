@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<executable>
+	<title>PolydataMerge</title>
+	<description>Add two vtk polydata files together</description>
+	<contributor>Gwendoline Roger</contributor>
+	<parameters>
+		<label>Add two vtk polydata files: Input/Output</label>
+		<description>Add two vtk polydata files</description>
+		<string-vector>
+			<name>fiberFiles</name>
+			<flag>-f</flag>
+			<longflag>--vtkFiles</longflag>
+			<label>vtk polydata files to add</label>
+			<channel>input</channel>
+			<description>Input vtk polydata(fibers) to add, separate it by a comma</description>
+		</string-vector>
+		<file>
+			<name>fiberOutput</name>
+			<longflag>--vtk_output</longflag>
+			<flag>o</flag>
+			<label>vtk polydata (Fiber) Output</label>
+			<description>Output vtk polydata (fiber) file</description>
+			<channel>output</channel>
+		</file>
+	</parameters>
+</executable>
