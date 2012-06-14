@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+	<category>DTI.DTIProcess</category>
+	<title>PolydataTransform</title>
+	<description>Transform a polydata with a HField or a displacement field</description>
+	<contributor>Gwendoline Roger</contributor>
+	<version>1.0.0</version>
+	<parameters advanced="false">
+		<file>
+			<name>fiberOutput</name>
+			<longflag>--fiber_output</longflag>
+			<flag>o</flag>
+			<label>Fiber Output</label>
+			<description>Output fiber file. </description>
+			<channel>output</channel>
+		</file>
+		<file>
+			<name>hField</name>
+			<longflag>--h_field</longflag>
+			<flag>H</flag>
+			<label>HField</label>
+			<description>HField for warp</description>
+			<channel>input</channel>
+		</file>
+		<file>
+			<name>displacementField</name>
+			<longflag>--displacement_field</longflag>
+			<flag>D</flag>
+			<label>DisplacementField</label>
+			<description>Displacement Field for warp</description>
+			<channel>input</channel>
+		</file>
+		<file>
+			<name>fiberFile</name>
+			<longflag>--fiber_file</longflag>
+			<label>Fiber File</label>
+			<description>DTI fiber file</description>
+			<channel>input</channel>
+		</file>
+	</parameters>
+</executable>

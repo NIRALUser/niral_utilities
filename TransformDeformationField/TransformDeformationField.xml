@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+	<category>Diffusion.Utilities</category>
+	<title>Concatenation of two deformation field volumes or average of multiple deformation field volumes</title>
+	<license></license>
+	<contributor>Gwendoline Roger, Francois Budin</contributor>
+	
+	<parameters>
+		<label>Input/Ouput</label>
+		<description>Input/output parameters</description>
+		<image type="any">
+			<name>referenceVolume</name>
+			<label>Reference Volume (To Set Output Parameters)</label>
+			<channel>input</channel>
+			<flag>-R</flag>
+			<longflag>--Reference</longflag>
+			<description>Reference Volume (spacing,size,orientation,origin)</description>
+			<default></default>
+		</image>
+	</parameters>
+	<parameters>
+		<label>Transform Parameters</label>
+		<description>Parameters used to choose the transform between concatenation and average</description>
+		<string-vector>
+			<name>deffieldtoconcatenate</name>
+			<label>Set the two Deformation Field Volumes to concatenate</label>
+			<description>Set the two Deformation Field Volumes to concatenate: "deformationField1","deformationField2": if deformationfield1=deformation field from input to temp and deformationfield2= deformation field from temp to output, the order of concatenation is "deformationfield2","deformationfield1"</description>
+			<channel>input</channel>
+			<longflag>--concatenate</longflag>
+			<default></default>
+		</string-vector>
+		<string-vector>
+			<name>deffieldtoaverage</name>
+			<label>Deformation Field Volumes to average</label>
+			<description>Set all the Deformation Field Volumes to average: "deformationField1","deformationField2",...</description>
+			<channel>input</channel>
+			<longflag>--average</longflag>
+			<default></default>
+		</string-vector>
+		<string-vector>
+			<name>typeOfField</name>
+			<label>Set if the deformation field is an "h-Field" or a "displacement" in the same order as you enter your deformation field volumes to average or to concatenate, the default type is h-Field</label>
+			<description>Set if the deformation field is an "h-Field" or a "displacement" in the same order as you enter your deformation field volumes to average or to concatenate</description>
+			<channel>input</channel>
+			<longflag>--hfieldtype</longflag>
+			<default></default>
+		</string-vector>
+	</parameters>
+	<parameters>
+		<label>Output parameters</label>
+		<description>Ouput parameters: choose outputHfield if you want a concatenation, choose outputHfieldAvg if you want an average</description>
+		<image type="vector">
+			<name>outputConcatenate</name>
+			<label>Save the concatenation of deformation field volumes</label>
+			<description>Save the concatenation of deformation field volumes as a deformation field</description>
+			<channel>output</channel>
+			<longflag>--outputConcatenate</longflag>
+			<default></default>
+		</image>
+		<image type="vector">
+			<name>outputAvg</name>
+			<label>Save the average of deformation field volumes</label>
+			<description>Save the average of deformation field volumes as a deformation field</description>
+			<longflag>--outputAvg</longflag>
+			<default></default>
+		</image>
+	</parameters>
+	
+	
+</executable>
