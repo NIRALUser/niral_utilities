@@ -50,8 +50,8 @@ using namespace std;
 using namespace std;
 using namespace itk;
 
-typedef short PixelType;
-typedef short ExtractPixelType;
+typedef float PixelType;
+typedef float ExtractPixelType;
 typedef unsigned char Write2DPixelType;
 typedef unsigned char BinaryPixelType;
 enum { ImageDimension3 = 3, ImageDimension2 = 2 };
