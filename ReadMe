@@ -1,0 +1,1 @@
+Software in Unsupported directory is not build with the main CMakeLists.txt file. It has to be build manually.

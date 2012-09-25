@@ -1,10 +1,10 @@
 /* 
- * author:  msturm, mstyner 
+ * author:  msturm,mstyner
  * created: 16 Apr 1997
- * changes: 1998, 1999, 2002
+ * changes:
  *
  * contains routines for command line parsing 
- * (mostly adapted from gaudi toolbox, changed to templated functions)
+ * (mostly copied from gaudi toolbox, changed to templated functions)
  *
  */
 
@@ -32,15 +32,15 @@ inline float fatof(const char *str) {
 
 template <class T>
 inline T ipGetArgument(const char **argv, const char *keystr, 
-                 T (*convert) (const char *str), const T defval) {
+           T (*convert) (const char *str), const T defval) {
   for (int i=1; argv[i]; i++)
-    if (strstr(argv[i],keystr))
+    if (!strcmp(argv[i],keystr))
       if (argv[i+1]) return convert(argv[i+1]);
       else {
-     fprintf(stderr,"Error: ipGetArgument: argument value of option \"%s\" is missing!\n", 
-          argv[i]);
+  fprintf(stderr,"Error: ipGetArgument: argument value of option \"%s\" is missing!\n", 
+    argv[i]);
 
-     exit(-1);
+  exit(-1);
       }
 
   return defval;
@@ -51,13 +51,13 @@ inline charp ipGetStringArgument(const char **argv, const char *keystr, const ch
   char *_defval = (defval ? strdup(defval): NULL);
   //return ipGetArgument(argv, keystr, strdup, _defval);
   for (int i=1; argv[i]; i++)
-    if (strstr(argv[i],keystr))
+    if (!strcmp(argv[i],keystr))
       if (argv[i+1]) return strdup(argv[i+1]);
       else {
-     fprintf(stderr,"Error: ipGetArgument: argument value of option \"%s\" is missing!\n", 
-          argv[i]);
+  fprintf(stderr,"Error: ipGetArgument: argument value of option \"%s\" is missing!\n", 
+    argv[i]);
 
-     exit(-1);
+  exit(-1);
       }
 
   return _defval;
@@ -68,7 +68,7 @@ inline charp ipGetStringArgument(const char **argv, const char *keystr, const ch
 inline int ipGetStringMultipArgument(const char **argv, const char *keystr, char **out, const int max) {
   int i = 1, num;
   while (argv[i]) {
-    if (strstr(argv[i],keystr)) {
+    if (!strcmp(argv[i],keystr)) {
       // keystr found
       if (argv[i+1] && (argv[i+1])[0] != '-') {
         i++;
@@ -90,13 +90,13 @@ inline int ipGetStringMultipArgument(const char **argv, const char *keystr, char
 inline int ipGetIntArgument(const char **argv, const char *keystr, const int defval) {
   //return ipGetArgument(argv, keystr, atoi, defval);{
   for (int i=1; argv[i]; i++)
-    if (strstr(argv[i],keystr))
+    if (!strcmp(argv[i],keystr))
       if (argv[i+1]) return atoi(argv[i+1]);
       else {
-     fprintf(stderr,"Error: ipGetArgument: argument value of option \"%s\" is missing!\n", 
-          argv[i]);
+  fprintf(stderr,"Error: ipGetArgument: argument value of option \"%s\" is missing!\n", 
+    argv[i]);
 
-     exit(-1);
+  exit(-1);
       }
 
   return defval;
@@ -105,13 +105,13 @@ inline int ipGetIntArgument(const char **argv, const char *keystr, const int def
 inline float ipGetFloatArgument(const char **argv, const char *keystr, const float defval) {
   //return ipGetArgument(argv, keystr, fatof, defval);
   for (int i=1; argv[i]; i++)
-    if (strstr(argv[i],keystr))
+    if (!strcmp(argv[i],keystr))
       if (argv[i+1]) return fatof(argv[i+1]);
       else {
-     fprintf(stderr,"Error: ipGetArgument: argument value of option \"%s\" is missing!\n", 
-          argv[i]);
+  fprintf(stderr,"Error: ipGetArgument: argument value of option \"%s\" is missing!\n", 
+    argv[i]);
 
-     exit(-1);
+  exit(-1);
       }
 
   return defval;
@@ -120,13 +120,13 @@ inline float ipGetFloatArgument(const char **argv, const char *keystr, const flo
 inline double ipGetDoubleArgument(const char **argv, const char *keystr, const double defval) {
   //return ipGetArgument(argv, keystr, atof, defval);
   for (int i=1; argv[i]; i++)
-    if (strstr(argv[i],keystr))
+    if (!strcmp(argv[i],keystr))
       if (argv[i+1]) return atof(argv[i+1]);
       else {
-     fprintf(stderr,"Error: ipGetArgument: argument value of option \"%s\" is missing!\n", 
-          argv[i]);
+  fprintf(stderr,"Error: ipGetArgument: argument value of option \"%s\" is missing!\n", 
+    argv[i]);
 
-     exit(-1);
+  exit(-1);
       }
 
   return defval;
@@ -134,7 +134,7 @@ inline double ipGetDoubleArgument(const char **argv, const char *keystr, const d
 
 inline int ipExistsArgument(const char **argv, const char *keystr) {
   for (int i=1; argv[i]; i++) 
-    if (strstr(argv[i],keystr)) return 1;
+    if (!strcmp(argv[i],keystr)) return 1;
   
   return 0;
 }
@@ -165,14 +165,14 @@ inline int ipLineWordCount(const char *s){
  * gets the generic name of a file cutting the extension 
  ************************************************************/ 
 inline char *ipGetBaseName(const char *string){
-  int i;
+  unsigned int i;
   char *ret = NULL, *retp = NULL; 
   if (!(ret = strdup(string))) {
     fprintf(stderr, "Error: ipGetBaseName [%s, line %d]: strdup() failed:",
             __FILE__, __LINE__);
     perror("");
     exit(errno);  }  
-  for(i=0, retp=ret; i<(int)strlen(string);i++, retp++)
+  for(i=0, retp=ret; i<strlen(string);i++, retp++)
     if (*retp == '.') {
       *retp = '\0';
       break;    } 
@@ -206,7 +206,7 @@ inline int ipfgetline(FILE* f, char* s, int lim){
 
 template <class T>
 int ipExtractTokens(T *tokenval, const char *tokenstr, const int n,
-              T (*convert) (const char *str)) {
+        T (*convert) (const char *str)) {
   char *tmp_token = new char [ipMAXTOKLEN];
   char *tmp_tokenp = tmp_token;
   const char *tokenp = tokenstr;
@@ -217,9 +217,9 @@ int ipExtractTokens(T *tokenval, const char *tokenstr, const int n,
     while (isspace(*tokenp) && *tokenp) tokenp++;
     tmp_tokenp = tmp_token;
     while ((*tokenp) && (isalnum(*tokenp) || (*tokenp == '.') || 
-                (*tokenp == '-') || (*tokenp == '+') || 
-                (*tokenp == '_') ) && 
-        ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
+       (*tokenp == '-') || (*tokenp == '+') || 
+       (*tokenp == '_')) && 
+     ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
       *(tmp_tokenp++) = *(tokenp++);
     if(*tokenp) tokenp++; // skip separator
     tokenval[i++] = convert(tmp_token);
@@ -241,7 +241,7 @@ int ipExtractTokens(T *tokenval, const char *tokenstr, const int n,
 
 template <class T>
 int ipExtractSpaceSepTokens(T *tokenval, const char *tokenstr, const int n,
-                   T (*convert) (const char *str)) {
+          T (*convert) (const char *str)) {
   char *tmp_token = new char [ipMAXTOKLEN];
   char *tmp_tokenp = tmp_token;
   const char *tokenp = tokenstr;
@@ -252,7 +252,7 @@ int ipExtractSpaceSepTokens(T *tokenval, const char *tokenstr, const int n,
     while (isspace(*tokenp) && *tokenp) tokenp++;
     tmp_tokenp = tmp_token;
     while ((*tokenp) && (isspace(*tokenp) || (*tokenp != ',') ) && 
-        ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
+     ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
       *(tmp_tokenp++) = *(tokenp++);
     if(*tokenp) tokenp++; // skip separator
     tokenval[i++] = convert(tmp_token);
@@ -276,12 +276,13 @@ inline int ipExtractIntTokens(int *tokenval, const char *tokenstr, const int n) 
     while (isspace(*tokenp) && *tokenp) tokenp++;
     tmp_tokenp = tmp_token;
     while ((*tokenp) && (isalnum(*tokenp) || (*tokenp == '.') || 
-                (*tokenp == '-') || (*tokenp == '+') || 
-                (*tokenp == '_') ) && 
-        ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
+       (*tokenp == '-') || (*tokenp == '+') || 
+       (*tokenp == '_')) && 
+     ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
       *(tmp_tokenp++) = *(tokenp++);
     if(*tokenp) tokenp++; // skip separator
     tokenval[i++] = atoi(tmp_token);
+    
   }
   
   delete [] tmp_token;
@@ -301,9 +302,9 @@ inline int ipExtractFloatTokens(float *tokenval, const char *tokenstr, const int
     while (isspace(*tokenp) && *tokenp) tokenp++;
     tmp_tokenp = tmp_token;
     while ((*tokenp) && (isalnum(*tokenp) || (*tokenp == '.') || 
-                (*tokenp == '-') || (*tokenp == '+') || 
-                (*tokenp == '_') ) && 
-        ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
+       (*tokenp == '-') || (*tokenp == '+') || 
+       (*tokenp == '_') ) && 
+     ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
       *(tmp_tokenp++) = *(tokenp++);
     if(*tokenp) tokenp++; // skip separator
     tokenval[i++] = fatof(tmp_token);
@@ -326,9 +327,9 @@ inline int ipExtractDoubleTokens(double *tokenval, const char *tokenstr, const i
     while (isspace(*tokenp) && *tokenp) tokenp++;
     tmp_tokenp = tmp_token;
     while ((*tokenp) && (isalnum(*tokenp) || (*tokenp == '.') || 
-                (*tokenp == '-') || (*tokenp == '+') || 
-                (*tokenp == '_') ) && 
-        ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
+       (*tokenp == '-') || (*tokenp == '+') || 
+       (*tokenp == '_') ) && 
+     ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
       *(tmp_tokenp++) = *(tokenp++);
     if(*tokenp) tokenp++; // skip separator
     tokenval[i++] = atof(tmp_token);
@@ -351,9 +352,9 @@ inline int ipExtractStringTokens(char **tokenval, const char *tokenstr, const in
     while (isspace(*tokenp) && *tokenp) tokenp++;
     tmp_tokenp = tmp_token;
     while ((*tokenp) && (isalnum(*tokenp) || (*tokenp == '.') || 
-                (*tokenp == '-') || (*tokenp == '+') || 
-                (*tokenp == '_') ) && 
-        ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
+       (*tokenp == '-') || (*tokenp == '+') || 
+       (*tokenp == '_') || (*tokenp == '/')) && 
+     ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
       *(tmp_tokenp++) = *(tokenp++);
     if(*tokenp) tokenp++; // skip separator
     tokenval[i++] = strdup(tmp_token);
