@@ -1,0 +1,35 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0105 
+header_name {.h} 
+code_name {.cxx}
+class FltkDisclaimerGUI {open : FltkDisclaimerGUIBase
+} {
+  Function {MakeWindow()} {open
+  } {
+    Fl_Window FltkDisclaimerGUIWindow {
+      label Dislaimer open
+      xywh {444 388 501 355} type Double
+      code0 {\#include "FltkDisclaimerGUIBase.h"} modal visible
+    } {
+      Fl_Text_Display g_developer {
+        xywh {130 10 365 115} box NO_BOX color 49 labelsize 13 align 16 textsize 11
+      }
+      Fl_Text_Display g_disclaimer {
+        xywh {15 130 480 175} box NO_BOX color 49 align 16 textsize 11
+      }
+      Fl_Button {} {
+        label {I agree}
+        callback {Accept();} selected
+        xywh {265 320 80 25} box PLASTIC_UP_BOX down_box PLASTIC_DOWN_BOX color 180
+      }
+      Fl_Button {} {
+        label Quit
+        callback {Reject();}
+        xywh {140 320 80 25} box PLASTIC_UP_BOX down_box PLASTIC_DOWN_BOX color 180
+      }
+      Fl_Box {} {
+        image {disclaimer.gif} xywh {5 5 110 125}
+      }
+    }
+  }
+} 
