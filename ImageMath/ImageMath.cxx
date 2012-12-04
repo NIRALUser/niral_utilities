@@ -257,6 +257,7 @@ int main(const int argc, const char **argv)
     cout << "-min infile2           Compute the minimum between the corresponding pixels of the two input images" << endl;
     cout << "-avg infile2 infile3...       Compute the average image" << endl;
     cout << "-majorityVoting infile2 infile3...       Compute an accurate parcellation map considering a majority voting process" << endl;
+    cout << "-weightedMajorityVoting infile2 infile3... -weights w1,w2,...     Compute an accurate parcellation map considering a weighted majority voting process" << endl;
     cout << "-center                Center image" << endl;
     cout << "-flip [x,][y,][z]      Flip image" << endl;
     cout << "-NaNCor val    Removes NaN and set the value of those voxels to the given value" << endl;
@@ -274,6 +275,7 @@ int main(const int argc, const char **argv)
   const unsigned int MaxNumFiles = 1000;
   unsigned int NbFiles = 0;
   char *files[MaxNumFiles];
+  float wparameters[MaxNumFiles];
   vector<string> InputFiles;
 
   char *inputFileName = strdup(argv[1]);
@@ -659,6 +661,21 @@ int main(const int argc, const char **argv)
       for(unsigned int i = 0 ; i < NbFiles ; i++)
 	InputFiles.push_back(files[i]);
     }
+
+  bool WeightedMajorityVotingOn = ipExistsArgument(argv, "-weightedMajorityVoting");
+  if (WeightedMajorityVotingOn)
+    {
+      NbFiles = ipGetStringMultipArgument(argv, "-weightedMajorityVoting", files, MaxNumFiles);
+      char *mv_tmp_str   = ipGetStringArgument(argv, "-weights", NULL);
+      unsigned int num = ipExtractFloatTokens(wparameters, mv_tmp_str, MaxNumFiles);
+      if (NbFiles != num) {
+          cerr << "weighted majority voting needs" << NbFiles << "comma separated entries: w1,w2,...,w" << NbFiles << endl;
+          exit(1);
+      } 
+      for(unsigned int i = 0 ; i < NbFiles ; i++)
+	InputFiles.push_back(files[i]);
+    }
+
     bool StdOn = ipExistsArgument(argv, "-std");
   if (StdOn)
   {
@@ -2227,13 +2244,27 @@ int main(const int argc, const char **argv)
       {
 	PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
 	PixelType *LabelArray;
+	PixelType *LabelWeightArray;                  //weighting factor for each label
 	LabelArray = new PixelType[MaxLabel];
+	LabelWeightArray = new PixelType[NbFiles];
+
 	for (int Label = 0; Label < MaxLabel; Label++)
 	  LabelArray[Label] = 0;
-	
+
 	for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
-	  LabelArray[(ShortPixelType)vConstLabelIterator[LabelFileNumber].Get()]++;
-	
+          {
+	    LabelArray[(ShortPixelType)vConstLabelIterator[LabelFileNumber].Get()]++;
+          }
+/*	
+	for (int Label = 0; Label < MaxLabel; Label++)
+	  {
+	    if (LabelArray[Label] > MaxVoxelValue)
+	      {
+		MaxVoxelValue = LabelArray[Label];
+		MaxLabelValue = Label;
+	      }
+	  }
+*/
 	for (int Label = 0; Label < MaxLabel; Label++)
 	  {
 	    if (LabelArray[Label] > MaxVoxelValue)
@@ -2243,7 +2274,13 @@ int main(const int argc, const char **argv)
 	      }
 	  }
 	
-	OutputIterator.Set(MaxLabelValue);
+        if(MaxLabelValue >= 0.5)
+	    OutputIterator.Set(MaxLabelValue);
+        else
+	    OutputIterator.Set(0);
+
+          OutputIterator.Set(MaxLabelValue);
+
 	delete[] LabelArray;
 	
 	++ConstInputIterator;
@@ -2293,7 +2330,147 @@ int main(const int argc, const char **argv)
 	}
       
     inputImage = MajVotingImage;
-  } else if( flip )
+  } else if(WeightedMajorityVotingOn) {
+
+    outFileName.erase();
+    outFileName.append(base_string);
+    outFileName.append("_majVoting");
+
+    if(debug) cout << "Majority voting " << endl;
+
+    // Reading label images
+    vector<ImagePointer> vLabelImages;
+    for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
+      {
+	VolumeReaderType::Pointer LabelImageReader = VolumeReaderType::New();
+	if (debug) cout << "Loading file " << InputFiles[LabelFileNumber] << endl;
+	LabelImageReader->SetFileName(InputFiles[LabelFileNumber].c_str());
+	try 
+	  {
+	    LabelImageReader->Update();
+	  }
+	catch (ExceptionObject & err) 
+	  {
+	    cerr<<"ExceptionObject caught!"<<endl;
+	    cerr<<err<<endl;
+	    return EXIT_FAILURE;	
+	  }
+	vLabelImages.push_back(LabelImageReader->GetOutput());
+        
+      }
+    
+    // Creating output image
+    ImagePointer MajVotingImage = ImageType::New();
+    ImageType::SpacingType spacing;
+    spacing[0] = inputImage->GetSpacing()[0];
+    spacing[1] = inputImage->GetSpacing()[1];
+    spacing[2] = inputImage->GetSpacing()[2];
+    MajVotingImage->SetSpacing(spacing);
+    MajVotingImage->SetRegions(inputImage->GetRequestedRegion());
+    MajVotingImage->Allocate();
+    
+    //  Iterators initialization
+    vector<ConstIteratorType> vConstLabelIterator;
+    ConstIteratorType ConstInputIterator(inputImage,inputImage->GetRequestedRegion());
+    IteratorType OutputIterator(MajVotingImage, inputImage->GetRequestedRegion());
+    
+    ConstInputIterator.GoToBegin();
+    OutputIterator.GoToBegin();      
+    for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
+      {
+	ConstIteratorType ConstLabelIterator(vLabelImages[LabelFileNumber],inputImage->GetRequestedRegion());
+	vConstLabelIterator.push_back(ConstLabelIterator);
+	vConstLabelIterator[LabelFileNumber].GoToBegin();	  
+      }
+    
+    //  Compute the maximum value of intensity of the first parcellation image
+    ShortPixelType MaxLabel;
+    MaxFilterType::Pointer maxFilter = MaxFilterType::New();
+    maxFilter->SetImage(vLabelImages[0]);
+    maxFilter->ComputeMaximum();
+    MaxLabel = (ShortPixelType) maxFilter->GetMaximum();
+    MaxLabel++;
+
+    //  Filling output image
+    while (!ConstInputIterator.IsAtEnd())
+      {
+	PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
+	PixelType *LabelArray;
+	PixelType *LabelWeightArray;                  //weighting factor for each label
+	LabelArray = new PixelType[MaxLabel];
+	LabelWeightArray = new PixelType[NbFiles];
+
+	for (int Label = 0; Label < MaxLabel; Label++)
+	  LabelArray[Label] = 0;
+
+	for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
+          {
+	  LabelArray[(ShortPixelType)vConstLabelIterator[LabelFileNumber].Get()] += wparameters[LabelFileNumber];
+          }
+	
+	for (int Label = 0; Label < MaxLabel; Label++)
+	  {
+	    if (LabelArray[Label] > MaxVoxelValue)
+	      {
+		MaxVoxelValue = LabelArray[Label];
+		MaxLabelValue = Label;
+	      }
+	  }
+	
+        if(MaxLabelValue >= 0.5)
+	    OutputIterator.Set(MaxLabelValue);
+        else
+	    OutputIterator.Set(0);
+	delete[] LabelArray;	  
+	
+	++ConstInputIterator;
+	++OutputIterator;
+	for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
+	  ++vConstLabelIterator[LabelFileNumber];
+      }
+
+    //  Relabeling: considering neighborhood
+    NeighborhoodIteratorType::RadiusType Radius;
+      Radius.Fill(1);
+      NeighborhoodIteratorType NeighborhoodOutputIterator(Radius,MajVotingImage,MajVotingImage->GetRequestedRegion());
+      NeighborhoodIteratorType::OffsetType offset1 = {{-1,0,0}};
+      NeighborhoodIteratorType::OffsetType offset2 = {{1,0,0}};
+      NeighborhoodIteratorType::OffsetType offset3 = {{0,-1,0}};
+      NeighborhoodIteratorType::OffsetType offset4 = {{0,1,0 }};
+      NeighborhoodIteratorType::OffsetType offset5 = {{0,0,-1}};
+      NeighborhoodIteratorType::OffsetType offset6 = {{0,0,1}};
+
+      for (OutputIterator.GoToBegin(), NeighborhoodOutputIterator.GoToBegin(); !OutputIterator.IsAtEnd(); ++OutputIterator, ++NeighborhoodOutputIterator) {
+	  PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
+	  PixelType *LabelArray;
+	  LabelArray = new PixelType[MaxLabel];
+	  for (int Label = 0; Label < MaxLabel; Label++)
+	    LabelArray[Label] = 0;
+	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset1)]++;
+	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset2)]++;
+	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset3)]++;
+	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset4)]++;
+	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset5)]++;
+	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset6)]++; 	  
+
+	  for (int Label = 0; Label < MaxLabel; Label++)
+	    {
+	      if (LabelArray[Label] > MaxVoxelValue)
+		{
+		  MaxVoxelValue = LabelArray[Label];
+		  MaxLabelValue = Label;
+		}
+	    }
+
+	  if ( (MaxVoxelValue >= 4) && (MaxLabelValue != 0) && (OutputIterator.Get() != MaxLabelValue) )
+	    OutputIterator.Set(MaxLabelValue);
+
+	  delete[] LabelArray;
+	}
+      
+    inputImage = MajVotingImage;
+  } 
+ else if( flip )
   { 
     ImageType::SizeType size ;
     size = inputImage->GetLargestPossibleRegion().GetSize() ;
