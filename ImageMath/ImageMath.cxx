@@ -144,7 +144,6 @@ typedef itk::MinimumMaximumImageCalculator<ImageType> MaxFilterType;
 
 static int debug = 0;
 
-
 double Average( vector< double > vec )
 {
   double Av = 0 ;
