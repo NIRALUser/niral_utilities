@@ -351,7 +351,7 @@ int main(int argc, const char* argv[])
       for(int slice = 0 ; slice < dim[axisinter] ; slice++) {
 	
 	//ID of the slice in the output volume
-	int curr_slice = static_cast<int>(floor(slice/nbinter));
+	int curr_slice = static_cast<int>((double)floor((double)(slice/nbinter))); // (double) cast by Adrien Kaiser 01/22/2013 for windows compilation
 
 	int outimageID = static_cast<int>(fmod(static_cast<float>(slice), static_cast<float>(nbinter)));
 	

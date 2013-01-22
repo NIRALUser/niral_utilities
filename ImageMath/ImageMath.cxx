@@ -12,6 +12,8 @@
 #pragma warning ( disable : 4503 )
 #endif
 
+#define isnan _isnan // std::isnan -> std::_isnan by Adrien Kaiser 01/22/2013 for windows compilation
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -451,7 +453,7 @@ int main(const int argc, const char **argv)
   bool normalizeEMSOn    = ipExistsArgument(argv, "-normalizeEMS"); 
   int EMScount = ipGetIntArgument(argv,"-normalizeEMS",1);   
   tmp_str      = ipGetStringArgument(argv, "-EMSfile", NULL);
-  char * probFiles[EMScount];
+  char ** probFiles = new char*[EMScount]; // char * probFiles[EMScount]; replaced by 'new' by Adrien Kaiser 01/22/2013 for windows compilation
   vector<string>  EMSFiles;
   if (tmp_str) {
     if(debug) cout<<"there are "<<EMScount<<" files"<<endl;
@@ -466,7 +468,7 @@ int main(const int argc, const char **argv)
 	EMSFiles.push_back(probFiles[i]);}
     }
   }
-
+delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for windows compilation
   bool NormalizeOn = ipExistsArgument(argv, "-Normalize"); 
   vector<string>  NormalizeFiles;
   if (NormalizeOn)
