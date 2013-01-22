@@ -11,16 +11,13 @@ ELSE(GenerateCLP_FOUND)
   MESSAGE(FATAL_ERROR "GenerateCLP not found. Please set GenerateCLP_DIR.")
 ENDIF(GenerateCLP_FOUND)
 
-FIND_PACKAGE(ITK 3 REQUIRED)
+FIND_PACKAGE(ITK REQUIRED)
 IF (ITK_FOUND)
    INCLUDE(${USE_ITK_FILE})
 ELSE(ITK_FOUND)
    MESSAGE(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
 ENDIF (ITK_FOUND)
 
-IF( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
-  MESSAGE( FATAL_ERROR "TransformDeformationField needs ITKv3 to compile" )
-ENDIF()
 
 set (CLP TransformDeformationField)
 
