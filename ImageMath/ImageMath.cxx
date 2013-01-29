@@ -12,7 +12,9 @@
 #pragma warning ( disable : 4503 )
 #endif
 
-#define isnan _isnan // std::isnan -> std::_isnan by Adrien Kaiser 01/22/2013 for windows compilation
+#ifndef isnan
+  #define isnan _isnan // std::isnan -> isnan by Adrien Kaiser 01/22/2013 for windows compilation // windows knows _isnan and not isnan
+#endif
 
 #include <iostream>
 #include <fstream>
@@ -2523,7 +2525,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
      long counter = 0 ;
      for( it.GoToBegin() ; !it.IsAtEnd() ; ++it )
      {
-        if( std::isnan( it.Get() ) )
+        if( isnan( it.Get() ) )
         {
            counter++ ;
            it.Set( static_cast<PixelType>( nan_value ) ) ;
