@@ -44,6 +44,8 @@ using namespace std;
 #include "argio.h"
 #include "ImageStat.h" 
 
+#include "itkHausdorffDistanceImageFilter.h"
+
 #define DEFAULT_SAMP 2
 // number of samples by default
 
@@ -126,7 +128,7 @@ int main(const int argc, const char **argv)
 		cout << "      -probabilityMap probabilitymap   use probability map to compute volume, mean intensity etc." << endl;
 		cout << "      -volumeSummary   give volume for each label" << endl;
 		cout << "      -intensitySummary   give mean intensity, standard deviation, min, max, quantiles for each label" << endl;
-		cout << "-volOverlap labelFile  compute both Tanimoto (intersection over union) and Dice coefficient of input label image with additional image" << endl;
+		cout << "-volOverlap labelFile  compute Tanimoto (intersection over union), Dice coefficient and Hausdorff distance of input label image with additional image" << endl;
 		cout << endl << endl;
 		exit(0);
 	}
@@ -859,6 +861,16 @@ int main(const int argc, const char **argv)
 				++iterImageA;
 				++iterImageB;
 			}
+
+			typedef itk::HausdorffDistanceImageFilter<ImageType,ImageType> HausdorffFilterType;
+			HausdorffFilterType::Pointer hausdorff = HausdorffFilterType::New();
+
+			hausdorff->SetInput1( inputImage );
+			hausdorff->SetInput2( volOverlapImage );
+			hausdorff->Update();
+			double hausdorffDistance = hausdorff->GetHausdorffDistance() ;
+			
+
 			volUnion = volUnion + volIntersection;
 			efile << "Union = " << volUnion << endl;
 			efile << "Intersection = " << volIntersection << endl;
@@ -866,7 +878,7 @@ int main(const int argc, const char **argv)
 			efile << "volB = " << volB << endl;
 			efile<< "DiceCoef = " << 2.0 * (double) volIntersection / (volA + volB) << endl;
 			efile<< "TanimotoCoef = " << (double) volIntersection / volUnion << endl;
-
+			efile << "HausdorffDist = " << hausdorffDistance << endl ;
 			efile.close();
 
 		}
