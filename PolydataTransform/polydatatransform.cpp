@@ -90,10 +90,21 @@ int main(int argc, char* argv[])
     for(int i=0;i<numPoints;i++)
     {	
         inPts->GetPoint( i, fiberpointtemp );
-	//convert RAS to LPS (vtk)
-	fiberpoint[0] = - fiberpointtemp[0];
-	fiberpoint[1] = - fiberpointtemp[1];
-	fiberpoint[2] = + fiberpointtemp[2];	
+	if (invx) {
+	  fiberpoint[0] = - fiberpointtemp[0];
+	} else {
+	  fiberpoint[0] = + fiberpointtemp[0];
+	}
+	if (invy) {
+	  fiberpoint[1] = - fiberpointtemp[1];
+	} else {
+	  fiberpoint[1] = + fiberpointtemp[1];
+	}
+	if (invz) {
+	  fiberpoint[2] = - fiberpointtemp[2];
+	} else {
+	  fiberpoint[2] = + fiberpointtemp[2];	
+	}
 
         deformationfield->TransformPhysicalPointToContinuousIndex(fiberpoint,ci);
 	if( !deformationfield->GetLargestPossibleRegion().IsInside( ci ) )
@@ -105,9 +116,21 @@ int main(int argc, char* argv[])
           fiberpoint[j] +=warp[j]; 
 
 	//convert LPS to RAS (vtk)
-	fiberpoint[0] = - fiberpoint[0];
-	fiberpoint[1] = - fiberpoint[1];
-	fiberpoint[2] = + fiberpoint[2];
+	if (invx) {
+	  fiberpoint[0] = - fiberpoint[0];
+	} else {
+	  fiberpoint[0] = + fiberpoint[0];
+	}
+	if (invy) {
+	  fiberpoint[1] = - fiberpoint[1];
+	} else {
+	  fiberpoint[1] = + fiberpoint[1];
+	}
+	if (invz) {
+	  fiberpoint[2] = - fiberpoint[2];
+	} else {
+	  fiberpoint[2] = + fiberpoint[2];	
+	}
 
         points->InsertPoint(i,fiberpoint[0],fiberpoint[1],fiberpoint[2]);
 	

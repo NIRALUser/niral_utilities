@@ -36,6 +36,27 @@
 			<label>Fiber File</label>
 			<description>DTI fiber file</description>
 			<channel>input</channel>
-		</file>
+		</file>    
+		<boolean>
+		  <name>invx</name>
+		  <longflag>--invertx</longflag>
+		  <label>Invert X axis</label>
+		  <description>Invert X axis prior to transform, as well as after transform</description>
+		  <default>false</default>
+		</boolean>
+		<boolean>
+		  <name>invy</name>
+		  <longflag>--inverty</longflag>
+		  <label>Invert Y axis</label>
+		  <description>Invert Y axis prior to transform, as well as after transform</description>
+		  <default>false</default>
+		</boolean>
+		<boolean>
+		  <name>invz</name>
+		  <longflag>--invertz</longflag>
+		  <label>Invert Z axis</label>
+		  <description>Invert Z axis prior to transform, as well as after transform</description>
+		  <default>false</default>
+		</boolean>
 	</parameters>
 </executable>
