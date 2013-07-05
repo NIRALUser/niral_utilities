@@ -387,7 +387,7 @@ int main(const int argc, const char **argv)
 
   int erodeRadius, dilateRadius;
   erodeRadius = dilateRadius = 1;
-  PixelType erodeVal, dilateVal;
+  PixelType erodeVal=1, dilateVal=1;
   bool dilateOn   = ipExistsArgument(argv, "-dilate");  
   tmp_str      = ipGetStringArgument(argv, "-dilate", NULL); 
   if (tmp_str) {
@@ -607,6 +607,10 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 
   tmp_str      = ipGetStringArgument(argv, "-pixelLookup", NULL);
   float pixelLookupIndex[3];
+  for( unsigned int i = 0 ; i < 3 ; i++ )
+  {
+    pixelLookupIndex[ i ] = 0 ;
+  }
   if (tmp_str) {
       int num = ipExtractFloatTokens(textend, tmp_str, 3);
       if (3 != num)
@@ -1251,11 +1255,27 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     IteratorType iterImage1 (inputImage, inputImage->GetBufferedRegion());
     while ( !iterImage1.IsAtEnd() )  {
       PixelType value1 =  iterImage1.Get();
-      PixelType value2;
-      if (operID == 0) { value2 = value1 + operVal;
-      } else if (operID == 1) { value2 = value1 - operVal;
-      } else if (operID == 2) { value2 = value1 * operVal;
-      } else if (operID == 3) { value2 = value1 / operVal;
+      PixelType value2 ;
+      if (operID == 0)
+      {
+        value2 = value1 + operVal;
+      }
+      else if (operID == 1)
+      {
+        value2 = value1 - operVal;
+      }
+      else if (operID == 2)
+      {
+        value2 = value1 * operVal;
+      }
+      else if (operID == 3)
+      {
+        value2 = value1 / operVal;
+      }
+      else
+      {
+        std::cerr << "opID for -constOper has to be between 0 and 3" << std::endl ;
+        return EXIT_FAILURE ;
       }
       
       iterImage1.Set(value2);
