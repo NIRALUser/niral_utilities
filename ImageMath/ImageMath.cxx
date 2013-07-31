@@ -77,6 +77,7 @@ using namespace std;
 #include <itkNearestNeighborInterpolateImageFunction.h>
 #include <itkImageRegionIterator.h>
 #include <itkMetaDataObject.h>
+#include <itkDanielssonDistanceMapImageFilter.h>
 
 #include "argio.h"
 #include "ImageMath.h" 
@@ -158,8 +159,6 @@ double Average( vector< double > vec )
   Av /= (double)vec.size() ;
   return Av ;
 }
-
-
 
 double DistanceToMean( std::vector< double > vec1 , std::vector< double > vec2 )
 {
@@ -268,6 +267,7 @@ int main(const int argc, const char **argv)
     cout << "-rescale min,max       Applies a linear transformation to the intensity levels of the input Image" << endl;
     cout << "-correl images2,mask   Computes the correlation between 2 images voxelwize" << endl;
     cout << "-pixelLookup x,y,z     Outputs the pixel intensity for a given coordinate" << endl ;
+    cout << "-danDistanceMap        Outputs the Danielsson Distance Map" << endl ;
     cout << endl << endl;
     exit(0);
   }
@@ -682,6 +682,8 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       for(unsigned int i = 0 ; i < NbFiles ; i++)
 	InputFiles.push_back(files[i]);
     }
+
+  bool DanDistanceMapOn = ipExistsArgument(argv, "-danDistanceMap");
 
     bool StdOn = ipExistsArgument(argv, "-std");
   if (StdOn)
@@ -2463,36 +2465,86 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       NeighborhoodIteratorType::OffsetType offset5 = {{0,0,-1}};
       NeighborhoodIteratorType::OffsetType offset6 = {{0,0,1}};
 
-      for (OutputIterator.GoToBegin(), NeighborhoodOutputIterator.GoToBegin(); !OutputIterator.IsAtEnd(); ++OutputIterator, ++NeighborhoodOutputIterator) {
-	  PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
-	  PixelType *LabelArray;
-	  LabelArray = new PixelType[MaxLabel];
-	  for (int Label = 0; Label < MaxLabel; Label++)
-	    LabelArray[Label] = 0;
-	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset1)]++;
-	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset2)]++;
-	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset3)]++;
-	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset4)]++;
-	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset5)]++;
-	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset6)]++; 	  
+        for (OutputIterator.GoToBegin(), NeighborhoodOutputIterator.GoToBegin(); !OutputIterator.IsAtEnd(); ++OutputIterator, ++NeighborhoodOutputIterator){
+	    PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
+	    PixelType *LabelArray;
+	    LabelArray = new PixelType[MaxLabel];
+	    for (int Label = 0; Label < MaxLabel; Label++)
+	        LabelArray[Label] = 0;
+	    LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset1)]++;
+	    LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset2)]++;
+	    LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset3)]++;
+	    LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset4)]++;
+	    LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset5)]++;
+	    LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset6)]++; 	  
 
-	  for (int Label = 0; Label < MaxLabel; Label++)
-	    {
-	      if (LabelArray[Label] > MaxVoxelValue)
-		{
-		  MaxVoxelValue = LabelArray[Label];
-		  MaxLabelValue = Label;
-		}
+	    for (int Label = 0; Label < MaxLabel; Label++){
+	        if (LabelArray[Label] > MaxVoxelValue){
+		    MaxVoxelValue = LabelArray[Label];
+		    MaxLabelValue = Label;
+                }
 	    }
+  
+            if ( (MaxVoxelValue >= 4) && (MaxLabelValue != 0) && (OutputIterator.Get() != MaxLabelValue) )
+      //      if ( (MaxLabelValue != 0) && (OutputIterator.Get() != MaxLabelValue) )
+	        OutputIterator.Set(MaxLabelValue);
+           // else
+	    //    OutputIterator.Set(MaxLabelValue);
 
-	  if ( (MaxVoxelValue >= 4) && (MaxLabelValue != 0) && (OutputIterator.Get() != MaxLabelValue) )
-	    OutputIterator.Set(MaxLabelValue);
-
-	  delete[] LabelArray;
+	    delete[] LabelArray;
 	}
-      
-    inputImage = MajVotingImage;
-  } 
+        inputImage = MajVotingImage;
+    } 
+
+ else if(DanDistanceMapOn) {
+ //   typedef unsigned char InputPixelType;
+  //  typedef unsigned short OutputPixelType;
+   // typedef itk::Image<InputPixelType, 3> InputImageType;
+//    typedef itk::Image<OutputPixelType, 3> OutputImageType;
+    typedef itk::DanielssonDistanceMapImageFilter<ImageType, ImageType> FilterType;
+    FilterType::Pointer filter = FilterType::New();
+   
+    typedef itk::RescaleIntensityImageFilter<ImageType, ImageType> RescalerType;
+    RescalerType::Pointer scaler = RescalerType::New();
+/*
+    typedef otb::ImageFileReader<InputImageType> ReaderType;
+    typedef otb::ImageFileWriter<OutputImageType> WriterType;
+   
+    ReaderType::Pointer reader = ReaderType::New();
+    WriterType::Pointer writer = WriterType::New();
+
+    reader->SetFileName(argv[1]);
+    writer->SetFileName(argv[2]);
+*/
+    filter->SetInput(inputImage);
+   // scaler->SetInput(filter->GetOutput());
+   // scaler->SetInput(filter->GetVoronoiMap());
+   // writer->SetInput(scaler->GetOutput());
+
+    //scaler->SetOutputMaximum(65535L);
+   // scaler->SetOutputMinimum(0L);
+
+    //filter->InputIsBinaryOn();
+
+
+    try {
+        filter->Update();
+    }
+    catch (ExceptionObject & err) {
+        cerr << "ExceptionObject caught!" << endl;
+        cerr << err << endl;
+        return EXIT_FAILURE;
+    }
+    inputImage = filter->GetVoronoiMap();
+/*
+    writer->Update();
+    const char * voronoiMapFileName = argv[3];
+
+    scaler->SetInput(filter->GetVoronoiMap());
+    writer->SetFileName(voronoiMapFileName);
+    writer->Update();
+*/
+ }
  else if( flip )
   { 
     ImageType::SizeType size ;
