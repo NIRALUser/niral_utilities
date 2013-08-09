@@ -194,6 +194,49 @@ double ImagesCorrelation( ImageType::Pointer image1 , ImageType::Pointer image2 
   return s12/sqrt(s1*s2) ;
 }
 
+//Added by Yundi Shi
+//Calculate the average intensity of an image with a mask file
+double ImagesAverage( ImageType::Pointer image ,  ShortImageType::Pointer mask )
+{
+  typedef ImageType::IndexType IndexType ;
+  IndexType index ;
+  ShortIteratorType it( mask , mask->GetLargestPossibleRegion() ) ;
+  std::vector< double > val ;
+  for( it.GoToBegin() ; !it.IsAtEnd() ; ++it )
+  {
+    if( it.Get() )
+    {
+      index = it.GetIndex() ;
+      val.push_back( image->GetPixel( index ) ) ;
+    }
+  }
+  double s = Average( val ) ;
+  return s ;
+}
+
+//Added by Yundi Shi
+//Calculate the standard deviation of intensities of an image with a mask file
+double ImagesStd( ImageType::Pointer image ,  ShortImageType::Pointer mask )
+{
+  typedef ImageType::IndexType IndexType ;
+  IndexType index ;
+  ShortIteratorType it( mask , mask->GetLargestPossibleRegion() ) ;
+  std::vector< double > val ;
+  for( it.GoToBegin() ; !it.IsAtEnd() ; ++it )
+  {
+    if( it.Get() )
+    {
+      index = it.GetIndex() ;
+      val.push_back( image->GetPixel( index ) ) ;
+    }
+  }
+  double image_sum = DistanceToMean( val , val ) ;
+  double image_std = sqrt(image_sum/(val.size()-1.0));
+
+  return image_std ;
+}
+
+
 //What pixeltype is the image 
 void GetImageType( char* fileName ,
                    itk::ImageIOBase::IOPixelType &pixelType ,
@@ -266,6 +309,8 @@ int main(const int argc, const char **argv)
     cout << "-std infile2 infile3...             Compute the standard deviation from a set of images (one image has to be specified for the input, but it's not included in the process)" << endl;
     cout << "-rescale min,max       Applies a linear transformation to the intensity levels of the input Image" << endl;
     cout << "-correl images2,mask   Computes the correlation between 2 images voxelwize" << endl;
+    cout << "-RegionAvg mask   Computes the average intensities over a masked region" << endl;
+    cout << "-RegionStd mask   Computes the standard deviation of image intensities over a masked region" << endl;
     cout << "-pixelLookup x,y,z     Outputs the pixel intensity for a given coordinate" << endl ;
     cout << "-danDistanceMap        Outputs the Danielsson Distance Map" << endl ;
     cout << endl << endl;
@@ -651,8 +696,13 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       exit(1);
     }
   }
-
-
+  bool RegionAvgOn = ipExistsArgument(argv, "-RegionAvg");
+  bool RegionStdOn = ipExistsArgument(argv, "-RegionStd");
+  char *RegionMaskFile  = ipGetStringArgument(argv, "-RegionAvg", NULL);
+  if(RegionStdOn) {
+    RegionMaskFile  = ipGetStringArgument(argv, "-RegionStd", NULL);
+  }
+  
   bool AvgOn = ipExistsArgument(argv, "-avg");
   if (AvgOn)
     {
@@ -685,7 +735,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 
   bool DanDistanceMapOn = ipExistsArgument(argv, "-danDistanceMap");
 
-    bool StdOn = ipExistsArgument(argv, "-std");
+  bool StdOn = ipExistsArgument(argv, "-std");
   if (StdOn)
   {
       NbFiles = ipGetStringMultipArgument(argv, "-std", files, MaxNumFiles);
@@ -916,6 +966,28 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       ++iterImage2;
     }
   }
+  else if (RegionAvgOn)
+    {
+      VolumeReaderType::Pointer maskReader = VolumeReaderType::New();
+      maskReader->SetFileName(RegionMaskFile) ;
+      castShortFilterType::Pointer castMask = castShortFilterType::New() ;
+      castMask->SetInput( maskReader->GetOutput() ) ;
+      castMask->Update() ;
+      double avg_value = ImagesAverage(inputImage,castMask->GetOutput());
+      cout<<"Average Intensity of the masked region is: "<<avg_value<<endl;
+      return EXIT_SUCCESS ;
+    }
+  else if (RegionStdOn)
+    {
+      VolumeReaderType::Pointer maskReader = VolumeReaderType::New();
+      maskReader->SetFileName(RegionMaskFile) ;
+      castShortFilterType::Pointer castMask = castShortFilterType::New() ;
+      castMask->SetInput( maskReader->GetOutput() ) ;
+      castMask->Update() ;
+      double std_value = ImagesStd(inputImage,castMask->GetOutput());
+      cout<<"Standard deviation of the iamge intensity in the masked region is: "<<std_value<<endl;
+      return EXIT_SUCCESS ;
+    }
   else if( correlOn )
   {
     VolumeReaderType::Pointer image2Reader = VolumeReaderType::New();
