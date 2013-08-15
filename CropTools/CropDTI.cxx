@@ -28,7 +28,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include <itkImageRegionConstIterator.h>
 #include <itkImageFileWriter.h>
 #include <itkMetaImageIO.h>
-
+#include <itkVector.h>
 #include <itkExtractImageFilter.h>
 #include <itkConstantPadImageFilter.h>
 
@@ -165,14 +165,19 @@ int main(int argc, const char* argv[])
 		cropParam[1] = (imageOriginalSize[1] - sizeParam[1])/2; ; 
 		cropParam[2] = (imageOriginalSize[2] - sizeParam[2])/2; ; 
 
-		cropParam[3] = sizeParam[0]; 
-		cropParam[4] = sizeParam[1]; 
-		cropParam[5] = sizeParam[2]; 
+		cropParam[3] = sizeParam[0];
+		cropParam[4] = sizeParam[1];
+		cropParam[5] = sizeParam[2];
 	}
+
+/*	outputIndex[0] = 0;//cropParam[0]; 
+	outputIndex[1] = 0;//cropParam[1]; 
+	outputIndex[2] = 0;//ropParam[2]; */
 
 	outputIndex[0] = 0;//cropParam[0]; 
 	outputIndex[1] = 0;//cropParam[1]; 
-	outputIndex[2] = 0;//ropParam[2]; 
+	outputIndex[2] = 0;//cropParam[2]; 
+
 
 	outputSize[0] = cropParam[3]; 
 	outputSize[1] = cropParam[4]; 
@@ -181,13 +186,30 @@ int main(int argc, const char* argv[])
 	outputRegion.SetIndex(outputIndex);
 	outputRegion.SetSize( outputSize);
 
+  DtiImageType::PointType newOrigin ;
+  DtiImageType::PointType currentOrigin = imageReader->GetOutput()->GetOrigin() ;
+  DtiImageType::DirectionType direction = imageReader->GetOutput()->GetDirection() ;
+  DtiImageType::SpacingType spacing = imageReader->GetOutput()->GetSpacing() ;
+  itk::Vector< double , 3 > diff ;
+  for( int i = 0 ; i < 3 ; i++ )
+  {
+    diff[ i ] = cropParam[ i ] ;
+  }
+  itk::Vector< double , 3 > displacement ;
+  displacement = direction * diff ;
+  for( int i = 0 ; i < 3 ; i++ )
+  {
+    displacement [ i ] *= spacing[ i ] ;
+  }
+  newOrigin = currentOrigin + displacement ;
 	DtiImageType::Pointer	PaddedDTI = DtiImageType::New();
 	PaddedDTI->SetLargestPossibleRegion(outputRegion);
 	PaddedDTI->SetBufferedRegion(outputRegion);
-	PaddedDTI->SetSpacing( imageReader->GetOutput()->GetSpacing() );
-	PaddedDTI->SetOrigin(imageReader->GetOutput()->GetOrigin() );
+	PaddedDTI->SetSpacing( spacing ) ;
+	PaddedDTI->SetOrigin( newOrigin ) ;
+	PaddedDTI->SetDirection( direction ) ;
 	PaddedDTI->Allocate();
-
+  PaddedDTI->SetMetaDataDictionary(imageReader->GetOutput()->GetMetaDataDictionary()); 
 	double tensorPixel0[6]={0.0,0.0,0.0,0.0,0.0,0.0};
 	//double tensorPixel1[6]={1.0,0.0,0.0,1.0,0.0,1.0};
 	PaddedDTI->FillBuffer(tensorPixel0);
@@ -231,7 +253,7 @@ int main(int argc, const char* argv[])
 
 	DTIWriterType::Pointer DTIWriter = DTIWriterType::New();
 	DTIWriter->SetFileName(outfileName.c_str());
-	DTIWriter->SetInput(PaddedDTI);
+	DTIWriter->SetInput(PaddedDTI);	
 	DTIWriter->Update();
 
 	return 0 ;
