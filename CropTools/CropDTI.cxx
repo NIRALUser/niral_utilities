@@ -11,6 +11,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#define VERSION_NUMBER "1.01"
+
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
@@ -49,16 +51,23 @@ int main(int argc, const char* argv[])
 		ipExistsArgument(argv,"-usage"))
 	{
 		cout << "usage: " << argv[0] <<" infile [-o outfile] [-region  px,py,pz,w,h,d | -size w,h,d] [-v] " << endl
-			 << "  -region px,py,pz,w,h,d crop/uncrop(embed/pad with 0-matrix) DTI image " << endl
-			 << "          including starting point index px, py, pz" << endl
-			 << "          with dimensions width(w),height(h) and depth(d)" << endl
-			 << "  -size   w,h,d crop/uncrop(embed/pad with 0-matrix) DTI image with" << endl
-			 << "          the input data put in center and with sizes of width(w),height(h) and depth(d)" << endl
-			 << "  -v      verbose mode" << endl
+			 << "  -region  px,py,pz,w,h,d crop/uncrop(embed/pad with 0-matrix) DTI image " << endl
+			 << "           including starting point index px, py, pz" << endl
+			 << "           with dimensions width(w),height(h) and depth(d)" << endl
+			 << "  -size    w,h,d crop/uncrop(embed/pad with 0-matrix) DTI image with" << endl
+			 << "           the input data put in center and with sizes of width(w),height(h) and depth(d)" << endl
+			 << "  -v       verbose mode" << endl
+       << " -version  print software version" << endl
 			 << endl;
 		exit(0) ;
 	}
 
+  int version =  ipExistsArgument(argv,"-version"); 
+  if( version )
+  {
+    std::cout << "CropDTI  version: " << VERSION_NUMBER << std::endl ;
+    return 0 ;
+  }
 	// argument processing
 	string fileName(argv[1]);
 
