@@ -305,7 +305,7 @@ int main(const int argc, const char **argv)
     cout << "-weightedMajorityVoting infile2 infile3... -weights w1,w2,...     Compute an accurate parcellation map considering a weighted majority voting process" << endl;
     cout << "-center                Center image" << endl;
     cout << "-flip [x,][y,][z]      Flip image" << endl;
-    cout << "-NaNCor val    Removes NaN and set the value of those voxels to the given value" << endl;
+    cout << "-NaNCor                Removes NaN and set the value of those voxels the average of the (non-NaN) neighbor values" << endl;
     cout << "-std infile2 infile3...             Compute the standard deviation from a set of images (one image has to be specified for the input, but it's not included in the process)" << endl;
     cout << "-rescale min,max       Applies a linear transformation to the intensity levels of the input Image" << endl;
     cout << "-correl images2,mask   Computes the correlation between 2 images voxelwize" << endl;
@@ -793,7 +793,6 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     }
   }
   bool nan   = ipExistsArgument(argv, "-NaNCor"); 
-  float nan_value   = ipGetFloatArgument( argv , "-NaNCor", 0 ) ;
 
   bool rescalingOn    = ipExistsArgument(argv, "-rescale"); 
   tmp_str      = ipGetStringArgument(argv, "-rescale", NULL);
@@ -2664,15 +2663,29 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     outFileName.append("_flip");
   }else if( nan )
   {
-     typedef itk::ImageRegionIterator< ImageType > IteratorType ;
-     IteratorType it( inputImage , inputImage->GetLargestPossibleRegion() ) ;
+     NeighborhoodIteratorType::RadiusType radius;
+     radius.Fill(1);
+     NeighborhoodIteratorType it( radius , inputImage , inputImage->GetLargestPossibleRegion() ) ;
      long counter = 0 ;
      for( it.GoToBegin() ; !it.IsAtEnd() ; ++it )
      {
-        if( isnan( it.Get() ) )
+        if( isnan( it.GetCenterPixel() ) )
         {
            counter++ ;
-           it.Set( static_cast<PixelType>( nan_value ) ) ;
+           float avg = 0.0 ;
+           int counter2 = 0 ;
+           for( SizeValueType c = 0 ; c < it.Size() ; c++ )
+           {
+             if( !isnan( it.GetPixel( c ) ) )
+             {
+               avg += it.GetPixel( c ) ;
+               counter2++ ;
+             }
+           }
+           if( counter2 > 0)
+           {
+             it.SetCenterPixel( static_cast<PixelType>( avg/float(counter2) ) ) ;
+           }
         }
      }
      std::cout<< "Number Of NaN found: " << counter << std::endl ;
