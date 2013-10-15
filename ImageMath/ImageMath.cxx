@@ -255,7 +255,7 @@ void GetImageType( char* fileName ,
 int main(const int argc, const char **argv)
 {
   if (argc <=1 || ipExistsArgument(argv, "-usage") || ipExistsArgument(argv, "-help")) {
-    cout << "ImageMath 1.1 version (Dec 2007)" << endl;
+    cout << "ImageMath 1.11 version (Oct 2013)" << endl;
     cout << " computes base statistics of an image" << endl;
     cout << "usage: ImageMath infile <options>" << endl;
     cout << endl;
@@ -1139,6 +1139,8 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       maskFilterType::Pointer maskFilter = maskFilterType::New() ;
       maskFilter->SetInput1( inputImage ) ;
       maskFilter->SetInput2( inputImage2 ) ;
+      maskFilter->SetCoordinateTolerance( 0.001 ) ;
+      maskFilter->SetDirectionTolerance( 0.001 ) ;
       try
       {
         maskFilter->Update() ;
