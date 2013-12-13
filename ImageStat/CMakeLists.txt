@@ -19,3 +19,4 @@ set to OFF. ImageStat will fail to compile if this option is OFF. Please
 recompile ITK with this option set to ON to compile ImageStat")
 endif( NOT ${ITK_USE_REVIEW_STATISTICS} )
 
+install( TARGETS ImageStat RUNTIME DESTINATION bin )

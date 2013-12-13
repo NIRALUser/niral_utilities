@@ -25,3 +25,5 @@ GENERATECLP(src polydatamerge.xml)
 
 add_executable(polydatamerge  ${src}  )
 target_link_libraries(polydatamerge  ${ITK_LIBRARIES} vtkHybrid vtkCommon ${VTK_LIBRARIES})
+
+install( TARGETS polydatamerge RUNTIME DESTINATION bin )

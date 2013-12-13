@@ -21,4 +21,4 @@ ENDIF()
 ADD_EXECUTABLE(ImageMath ImageMath.cxx )
 TARGET_LINK_LIBRARIES( ImageMath ${ITK_LIBRARIES} )
 
-
+install( TARGETS ImageMath RUNTIME DESTINATION bin )

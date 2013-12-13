@@ -21,3 +21,5 @@ GENERATECLP(NiftiNrrdConversion.cxx NiftiNrrdConversion.xml)
 ADD_EXECUTABLE(DWI_NiftiNrrdConversion NiftiNrrdConversion.cxx)
 
 TARGET_LINK_LIBRARIES(DWI_NiftiNrrdConversion ${ITK_LIBRARIES})
+
+install( TARGETS DWI_NiftiNrrdConversion RUNTIME DESTINATION bin )

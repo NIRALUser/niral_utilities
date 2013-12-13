@@ -18,3 +18,4 @@ TARGET_LINK_LIBRARIES( convertITKformats ${ITK_LIBRARIES} )
 TARGET_LINK_LIBRARIES( convertITKformats4D ${ITK_LIBRARIES} )
 TARGET_LINK_LIBRARIES( convertTextToImage ${ITK_LIBRARIES} )
 
+install( TARGETS convertITKformats convertITKformats4D convertTextToImage RUNTIME DESTINATION bin )

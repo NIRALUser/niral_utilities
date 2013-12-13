@@ -11,7 +11,7 @@ ELSE(GenerateCLP_FOUND)
   MESSAGE(FATAL_ERROR "GenerateCLP not found. Please set GenerateCLP_DIR.")
 ENDIF(GenerateCLP_FOUND)
 
-FIND_PACKAGE(ITK 3 REQUIRED)
+FIND_PACKAGE(ITK REQUIRED)
 IF (ITK_FOUND)
    INCLUDE(${USE_ITK_FILE})
 ELSE(ITK_FOUND)
@@ -44,4 +44,4 @@ target_link_libraries (${CLP}
 )
 
 
-
+install( TARGETS ${CLP} RUNTIME DESTINATION bin )
