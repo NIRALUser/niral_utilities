@@ -72,7 +72,7 @@
 #include "itkImage.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "itkOrientedImage.h"
+//#include "itkOrientedImage.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include <iostream>
 #include <fstream>
@@ -147,7 +147,7 @@ int main( int argc, char * argv[] )
         std::cerr << " -g " << "  establish graph and search optimal route between image pairs through graph" << std::endl;
         std::cerr << " -m " << "  run majority voting" << std::endl;
         std::cerr << " -v " << "  run weighted majority voting" << std::endl;
-        std::cerr << " -t " << "  run STAPLE label fusion" << std::endl;
+        std::cerr << " -c " << "  run STAPLE label fusion" << std::endl;
         std::cerr << " -p " << "  calculate metrics" << std::endl;
         std::cerr << " -u " << "  calculate shape energy (circularity)" << std::endl;
         std::cerr << " -e " << "  calculate harmonic energy" << std::endl;
@@ -218,7 +218,7 @@ int main( int argc, char * argv[] )
         float p[DATASET_SIZE];  // sensitivity
         float q[DATASET_SIZE];   // specificity
         float A = 0, B = 0, R = 0, f = 0, fT1 = 0, fT0 = 0, f1 = 1, f0 = 1, senThresh = 0.95;
-        typedef itk::OrientedImage< float, 3 >                         OrientedImageType;
+        typedef itk::Image< float, 3 >                         OrientedImageType;
         char filename[1024];
         int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, usedCase[25] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1, 1, 1}; 
         int segLabel = atoi(argv[2]), fixCase = atoi(argv[3]), numIteration = 1, numCaseUsed = DATASET_SIZE, numCaseWillUse = DATASET_SIZE;
@@ -340,7 +340,7 @@ int main( int argc, char * argv[] )
     if( strchr (argv[1], 'b') != NULL ) {
         //label 1
         float A = 0, B = 0, R = 0, f = 0, b = 0, fT1 = 0, fT0 = 0, f1 = 1, f0 = 1, senThresh = 0.01;//senThresh = 0.95
-        typedef itk::OrientedImage< float, 3 >                         OrientedImageType;
+        typedef itk::Image< float, 3 >                         OrientedImageType;
         char filename[1024];
         int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, usedCase[25] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; 
         int segLabel = atoi(argv[2]), fixCase = atoi(argv[3]), numIteration = 1, numCaseUsed = DATASET_SIZE, numCaseWillUse = DATASET_SIZE;
@@ -905,7 +905,7 @@ int main( int argc, char * argv[] )
  
     if( strchr (argv[1], 'e') != NULL ) { 
         // compute harmonic energy
-        typedef itk::OrientedImage< float, Dimension >         OrientedImageType;
+        typedef itk::Image< float, Dimension >         OrientedImageType;
         typedef itk::ImageFileReader<OrientedImageType> OrientedReaderType;
         typedef itk::ImageFileWriter<OrientedImageType> OrientedWriterType;
         OrientedReaderType::Pointer orientedreaderx = OrientedReaderType::New();
@@ -988,7 +988,7 @@ int main( int argc, char * argv[] )
 
     if( strchr (argv[1], 'u') != NULL ) { 
         // compute shape energy
-        typedef itk::OrientedImage< float, Dimension >         OrientedImageType;
+        typedef itk::Image< float, Dimension >         OrientedImageType;
         typedef itk::ImageFileReader<OrientedImageType> OrientedReaderType;
         typedef itk::ImageFileWriter<OrientedImageType> OrientedWriterType;
      //   OrientedReaderType::Pointer binaryMask = OrientedReaderType::New();

@@ -58,7 +58,7 @@
 #include <iostream>
 #include <fstream>
 
-typedef itk::OrientedImage< float, 3>  synImageType;    
+typedef itk::Image< float, 3>  synImageType;    
 typedef itk::ImageFileWriter< synImageType >                  ImageWriterType;
 ImageWriterType::Pointer                    syntheticWriter = ImageWriterType::New();
 static void CreateEllipseImage(synImageType::Pointer image);
@@ -82,9 +82,9 @@ int main( int argc, char* argv[] )
         std::cerr << "EXAMPLE: \n" << argv[0] << " -c example.nrrd example_mask.nrrd /home/tester/work/\n\n" << std::endl;
         std::cerr << "         \n" << argv[0] << " -ch example.nrrd example_mask.nrrd /home/tester/work/ histogram_match_reference_image.nrrd\n\n" << std::endl;
         std::cerr << " -c " << "  calculate the texture features: (i) histogram, (ii) co-occurence, (iii) run length" << std::endl;
+        std::cerr << " -r " << "  specify the range of intensity" << std::endl;
         std::cerr << " -h " << "  conduct histogram match to a reference image" << std::endl;
         std::cerr << " -help " << " print out this instruction" << std::endl;
-        std::cerr << " -h " << " print out this instruction" << std::endl;
         return EXIT_FAILURE;
     }   
     // declare variables 
@@ -203,7 +203,12 @@ int main( int argc, char* argv[] )
         std::ofstream runlengthefile( runlengthfeaturefilename.c_str() , std::ios::app );
     //    runlengthefile << caseID << ":  " << "\n";
         runlengthefile.close();
-        muscleFeatT2.runlengthFeat3DROI ( segMuscleLeft->GetOutput(), t2LeftFemurSmooth, runlengthfeaturefilename, voxelVol );  // use T2w
+        if ( strchr (argv[1], 'r') != NULL ) { // specify intesnity range 
+            muscleFeatT2.runlengthFeat3DROI ( segMuscleLeft->GetOutput(), t2LeftFemurSmooth, runlengthfeaturefilename, voxelVol, atoi(argv[argc - 2]), atoi(argv[argc - 1]) );  // use T2w
+        }
+        else {
+            muscleFeatT2.runlengthFeat3DROI ( segMuscleLeft->GetOutput(), t2LeftFemurSmooth, runlengthfeaturefilename, voxelVol, 0, 0);  // use T2w
+        }
         #endif
         std::cout << "******" << std::flush;
 
@@ -213,7 +218,10 @@ int main( int argc, char* argv[] )
         std::ofstream cooccurrenceefile( cooccurrencefeaturefilename.c_str() , std::ios::app );
      //   cooccurrenceefile << caseID << ":  " << "\n";
         cooccurrenceefile.close();
-        muscleFeatT2.cooccurrenceFeat3DROI ( segMuscleLeft->GetOutput(), t2LeftFemurSmooth, cooccurrencefeaturefilename, voxelVol );
+        if ( strchr (argv[1], 'r') != NULL )  // specify intesnity range 
+            muscleFeatT2.cooccurrenceFeat3DROI ( segMuscleLeft->GetOutput(), t2LeftFemurSmooth, cooccurrencefeaturefilename, voxelVol, atoi(argv[argc - 2]), atoi(argv[argc - 1]));
+        else
+            muscleFeatT2.cooccurrenceFeat3DROI ( segMuscleLeft->GetOutput(), t2LeftFemurSmooth, cooccurrencefeaturefilename, voxelVol, 0, 0);
         #endif
         std::cout << "******" << std::flush;
 
@@ -222,7 +230,11 @@ int main( int argc, char* argv[] )
         std::string histogramfeaturefilename = procDirectory + "histogram_features.txt";
         std::ofstream efile( histogramfeaturefilename.c_str() , std::ios::app );
         efile.close();
-        muscleFeatT2.histogramFeat3DROI ( segMuscleLeft->GetOutput(), segMuscleLeft->GetOutput(), t2LeftFemurSmooth, voxelVol, histogramfeaturefilename, TRUE ); 
+        if ( strchr (argv[1], 'r') != NULL )  // specify intesnity range 
+            muscleFeatT2.histogramFeat3DROI ( segMuscleLeft->GetOutput(), segMuscleLeft->GetOutput(), t2LeftFemurSmooth, voxelVol, histogramfeaturefilename, TRUE, atoi(argv[argc - 2]), atoi(argv[argc - 1])); 
+        else 
+            muscleFeatT2.histogramFeat3DROI ( segMuscleLeft->GetOutput(), segMuscleLeft->GetOutput(), t2LeftFemurSmooth, voxelVol, histogramfeaturefilename, TRUE, 0, 0); 
+          
         #endif
         std::cout << "******" << std::endl;
     }

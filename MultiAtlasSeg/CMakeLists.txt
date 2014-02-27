@@ -11,12 +11,11 @@ ELSE(ITK_FOUND)
    MESSAGE(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
 ENDIF (ITK_FOUND)
 
-IF( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
-  MESSAGE( FATAL_ERROR "MultiAtlasSeg needs ITKv3 to compile" )
-ENDIF()
+#IF( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
+#  MESSAGE( FATAL_ERROR "MultiAtlasSeg needs ITKv3 to compile" )
+#ENDIF()
 
 ADD_EXECUTABLE(MultiAtlasSeg MultiAtlasSeg.cxx)
-TARGET_LINK_LIBRARIES(MultiAtlasSeg ITKCommon ITKBasicFilters ITKIO
-ITKStatistics ITKNumerics) 
+TARGET_LINK_LIBRARIES(MultiAtlasSeg ${ITK_LIBRARIES}) 
 
-install( TARGETS MultiAtlasSeg RUNTIME DESTINATION bin )
+#install( TARGETS MultiAtlasSeg RUNTIME DESTINATION bin )

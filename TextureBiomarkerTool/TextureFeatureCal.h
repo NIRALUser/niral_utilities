@@ -51,13 +51,13 @@ class TextureFeatureCal : public virtual DMDData
                   
 	}
         typedef itk::ImageRegionConstIterator< DMDData::OrientedImageType > ConstIteratorType;
-        void histogramFeat3DROI( DMDData::OrientedImageType::Pointer mask, DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, float voxelSize, std::string featurefilename, bool );
+        void histogramFeat3DROI( DMDData::OrientedImageType::Pointer mask, DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, float voxelSize, std::string featurefilename, bool, int, int);
         void runlengthFeat( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename);
         void runlengthFeat3D( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType);
         void runlengthFeat2DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType);
-        void runlengthFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType);        
+        void runlengthFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType, int, int);        
         void calRunLengthFeatures(DMDData::FITKType &SRE, DMDData::FITKType &LRE, DMDData::FITKType &GLN, DMDData::FITKType &RLN, DMDData::FITKType &RP, FITKType np, int runlengthmatrix[RUN_LENGTH_LEVEL][RUN_INTENSITY_LEVEL]);
-        void cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType voxelSize);        
+        void cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType voxelSize, int, int);        
         void calCooccurrenceFeatures( DMDData::FITKType &EntropyTmp, DMDData::FITKType &EnergyTmp, DMDData::FITKType &ContrastTmp, DMDData::FITKType &HomoGeneityTmp, float  cooccurrencematrix[CO_OCCURRENCE_LEVEL][CO_OCCURRENCE_LEVEL]);  
  
 }; 
@@ -1750,7 +1750,6 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
             tempIntensity = RUN_INTENSITY_LEVEL - 1;
         ReScaledDataIterator.Set(tempIntensity);
     }
-    std::cout << "rescale finished! " << std::endl;
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = data->GetLargestPossibleRegion().GetSize();
     DMDData::OrientedImageType::IndexType  index;    
@@ -2984,7 +2983,6 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
             tempIntensity = RUN_INTENSITY_LEVEL - 1;
         ReScaledDataIterator.Set(tempIntensity);
     }
-    std::cout << "rescale finished! " << std::endl;
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = data->GetLargestPossibleRegion().GetSize();
     DMDData::OrientedImageType::IndexType  index;    
@@ -3201,12 +3199,13 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
     }
 }
 //////////////////////////////////////////////////////////////////////////
-void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType voxelSize)
+void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType voxelSize, int intensityMaxCut, int intensityMinCut)
 {
     //ROI based run length features
     float  cooccurrencematrix[NUMBER_MUSCLE + 1][CO_OCCURRENCE_LEVEL][CO_OCCURRENCE_LEVEL];
-    int tempIntensity = 0, tempLength = 0, intensityMax = 0, intensityMin = 0, intensityMaxCut = 0, intensityMinCut = 0, histogram[HISTOGRAM_LIMIT] = {0};
+    int tempIntensity = 0, tempLength = 0, intensityMax = 0, intensityMin = 0, histogram[HISTOGRAM_LIMIT] = {0};
     float intensityRescaleFactor = 0;
+
     DMDData ddata;
     DMDData::OrientedImageType::Pointer rescaledData = DMDData::OrientedImageType::New(), rescaledData_REC_FEM = DMDData::OrientedImageType::New(), rescaledData_SEMIT = DMDData::OrientedImageType::New(), rescaledData_CRAN_SART = DMDData::OrientedImageType::New(), rescaledData_BIC_FEM = DMDData::OrientedImageType::New(), rescaledData_ADDUCTOR = DMDData::OrientedImageType::New(), rescaledData_GRACILIS = DMDData::OrientedImageType::New(), rescaledData_SEMI_MEM = DMDData::OrientedImageType::New(), rescaledData_VAS_LAT = DMDData::OrientedImageType::New(), rescaledData_VAS_MED = DMDData::OrientedImageType::New(), rescaledData_VAS_INT = DMDData::OrientedImageType::New(), rescaledData_CAUD_SART = DMDData::OrientedImageType::New(), tempMaskX = DMDData::OrientedImageType::New(), tempMaskY = DMDData::OrientedImageType::New(), tempMaskZ = DMDData::OrientedImageType::New();
     float Entropy = 0, Energy = 0, Contrast = 0, HomoGeneity = 0;  // SRE = Short Run Emphasis, LRE = Long Run Emphasis, GLN = Gray Level Nonuniform, RLN = Run Length Nonuniform, RP = Run Percentage
@@ -3253,6 +3252,8 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
         }
         labelMin++;
     }
+
+    if (intensityMaxCut == 0 || intensityMinCut == 0) {
     // identify minum and maxmum intensity of the image
     constDataIterator.GoToBegin();
     intensityMin = intensityMax = constDataIterator.Get();
@@ -3286,18 +3287,17 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
             break;
         }
     }
+    }
     //rescale images
-    intensityMaxCut = 800;
-    intensityMinCut = 200;
+   // intensityMaxCut = 800;
+  //  intensityMinCut = 200;
     intensityRescaleFactor = (float)(intensityMaxCut - intensityMinCut) / CO_OCCURRENCE_LEVEL;
     for ( constDataIterator.GoToBegin(), ReScaledDataIterator.GoToBegin(); !constDataIterator.IsAtEnd(); ++constDataIterator, ++ReScaledDataIterator ) {
         tempIntensity = constDataIterator.Get();
         if (tempIntensity < intensityMinCut)
-          //  tempIntensity = intensityMinCut;
-            tempIntensity = 0;
+            tempIntensity = intensityMinCut;
         if (tempIntensity > intensityMaxCut)
-            //tempIntensity = intensityMaxCut;
-            tempIntensity = 0;
+            tempIntensity = intensityMaxCut;
         tempIntensity = round(tempIntensity / intensityRescaleFactor);
         if(tempIntensity < 0)
             tempIntensity = 0;
@@ -3491,11 +3491,11 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
 
 }
 //////////////////////////////////////////////////////////////////////////
-void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType voxelSize)
+void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType voxelSize, int intensityMaxCut, int intensityMinCut)
 {
     //ROI based run length features
     int runlengthmatrix[NUMBER_MUSCLE + 1][RUN_LENGTH_LEVEL][RUN_INTENSITY_LEVEL];
-    int tempIntensity = 0, tempLength = 0, intensityMax = 0, intensityMin = 0, intensityMaxCut = 0, intensityMinCut = 0, histogram[HISTOGRAM_LIMIT] = {0};
+    int tempIntensity = 0, tempLength = 0, intensityMax = 0, intensityMin = 0, histogram[HISTOGRAM_LIMIT] = {0};
     float intensityRescaleFactor = 0;
     DMDData ddata;
     DMDData::OrientedImageType::Pointer rescaledData = DMDData::OrientedImageType::New(), rescaledData_REC_FEM = DMDData::OrientedImageType::New(), rescaledData_SEMIT = DMDData::OrientedImageType::New(), rescaledData_CRAN_SART = DMDData::OrientedImageType::New(), rescaledData_BIC_FEM = DMDData::OrientedImageType::New(), rescaledData_ADDUCTOR = DMDData::OrientedImageType::New(), rescaledData_GRACILIS = DMDData::OrientedImageType::New(), rescaledData_SEMI_MEM = DMDData::OrientedImageType::New(), rescaledData_VAS_LAT = DMDData::OrientedImageType::New(), rescaledData_VAS_MED = DMDData::OrientedImageType::New(), rescaledData_VAS_INT = DMDData::OrientedImageType::New(), rescaledData_CAUD_SART = DMDData::OrientedImageType::New(), tempMaskX = DMDData::OrientedImageType::New(), tempMaskY = DMDData::OrientedImageType::New(), tempMaskZ = DMDData::OrientedImageType::New();
@@ -3539,6 +3539,7 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
         labelMin++;
     }
 
+    if (intensityMaxCut == 0 || intensityMinCut == 0) {
     // identify minum and maxmum intensity of the image
     constDataIterator.GoToBegin();
     intensityMin = intensityMax = constDataIterator.Get();
@@ -3563,7 +3564,7 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
             break;
         }
     }
-    //std::cout << imageVolume << "  " << cumImageVolume << "  " << intensityMax << std::endl;
+    std::cout << imageVolume << "  " << cumImageVolume << "  " << intensityMax << std::endl;
     cumImageVolume = 0;
     for (int i = intensityMax; i >= 1; i--){
         cumImageVolume += histogram[i];
@@ -3572,18 +3573,17 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
             break;
         }
     }
+    }
     //rescale images
-    intensityMaxCut = 800;
-    intensityMinCut = 200;
+   // intensityMaxCut = 800;
+   // intensityMinCut = 200;
     intensityRescaleFactor = (float)(intensityMaxCut - intensityMinCut) / RUN_INTENSITY_LEVEL;
     for ( constDataIterator.GoToBegin(), ReScaledDataIterator.GoToBegin(); !constDataIterator.IsAtEnd(); ++constDataIterator, ++ReScaledDataIterator ) {
         tempIntensity = constDataIterator.Get();
         if (tempIntensity < intensityMinCut)
-            //tempIntensity = intensityMinCut;
-            tempIntensity = 0;
+            tempIntensity = intensityMinCut;
         if (tempIntensity > intensityMaxCut)
-           // tempIntensity = intensityMaxCut;
-            tempIntensity = 0;
+            tempIntensity = intensityMaxCut;
         tempIntensity = round(tempIntensity / intensityRescaleFactor);
         if(tempIntensity < 0)
             tempIntensity = 0;
@@ -3615,7 +3615,6 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
             }
         }
     }
-    std::cout << "mark3" << std::endl;
     DMDData::OrientedImageType::Pointer roi = DMDData::OrientedImageType::New();
     int nroi = 0; //the number of rois used for calculating features for each muscle.
     OrientedImageType::RegionType region;
@@ -3743,7 +3742,6 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
      //   efile.close();
   //      std::cout << muscleName[p] << " finished" << std::endl;
     }
-    std::cout << "mark4" << std::endl;
 
     std::ofstream efile( featurefilename.c_str() , std::ios::app );
 //    efile << caseID << ":\n" ;
@@ -3772,7 +3770,6 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
         efile << "   " << RPData[p];
     }
     efile.close();
-    std::cout << "mark5" << std::endl;
 }
 /*
 //////////////////////////////////////////////////////////////////////////
@@ -4018,13 +4015,14 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
 }
 */
 //////////////////////////////////////////////////////////////////////////
-void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer mask, DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, float voxelSize, std::string featurefilename, bool volOutputMark )
+void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer mask, DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, float voxelSize, std::string featurefilename, bool volOutputMark, int intensityMaxCut, int intensityMinCut)
 {
     // if volOutputMark = TRUE, then output the volume of muscles
     DMDData ddata;
     int labelMin = 0, labelMax = 0;
     int volSemitReal = 0, volRectReal = 0, volCranReal = 0, volAdductorReal = 0, volGracilisReal = 0, volBicReal = 0, volSemimemReal = 0, volVaslatReal = 0, volVasmedReal = 0, volVasintReal = 0, volCaudReal = 0;
-    int volSemitNonErod = 0, volRectNonErod = 0, volCranNonErod = 0, volAdductorNonErod = 0, volGracilisNonErod = 0, volBicNonErod = 0, volSemimemNonErod = 0, volVaslatNonErod = 0, volVasmedNonErod = 0, volVasintNonErod = 0, volCaudNonErod = 0;
+    int volSemitNonErod = 0, volRectNonErod = 0, volCranNonErod = 0, volAdductorNonErod = 0, volGracilisNonErod = 0, volBicNonErod = 0, volSemimemNonErod = 0, volVaslatNonErod = 0, volVasmedNonErod = 0, volVasintNonErod = 0, volCaudNonErod = 0, intensityMin = 0, intensityMax = 0;
+    int histogram[HISTOGRAM_LIMIT] = {0};
     float quanlitySemit = 0, quanlityRect = 0, quanlityCran = 0, quanlityAdductor = 0, quanlityGracilis = 0, quanlityBic = 0, quanlitySemimem = 0, quanlityVaslat = 0, quanlityVasmed = 0, quanlityVasint = 0, quanlityCaud = 0;
     float histogramSemit[HISTOGRAM_BIN_SIZE] = {0}, histogramRect[HISTOGRAM_BIN_SIZE] = {0},histogramCran[HISTOGRAM_BIN_SIZE] = {0}, histogramAdductor[HISTOGRAM_BIN_SIZE] = {0}, histogramGracilis[HISTOGRAM_BIN_SIZE] = {0}, histogramBic[HISTOGRAM_BIN_SIZE] = {0}, histogramSemimem[HISTOGRAM_BIN_SIZE] = {0}, histogramVaslat[HISTOGRAM_BIN_SIZE] = {0}, histogramVasmed[HISTOGRAM_BIN_SIZE] = {0}, histogramVasint[HISTOGRAM_BIN_SIZE] = {0}, histogramCaud[HISTOGRAM_BIN_SIZE] = {0} ;
     std::ofstream efile( featurefilename.c_str() , std::ios::app );
@@ -4034,6 +4032,7 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     ddata.imageInitialize ( data, rescaledData );
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
+    double imageVolume = 0;
 
     // identify the range of labels in mask of the image
     if(labelMin == 0 && labelMax == 0){
@@ -4047,15 +4046,52 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
         }
         labelMin++; // don't use label 0, that is the background
     }
-    int intensityMinCut = 200, intensityMaxCut = 800;
+
+    if (intensityMaxCut == 0 || intensityMinCut == 0) {
+    // identify minum and maxmum intensity of the image
+    constDataIterator.GoToBegin();
+    intensityMin = intensityMax = constDataIterator.Get();
+    for ( constDataIterator.GoToBegin(); !constDataIterator.IsAtEnd(); ++constDataIterator ) {
+        int hisTmp = constDataIterator.Get();
+        if (hisTmp >= HISTOGRAM_LIMIT)
+            hisTmp = HISTOGRAM_LIMIT - 1;
+        histogram[hisTmp]++; 
+        if(hisTmp > 0)
+            imageVolume++;
+        if (constDataIterator.Get() < intensityMin)
+            intensityMin = constDataIterator.Get();
+        if (constDataIterator.Get() > intensityMax)
+            intensityMax = constDataIterator.Get();
+    } 
+
+    // identify 5% minum and maxmum intensity of the image
+    float cumImageVolume = 0;
+    for (int i = 1; i <= intensityMax; i++){
+        cumImageVolume += histogram[i];
+        if((cumImageVolume / imageVolume) >= INTENSITY_CUT_RATE){
+            intensityMinCut = i;
+            break;
+        }
+    }
+    //std::cout << imageVolume << "  " << cumImageVolume << "  " << intensityMax << std::endl;
+    cumImageVolume = 0;
+    for (int i = intensityMax; i >= 1; i--){
+        cumImageVolume += histogram[i];
+        if((cumImageVolume / imageVolume) >= INTENSITY_CUT_RATE){
+            intensityMaxCut = i;
+            break;
+        }
+    }
+    }
+
+    //int intensityMinCut = 200
+    //int intensityMaxCut = 800;
     for ( constDataIterator.GoToBegin(), ReScaledDataIterator.GoToBegin(); !constDataIterator.IsAtEnd(); ++constDataIterator, ++ReScaledDataIterator ) {
         int tempIntensity = constDataIterator.Get();
         if (tempIntensity < intensityMinCut)
-            //tempIntensity = intensityMinCut;
-            tempIntensity = 0;
+            tempIntensity = intensityMinCut;
         if (tempIntensity > intensityMaxCut)
-            //tempIntensity = intensityMaxCut;
-            tempIntensity = 0;
+            tempIntensity = intensityMaxCut;
     //    tempIntensity = round(tempIntensity / intensityRescaleFactor);
         if(tempIntensity < 0)
             tempIntensity = 0;

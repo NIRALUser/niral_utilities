@@ -13,7 +13,7 @@
  *
 =========================================================================*/
 
-#include "itkOrientedImage.h"
+#include "itkImage.h"
 #include "itkGDCMImageIO.h"
 #include "itkGDCMSeriesFileNames.h"
 #include "itkImageSeriesReader.h"
@@ -83,9 +83,9 @@ class DMDData
  	    inputDirectory = inputDirec;
 	}
         // declare the pixel type and image dimension
-        typedef itk::OrientedImage< PixelType, 2 >                         OrientedImage2DType;
-        typedef itk::OrientedImage< PixelType, 3 >                         OrientedImageType;
-        typedef itk::OrientedImage< uncharPixelType, 3 >                   uncharOrientedImageType;
+        typedef itk::Image< PixelType, 2 >                         OrientedImage2DType;
+        typedef itk::Image< PixelType, 3 >                         OrientedImageType;
+        typedef itk::Image< uncharPixelType, 3 >                   uncharOrientedImageType;
 	// create image file reader and writer
         typedef itk::ImageSeriesReader< OrientedImageType >                OrientedSeriesReaderType;
         typedef itk::ImageFileWriter< OrientedImageType >                  OrientedWriterType;
@@ -348,7 +348,7 @@ float DMDData::muscleMean ( OrientedSeriesReaderType::Pointer input, OrientedIma
 void DMDData::morphErod ( OrientedImageType::Pointer input, OrientedImageType::Pointer &output, IntITKType size ) 
 {
     typedef unsigned char   InputPixelType;
-    typedef itk::OrientedImage< PixelType, 3 >   InputImageType;
+    typedef itk::Image< PixelType, 3 >   InputImageType;
     typedef itk::BinaryBallStructuringElement< PixelType, 3 >                             StructuringElementType;        
     typedef itk::GrayscaleErodeImageFilter< InputImageType, InputImageType, StructuringElementType >  ErodeFilterType;
     typedef itk::GrayscaleDilateImageFilter< InputImageType, InputImageType, StructuringElementType > DilateFilterType;
@@ -379,7 +379,7 @@ void DMDData::morphErod ( OrientedImageType::Pointer input, OrientedImageType::P
 void DMDData::morphDilat ( OrientedImageType::Pointer input, OrientedImageType::Pointer &output, IntITKType size ) 
 {
     typedef unsigned char   InputPixelType;
-    typedef itk::OrientedImage< PixelType, 3 >   InputImageType;
+    typedef itk::Image< PixelType, 3 >   InputImageType;
     typedef itk::BinaryBallStructuringElement< PixelType, 3 >                             StructuringElementType;        
     typedef itk::GrayscaleDilateImageFilter< InputImageType, InputImageType, StructuringElementType > DilateFilterType;
     
@@ -409,8 +409,8 @@ void DMDData::morphMultiGrayErod2DIn3D ( OrientedImageType::Pointer input, Orien
 {
     // apply 2D morphological erosion to each slice of 3D volumetric data
     typedef unsigned char   InputPixelType;
-    typedef itk::OrientedImage< PixelType, 3 >   InputImageType;
-    typedef itk::OrientedImage< PixelType, 2 >   OutputImageType;
+    typedef itk::Image< PixelType, 3 >   InputImageType;
+    typedef itk::Image< PixelType, 2 >   OutputImageType;
     typedef itk::BinaryBallStructuringElement< PixelType, 2 >                             StructuringElementType;        
 //    typedef itk::GrayscaleErodeImageFilter< OutputImageType, OutputImageType, StructuringElementType >  ErodeFilterType;
 //    typedef itk::GrayscaleDilateImageFilter< OutputImageType, OutputImageType, StructuringElementType > DilateFilterType;
