@@ -36,7 +36,7 @@
 #define ROI_SIZE 32
 #define CO_OCCURRENCE_LEVEL 64
 
-char *muscleName[] = { "MUSCLES", "CRAN_SART", "REC_FEM", "BIC_FEM", "GRACILIS", "SEMI_MEM", "ADDUCTOR", "SEMIT", "VAS_LAT", "VAS_INT", "VAS_MED", "CAUD_SART"};
+const char *muscleName[] = { "MUSCLES", "CRAN_SART", "REC_FEM", "BIC_FEM", "GRACILIS", "SEMI_MEM", "ADDUCTOR", "SEMIT", "VAS_LAT", "VAS_INT", "VAS_MED", "CAUD_SART"};
 //////////////////////////////////////////////////////////////////////////
 class TextureFeatureCal : public virtual DMDData
 {

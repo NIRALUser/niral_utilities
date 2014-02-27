@@ -223,7 +223,7 @@ int main( int argc, char * argv[] )
         int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, usedCase[25] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1, 1, 1}; 
         int segLabel = atoi(argv[2]), fixCase = atoi(argv[3]), numIteration = 1, numCaseUsed = DATASET_SIZE, numCaseWillUse = DATASET_SIZE;
         bool terminateCriteria = 1;
-        char *quotationMark = "\"";
+    //    char *quotationMark = "\"";
         std::string commandLine;
         std::ifstream readParameter;
         std::ostringstream strFixCase;
@@ -263,10 +263,10 @@ int main( int argc, char * argv[] )
                         commandLine = commandLine + " ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/" + strFixCase.str() + "/deformedImage_" + strTargetCase.str() + "to" + strFixCase.str() + "_seg.nrrd";
                 }
             }
-            if(fixCase < 100)
-                commandLine = commandLine + " --compressOutput --outputImage seg_0" + strFixCase.str() + "_fromAllScans_syn_100x50x25_AllMuscle.nrrd | grep " + quotationMark + "SPREADSHEET,PV" + quotationMark + " >> ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/0" + strFixCase.str() + "/performance0" + strFixCase.str() + "_syn_100x50x25_label_AllMuscle_" + numIter.str() + ".txt";
-            else 
-                commandLine = commandLine + " --compressOutput --outputImage seg_" + strFixCase.str() + "_fromAllScans_syn_100x50x25_AllMuscle.nrrd | grep " + quotationMark + "SPREADSHEET,PV" + quotationMark + " >> ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/" + strFixCase.str() + "/performance" + strFixCase.str() + "_syn_100x50x25_label_AllMuscle_" + numIter.str() + ".txt";
+         //   if(fixCase < 100)
+//                commandLine = commandLine + " --compressOutput --outputImage seg_0" + strFixCase.str() + "_fromAllScans_syn_100x50x25_AllMuscle.nrrd | grep " + quotationMark + "SPREADSHEET,PV" + quotationMark + " >> ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/0" + strFixCase.str() + "/performance0" + strFixCase.str() + "_syn_100x50x25_label_AllMuscle_" + numIter.str() + ".txt";
+         //   else 
+ //               commandLine = commandLine + " --compressOutput --outputImage seg_" + strFixCase.str() + "_fromAllScans_syn_100x50x25_AllMuscle.nrrd | grep " + quotationMark + "SPREADSHEET,PV" + quotationMark + " >> ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/" + strFixCase.str() + "/performance" + strFixCase.str() + "_syn_100x50x25_label_AllMuscle_" + numIter.str() + ".txt";
             std::cout << commandLine << std::endl;
             system(commandLine.c_str());//run STAPLE
             exit(1);
@@ -345,7 +345,7 @@ int main( int argc, char * argv[] )
         int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, usedCase[25] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; 
         int segLabel = atoi(argv[2]), fixCase = atoi(argv[3]), numIteration = 1, numCaseUsed = DATASET_SIZE, numCaseWillUse = DATASET_SIZE;
         bool terminateCriteria = 1;
-        char *quotationMark = "\"";
+     //   char *quotationMark = "\"";
         std::string commandLine;
         std::ifstream readParameter;
         std::ostringstream strFixCase;
