@@ -27,7 +27,7 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkConstShapedNeighborhoodIterator.h"
 #include "itkGradientAnisotropicDiffusionImageFilter.h"
-#include "itkImageDuplicator.h"
+//#include "itkImageDuplicator.h"
 #include "itkResampleImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"
 
@@ -49,8 +49,8 @@
 
 #include "itkRecursiveGaussianImageFilter.h"
 #include "itkImageMomentsCalculator.h"
-//#include "itkLabelStatisticsImageFilter.h"
-//#include "itkLabelGeometryImageFilter.h"
+#include "itkLabelStatisticsImageFilter.h"
+#include "itkLabelGeometryImageFilter.h"
 #include "itkConnectedThresholdImageFilter.h"
 
 #include <math.h>
@@ -1017,7 +1017,6 @@ void DMDData::connectedLabeling3D ( const OrientedImageType::Pointer input)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DMDData::waterTubeSegmentation (const OrientedImageType::Pointer input )
 {
-/*
     typedef itk::ImageFileWriter< uncharOrientedImageType >                  WriterType;
     WriterType::Pointer   uncharwriter = WriterType::New();
 
@@ -1154,7 +1153,6 @@ void DMDData::waterTubeSegmentation (const OrientedImageType::Pointer input )
         exit(0);
     }   
     std::cout << "output selected label" << std::endl;
-*/
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DMDData::fatSuppressBiasIdentify (const OrientedImageType::Pointer inputT2, OrientedImageType::Pointer inputT2FS)
