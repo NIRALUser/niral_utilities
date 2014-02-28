@@ -1391,45 +1391,7 @@ int main( int argc, char * argv[] )
         efile.close();
 //        invefile.close();
         iefile.close();
-/*
-        //search shortest route from startNode to endNode using Dijkstra
-       // std::cout << startNode << std::endl;
-        int k = 0;
-        float Dijkstra[NUMBER_OF_CASE] = {0};
-        while (startNode != endNode){
-            float minDist = 0;
-            int minNode = 0, DijkstraNode = 0;
-            k++;
-            for (int i = 0; i < NUMBER_OF_CASE; i++){
-                if (i == 0){
-                    if(graph[startNode][i][0] != -1) {
-                        while (Dijkstra[i] == 1)
-                            i++;
-                        minDist = graph[startNode][i][0];
-                        Dijkstra[startNode] = 1;
-                        DijkstraNode = i;
-                    }
-                    else {
-                        while (Dijkstra[i + 1] == 1)
-                            i++;
-                        minDist = graph[startNode][i + 1][0];
-                        Dijkstra[startNode] = 1;
-                        DijkstraNode = i + 1;
-                    }
-                }
-                else{
-                    if(Dijkstra[i] != 1){
-                        if (graph[startNode][i][0] < minDist && graph[startNode][i][0] != -1){
-                            minDist = graph[startNode][i][0];
-                            DijkstraNode = i;
-                        }
-                    }
-                }
-            }
-            Dijkstra[DijkstraNode] = 1;
-            startNode = DijkstraNode;
-        }
-*/
+
         //search shortest route from startNode to endNode using Floyd algorithm
         //startNode = atoi(argv[5]); 
         //endNode = atoi(argv[6]);
@@ -1482,101 +1444,147 @@ int main( int argc, char * argv[] )
     }
    
     if( strchr (argv[1], 'm') != NULL ) { 
-        //run conventional majority voting and weighted majority voting
-        std::ifstream efile( "harmonicEnergyNormalizedIdentical.txt");
-        std::ifstream iefile( "intensityEnergyNormalizedIdentical.txt");
-        std::ifstream sefile( "shapeEnergyNormalizedIdentical.txt");
+        //run majority voting
+        std::ostringstream strFixCase;
+        std::string filename;
+        filename = argv[2];
+        std::ifstream iefile( filename.c_str() );
+        filename = argv[3];
+        std::ifstream efile( filename.c_str() );
+        filename = argv[4];
+        std::ifstream templatefile( filename.c_str());
         std::string commandLine;
-        float harmonicE, intensityE, shapeE;
-        int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107};
-        float *weightFactor = new float[NUMBER_OF_CASE * (NUMBER_OF_CASE - 1)];
-        
-        for (int i = 0; i < NUMBER_OF_CASE * (NUMBER_OF_CASE - 1); i++)
-            weightFactor[i] = 0;
+        float harmonicE, intensityE, shapeE, weightFactor[NUMBER_OF_CASE * (NUMBER_OF_CASE - 1)], circularity[NUMBER_OF_CASE];
+        int cases[NUMBER_OF_CASE];
+        int onlyOneAtlas = 0;
+        gama = 0;
 
-/*        for (int i = 0; i < NUMBER_OF_CASE * (NUMBER_OF_CASE - 1); i++){
+        beta = atof(argv[argc - 5]);
+        alpha = atof(argv[argc - 4]);
+        gama = atof(argv[argc - 3]);
+      
+        DIR *dir;
+        struct dirent *ent;
+        int sizeLabelList = 0;
+        char is_a_label[5];
+
+        if ((dir = opendir (argv[5])) != NULL) {
+            std::string tmpFilename;
+            while ((ent = readdir (dir)) != NULL) {
+                tmpFilename = ent->d_name;
+                tmpFilename.copy(is_a_label, 5, 0);
+                if(tmpFilename.at(0) == '.')    
+                    continue;
+                else{
+                    if (!strcmp(is_a_label, argv[8]))
+                        sizeLabelList++;
+                }
+            }
+        }
+        closedir (dir);
+        std::string *labelList = new std::string[sizeLabelList];
+
+        if ((dir = opendir (argv[5])) != NULL) {
+            std::string tmpFilename;
+            int i = 0;
+            while ((ent = readdir (dir)) != NULL) {
+                tmpFilename = ent->d_name;
+                tmpFilename.copy(is_a_label, 5, 0);
+                if(tmpFilename.at(0) == '.')    // skip . and ..
+                    continue;
+                else{
+                    if (!strcmp(is_a_label, argv[8])){
+                        labelList[i] = tmpFilename;
+                        i++;
+                    }
+                }
+            }
+            SortStringList(labelList, sizeLabelList);
+        }
+        closedir (dir);
+
+        bool *caseFlag = new bool[NUMBER_OF_CASE];
+        for (int i = 0; i < NUMBER_OF_CASE; i++)
+            caseFlag[i] = 0;
+        for (int i = 0; i < NUMBER_OF_CASE; i++){
+            int temp;
+            templatefile >> temp;
+            caseFlag[temp] = 1;
+        }
+        templatefile.close();
+        for (int i = 0; i < NUMBER_OF_CASE; i++){
+            cases[i] = 1;
+            onlyOneAtlas++;
+            if (i != (NUMBER_OF_CASE - 1) && caseFlag[i] == 0) {
+                cases[i] = 0;
+                onlyOneAtlas--;
+            }
+            if (i == (NUMBER_OF_CASE - 1) )
+                onlyOneAtlas--;
+        } 
+        int m = 0;
+        float minDistance = 1000000, maxDistance = 0;
+        for ( int i = 0; i < (NUMBER_OF_ATLAS * (NUMBER_OF_ATLAS - 1) + NUMBER_OF_ATLAS); i++){
             efile >> harmonicE;
             iefile >> intensityE;
-            sefile >> shapeE;
-            weightFactor[i] = alpha * harmonicE + beta * intensityE + gama * shapeE;
+            if( i >= (NUMBER_OF_ATLAS * (NUMBER_OF_ATLAS - 1)) ){
+                weightFactor[m] = alpha * harmonicE + beta * intensityE; //+ gama * fabs(circularity[i] - circularity[j]);
+                if(weightFactor[m] < minDistance)
+                    minDistance = weightFactor[m];
+                if(weightFactor[m] > maxDistance)
+                    maxDistance = weightFactor[m];
+                m++;
+            }
+        }
+        for (int i = 0; i < NUMBER_OF_ATLAS; i++){
+            weightFactor[i] = (weightFactor[i] - minDistance) / (maxDistance - minDistance);
         }
         efile.close();
         iefile.close();
-        sefile.close();*/
-        //for conventional majority voting
-        std::ostringstream strTarget;
-        strTarget << cases[atoi(argv[2])];
-        if(cases[atoi(argv[2])] < 100){
-            if(atoi(argv[2]) == 0) {
-                std::ostringstream strSourceTmp;
-                strSourceTmp << cases[atoi(argv[2]) + 1];
-                if(cases[atoi(argv[2]) + 1] < 100)
-                    commandLine = "~/NeuroLib/ImageMath/ImageMath ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/0" + strTarget.str() + "/deformedImage_0" + strSourceTmp.str() + "to0" + strTarget.str() + "_seg.nrrd -majorityVoting ";
-                else
-                    commandLine = "~/NeuroLib/ImageMath/ImageMath ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/0" + strTarget.str() + "/deformedImage_" + strSourceTmp.str() + "to0" + strTarget.str() + "_seg.nrrd -majorityVoting ";
-            }
-            else {
-                std::ostringstream strSourceTmp;
-                strSourceTmp << cases[0];
-                if(cases[0] < 100)
-                    commandLine = "~/NeuroLib/ImageMath/ImageMath ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/0" + strTarget.str() + "/deformedImage_0" + strSourceTmp.str() + "to0" + strTarget.str() + "_seg.nrrd -majorityVoting ";
-                else
-                    commandLine = "~/NeuroLib/ImageMath/ImageMath ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/0" + strTarget.str() + "/deformedImage_" + strSourceTmp.str() + "to0" + strTarget.str() + "_seg.nrrd -majorityVoting ";
-            }
-        }
-        else {
-            if(atoi(argv[2]) == 0) {
-                std::ostringstream strSourceTmp;
-                strSourceTmp << cases[atoi(argv[2]) + 1];
-                if(cases[atoi(argv[2]) + 1] < 100)
-                    commandLine = "~/NeuroLib/ImageMath/ImageMath ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/" + strTarget.str() + "/deformedImage_0" + strSourceTmp.str() + "to" + strTarget.str() + "_seg.nrrd -majorityVoting ";
-                else
-                    commandLine = "~/NeuroLib/ImageMath/ImageMath ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/" + strTarget.str() + "/deformedImage_" + strSourceTmp.str() + "to" + strTarget.str() + "_seg.nrrd -majorityVoting ";
-            }
-            else {
-                std::ostringstream strSourceTmp;
-                strSourceTmp << cases[0];
-                if(cases[0] < 100)
-                    commandLine = "~/NeuroLib/ImageMath/ImageMath ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/" + strTarget.str() + "/deformedImage_0" + strSourceTmp.str() + "to" + strTarget.str() + "_seg.nrrd -majorityVoting ";
-                else
-                    commandLine = "~/NeuroLib/ImageMath/ImageMath ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/" + strTarget.str() + "/deformedImage_" + strSourceTmp.str() + "to" + strTarget.str() + "_seg.nrrd -majorityVoting ";
-            }
-        }
+
+        commandLine = "ImageMath " ;
+        commandLine += argv[5] ;
+        commandLine += labelList[0].c_str() ;
+        commandLine += " -majorityVoting ";
+        int z = 0;
         for (int i = 0; i < NUMBER_OF_CASE; i++){
+            if (cases[i] != atoi(argv[argc - 3]) && cases[i] != 0) {
+                z++;
+            }
+        }
+        int k = 0;
+        for (int i = 0; i < NUMBER_OF_ATLAS; i++){
             std::ostringstream strSource;
             strSource << cases[i];
-            if (i != atoi(argv[2])) {
-                if(cases[atoi(argv[2])] < 100){
-                    if(cases[i] < 100)
-                        commandLine += "~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/0" + strTarget.str() + "/deformedImage_0" + strSource.str() + "to0" + strTarget.str() + "_seg.nrrd ";
-                    else {
-                        commandLine += "~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/0" + strTarget.str() + "/deformedImage_" + strSource.str() + "to0" + strTarget.str() + "_seg.nrrd ";
-                    }
-                }
-                else {
-                    if(cases[i] < 100)
-                        commandLine += "~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/" + strTarget.str() + "/deformedImage_0" + strSource.str() + "to" + strTarget.str() + "_seg.nrrd ";
-                    else {
-                        commandLine += "~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/" + strTarget.str() + "/deformedImage_" + strSource.str() + "to" + strTarget.str() + "_seg.nrrd ";
-                    }  
-                }
+            if (cases[i] != 0) {
+                commandLine += argv[5] + labelList[i] + " ";
             }
         }     
-        if(cases[atoi(argv[2])] < 100){
-            std::ostringstream strSource;
-            strSource << cases[atoi(argv[2])];
-            commandLine += "-outfile ~/NeuroLib/ImageMath/MVOutput_seg_0" + strSource.str() + ".nrrd";
+/*
+        commandLine += "-weights ";
+        bool firstWeightFlag = 0;
+        k = 0;
+        for (int i = 0; i < NUMBER_OF_ATLAS; i++){
+            std::ostringstream strWFactor;
+            if(cases[i] != 0) {
+                if (firstWeightFlag == 1 && k > 0){
+                    commandLine += ",";
+                }
+                if (onlyOneAtlas == 1) 
+                    strWFactor << 1;
+                else
+                    strWFactor << 1 - weightFactor[k];
+                commandLine += strWFactor.str();
+                firstWeightFlag = 1;
+                k++;
+            }
         }
-        else{
-            std::ostringstream strSource;
-            strSource << cases[atoi(argv[2])];
-            commandLine += "-outfile ~/NeuroLib/ImageMath/MVOutput_seg_" + strSource.str() + ".nrrd";
-        }
+*/
+        commandLine += "-outfile " ;
+        commandLine += argv[6] ;
+        commandLine += argv[7];
         std::cout << commandLine.c_str() << std::endl;
-        // getchar();
         system(commandLine.c_str());
-       
-        // weighted majority voting
     }
 
     if( strchr (argv[1], 'v') != NULL ) { 
