@@ -44,6 +44,7 @@ using namespace std;
 #include <itkBinaryErodeImageFilter.h> 
 
 #include <itkImageRegionIterator.h>
+#include <itkImageRegionIteratorWithIndex.h>
 #include <itkImageRegionConstIterator.h>
 #include <itkNeighborhoodIterator.h>
 #include <itkCastImageFilter.h>
@@ -75,6 +76,7 @@ using namespace std;
 #include <itkResampleImageFilter.h>
 #include <itkAffineTransform.h>
 #include <itkNearestNeighborInterpolateImageFunction.h>
+#include <itkLinearInterpolateImageFunction.h>
 #include <itkImageRegionIterator.h>
 #include <itkMetaDataObject.h>
 #include <itkDanielssonDistanceMapImageFilter.h>
@@ -82,6 +84,8 @@ using namespace std;
 #include "argio.h"
 #include "ImageMath.h" 
 
+#define IMAGEMATH_VERSION "1.12"
+#define IMAGEMATH_DATE "March 2014"
 #define DEFAULT_SAMP 2
 // number of samples by default
 
@@ -97,6 +101,7 @@ typedef Image<ShortPixelType,ImageDimension>  ShortImageType;
 typedef Image<BinaryPixelType,ImageDimension> BinaryImageType;
 typedef ImageType::RegionType                 ImageRegionType;
 typedef ImageRegionIterator< ImageType >      IteratorType;
+typedef ImageRegionIteratorWithIndex< ImageType > IteratorWithIndexType;
 typedef ImageRegionIterator< ShortImageType> ShortIteratorType;
 typedef ImageRegionConstIterator<ImageType>   ConstIteratorType;
 typedef NeighborhoodIterator<ImageType>       NeighborhoodIteratorType;
@@ -255,9 +260,10 @@ void GetImageType( char* fileName ,
 int main(const int argc, const char **argv)
 {
   if (argc <=1 || ipExistsArgument(argv, "-usage") || ipExistsArgument(argv, "-help")) {
-    cout << "ImageMath 1.11 version (Oct 2013)" << endl;
-    cout << " computes base statistics of an image" << endl;
-    cout << "usage: ImageMath infile <options>" << endl;
+    cout << "ImageMath version:"<<IMAGEMATH_VERSION<<" ("<<IMAGEMATH_DATE<<")" << endl;
+    cout << " computes base operations on an image" << endl;
+    cout << "usage: ImageMath -version    Prints current version" << endl ;
+    cout << "       ImageMath infile <options>" << endl;
     cout << endl;
     cout << "infile                 input dataset" << endl;;
     cout << "-outbase outbase       base-outputfilename, if omitted then the same as base of input" << endl; 
@@ -313,10 +319,16 @@ int main(const int argc, const char **argv)
     cout << "-RegionStd mask   Computes the standard deviation of image intensities over a masked region" << endl;
     cout << "-pixelLookup x,y,z     Outputs the pixel intensity for a given coordinate" << endl ;
     cout << "-danDistanceMap        Outputs the Danielsson Distance Map" << endl ;
+    cout << "-mosaic                Creates a mosaic image from 2 images" << endl ;
+    cout << "  -mosaicStep size     Size of each window in the mosaic (default:10 voxels)" << endl;
     cout << endl << endl;
-    exit(0);
+    return EXIT_SUCCESS ;
   }
-
+  if( ipExistsArgument(argv, "-version") )
+  {
+    cout << "ImageMath version:"<<IMAGEMATH_VERSION<<" ("<<IMAGEMATH_DATE<<")" << endl;
+    return EXIT_SUCCESS ;
+  }
   const int BGVAL = 0;
   const int FGVAL = 1;
 
@@ -351,7 +363,7 @@ int main(const int argc, const char **argv)
     if ( num != 2 )
     {
       cerr << "correl needs 2 comma separated entries" << endl;
-      exit(1);
+      return EXIT_FAILURE ;
     }
     // read in the names of the ems files
     else{
@@ -408,7 +420,7 @@ int main(const int argc, const char **argv)
     int num = ipExtractFloatTokens(textend, tmp_str, 2);
     if (2 != num) {
       cerr << "threshold needs 2 comma separated entries: min,max" << endl;
-      exit(1);
+      return EXIT_FAILURE ;
     } else {
       tmin = (PixelType) textend[0];
       tmax = (PixelType) textend[1];
@@ -423,7 +435,7 @@ int main(const int argc, const char **argv)
     int num = ipExtractFloatTokens(textend, tmp_str, 2);
     if (2 != num) {
       cerr << "mask threshold needs 2 comma separated entries: min,max" << endl;
-      exit(1);
+      return EXIT_FAILURE ;
     } else {
       tmaskmin = (PixelType) textend[0];
       tmaskmax = (PixelType) textend[1];
@@ -439,7 +451,7 @@ int main(const int argc, const char **argv)
     int num = ipExtractFloatTokens(textend, tmp_str, 2);
     if (2 != num) {
       cerr << "dilate needs 2 comma separated entries: radius,value" << endl;
-      exit(1);
+      return EXIT_FAILURE ;
     } else {
       dilateRadius = (int) textend[0];
       dilateVal = (PixelType) textend[1];
@@ -451,7 +463,7 @@ int main(const int argc, const char **argv)
     int num = ipExtractFloatTokens(textend, tmp_str, 2);
     if (2 != num) {
       cerr << "erode needs 2 comma separated entries: radius,value" << endl;
-      exit(1);
+      return EXIT_FAILURE ;
     } else {
       erodeRadius = (int) textend[0];
       erodeVal = (PixelType) textend[1];
@@ -465,7 +477,7 @@ int main(const int argc, const char **argv)
     int num = ipExtractFloatTokens(pixdims, tmp_str, 3);
     if (3 != num) {
       cerr << "editPixdims needs 3 comma separated entries: px,py,pz " << endl;
-      exit(1); 
+      return EXIT_FAILURE ; 
     } 
   }  
 
@@ -477,7 +489,7 @@ int main(const int argc, const char **argv)
     int num = ipExtractFloatTokens(textend, tmp_str, 2);
     if (2 != num) {
       cerr << "oper needs 2 comma separated entries: opID,val" << endl;
-      exit(1);
+      return EXIT_FAILURE ;
     } else {
       operID = (int) textend[0];
       operVal = (PixelType) textend[1];
@@ -491,7 +503,7 @@ int main(const int argc, const char **argv)
     int num = ipExtractFloatTokens(textend, tmp_str, 1);
     if(1 != num){
       cerr << "conCompt only needs 1 value" << endl;
-      exit(1);
+      return EXIT_FAILURE ;
     } else {
       Lbl = (int) textend[0];
     }
@@ -505,9 +517,11 @@ int main(const int argc, const char **argv)
   if (tmp_str) {
     if(debug) cout<<"there are "<<EMScount<<" files"<<endl;
     int num = ipExtractStringTokens(probFiles, tmp_str, EMScount);
-    if (EMScount != num) {
+    if (EMScount != num)
+    {
       cerr << "normalizeEMS needs "<<EMScount<<" comma separated entries" << endl;
-      exit(1);}
+      return EXIT_FAILURE ;
+    }
     // read in the names of the ems files
     else{
       for(int i = 0 ; i < EMScount ; i++){
@@ -556,7 +570,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       else
       {
         cerr << "changeOrig needs 3 comma separated entries: px,py,pz " << endl;
-        exit(1); 
+        return EXIT_FAILURE ; 
       } 
     }
   }
@@ -581,7 +595,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       if (3 != num)
       {
         cerr << "changeSp needs 3 comma separated entries: spx,spy,spz " << endl;
-        exit(1);
+        return EXIT_FAILURE ;
       }
       else
       {
@@ -600,7 +614,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     int num = ipExtractIntTokens(matchHistoPara, tmp_str, 3);
     if (3 != num) {
       cerr << "matchHistoPara needx 3 comma separated entries: bins,points,threshBool" << endl;
-      exit(1);
+      return EXIT_FAILURE ;
     } else {
       matchHistoNumBins = matchHistoPara[0];
       matchHistoNumPoints = matchHistoPara[1];
@@ -633,7 +647,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     int numDim       = ipExtractIntTokens(cropParam, tmp_str, numCropParam);
     if (numDim != numCropParam) {              
       cerr << argv[0] << ": crop needs "<< numCropParam << " parameters.\n";
-      exit(-1);
+      return EXIT_FAILURE ;
     }
     free(tmp_str);
   } 
@@ -661,7 +675,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       if (3 != num)
       {
         cerr << "pixelLookup needs 3 comma separated entries: x,y,z " << endl;
-        exit(1);
+        return EXIT_FAILURE ;
       }
       else
       {
@@ -693,7 +707,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     int num = ipExtractFloatTokens(&pwrval, tmp_str, 1);
     if (1 != num) {
       cerr << "pwr option requires one entry: the value of the power" << endl;
-      exit(1);
+      return EXIT_FAILURE ;
     }
   }
   bool RegionAvgOn = ipExistsArgument(argv, "-RegionAvg");
@@ -727,14 +741,15 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       unsigned int num = ipExtractFloatTokens(wparameters, mv_tmp_str, MaxNumFiles);
       if (NbFiles != num) {
           cerr << "weighted majority voting needs" << NbFiles << "comma separated entries: w1,w2,...,w" << NbFiles << endl;
-          exit(1);
+          return EXIT_FAILURE ;
       } 
       for(unsigned int i = 0 ; i < NbFiles ; i++)
 	InputFiles.push_back(files[i]);
     }
 
   bool DanDistanceMapOn = ipExistsArgument(argv, "-danDistanceMap");
-
+  char *mosaic = ipGetStringArgument(argv, "-mosaic", NULL);  
+  int mosaicStepSize = ipGetIntArgument(argv,"-mosaicStep",10);
   bool StdOn = ipExistsArgument(argv, "-std");
   if (StdOn)
   {
@@ -803,7 +818,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     int num = ipExtractFloatTokens(rescaling, tmp_str, 2);
     if (2 != num) {
       cerr << "Rescale needs 2 comma separated entries: min,max" << endl;
-      exit(1);
+      return EXIT_FAILURE ;
     } else {
       rmin = (PixelType) rescaling[0];
       rmax = (PixelType) rescaling[1];
@@ -1871,7 +1886,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       writer->SetInput(castFilter->GetOutput());
       writer->Write();
     }
-    exit(0);
+    return EXIT_SUCCESS ;
   } else if (NormalizeOn) {
 
     VolumeReaderType::Pointer imageReader = VolumeReaderType::New();
@@ -1990,7 +2005,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       writer->SetInput(castFilter->GetOutput());
       writer->Write();
     }
-    exit(0);
+    return EXIT_SUCCESS ;
   } else if (editPixdimsOn) {
     outFileName.erase();
     outFileName.append(base_string);
@@ -2715,12 +2730,51 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       idx[2] = pixelLookupIndex[2] ;
       std::cout << "Image value at pixel " << idx[0] << " " << idx[1] << " " << idx[2] << " is: " << std::endl ;
       std::cout <<  inputImage->GetPixel ( idx ) << std::endl ;
-      exit ( 0 ) ;
+      return EXIT_SUCCESS ;
 
+  } else if( mosaic )
+  {
+    if (debug) cout << "Loading: " << mosaic  << endl;
+    VolumeReaderType::Pointer imageReader = VolumeReaderType::New();
+    imageReader->SetFileName(mosaic) ;
+    imageReader->Update();
+    //Resample images to same size
+    if (debug) cout << "Resampling: " << mosaic << endl;
+    typedef itk::LinearInterpolateImageFunction< ImageType , double > LinearInterpolateType ;
+    LinearInterpolateType::Pointer interpolator = LinearInterpolateType::New() ;
+    itk::ResampleImageFilter< ImageType , ImageType >::Pointer resampler ;
+    resampler = itk::ResampleImageFilter< ImageType , ImageType >::New() ;
+    resampler->SetOutputParametersFromImage( inputImage ) ;
+    resampler->SetInput( imageReader->GetOutput() ) ;
+    resampler->SetInterpolator( interpolator ) ;
+    resampler->Update() ;
+    //iterates through both inputs and output image
+    if (debug) cout << "Creating mosaic. Step size: " << mosaicStepSize << endl ;
+    IteratorWithIndexType it1( inputImage , inputImage->GetLargestPossibleRegion() ) ;
+    IteratorWithIndexType it2( resampler->GetOutput() , resampler->GetOutput()->GetLargestPossibleRegion() ) ;
+    ImageType::Pointer outputImage = ImageType::New() ;
+    outputImage->CopyInformation( inputImage ) ;
+    outputImage->SetRegions( inputImage->GetLargestPossibleRegion() ) ;
+    outputImage->Allocate() ;
+    IteratorWithIndexType out( outputImage , outputImage->GetLargestPossibleRegion() ) ;
+    ImageType::IndexType index ;
+    for( it1.GoToBegin() , it2.GoToBegin() , out.GoToBegin() ; !out.IsAtEnd() ; ++it1, ++it2, ++out )
+    {
+      index = out.GetIndex() ;
+      if( ( ( (index[ 0 ] / mosaicStepSize)%2 + (index[ 1 ] / mosaicStepSize) )%2 + index[ 2 ]/mosaicStepSize )%2 )
+      {
+        out.Set( it1.Get() ) ;
+      }
+      else
+      {
+        out.Set( it2.Get() ) ;
+      }
     }
+    inputImage = outputImage ;
+  }
   else {
     cout << "NOTHING TO DO, no operation selected..." << endl;
-    exit(1);
+    return EXIT_FAILURE ;
   }
 
   // add the extension to the outputfile name
@@ -2807,5 +2861,5 @@ else
     writer->Write();
   }
 }
-  return 0;
+  return EXIT_SUCCESS;
 }
