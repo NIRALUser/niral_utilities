@@ -493,7 +493,7 @@ int main(const int argc, const char **argv)
 
 			ImageSampleType::Pointer labelSample = ImageSampleType::New();
 			labelSample->SetImage(labelImage);
-			PixelType label;
+			PixelType label = 0 ; //initializing to avoid compilation warning
 			ImageSampleIterator iterLabel = labelSample->Begin() ;
 			if(maskForLabelOn)
 			{

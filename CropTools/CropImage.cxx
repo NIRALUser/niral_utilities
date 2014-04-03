@@ -23,6 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include <fstream>
 #include <cstdlib>
 #include <cmath>
+#include <limits>
 
 #include <itkImage.h>
 #include <itkImageFileReader.h> 
@@ -73,8 +74,8 @@ int main(int argc, const char* argv[])
   // argument processing
   string fileName(argv[1]);
 
-  debug =  ipExistsArgument(argv,"-v"); 
-  string outfileName(ipGetStringArgument(argv, "-o", ""));
+  debug =  ipExistsArgument(argv,"-v");
+  string outfileName( ipGetStringArgument(argv, "-o", "") ) ;
 
   if (outfileName.empty()) {
     outfileName = "output.mha";
@@ -242,7 +243,7 @@ int main(int argc, const char* argv[])
   }else if(interlOn){
 
     //Check if the input image  number of slices along the specified axis is a multiple of nbinterl
-    int nbslices; 
+    unsigned int nbslices; 
     int dim[Dimension];
     ImageType::RegionType imageRegion = imageReader->GetOutput()->GetLargestPossibleRegion(); 
     dim[0] = imageRegion.GetSize(0);
@@ -501,8 +502,8 @@ int main(int argc, const char* argv[])
     } else if (autoCropOn) {
       //autoCropThresh;
       unsigned int minx, miny, minz, maxx, maxy, maxz;
-      minx = miny = minz = 100000;
-      maxx = maxy = maxz = 0;
+      minx = miny = minz = std::numeric_limits<unsigned int>::max() ;
+      maxx = maxy = maxz = std::numeric_limits<unsigned int>::min() ;
       
       // first grow for all seed (constrained) and then do connected component labeling 
       Iterator iter (imageReader->GetOutput(), imageReader->GetOutput()->GetLargestPossibleRegion());
@@ -526,17 +527,17 @@ int main(int argc, const char* argv[])
       }
       // enlarge by one voxel border
       ImageType::RegionType imageRegion = imageReader->GetOutput()->GetLargestPossibleRegion();
-      if (minx >= autoBorder) minx -= autoBorder;
+      if ((long)minx >= (long)autoBorder) minx -= autoBorder;
       else minx = 0;
-      if (miny >= autoBorder) miny -= autoBorder;
+      if ((long)miny >= (long)autoBorder) miny -= autoBorder;
       else miny = 0;
-      if (minz >= autoBorder) minz -= autoBorder;
+      if ((long)minz >= (long)autoBorder) minz -= autoBorder;
       else minz = 0;
-      if (maxx < imageRegion.GetSize(0)-autoBorder) maxx += autoBorder;
+      if ((long)maxx < (long)(imageRegion.GetSize(0)-autoBorder)) maxx += autoBorder;
       else maxx = imageRegion.GetSize(0) - 1;
-      if (maxy < imageRegion.GetSize(1)-autoBorder) maxy += autoBorder;
+      if ((long)maxy < (long)(imageRegion.GetSize(1)-autoBorder)) maxy += autoBorder;
       else maxy = imageRegion.GetSize(1) - 1;
-      if (maxz < imageRegion.GetSize(2)-autoBorder) maxz += autoBorder;
+      if ((long)maxz < (long)(imageRegion.GetSize(2)-autoBorder)) maxz += autoBorder;
       else maxz = imageRegion.GetSize(2) - 1;
       
       extractRegion.SetIndex(0,minx);
