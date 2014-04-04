@@ -210,7 +210,6 @@ int main(const int argc, const char **argv)
 	//vector<ImagePointer> vprobaMaps;
 	ImagePointer probabilityMapImage;
 	ImageSampleType::Pointer imageSample;
-	ImageSampleType::Pointer labelSample;
 	
 	vector<int> labelList;
   
@@ -242,19 +241,19 @@ int main(const int argc, const char **argv)
 		//read mask
 		if (maskfile) {
 			if (debug) cout << "Loading mask " << maskfile  << endl;
-			BinaryVolumeReaderType::Pointer imageReader = BinaryVolumeReaderType::New();
-			imageReader->SetFileName(maskfile) ;
-			imageReader->Update();
-			maskImage = imageReader->GetOutput();
+			BinaryVolumeReaderType::Pointer maskReader = BinaryVolumeReaderType::New();
+			maskReader->SetFileName(maskfile) ;
+			maskReader->Update();
+			maskImage = maskReader->GetOutput();
 		}
 
 		//read mask
 		if (probmaskfile) {
 			if (debug) cout << "Loading probability mask " << maskfile  << endl;
-			VolumeReaderType::Pointer imageReader = VolumeReaderType::New();
-			imageReader->SetFileName(probmaskfile) ;
-			imageReader->Update();
-			probmaskImage = imageReader->GetOutput();
+			VolumeReaderType::Pointer probaReader = VolumeReaderType::New();
+			probaReader->SetFileName(probmaskfile) ;
+			probaReader->Update();
+			probmaskImage = probaReader->GetOutput();
 		}
 		//read label
 		if (labelOn) {
@@ -326,10 +325,10 @@ int main(const int argc, const char **argv)
 		}
 		if (volOverlapFile) {
 			if (debug) cout << "Loading Volume Overlap Label File " << volOverlapFile  << endl;
-			VolumeReaderType::Pointer imageReader = VolumeReaderType::New();
-			imageReader->SetFileName(volOverlapFile) ;
-			imageReader->Update();
-			volOverlapImage = imageReader->GetOutput();
+			VolumeReaderType::Pointer overlapReader = VolumeReaderType::New();
+			overlapReader->SetFileName(volOverlapFile) ;
+			overlapReader->Update();
+			volOverlapImage = overlapReader->GetOutput();
 		}
 		if (histOn) {
 			//Get extrema over volume/slice/mask
@@ -493,15 +492,15 @@ int main(const int argc, const char **argv)
 
 			ImageSampleType::Pointer labelSample = ImageSampleType::New();
 			labelSample->SetImage(labelImage);
-			PixelType label = 0 ; //initializing to avoid compilation warning
+			PixelType labelValue = 0 ; //initializing to avoid compilation warning
 			ImageSampleIterator iterLabel = labelSample->Begin() ;
 			if(maskForLabelOn)
 			{
 				Iterator itMaskForLabel( maskForLabelImage, maskForLabelImage->GetRequestedRegion());
 				while( iterLabel != labelSample->End() )
 				{
-					label = iterLabel.GetMeasurementVector()[0];
-					if ((label != 0) && (!searchList(label,labelList)) && (itMaskForLabel.Get() != 0)) labelList.push_back( label );
+					labelValue = iterLabel.GetMeasurementVector()[0];
+					if ((labelValue != 0) && (!searchList(labelValue,labelList)) && (itMaskForLabel.Get() != 0)) labelList.push_back( labelValue );
 					++iterLabel;
 					++itMaskForLabel;
 				}
@@ -510,8 +509,8 @@ int main(const int argc, const char **argv)
 			{
 				while(iterLabel != labelSample->End())
 				{
-					label = iterLabel.GetMeasurementVector()[0];
-					if ((label != 0) && (!searchList(label,labelList))) labelList.push_back(label);
+					labelValue = iterLabel.GetMeasurementVector()[0];
+					if ((labelValue != 0) && (!searchList(labelValue,labelList))) labelList.push_back(labelValue);
 					++iterLabel;
 				}
 			}
@@ -568,10 +567,10 @@ int main(const int argc, const char **argv)
 			iterLabel = labelSample->Begin();
 			while( iter != sample->End() )
 			{
-				label = iterLabel.GetMeasurementVector()[0];
-				if ((label != 0 ) && ((iter.GetMeasurementVector()[1] != 0) ))
+				labelValue = iterLabel.GetMeasurementVector()[0];
+				if ((labelValue != 0 ) && ((iter.GetMeasurementVector()[1] != 0) ))
 				{
-					membershipSample->AddInstance(label,iter.GetInstanceIdentifier());
+					membershipSample->AddInstance(labelValue,iter.GetInstanceIdentifier());
 				}
 				++iter ;
 				++iterLabel;

@@ -206,8 +206,8 @@ int main( int argc, char * argv[] )
 //    ReaderType::Pointer fixedReader11  = ReaderType::New();
     ReaderType::Pointer fixedReaderT  = ReaderType::New();
     WriterType::Pointer writer = WriterType::New();
-    ReaderType::Pointer fixedReaders[DATASET_SIZE];
-    ReaderType::Pointer moveReaders[DATASET_SIZE];
+    std::vector<ReaderType::Pointer> fixedReaders(DATASET_SIZE);
+    std::vector<ReaderType::Pointer> moveReaders(DATASET_SIZE);
 
     for(int i = 0; i < DATASET_SIZE; i++) {
         fixedReaders[i]  = ReaderType::New();
@@ -402,7 +402,7 @@ int main( int argc, char * argv[] )
         }
         #endif
         readParameter.close();*/
-        ImageType::Pointer segmentations[DATASET_SIZE]; 
+        std::vector<ImageType::Pointer> segmentations(DATASET_SIZE); 
         ImageType::Pointer segmentation = ImageType::New(); 
         ImageType::Pointer T = ImageType::New(); 
         for (int i = 0; i < DATASET_SIZE; i++)

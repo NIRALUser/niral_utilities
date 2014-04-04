@@ -17,6 +17,10 @@ ENDIF (ITK_FOUND)
 IF( ${ITK_VERSION} VERSION_LESS 4.4.0 )
   MESSAGE( FATAL_ERROR "ImageMath needs ITKv4.4.0 or greater to compile" )
 ENDIF()
+if( ITKV3_COMPATIBILITY )
+#  message(FATAL_ERROR "ImageMath: ITK needs to be compiled with ITKV3_COMPATIBILITY set to OFF")
+endif()
+
 
 ADD_EXECUTABLE(ImageMath ImageMath.cxx )
 TARGET_LINK_LIBRARIES( ImageMath ${ITK_LIBRARIES} )

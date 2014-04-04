@@ -346,7 +346,6 @@ int main(int argc, const char* argv[])
       }
       std::vector<double> globalslice;
 
-      ImageRegionType extractRegion;
       //Now that the output images are created, we fill them up.
       //For each slice of the original image
       for(int slice = 0 ; slice < dim[axisinter] ; slice++) {

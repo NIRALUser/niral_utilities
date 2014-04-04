@@ -415,7 +415,7 @@ int main(const int argc, const char **argv)
   char * tmp_str      = ipGetStringArgument(argv, "-threshold", NULL);
   PixelType tmin = 0;
   PixelType tmax = 0;
-  float textend[2];
+  float textend[3];
   if (tmp_str) {
     int num = ipExtractFloatTokens(textend, tmp_str, 2);
     if (2 != num) {
@@ -643,7 +643,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
   int cropParam[numCropParam];
   bool cropOn = ipExistsArgument(argv,"-crop");
   if (cropOn) {  
-    char *tmp_str    = ipGetStringArgument(argv, "-crop", NULL);
+    tmp_str    = ipGetStringArgument(argv, "-crop", NULL);
     int numDim       = ipExtractIntTokens(cropParam, tmp_str, numCropParam);
     if (numDim != numCropParam) {              
       cerr << argv[0] << ": crop needs "<< numCropParam << " parameters.\n";
@@ -809,19 +809,16 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
   }
   bool nan   = ipExistsArgument(argv, "-NaNCor"); 
 
-  bool rescalingOn    = ipExistsArgument(argv, "-rescale"); 
-  tmp_str      = ipGetStringArgument(argv, "-rescale", NULL);
-  PixelType rmin = 0;
-  PixelType rmax = 0;
-  float rescaling[2];
-  if (tmp_str) {
+  bool rescalingOn = ipExistsArgument( argv , "-rescale" ) ; 
+  tmp_str = ipGetStringArgument( argv , "-rescale" , NULL ) ;
+  float rescaling[2] ;
+  if (tmp_str)
+  {
     int num = ipExtractFloatTokens(rescaling, tmp_str, 2);
-    if (2 != num) {
-      cerr << "Rescale needs 2 comma separated entries: min,max" << endl;
+    if( 2 != num)
+    {
+      cerr << "Rescale needs 2 comma separated entries: min,max" << endl ;
       return EXIT_FAILURE ;
-    } else {
-      rmin = (PixelType) rescaling[0];
-      rmax = (PixelType) rescaling[1];
     }
   }
 
@@ -1380,8 +1377,6 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 
     ConnectiveFilterType::Pointer Connective = ConnectiveFilterType::New();
     RelabelFilterType::Pointer relabelFilter = RelabelFilterType::New();
-    threshFilterType::Pointer threshFilter = threshFilterType::New();
-
     //Get the connectivity map of the image
     Connective->SetInput(inputImage);
     try {
@@ -1904,7 +1899,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     vector<ImagePointer> NormalizeImages;
     for (unsigned int i = 0; i< NbFiles; i++){
       if (debug) cout << "Loading image " << NormalizeFiles[i]  << endl;
-      VolumeReaderType::Pointer imageReader = VolumeReaderType::New();
+      imageReader = VolumeReaderType::New();
       imageReader->SetFileName(NormalizeFiles[i].c_str()) ;
       try {
 	imageReader->Update();
@@ -2210,7 +2205,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
         inputImage = addFilter->GetOutput();
 
 	// sum of square computation
-        squareFilterType::Pointer squareFilter = squareFilterType::New();
+        squareFilter = squareFilterType::New();
         squareFilter->SetInput(ImageReader->GetOutput());
         try
         {
@@ -2357,9 +2352,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       {
 	PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
 	PixelType *LabelArray;
-	PixelType *LabelWeightArray;                  //weighting factor for each label
 	LabelArray = new PixelType[MaxLabel];
-	LabelWeightArray = new PixelType[NbFiles];
 
 	for (int Label = 0; Label < MaxLabel; Label++)
 	  LabelArray[Label] = 0;
@@ -2509,9 +2502,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       {
 	PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
 	PixelType *LabelArray;
-	PixelType *LabelWeightArray;                  //weighting factor for each label
 	LabelArray = new PixelType[MaxLabel];
-	LabelWeightArray = new PixelType[NbFiles];
 
 	for (int Label = 0; Label < MaxLabel; Label++)
 	  LabelArray[Label] = 0;
