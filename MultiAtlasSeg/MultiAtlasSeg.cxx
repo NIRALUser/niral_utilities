@@ -146,12 +146,6 @@ int main( int argc, char * argv[] )
     float q[DATASET_SIZE];   // specificity
     float alpha = 0, beta = 0, gama = 0;
     
-  //  alpha = 0.1;
-   // beta = 0.1;
- //   gama = 0.8;
-
-    //alpha = 0.000246;
-    //beta = 1;
     alpha = 0.5;
     beta = 0.5;
 
@@ -819,12 +813,9 @@ int main( int argc, char * argv[] )
         float HE = 0;
         std::string filename;
         std::ostringstream strFixCase;
-      //  strFixCase << argv[3];
 
         orientedreaderx->SetFileName(argv[2]);
         orientedreadery->SetFileName(argv[3]);
-    //    orientedwriter->SetFileName( "deformationField_051to039WarpxvecWrite.nrrd" );
-     //   orientedwriter->SetInput(orientedreaderx->GetOutput());
         try {
             //orientedwriter->Update();
             orientedreaderx->Update();
@@ -836,43 +827,12 @@ int main( int argc, char * argv[] )
             std::cerr << err << std::endl;
             return EXIT_FAILURE;
         }
-/*        orientedreadery->SetFileName(argv[3]);
-      //  orientedwriter->SetFileName( "deformationField_051to039WarpyvecWrite.nrrd" );
-      //  orientedwriter->SetInput( orientedreadery->GetOutput() );
-        try {
-       //     orientedwriter->Update();
-            orientedreadery->Update();
-            deformationFieldy = orientedreadery->GetOutput();
-            size = deformationFieldy->GetLargestPossibleRegion().GetSize();
-        }
-        catch( itk::ExceptionObject & err ) {
-            std::cerr << "ExceptionObject caught !" << std::endl;
-            std::cerr << err << std::endl;
-            return EXIT_FAILURE;
-        }
-        orientedreaderz->SetFileName(argv[4]);
-       // orientedwriter->SetFileName( "deformationField_051to039WarpzvecWrite.nrrd" );
-       // orientedwriter->SetInput( orientedreaderz->GetOutput() );
-        try {
-            //orientedwriter->Update();
-            orientedreaderz->Update();
-            deformationFieldz = orientedreaderz->GetOutput();
-            size = deformationFieldz->GetLargestPossibleRegion().GetSize();
-        }
-        catch( itk::ExceptionObject & err ) {
-            std::cerr << "ExceptionObject caught !" << std::endl;
-            std::cerr << err << std::endl;
-            return EXIT_FAILURE;
-        }
-*/
         for(index[2] = 0; index[2] < (int)size[2]; index[2]++) {
             for(index[1] = 0; index[1] < (int)size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < (int)size[0]; index[0]++) {
                     // calculate harmonic energy
                     float tmpHE = 0;
                     tmpHE += pow(deformationFieldx->GetPixel(index), 2);
-               //     tmpHE += pow(deformationFieldy->GetPixel(index), 2);
-                //    tmpHE += pow(deformationFieldz->GetPixel(index), 2);
                     HE += sqrt(tmpHE);
                 }
             }
@@ -1135,22 +1095,14 @@ int main( int argc, char * argv[] )
         std::ostringstream strFixCase;
         std::string filename;
 
-    //    strFixCase << argv[argc - 1];
-
         filename = argv[2]; 
-      //  filename = "test/HEEnergyMICCAI" + strFixCase.str() + "_Normalized.txt";
-        //filename = "../data/HEEnergyMICCAI" + strFixCase.str() + "WithoutFlip.txt";
         std::ifstream iefile( filename.c_str() ); // intensity energy
 
         filename = argv[3]; 
-     //   filename = "test/intEnergyMICCAI" + strFixCase.str() + "_Normalized.txt";
-        //filename = "../data/intEnergyMICCAI" + strFixCase.str() + "WithoutFlip.txt";
         std::ifstream efile( filename.c_str() ); // harmonic energy
 
         filename = argv[4];
         
-   //     filename = "test/templateForSegMICCAI_" + strFixCase.str() + ".txt";
-      //  filename = "../data/templateForSegMICCAI_" + strFixCase.str() + "WithoutFlip.txt";
         std::string commandLine;
         commandLine = "rm " + filename;
         system(commandLine.c_str());
@@ -1351,6 +1303,8 @@ int main( int argc, char * argv[] )
         std::ifstream efile( filename.c_str() );
         filename = argv[4];
         std::ifstream templatefile( filename.c_str());
+	std::string outfolder(argv[5]);
+
         std::string commandLine;
         float harmonicE, intensityE, shapeE, weightFactor[NUMBER_OF_CASE * (NUMBER_OF_CASE - 1)], circularity[NUMBER_OF_CASE];
         int cases[NUMBER_OF_CASE];
@@ -1366,7 +1320,7 @@ int main( int argc, char * argv[] )
         int sizeLabelList = 0;
         char is_a_label[5];
 
-        if ((dir = opendir (argv[5])) != NULL) {
+        if ((dir = opendir (outfolder.c_str())) != NULL) {
             std::string tmpFilename;
             while ((ent = readdir (dir)) != NULL) {
                 tmpFilename = ent->d_name;
@@ -1382,7 +1336,7 @@ int main( int argc, char * argv[] )
         closedir (dir);
         std::string *labelList = new std::string[sizeLabelList];
 
-        if ((dir = opendir (argv[5])) != NULL) {
+        if ((dir = opendir (outfolder.c_str())) != NULL) {
             std::string tmpFilename;
             int i = 0;
             while ((ent = readdir (dir)) != NULL) {
@@ -1441,7 +1395,7 @@ int main( int argc, char * argv[] )
         iefile.close();
 
         commandLine = "ImageMath " ;
-        commandLine += argv[5] ;
+        commandLine += outfolder;
         commandLine += labelList[0].c_str() ;
         commandLine += " -majorityVoting ";
         int z = 0;
@@ -1455,7 +1409,7 @@ int main( int argc, char * argv[] )
             std::ostringstream strSource;
             strSource << cases[i];
             if (cases[i] != 0) {
-                commandLine += argv[5] + labelList[i] + " ";
+                commandLine += outfolder + labelList[i] + " ";
             }
         }     
 /*
@@ -1496,6 +1450,7 @@ int main( int argc, char * argv[] )
         std::ifstream efile( filename.c_str() );
         filename = argv[4];
         std::ifstream templatefile( filename.c_str());
+	std::string outfolder (argv[5]);
         std::string commandLine;
         float harmonicE, intensityE, shapeE, weightFactor[NUMBER_OF_CASE * (NUMBER_OF_CASE - 1)], circularity[NUMBER_OF_CASE];
         int cases[NUMBER_OF_CASE];// = {1000, 1001, 1002, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1017, 1036, 1003};
@@ -1506,14 +1461,15 @@ int main( int argc, char * argv[] )
         alpha = atof(argv[argc - 4]);
         gama = atof(argv[argc - 3]);
       
-       // std::cout << beta << "  " << alpha << "  " << gama << std::endl;
+        std::cout << "weights: " << beta << "  " << alpha << "  " << gama << std::endl;
+        std::cout << "outfolder: " << outfolder << std::endl;
 
         DIR *dir;
         struct dirent *ent;
         int sizeLabelList = 0;
         char is_a_label[5];
 
-        if ((dir = opendir (argv[5])) != NULL) {
+        if ((dir = opendir (outfolder.c_str())) != NULL) {
             std::string tmpFilename;
             while ((ent = readdir (dir)) != NULL) {
                 tmpFilename = ent->d_name;
@@ -1532,7 +1488,7 @@ int main( int argc, char * argv[] )
       //  std::cout << "size of label list: " << sizeLabelList << std::endl;
         std::string *labelList = new std::string[sizeLabelList];
 
-        if ((dir = opendir (argv[5])) != NULL) {
+        if ((dir = opendir (outfolder.c_str())) != NULL) {
             std::string tmpFilename;
             int i = 0;
             while ((ent = readdir (dir)) != NULL) {
@@ -1596,11 +1552,9 @@ int main( int argc, char * argv[] )
         efile.close();
         iefile.close();
 
-        //std::ostringstream strTarget;
-        //commandLine = "~/work/NeuroLib/ImageMath_build2/ImageMath " ;
         commandLine = "ImageMath " ;
-        commandLine += argv[5] ;
-        commandLine += labelList[0].c_str() ;
+        commandLine += outfolder;
+        commandLine += labelList[0] ;
         commandLine += " -weightedMajorityVoting ";
         int z = 0;
         for (int i = 0; i < NUMBER_OF_CASE; i++){
@@ -1613,7 +1567,7 @@ int main( int argc, char * argv[] )
             std::ostringstream strSource;
             strSource << cases[i];
             if (cases[i] != 0) {
-                commandLine += argv[5] + labelList[i] + " ";
+                commandLine += outfolder + labelList[i] + " ";
             }
         }     
         commandLine += "-weights ";
@@ -1701,14 +1655,8 @@ int main( int argc, char * argv[] )
         NMImetric->SetFixedImage(  fixedImage  );
         NMImetric->SetMovingImage( movingImage );
         MSMmetric->SetFixedImageRegion( fixedImage->GetLargestPossibleRegion( ) );
-//        NCCmetric->SetFixedImageRegion( fixedImage->GetLargestPossibleRegion( ) );
-//        MImetric->SetFixedImageRegion( fixedImage->GetLargestPossibleRegion( ) );
-//        NMImetric->SetFixedImageRegion( fixedImage->GetLargestPossibleRegion( ) );
         try {
             MSMmetric->Initialize();
-   //         NCCmetric->Initialize();
-    //        MImetric->Initialize();
-     //       NMImetric->Initialize();
         }
         catch( itk::ExceptionObject & excep ){
             std::cerr << "Exception catched !" << std::endl;
@@ -1716,24 +1664,13 @@ int main( int argc, char * argv[] )
             return EXIT_FAILURE;
         }
         float msm = MSMmetric->GetValue( transform->GetParameters( ) );
- //       float ncc = NCCmetric->GetValue( transform->GetParameters( ) );
-  //      float mi = MImetric->GetValue( transform->GetParameters( ) );
-   //     float nmi = NMImetric->GetValue( transform->GetParameters( ) );
         std::string filename;
         std::ostringstream strFixCase;
-       // strFixCase << argv[5];
-     //   filename = "intensityEnergyMICCAI.txt";
-        //filename = "performance" + strFixCase.str() + ".txt";
-        //filename = "../data/intensityEnergyMICCAI" + strFixCase.str() + ".txt";
-        //filename = "intensityEnergyMICCAI" + strFixCase.str() + ".txt";
         filename = argv[4];//"/home/jiahuiw/intensityEnergy.txt";
         std::ofstream efile( filename.c_str() , std::ios::app );
         efile << msm << "\n";
         efile.close();
         std::cout << "mean square metric value:            " << msm << std::endl;
- //       std::cout << "normalized cross correlation value:  " << ncc << std::endl;
-   //     std::cout << "mutual information value:            " << mi << std::endl;
-     //   std::cout << "normalized mutual information value: " << nmi << std::endl;
     } 
      
     return EXIT_SUCCESS;
