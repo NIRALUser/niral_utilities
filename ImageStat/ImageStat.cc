@@ -106,7 +106,7 @@ int main(const int argc, const char **argv)
 	if (argc <=1 || ipExistsArgument(argv, "-usage") || ipExistsArgument(argv, "-help")) {
 		std::cout << "ImageStat 1.6 version (4/17/14)" << std::endl;
 		std::cout << " computes base statistics of an image" << std::endl;
-		std::cout << "usage: ImageStat infile [-outbase outbase] [-mask maskfile]  [-v]"<< std::endl;
+		std::cout << "usage: ImageStat infile [-outbase outbase] [-mask maskfile]  [-verbose]"<< std::endl;
 		std::cout << "       [-histo [-min xmin] [-max xmax] [-samp s]] " << std::endl;
 		std::cout << std::endl;
 		std::cout << "infile         input dataset" << std::endl;;
@@ -477,6 +477,7 @@ int main(const int argc, const char **argv)
 
 			if (minOn) minLabel = xmin;
 			if (maxOn) maxLabel = xmax;
+			if (debug) std::cout << "min-max: " << minLabel  << " , " << maxLabel << std::endl;
 
 			ImageSampleType::Pointer labelSample = ImageSampleType::New();
 			labelSample->SetImage(labelImage); //initializing to avoid compilation warning
@@ -681,8 +682,7 @@ int main(const int argc, const char **argv)
 			  for (int j=0; j<(int)labelList.size() ; j++ )
 			    {
 			      l=labelList[j];
-			      if ( (!minOn || (minOn && l >= minLabel)) && 
-				   (!maxOn || (maxOn && l <= maxLabel)))
+			      if ( (!minOn || l >= minLabel) && (!maxOn || l <= maxLabel))
 				{
 				  efile << l;
 				  efile << "\t \t" << tab[0][j];
@@ -709,8 +709,8 @@ int main(const int argc, const char **argv)
 				  if(displayOn)
 				    std::cout<<endl;
 				}
-			      efile.close();
 			    }
+			    efile.close();
 			}
 			if (volumeSummaryOn){
 			  char statfile [5024];
