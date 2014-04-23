@@ -1,9 +1,5 @@
 /*=========================================================================
 
-  Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: MeanSquaresImageMetric1.cxx,v $
-  Language:  C++
-  Date:      $Date: 2012-02-17 $
   Version:   $  1.20 $
              1. Compute the performance level for all the labels (v 1.13, 12-13-2011)
              2. Iterative weighted mojority voting '-w' (v 1.13, 12-13-2011)
@@ -24,31 +20,11 @@
             11. Added distance normalization (v 1.21 08-17-2012)
             12. Add Beysian correction (v 1.3 11-28-2012)
 
-  Copyright (c) Insight Software Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
-
 =========================================================================*/
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-// Software Guide : BeginLatex
-//
-// This example illustrates how to explore the domain of an image metric.  This
-// is a useful exercise to do before starting a registration process, since
-// getting familiar with the characteristics of the metric is fundamental for
-// the appropriate selection of the optimizer to be use for driving the
-// registration process, as well as for selecting the optimizer parameters.
-// This process makes possible to identify how noisy a metric may be in a given
-// range of parameters, and it will also give an idea of the number of local
-// minima or maxima in which an optimizer may get trapped while exploring the
-// parametric space.
-//
-// Software Guide : EndLatex 
 
 #define REC_FEM 1
 #define SEMIT 4
@@ -58,9 +34,6 @@
 #define GRACILIS 6
 #define BACKGROUND 0
 #define NUMBER_OF_CASE_USED 3
-//#define NUMBER_OF_CASE 25
-//#define NUMBER_OF_CASE 4
-//#define NUMBER_OF_ATLAS 3
 #define NUMBER_OF_MUSCLE 6
 #define _INDIVIDUAL_MUSCLE
 #define ENERGY_CONST 0.0
@@ -82,14 +55,6 @@
 #include <stdlib.h>
 #include <dirent.h>
 
-// Software Guide : BeginLatex
-//
-// We start by including the headers of the basic components: Metric, Transform
-// and Interpolator.
-//
-// Software Guide : EndLatex 
-
-// Software Guide : BeginCodeSnippet
 #include "itkMeanSquaresImageToImageMetric.h"
 #include "itkNormalizedCorrelationImageToImageMetric.h"
 #include "itkMutualInformationImageToImageMetric.h"
@@ -109,7 +74,6 @@
 #include "itkWarpHarmonicEnergyCalculator.h"
 #include "itkGridForwardWarpImageFilter.h"
 #include "itkVectorCentralDifferenceImageFunction.h"
-// Software Guide : EndCodeSnippet
 
 void SortStringList(std::string *strList, int size)
 {
@@ -129,7 +93,7 @@ void SortStringList(std::string *strList, int size)
 }
     
 
-inline int ipExistsArgument(char **argv, char *keystr) {
+inline int ipExistsArgument(char **argv, const char *keystr) {
   for (int i = 1; argv[i]; i++) 
     if (strstr(argv[i], keystr)) 
         return 1;
@@ -139,37 +103,42 @@ inline int ipExistsArgument(char **argv, char *keystr) {
 int main( int argc, char * argv[] )
 {
     if (argc <= 1 || ipExistsArgument(argv, "-usage") || ipExistsArgument(argv, "-help")) {
-        std::cerr << "Multi-Atlas Segmentation Tool 1.13 version (Feb 2012)" << std::endl;
-        std::cerr << "Usage: " << std::endl;
-        std::cerr << argv[0] << "  fixedImage  movingImage" << std::endl;
-        std::cerr << " -z " << "  chose the most similar template" << std::endl;
-        std::cerr << " -b " << "  chose the most similar template" << std::endl;
-        std::cerr << " -g " << "  establish graph and search optimal route between image pairs through graph" << std::endl;
-        std::cerr << " -m " << "  run majority voting" << std::endl;
-        std::cerr << " -v " << "  run weighted majority voting" << std::endl;
-        std::cerr << " -c " << "  run STAPLE label fusion" << std::endl;
-        std::cerr << " -p " << "  calculate metrics" << std::endl;
-        std::cerr << " -u " << "  calculate shape energy (circularity)" << std::endl;
-        std::cerr << " -e " << "  calculate harmonic energy" << std::endl;
-        std::cerr << " -n " << "  normalize the weighting factors" << std::endl;
-        std::cerr << " -help " << " print out this instruction" << std::endl;
+        std::cout << "Multi-Atlas Segmentation Tool 1.13 version (Feb 2012)" << std::endl;
+        std::cout << "Usage: " << std::endl;
+        std::cout << argv[0] << "  fixedImage  movingImage" << std::endl;
+        std::cout << " -z " << "  chose the most similar template" << std::endl;
+        std::cout << " -b " << "  chose the most similar template" << std::endl;
+        std::cout << " -g " << "  establish graph and search optimal route between image pairs through graph" << std::endl;
+        std::cout << " -m " << "  run majority voting" << std::endl;
+        std::cout << " -v " << "  run weighted majority voting" << std::endl;
+        std::cout << " -c " << "  run STAPLE label fusion" << std::endl;
+        std::cout << " -p " << "  calculate metrics" << std::endl;
+        std::cout << " -u " << "  calculate shape energy (circularity)" << std::endl;
+        std::cout << " -e " << "  calculate harmonic energy" << std::endl;
+        std::cout << " -n " << "  normalize the weighting factors" << std::endl;
+        std::cout << " -help " << " print out this instruction" << std::endl;
+        std::cout << " fixedImage  movingImage NumberOfAtlases NumberOfCases" << " print out this instruction" << std::endl;
         return EXIT_FAILURE;
     }
 
     int NUMBER_OF_CASE = atoi(argv[argc - 1]);
     int NUMBER_OF_ATLAS = atoi(argv[argc - 2]);
 
-// Software Guide : BeginLatex
-//
-// We define the dimension and pixel type of the images to be used in the
-// evaluation of the Metric.
-//
-// Software Guide : EndLatex 
-// Software Guide : BeginCodeSnippet
+    bool option_V = ipExistsArgument(argv, "-v");
+    bool option_S = ipExistsArgument(argv, "-s");
+    bool option_W = ipExistsArgument(argv, "-w");
+    bool option_Z = ipExistsArgument(argv, "-z");
+    bool option_B = ipExistsArgument(argv, "-b");
+    bool option_G = ipExistsArgument(argv, "-g");
+    bool option_M = ipExistsArgument(argv, "-m");
+    bool option_C = ipExistsArgument(argv, "-c");
+    bool option_P = ipExistsArgument(argv, "-p");
+    bool option_U = ipExistsArgument(argv, "-u");
+    bool option_E = ipExistsArgument(argv, "-e");
+    bool option_N = ipExistsArgument(argv, "-n");
     const     unsigned int   Dimension = 3; 
-    typedef   unsigned char  PixelType; 
+    typedef   unsigned short  PixelType; 
     typedef itk::Image< PixelType, Dimension >   ImageType;
-// Software Guide : EndCodeSnippet
     typedef itk::ImageFileReader< ImageType >  ReaderType;
     typedef itk::ImageFileWriter< ImageType >  WriterType;
     int DATASET_SIZE = 25;
@@ -177,9 +146,6 @@ int main( int argc, char * argv[] )
     float q[DATASET_SIZE];   // specificity
     float alpha = 0, beta = 0, gama = 0;
     
-    //alpha = atof(argv[3]);
-   // beta = atof(argv[4]);
-    //gama = atof(argv[5]);
   //  alpha = 0.1;
    // beta = 0.1;
  //   gama = 0.8;
@@ -193,17 +159,6 @@ int main( int argc, char * argv[] )
     ReaderType::Pointer movingReader = ReaderType::New();
     ReaderType::Pointer fixedSegReader  = ReaderType::New();
     ReaderType::Pointer movingSegReader = ReaderType::New();
-//    ReaderType::Pointer fixedReader1  = ReaderType::New();
-//    ReaderType::Pointer fixedReader2  = ReaderType::New();
-//    ReaderType::Pointer fixedReader3  = ReaderType::New();
-//    ReaderType::Pointer fixedReader4  = ReaderType::New();
-//    ReaderType::Pointer fixedReader5  = ReaderType::New();
-//    ReaderType::Pointer fixedReader6  = ReaderType::New();
-//    ReaderType::Pointer fixedReader7  = ReaderType::New();
-//    ReaderType::Pointer fixedReader8  = ReaderType::New();
-//    ReaderType::Pointer fixedReader9  = ReaderType::New();
-//    ReaderType::Pointer fixedReader10  = ReaderType::New();
-//    ReaderType::Pointer fixedReader11  = ReaderType::New();
     ReaderType::Pointer fixedReaderT  = ReaderType::New();
     WriterType::Pointer writer = WriterType::New();
     std::vector<ReaderType::Pointer> fixedReaders(DATASET_SIZE);
@@ -213,7 +168,8 @@ int main( int argc, char * argv[] )
         fixedReaders[i]  = ReaderType::New();
         moveReaders[i]  = ReaderType::New();
     }
-    if( strchr (argv[1], 'c') != NULL ) {
+
+    if(  option_C ) {
         //label 1
         float p[DATASET_SIZE];  // sensitivity
         float q[DATASET_SIZE];   // specificity
@@ -248,8 +204,7 @@ int main( int argc, char * argv[] )
                     usedCase[i] = 0;
             }  
             commandLine = "crlSTAPLE";
-            //for (int i = 0; i < NUMBER_OF_CASE; i++){
-            for (int i = 0; i < 25; i++){
+            for (int i = 0; i < NUMBER_OF_CASE; i++){
                 std::ostringstream strTargetCase;
                 if(usedCase[i]) {
                     strTargetCase << cases[i];
@@ -263,10 +218,7 @@ int main( int argc, char * argv[] )
                         commandLine = commandLine + " ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/" + strFixCase.str() + "/deformedImage_" + strTargetCase.str() + "to" + strFixCase.str() + "_seg.nrrd";
                 }
             }
-         //   if(fixCase < 100)
-//                commandLine = commandLine + " --compressOutput --outputImage seg_0" + strFixCase.str() + "_fromAllScans_syn_100x50x25_AllMuscle.nrrd | grep " + quotationMark + "SPREADSHEET,PV" + quotationMark + " >> ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/0" + strFixCase.str() + "/performance0" + strFixCase.str() + "_syn_100x50x25_label_AllMuscle_" + numIter.str() + ".txt";
-         //   else 
- //               commandLine = commandLine + " --compressOutput --outputImage seg_" + strFixCase.str() + "_fromAllScans_syn_100x50x25_AllMuscle.nrrd | grep " + quotationMark + "SPREADSHEET,PV" + quotationMark + " >> ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/" + strFixCase.str() + "/performance" + strFixCase.str() + "_syn_100x50x25_label_AllMuscle_" + numIter.str() + ".txt";
+
             std::cout << commandLine << std::endl;
             system(commandLine.c_str());//run STAPLE
             exit(1);
@@ -337,7 +289,7 @@ int main( int argc, char * argv[] )
         exit(1);
     }
 
-    if( strchr (argv[1], 'b') != NULL ) {
+    if( option_B ) {
         //label 1
         float A = 0, B = 0, R = 0, f = 0, b = 0, fT1 = 0, fT0 = 0, f1 = 1, f0 = 1, senThresh = 0.01;//senThresh = 0.95
         typedef itk::Image< float, 3 >                         OrientedImageType;
@@ -351,57 +303,6 @@ int main( int argc, char * argv[] )
         std::ostringstream strFixCase;
         strFixCase << fixCase;
 
-/*
-        #ifdef INDIVIDUAL_MUSCLE
-            sprintf(filename, "/biomed-resimg/NDRC/DuchenneDystrophy/data/canine/Multi_Atlas_Build/Data/Prepare_Tree_Atlas_NatHist_Normal/staple/performance0%d_syn_100x50x25_label_%d.txt", segLabel, fixCase);
-        #else
-            //used for weighted majority voting
-            sprintf(filename, "performanceIterativeWMV%d.txt", fixCase);
-        #endif
-        readParameter.open(filename);
-        char parameters[100];
-        #ifdef INDIVIDUAL_MUSCLE
-        if (readParameter.is_open()) {
-            for(int i = 0; i < DATASET_SIZE; i++) {
-                if (!readParameter.eof()) {
-                    readParameter >> parameters;
-                    q[i]  = atof(parameters); 
-                   // std::cout << q[i] << std::endl;
-                }
-            }
-            for(int i = 0; i < DATASET_SIZE; i++) {
-                if (!readParameter.eof()) {
-                    readParameter >> parameters;
-                    p[i]  = atof(parameters); 
-                }
-            }
-        }    
-        #else
-        if (readParameter.is_open()) {
-            int k = 0;
-            for(int i = 0; i < DATASET_SIZE; i++) {
-                if (!readParameter.eof()) {
-                    readParameter >> parameters;
-                    q[k] = atof(parameters); 
-                }
-                for(int j = 0; j < NUMBER_OF_MUSCLE; j++) {
-                    if (!readParameter.eof()) {
-                        readParameter >> parameters;
-                        if(j + 1 == segLabel){
-                            p[k]  = atof(parameters); 
-                            std::cout << k << "  " << p[k] << "  " << q[k];
-                        }
-                    }
-                }
-                std::cout << "\n";
-                k++;
-                if (cases[i] == fixCase) { //used for STAPLE
-                    k--;
-                }
-            }
-        }
-        #endif
-        readParameter.close();*/
         std::vector<ImageType::Pointer> segmentations(DATASET_SIZE); 
         ImageType::Pointer segmentation = ImageType::New(); 
         ImageType::Pointer T = ImageType::New(); 
@@ -532,7 +433,7 @@ int main( int argc, char * argv[] )
         writer->Update();
     }
 
-    if( strchr (argv[1], 'w') != NULL ) { 
+    if( option_W ) { 
         // weighted majority voting
         fixedReader->SetFileName(argv[2]);
         fixedReader->Update();
@@ -784,21 +685,21 @@ int main( int argc, char * argv[] )
         }
     }
         
-    if( strchr (argv[1], 'p') != NULL ) { 
+    if( option_P ) { 
         fixedReader->SetFileName(  argv[ 2 ] );
         movingReader->SetFileName( argv[ 3 ] );
     }
 
-    if( strchr (argv[1], 's') != NULL ) { 
+    if( option_S ) { 
         fixedSegReader->SetFileName(  argv[ 2 ] );
         movingSegReader->SetFileName( argv[ 3 ] );
     }
     try {
-        if( strchr (argv[1], 'p') != NULL ) { 
+        if( option_P ) { 
             fixedReader->Update();
             movingReader->Update();
         }
-        if( strchr (argv[1], 's') != NULL ) { 
+        if( option_S ) { 
            fixedSegReader->Update();
            movingSegReader->Update();
         }
@@ -809,7 +710,7 @@ int main( int argc, char * argv[] )
     std::cerr << excep << std::endl;
     }
 
-    if( strchr (argv[1], 's') != NULL ) { 
+    if( option_S ) { 
         ImageType::SizeType                  size = fixedSegReader->GetOutput()->GetLargestPossibleRegion().GetSize();
         ImageType::IndexType                 indexInput;
         float RecFemInt = 0, CraSarInt = 0, AddInt = 0, BicFemInt = 0, GraInt = 0, SemTenInt = 0;
@@ -903,7 +804,7 @@ int main( int argc, char * argv[] )
         std::cout << "the sensitivety is " << averagePerformance << std::endl;
     }
  
-    if( strchr (argv[1], 'e') != NULL ) { 
+    if( option_E ) { 
         // compute harmonic energy
         typedef itk::Image< float, Dimension >         OrientedImageType;
         typedef itk::ImageFileReader<OrientedImageType> OrientedReaderType;
@@ -986,7 +887,7 @@ int main( int argc, char * argv[] )
         return 0;
     }
 
-    if( strchr (argv[1], 'u') != NULL ) { 
+    if( option_U ) { 
         // compute shape energy
         typedef itk::Image< float, Dimension >         OrientedImageType;
         typedef itk::ImageFileReader<OrientedImageType> OrientedReaderType;
@@ -1040,7 +941,7 @@ int main( int argc, char * argv[] )
         return 0;
     }
 
-    if( strchr (argv[1], 'z') != NULL ) { 
+    if( option_Z ) { 
         float graph[NUMBER_OF_CASE][NUMBER_OF_CASE][2], circularity[NUMBER_OF_CASE]; //include deformation from two directions
         float intensityE, harmonicE, shapeE, tmpHE = 0;
         int startNode = atoi(argv[2]), endNode = atoi(argv[3]), floydRoute[NUMBER_OF_CASE];
@@ -1170,12 +1071,11 @@ int main( int argc, char * argv[] )
         templatefile.close();
     }
 
-    if( strchr (argv[1], 'n') != NULL ) { 
+    if( option_N ) { 
         std::string filename;
         std::ostringstream strFixCase;
         //strFixCase << argv[argc - 1];
-       // filename = "test/intEnergyMICCAI" + strFixCase.str() + ".txt";
-       // filename = "test/HEEnergyMICCAI" + strFixCase.str() + ".txt";
+
         filename = argv[2];
         std::ifstream infile1( filename.c_str() );
         std::ifstream infile2( filename.c_str() );
@@ -1219,8 +1119,6 @@ int main( int argc, char * argv[] )
            else
                weightValue[i] = 0;
         }
-        //  filename = "test/intEnergyMICCAI" + strFixCase.str() + "_Normalized.txt";
-        //filename = "test/HEEnergyMICCAI" + strFixCase.str() + "_Normalized.txt";
         filename = argv[3];
         std::ofstream outfile( filename.c_str() , std::ios::app );
         for (int i = 0; i < sizeOfDataset; i++){
@@ -1229,7 +1127,7 @@ int main( int argc, char * argv[] )
         outfile.close();
     }
 
-    if( strchr (argv[1], 'g') != NULL ) { 
+    if( option_G ) { 
         float graph[NUMBER_OF_CASE][NUMBER_OF_CASE][2], circularity[NUMBER_OF_CASE]; //include deformation from two directions
         float intensityE, harmonicE, shapeE, tmpHE = 0, maxDistance = 0, minDistance = 100000;
         int startNode = 0, endNode = 0;
@@ -1443,7 +1341,7 @@ int main( int argc, char * argv[] )
         templatefile.close();
     }
    
-    if( strchr (argv[1], 'm') != NULL ) { 
+    if( option_M ) { 
         //run majority voting
         std::ostringstream strFixCase;
         std::string filename;
@@ -1587,7 +1485,7 @@ int main( int argc, char * argv[] )
         system(commandLine.c_str());
     }
 
-    if( strchr (argv[1], 'v') != NULL ) { 
+    if( option_V ) { 
         //run weighted majority voting
         std::ostringstream strFixCase;
       //  strFixCase << argv[argc - 1];
@@ -1745,7 +1643,7 @@ int main( int argc, char * argv[] )
         
     }
 
-    if( strchr (argv[1], 'p') != NULL ) { 
+    if( option_P ) { 
         typedef itk::MeanSquaresImageToImageMetric< ImageType, ImageType >  MSMMetricType;
         typedef itk::NormalizedCorrelationImageToImageMetric< ImageType, ImageType >  NCCMetricType;
         typedef itk::MutualInformationImageToImageMetric< ImageType, ImageType >  MIMetricType;
@@ -1759,15 +1657,6 @@ int main( int argc, char * argv[] )
 
         RescaleFilterType::Pointer rescaleFixFilter = RescaleFilterType::New();
         RescaleFilterType::Pointer rescaleMoveFilter = RescaleFilterType::New();
-        // Software Guide : EndCodeSnippet
-        // Software Guide : BeginLatex
-//
-// We also instantiate the transform and interpolator types, and create objects
-// of each class.
-//
-// Software Guide : EndLatex 
-
-// Software Guide : BeginCodeSnippet
         typedef itk::TranslationTransform< double, Dimension >  TransformType;
         TransformType::Pointer translatetransform = TransformType::New( );
         typedef itk::AffineTransform<double,3> AffineTransformType;
@@ -1776,8 +1665,6 @@ int main( int argc, char * argv[] )
         typedef itk::NearestNeighborInterpolateImageFunction< ImageType, double >  NNInterpolatorType;
         typedef itk::LinearInterpolateImageFunction< ImageType > LinearInterpolatorType;
         NNInterpolatorType::Pointer interpolator = NNInterpolatorType::New();
-//LinearInterpolatorType::Pointer interpolator = LinearInterpolatorType::New();
-// Software Guide : EndCodeSnippet
         transform->SetIdentity();
 
         rescaleFixFilter->SetInput( fixedReader->GetOutput() );
@@ -1790,19 +1677,9 @@ int main( int argc, char * argv[] )
         rescaleMoveFilter->SetOutputMaximum( 1023 );
         rescaleMoveFilter->Update();
 
-       // ImageType::ConstPointer fixedImage  = fixedReader->GetOutput();
-        //ImageType::ConstPointer movingImage = movingReader->GetOutput();
         ImageType::ConstPointer fixedImage  = rescaleFixFilter->GetOutput();
         ImageType::ConstPointer movingImage = rescaleMoveFilter->GetOutput();
 
-// Software Guide : BeginLatex
-//
-// The classes required by the metric are connected to it. This includes the
-// fixed and moving images, the interpolator and the  transform.
-//
-// Software Guide : EndLatex 
-
-// Software Guide : BeginCodeSnippet
         // mean square metric
         MSMmetric->SetTransform( transform );
         MSMmetric->SetInterpolator( interpolator );
@@ -1823,7 +1700,6 @@ int main( int argc, char * argv[] )
         NMImetric->SetInterpolator( interpolator );
         NMImetric->SetFixedImage(  fixedImage  );
         NMImetric->SetMovingImage( movingImage );
-        // Software Guide : EndCodeSnippet
         MSMmetric->SetFixedImageRegion( fixedImage->GetLargestPossibleRegion( ) );
 //        NCCmetric->SetFixedImageRegion( fixedImage->GetLargestPossibleRegion( ) );
 //        MImetric->SetFixedImageRegion( fixedImage->GetLargestPossibleRegion( ) );
