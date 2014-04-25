@@ -116,6 +116,7 @@ int main( int argc, char * argv[] )
         std::cout << " -u " << "  calculate shape energy (circularity)" << std::endl;
         std::cout << " -e " << "  calculate harmonic energy" << std::endl;
         std::cout << " -n " << "  normalize the weighting factors" << std::endl;
+        std::cout << " -N " << "  normalize the weighting factors, supplying 2 files" << std::endl;
         std::cout << " -help " << " print out this instruction" << std::endl;
         std::cout << " fixedImage  movingImage NumberOfAtlases NumberOfCases" << " print out this instruction" << std::endl;
         return EXIT_FAILURE;
@@ -136,6 +137,7 @@ int main( int argc, char * argv[] )
     bool option_U = ipExistsArgument(argv, "-u");
     bool option_E = ipExistsArgument(argv, "-e");
     bool option_N = ipExistsArgument(argv, "-n");
+    bool option_N2 = ipExistsArgument(argv, "-N");
     const     unsigned int   Dimension = 3; 
     typedef   unsigned short  PixelType; 
     typedef itk::Image< PixelType, Dimension >   ImageType;
@@ -804,20 +806,16 @@ int main( int argc, char * argv[] )
         typedef itk::ImageFileReader<OrientedImageType> OrientedReaderType;
         typedef itk::ImageFileWriter<OrientedImageType> OrientedWriterType;
         OrientedReaderType::Pointer orientedreaderx = OrientedReaderType::New();
-        OrientedReaderType::Pointer orientedreadery = OrientedReaderType::New();
-        OrientedReaderType::Pointer orientedreaderz = OrientedReaderType::New();
         OrientedWriterType::Pointer orientedwriter = OrientedWriterType::New();
-        OrientedImageType::Pointer deformationFieldx, deformationFieldy, deformationFieldz; 
-        OrientedImageType::IndexType                   index;
-        OrientedImageType::SizeType                    size;
-        float HE = 0;
+        OrientedImageType::Pointer deformationFieldx; 
+        OrientedImageType::IndexType index;
+        OrientedImageType::SizeType size;
+        double HE = 0;
         std::string filename;
         std::ostringstream strFixCase;
 
         orientedreaderx->SetFileName(argv[2]);
-        orientedreadery->SetFileName(argv[3]);
         try {
-            //orientedwriter->Update();
             orientedreaderx->Update();
             deformationFieldx = orientedreaderx->GetOutput();
             size = deformationFieldx->GetLargestPossibleRegion().GetSize();
@@ -828,19 +826,19 @@ int main( int argc, char * argv[] )
             return EXIT_FAILURE;
         }
         for(index[2] = 0; index[2] < (int)size[2]; index[2]++) {
-            for(index[1] = 0; index[1] < (int)size[1]; index[1]++) {
-                for(index[0] = 0; index[0] < (int)size[0]; index[0]++) {
-                    // calculate harmonic energy
-                    float tmpHE = 0;
-                    tmpHE += pow(deformationFieldx->GetPixel(index), 2);
-                    HE += sqrt(tmpHE);
-                }
-            }
+	  for(index[1] = 0; index[1] < (int)size[1]; index[1]++) {
+	    for(index[0] = 0; index[0] < (int)size[0]; index[0]++) {
+	      // calculate harmonic energy
+	      double value = deformationFieldx->GetPixel(index);
+	      HE += fabs(value * value);
+	    }
+	  }
         }
+        std::cout << "harmonic energy overall: " << HE << std::endl;
+	HE = HE / (size[0] * size[1] * size[2]);
+
         std::cout << "harmonic energy: " << HE << std::endl;
-        //filename = "/home/jiahuiw/harmonicEnergy.txt";
         filename = argv[3];
-    //    filename = "harmonicEnergyMICCAI" + strFixCase.str() + ".txt";
         std::ofstream efile( filename.c_str() , std::ios::app );
         efile << HE << "\n";
         efile.close();
@@ -1087,6 +1085,77 @@ int main( int argc, char * argv[] )
         outfile.close();
     }
 
+    if( option_N2 ) { 
+      std::string filename1, filename2;
+        std::ostringstream strFixCase;
+        float min = 0, max = 0;
+        int sizeOfDataset = 0;
+
+        filename1 = argv[2];
+        filename2 = argv[3];
+        std::ifstream infile1( filename1.c_str() );
+        std::ifstream infile2( filename1.c_str() );
+        std::ifstream infile3( filename2.c_str() );
+        std::ifstream infile4( filename2.c_str() );
+        
+        while (!infile1.eof()) {
+           float tmp;
+           infile1 >> tmp;
+           sizeOfDataset++;
+        }
+        infile1.close();
+        while (!infile3.eof()) {
+           float tmp;
+           infile3 >> tmp;
+           sizeOfDataset++;
+        }
+        infile3.close();
+        sizeOfDataset--;
+        std::cout << "size of data: " << sizeOfDataset << std::endl;
+ 
+        float *weightValue = new float[sizeOfDataset]; 
+        sizeOfDataset = 0;
+        while (!infile2.eof()) {
+           infile2 >> weightValue[sizeOfDataset];
+           sizeOfDataset++;
+        }
+        infile2.close();
+        sizeOfDataset = 0;
+        while (!infile4.eof()) {
+           infile4 >> weightValue[sizeOfDataset];
+           sizeOfDataset++;
+        }
+        infile4.close();
+        sizeOfDataset--;
+
+        for (int i = 0; i < sizeOfDataset; i++) { 
+            if (i == 0) {
+                min = weightValue[i];
+                max = min;
+            }
+            else {
+              //  infile >> weightValue[i];
+                if (weightValue[i] > max)
+                    max = weightValue[i];
+                if (weightValue[i] < min)
+                    min = weightValue[i];
+            }
+        }
+        for (int i = 0; i < sizeOfDataset; i++){
+           if(max - min != 0)
+               weightValue[i] = (weightValue[i] - min) / (max - min);
+           else
+               weightValue[i] = 0;
+        }
+
+        filename1 = argv[4];
+        std::ofstream outfile( filename1.c_str() , std::ios::app );
+        for (int i = 0; i < sizeOfDataset; i++){
+            outfile << weightValue[i] << "\n";
+        }
+        outfile.close();
+    }
+
     if( option_G ) { 
         float graph[NUMBER_OF_CASE][NUMBER_OF_CASE][2], circularity[NUMBER_OF_CASE]; //include deformation from two directions
         float intensityE, harmonicE, shapeE, tmpHE = 0, maxDistance = 0, minDistance = 100000;
@@ -1107,7 +1176,8 @@ int main( int argc, char * argv[] )
         commandLine = "rm " + filename;
         system(commandLine.c_str());
         std::ofstream templatefile(filename.c_str(), std::ios::app );
-        int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, caseUsed[NUMBER_OF_CASE]; 
+        int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107};
+	int caseUsed[NUMBER_OF_CASE]; 
         int graphHistogram[120] = {0};
     //    gama = 0;
        
@@ -1163,6 +1233,8 @@ int main( int argc, char * argv[] )
                 }
             }
         }
+	//std::cout << m << std::endl;
+
         for (int i = NUMBER_OF_ATLAS; i < NUMBER_OF_CASE; i++){
             for (int j = 0; j < NUMBER_OF_ATLAS; j++){
                     m++;
@@ -1184,8 +1256,19 @@ int main( int argc, char * argv[] )
                         graphHistogram[tmp - 1]++;
             }
         }
+	//std::cout << m << std::endl;
+
+	/*	std::cout << "Graph: " << std::endl;
+        for (int i = 0; i < NUMBER_OF_CASE; i++){
+            for (int j = 0; j < NUMBER_OF_CASE; j++){
+	      std::cout << graph[j][i][0] << "," ;
+            }
+	    std::cout << std::endl;
+	    }*/
+
         //normalize the distance
-        for (int i = 0; i < NUMBER_OF_ATLAS; i++){
+	
+        for (int i = 0; i < NUMBER_OF_CASE; i++){
             minDistance = 1000000;
             maxDistance = 0;
             for (int j = 0; j < NUMBER_OF_ATLAS; j++){
@@ -1205,8 +1288,8 @@ int main( int argc, char * argv[] )
                     graph[j][i][0] = (graph[j][i][0] - minDistance) / (maxDistance - minDistance);
                 }
             }
-        }
-        for (int i = NUMBER_OF_ATLAS; i < NUMBER_OF_CASE; i++){
+	    }
+        /*for (int i = NUMBER_OF_ATLAS; i < NUMBER_OF_CASE; i++){
             minDistance = 1000000;
             maxDistance = 0;
             for (int j = 0; j < NUMBER_OF_ATLAS; j++){
@@ -1218,29 +1301,12 @@ int main( int argc, char * argv[] )
             for (int j = 0; j < NUMBER_OF_ATLAS; j++){
                 graph[j][i][0] = (graph[j][i][0] - minDistance) / (maxDistance - minDistance);
             }
-        }
-        /*
-        for (int i = 0; i < NUMBER_OF_ATLAS; i++){
-            for (int j = 0; j < NUMBER_OF_ATLAS; j++){
-                if(i == j){
-                    graph[i][j][0] = -1;
-                    graph[i][j][1] = -1;
-                }
-                else {
-                    graph[i][j][0] = (graph[i][j][0] - minDistance) / (maxDistance - minDistance);
-                }
-            }
-        }
-        for (int i = 0; i < NUMBER_OF_ATLAS; i++){
-            for (int j = NUMBER_OF_ATLAS; j < NUMBER_OF_CASE; j++){
-                graph[i][j][0] = (graph[i][j][0] - minDistance) / (maxDistance - minDistance);
-            }
-        }
-         */
+        }*/
         //end of normalization
         efile.close();
 //        invefile.close();
         iefile.close();
+
 
         //search shortest route from startNode to endNode using Floyd algorithm
         //startNode = atoi(argv[5]); 
@@ -1450,7 +1516,7 @@ int main( int argc, char * argv[] )
         std::ifstream efile( filename.c_str() );
         filename = argv[4];
         std::ifstream templatefile( filename.c_str());
-	std::string outfolder (argv[5]);
+	std::string labelfolder (argv[5]);
         std::string commandLine;
         float harmonicE, intensityE, shapeE, weightFactor[NUMBER_OF_CASE * (NUMBER_OF_CASE - 1)], circularity[NUMBER_OF_CASE];
         int cases[NUMBER_OF_CASE];// = {1000, 1001, 1002, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1017, 1036, 1003};
@@ -1462,43 +1528,46 @@ int main( int argc, char * argv[] )
         gama = atof(argv[argc - 3]);
       
         std::cout << "weights: " << beta << "  " << alpha << "  " << gama << std::endl;
-        std::cout << "outfolder: " << outfolder << std::endl;
+        std::cout << "labelfolder: " << labelfolder << std::endl;
+
+	//std::cout << argv[8] << std::endl;
 
         DIR *dir;
         struct dirent *ent;
         int sizeLabelList = 0;
-        char is_a_label[5];
+        char is_a_label[6];
 
-        if ((dir = opendir (outfolder.c_str())) != NULL) {
+        if ((dir = opendir (labelfolder.c_str())) != NULL) {
             std::string tmpFilename;
             while ((ent = readdir (dir)) != NULL) {
                 tmpFilename = ent->d_name;
                 tmpFilename.copy(is_a_label, 5, 0);
+		is_a_label[5] = '\0';
+		//		std::cout << tmpFilename << "," << is_a_label << std::endl;
                 if(tmpFilename.at(0) == '.')    // skip . and ..
                     continue;
                 else{
-             //       if (!strcmp(is_a_label, "label"))
-                    //if (!strcmp(is_a_label, "par_W"))
-                    if (!strcmp(is_a_label, argv[8]))
-                        sizeLabelList++;
+		  if (!strcmp(is_a_label, argv[8])) {
+		    sizeLabelList++;
+		  }
                 }
             }
         }
         closedir (dir);
-      //  std::cout << "size of label list: " << sizeLabelList << std::endl;
+
+        std::cout << "size of label list: " << sizeLabelList << std::endl;
         std::string *labelList = new std::string[sizeLabelList];
 
-        if ((dir = opendir (outfolder.c_str())) != NULL) {
+        if ((dir = opendir (labelfolder.c_str())) != NULL) {
             std::string tmpFilename;
             int i = 0;
             while ((ent = readdir (dir)) != NULL) {
                 tmpFilename = ent->d_name;
                 tmpFilename.copy(is_a_label, 5, 0);
+		is_a_label[5] = '\0';
                 if(tmpFilename.at(0) == '.')    // skip . and ..
                     continue;
                 else{
-                   // if (!strcmp(is_a_label, "label")){
-                    //if (!strcmp(is_a_label, "par_W")){
                     if (!strcmp(is_a_label, argv[8])){
                         labelList[i] = tmpFilename;
                         i++;
@@ -1553,7 +1622,7 @@ int main( int argc, char * argv[] )
         iefile.close();
 
         commandLine = "ImageMath " ;
-        commandLine += outfolder;
+        commandLine += labelfolder;
         commandLine += labelList[0] ;
         commandLine += " -weightedMajorityVoting ";
         int z = 0;
@@ -1567,7 +1636,7 @@ int main( int argc, char * argv[] )
             std::ostringstream strSource;
             strSource << cases[i];
             if (cases[i] != 0) {
-                commandLine += outfolder + labelList[i] + " ";
+                commandLine += labelfolder + labelList[i] + " ";
             }
         }     
         commandLine += "-weights ";
@@ -1611,15 +1680,6 @@ int main( int argc, char * argv[] )
 
         RescaleFilterType::Pointer rescaleFixFilter = RescaleFilterType::New();
         RescaleFilterType::Pointer rescaleMoveFilter = RescaleFilterType::New();
-        typedef itk::TranslationTransform< double, Dimension >  TransformType;
-        TransformType::Pointer translatetransform = TransformType::New( );
-        typedef itk::AffineTransform<double,3> AffineTransformType;
-        typedef AffineTransformType::ParametersType affineParametersType;
-        AffineTransformType::Pointer transform = AffineTransformType::New();
-        typedef itk::NearestNeighborInterpolateImageFunction< ImageType, double >  NNInterpolatorType;
-        typedef itk::LinearInterpolateImageFunction< ImageType > LinearInterpolatorType;
-        NNInterpolatorType::Pointer interpolator = NNInterpolatorType::New();
-        transform->SetIdentity();
 
         rescaleFixFilter->SetInput( fixedReader->GetOutput() );
         rescaleFixFilter->SetOutputMinimum( 0 );
@@ -1633,6 +1693,14 @@ int main( int argc, char * argv[] )
 
         ImageType::ConstPointer fixedImage  = rescaleFixFilter->GetOutput();
         ImageType::ConstPointer movingImage = rescaleMoveFilter->GetOutput();
+
+        typedef itk::AffineTransform<double,3> AffineTransformType;
+        AffineTransformType::Pointer transform = AffineTransformType::New();
+
+        typedef itk::NearestNeighborInterpolateImageFunction< ImageType, double >  NNInterpolatorType;
+        typedef itk::LinearInterpolateImageFunction< ImageType > LinearInterpolatorType;
+        LinearInterpolatorType::Pointer interpolator = LinearInterpolatorType::New();
+        transform->SetIdentity();
 
         // mean square metric
         MSMmetric->SetTransform( transform );
@@ -1654,6 +1722,7 @@ int main( int argc, char * argv[] )
         NMImetric->SetInterpolator( interpolator );
         NMImetric->SetFixedImage(  fixedImage  );
         NMImetric->SetMovingImage( movingImage );
+
         MSMmetric->SetFixedImageRegion( fixedImage->GetLargestPossibleRegion( ) );
         try {
             MSMmetric->Initialize();
@@ -1663,10 +1732,12 @@ int main( int argc, char * argv[] )
             std::cerr << excep << std::endl;
             return EXIT_FAILURE;
         }
-        float msm = MSMmetric->GetValue( transform->GetParameters( ) );
+        float msm;
+	msm = MSMmetric->GetValue( transform->GetParameters( ) );
+	//msm = NCCmetric->GetValue( transform->GetParameters( ) );
         std::string filename;
-        std::ostringstream strFixCase;
-        filename = argv[4];//"/home/jiahuiw/intensityEnergy.txt";
+        //std::ostringstream strFixCase;
+        filename = argv[4];
         std::ofstream efile( filename.c_str() , std::ios::app );
         efile << msm << "\n";
         efile.close();
