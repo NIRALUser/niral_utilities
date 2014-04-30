@@ -95,7 +95,7 @@ void SortStringList(std::string *strList, int size)
 
 inline int ipExistsArgument(char **argv, const char *keystr) {
   for (int i = 1; argv[i]; i++) 
-    if (strstr(argv[i], keystr)) 
+    if (strstr(argv[i], keystr) == argv[i]) 
         return 1;
   return 0;
 }
@@ -106,17 +106,17 @@ int main( int argc, char * argv[] )
         std::cout << "Multi-Atlas Segmentation Tool 1.13 version (Feb 2012)" << std::endl;
         std::cout << "Usage: " << std::endl;
         std::cout << argv[0] << "  fixedImage  movingImage" << std::endl;
-        std::cout << " -z " << "  chose the most similar template" << std::endl;
-        std::cout << " -b " << "  chose the most similar template" << std::endl;
-        std::cout << " -g " << "  establish graph and search optimal route between image pairs through graph" << std::endl;
-        std::cout << " -m " << "  run majority voting" << std::endl;
-        std::cout << " -v " << "  run weighted majority voting" << std::endl;
-        std::cout << " -c " << "  run STAPLE label fusion" << std::endl;
-        std::cout << " -p " << "  calculate metrics" << std::endl;
-        std::cout << " -u " << "  calculate shape energy (circularity)" << std::endl;
-        std::cout << " -e " << "  calculate harmonic energy" << std::endl;
-        std::cout << " -n " << "  normalize the weighting factors" << std::endl;
-        std::cout << " -N " << "  normalize the weighting factors, supplying 2 files" << std::endl;
+        std::cout << " -z" << "  chose the most similar template" << std::endl;
+        std::cout << " -b" << "  chose the most similar template" << std::endl;
+        std::cout << " -g" << "  establish graph and search optimal route between image pairs through graph" << std::endl;
+        std::cout << " -m" << "  run majority voting" << std::endl;
+        std::cout << " -v" << "  run weighted majority voting" << std::endl;
+        std::cout << " -c" << "  run STAPLE label fusion" << std::endl;
+        std::cout << " -p" << "  calculate metrics" << std::endl;
+        std::cout << " -u" << "  calculate shape energy (circularity)" << std::endl;
+        std::cout << " -e" << "  calculate harmonic energy" << std::endl;
+        std::cout << " -n" << "  normalize the weighting factors" << std::endl;
+        std::cout << " -N" << "  normalize the weighting factors, supplying 2 files" << std::endl;
         std::cout << " -help " << " print out this instruction" << std::endl;
         std::cout << " fixedImage  movingImage NumberOfAtlases NumberOfCases" << " print out this instruction" << std::endl;
         return EXIT_FAILURE;
@@ -1360,19 +1360,15 @@ int main( int argc, char * argv[] )
     }
    
     if( option_M ) { 
-        //run majority voting
+        std::cout << "running majority voting" << std::endl;
         std::ostringstream strFixCase;
+
         std::string filename;
-        filename = argv[2];
-        std::ifstream iefile( filename.c_str() );
-        filename = argv[3];
-        std::ifstream efile( filename.c_str() );
         filename = argv[4];
         std::ifstream templatefile( filename.c_str());
-	std::string outfolder(argv[5]);
+	std::string outfolder (argv[5]);
 
         std::string commandLine;
-        float harmonicE, intensityE, shapeE, weightFactor[NUMBER_OF_CASE * (NUMBER_OF_CASE - 1)], circularity[NUMBER_OF_CASE];
         int cases[NUMBER_OF_CASE];
         int onlyOneAtlas = 0;
         gama = 0;
@@ -1391,15 +1387,23 @@ int main( int argc, char * argv[] )
             while ((ent = readdir (dir)) != NULL) {
                 tmpFilename = ent->d_name;
                 tmpFilename.copy(is_a_label, 5, 0);
-                if(tmpFilename.at(0) == '.')    
+		is_a_label[5] = '\0';
+		std::cout << tmpFilename << "," << is_a_label << "," <<  argv[8] << std::endl;
+                if(tmpFilename.at(0) == '.')    // skip . and ..
                     continue;
                 else{
-                    if (!strcmp(is_a_label, argv[8]))
-                        sizeLabelList++;
+		  if (!strcmp(is_a_label, argv[8])) {
+		    std::cout << tmpFilename << "," << is_a_label << std::endl;
+		    sizeLabelList++;
+		  }
                 }
             }
         }
         closedir (dir);
+	if (sizeLabelList == 0) {
+	  std::cout << "no label/parcellation files found, exiting" << std::endl;
+	  exit(-1);
+	}
         std::string *labelList = new std::string[sizeLabelList];
 
         if ((dir = opendir (outfolder.c_str())) != NULL) {
@@ -1408,6 +1412,7 @@ int main( int argc, char * argv[] )
             while ((ent = readdir (dir)) != NULL) {
                 tmpFilename = ent->d_name;
                 tmpFilename.copy(is_a_label, 5, 0);
+		is_a_label[5] = '\0';
                 if(tmpFilename.at(0) == '.')    // skip . and ..
                     continue;
                 else{
@@ -1440,25 +1445,6 @@ int main( int argc, char * argv[] )
             if (i == (NUMBER_OF_CASE - 1) )
                 onlyOneAtlas--;
         } 
-        int m = 0;
-        float minDistance = 1000000, maxDistance = 0;
-        for ( int i = 0; i < (NUMBER_OF_ATLAS * (NUMBER_OF_ATLAS - 1) + NUMBER_OF_ATLAS); i++){
-            efile >> harmonicE;
-            iefile >> intensityE;
-            if( i >= (NUMBER_OF_ATLAS * (NUMBER_OF_ATLAS - 1)) ){
-                weightFactor[m] = alpha * harmonicE + beta * intensityE; //+ gama * fabs(circularity[i] - circularity[j]);
-                if(weightFactor[m] < minDistance)
-                    minDistance = weightFactor[m];
-                if(weightFactor[m] > maxDistance)
-                    maxDistance = weightFactor[m];
-                m++;
-            }
-        }
-        for (int i = 0; i < NUMBER_OF_ATLAS; i++){
-            weightFactor[i] = (weightFactor[i] - minDistance) / (maxDistance - minDistance);
-        }
-        efile.close();
-        iefile.close();
 
         commandLine = "ImageMath " ;
         commandLine += outfolder;
@@ -1478,26 +1464,6 @@ int main( int argc, char * argv[] )
                 commandLine += outfolder + labelList[i] + " ";
             }
         }     
-/*
-        commandLine += "-weights ";
-        bool firstWeightFlag = 0;
-        k = 0;
-        for (int i = 0; i < NUMBER_OF_ATLAS; i++){
-            std::ostringstream strWFactor;
-            if(cases[i] != 0) {
-                if (firstWeightFlag == 1 && k > 0){
-                    commandLine += ",";
-                }
-                if (onlyOneAtlas == 1) 
-                    strWFactor << 1;
-                else
-                    strWFactor << 1 - weightFactor[k];
-                commandLine += strWFactor.str();
-                firstWeightFlag = 1;
-                k++;
-            }
-        }
-*/
         commandLine += "-outfile " ;
         commandLine += argv[6] ;
         commandLine += argv[7];
@@ -1506,9 +1472,11 @@ int main( int argc, char * argv[] )
     }
 
     if( option_V ) { 
+        std::cout << "running weighted majority voting" << std::endl;
         //run weighted majority voting
         std::ostringstream strFixCase;
       //  strFixCase << argv[argc - 1];
+
         std::string filename;
         filename = argv[2];
         std::ifstream iefile( filename.c_str() );
@@ -1517,6 +1485,7 @@ int main( int argc, char * argv[] )
         filename = argv[4];
         std::ifstream templatefile( filename.c_str());
 	std::string labelfolder (argv[5]);
+
         std::string commandLine;
         float harmonicE, intensityE, shapeE, weightFactor[NUMBER_OF_CASE * (NUMBER_OF_CASE - 1)], circularity[NUMBER_OF_CASE];
         int cases[NUMBER_OF_CASE];// = {1000, 1001, 1002, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1017, 1036, 1003};
@@ -1548,6 +1517,7 @@ int main( int argc, char * argv[] )
                     continue;
                 else{
 		  if (!strcmp(is_a_label, argv[8])) {
+		    std::cout << tmpFilename << "," << is_a_label << std::endl;
 		    sizeLabelList++;
 		  }
                 }
@@ -1555,6 +1525,10 @@ int main( int argc, char * argv[] )
         }
         closedir (dir);
 
+	if (sizeLabelList == 0) {
+	  std::cout << "no label/parcellation files found, exiting" << std::endl;
+	  exit(-1);
+	}
         std::cout << "size of label list: " << sizeLabelList << std::endl;
         std::string *labelList = new std::string[sizeLabelList];
 
@@ -1659,7 +1633,6 @@ int main( int argc, char * argv[] )
         }
         commandLine += " -outfile " ;
         commandLine += argv[6] ;
-        //commandLine += "WeightedMVOutput_seg.nii";
         commandLine += argv[7];
         std::cout << commandLine.c_str() << std::endl;
         system(commandLine.c_str());
