@@ -14,7 +14,7 @@ ENDIF (${CMAKE_SOURCE_DIR} STREQUAL ${NIRAL_UTILITIES_SOURCE_DIR})
 
 include_directories( Common )
 
-OPTION(COMPILE_CORREVAL "Compile CorrespondenceEvaluator." ON)
+OPTION(COMPILE_CORREVAL "Compile CorrespondenceEvaluator." OFF)
 IF(COMPILE_CORREVAL)
   SUBDIRS(CorrespondenceEvaluator)
 ENDIF(COMPILE_CORREVAL)

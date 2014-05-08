@@ -8,6 +8,11 @@ ELSE(ITK_FOUND)
     "ITK not found. Please set ITK_DIR.")
 ENDIF(ITK_FOUND)
 
+IF( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
+  MESSAGE( FATAL_ERROR "CorrespondenceEvaluator needs ITKv3 to compile" )
+ENDIF()
+
+
 SET( SOURCES ${SOURCES}
 itkCorrespondenceEvaluator.h itkCorrespondenceEvaluator.txx)
 
