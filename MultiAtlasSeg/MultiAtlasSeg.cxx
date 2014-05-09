@@ -802,23 +802,23 @@ int main( int argc, char * argv[] )
  
     if( option_E ) { 
         // compute harmonic energy
-        typedef itk::Image< float, Dimension >         OrientedImageType;
+      typedef itk::Vector<double,3> DeformationPixelType;
+
+        typedef itk::Image< DeformationPixelType, Dimension >         OrientedImageType;
         typedef itk::ImageFileReader<OrientedImageType> OrientedReaderType;
-        typedef itk::ImageFileWriter<OrientedImageType> OrientedWriterType;
-        OrientedReaderType::Pointer orientedreaderx = OrientedReaderType::New();
-        OrientedWriterType::Pointer orientedwriter = OrientedWriterType::New();
-        OrientedImageType::Pointer deformationFieldx; 
+        OrientedReaderType::Pointer orientedreader = OrientedReaderType::New();
+        OrientedImageType::Pointer deformationField; 
         OrientedImageType::IndexType index;
         OrientedImageType::SizeType size;
         double HE = 0;
         std::string filename;
         std::ostringstream strFixCase;
 
-        orientedreaderx->SetFileName(argv[2]);
+        orientedreader->SetFileName(argv[2]);
         try {
-            orientedreaderx->Update();
-            deformationFieldx = orientedreaderx->GetOutput();
-            size = deformationFieldx->GetLargestPossibleRegion().GetSize();
+            orientedreader->Update();
+            deformationField = orientedreader->GetOutput();
+            size = deformationField->GetLargestPossibleRegion().GetSize();
         }
         catch( itk::ExceptionObject & err ) {
             std::cerr << "ExceptionObject caught !" << std::endl;
@@ -829,8 +829,8 @@ int main( int argc, char * argv[] )
 	  for(index[1] = 0; index[1] < (int)size[1]; index[1]++) {
 	    for(index[0] = 0; index[0] < (int)size[0]; index[0]++) {
 	      // calculate harmonic energy
-	      double value = deformationFieldx->GetPixel(index);
-	      HE += fabs(value * value);
+	      DeformationPixelType value = deformationField->GetPixel(index);
+	      HE += sqrt(value[0] * value[0] + value[1] * value[1] + value[2] * value[2]);
 	    }
 	  }
         }
@@ -1388,12 +1388,12 @@ int main( int argc, char * argv[] )
                 tmpFilename = ent->d_name;
                 tmpFilename.copy(is_a_label, 5, 0);
 		is_a_label[5] = '\0';
-		std::cout << tmpFilename << "," << is_a_label << "," <<  argv[8] << std::endl;
+		//std::cout << tmpFilename << "," << is_a_label << "," <<  argv[8] << std::endl;
                 if(tmpFilename.at(0) == '.')    // skip . and ..
                     continue;
                 else{
 		  if (!strcmp(is_a_label, argv[8])) {
-		    std::cout << tmpFilename << "," << is_a_label << std::endl;
+		    //std::cout << tmpFilename << "," << is_a_label << std::endl;
 		    sizeLabelList++;
 		  }
                 }
@@ -1427,42 +1427,17 @@ int main( int argc, char * argv[] )
         closedir (dir);
 
         bool *caseFlag = new bool[NUMBER_OF_CASE];
-        for (int i = 0; i < NUMBER_OF_CASE; i++)
-            caseFlag[i] = 0;
         for (int i = 0; i < NUMBER_OF_CASE; i++){
-            int temp;
-            templatefile >> temp;
-            caseFlag[temp] = 1;
+            caseFlag[i] = 1;
         }
-        templatefile.close();
-        for (int i = 0; i < NUMBER_OF_CASE; i++){
-            cases[i] = 1;
-            onlyOneAtlas++;
-            if (i != (NUMBER_OF_CASE - 1) && caseFlag[i] == 0) {
-                cases[i] = 0;
-                onlyOneAtlas--;
-            }
-            if (i == (NUMBER_OF_CASE - 1) )
-                onlyOneAtlas--;
-        } 
 
         commandLine = "ImageMath " ;
         commandLine += outfolder;
         commandLine += labelList[0].c_str() ;
         commandLine += " -majorityVoting ";
-        int z = 0;
-        for (int i = 0; i < NUMBER_OF_CASE; i++){
-            if (cases[i] != atoi(argv[argc - 3]) && cases[i] != 0) {
-                z++;
-            }
-        }
         int k = 0;
         for (int i = 0; i < NUMBER_OF_ATLAS; i++){
-            std::ostringstream strSource;
-            strSource << cases[i];
-            if (cases[i] != 0) {
-                commandLine += outfolder + labelList[i] + " ";
-            }
+          commandLine += outfolder + labelList[i] + " ";
         }     
         commandLine += "-outfile " ;
         commandLine += argv[6] ;
@@ -1517,7 +1492,7 @@ int main( int argc, char * argv[] )
                     continue;
                 else{
 		  if (!strcmp(is_a_label, argv[8])) {
-		    std::cout << tmpFilename << "," << is_a_label << std::endl;
+		    //std::cout << tmpFilename << "," << is_a_label << std::endl;
 		    sizeLabelList++;
 		  }
                 }
@@ -1566,14 +1541,12 @@ int main( int argc, char * argv[] )
         for (int i = 0; i < NUMBER_OF_CASE; i++){
             cases[i] = 1;
             onlyOneAtlas++;
-          //  std::cout << "1: " << onlyOneAtlas << std::endl;
             if (i != (NUMBER_OF_CASE - 1) && caseFlag[i] == 0) {
                 cases[i] = 0;
                 onlyOneAtlas--;
             }
             if (i == (NUMBER_OF_CASE - 1) )
                 onlyOneAtlas--;
-           // std::cout << "2: " << onlyOneAtlas << std::endl;
         } 
         int m = 0;
         float minDistance = 1000000, maxDistance = 0;
@@ -1581,7 +1554,7 @@ int main( int argc, char * argv[] )
             efile >> harmonicE;
             iefile >> intensityE;
             if( i >= (NUMBER_OF_ATLAS * (NUMBER_OF_ATLAS - 1)) ){
-                weightFactor[m] = alpha * harmonicE + beta * intensityE; //+ gama * fabs(circularity[i] - circularity[j]);
+                weightFactor[m] = alpha * harmonicE + beta * intensityE; 
                 if(weightFactor[m] < minDistance)
                     minDistance = weightFactor[m];
                 if(weightFactor[m] > maxDistance)
@@ -1599,16 +1572,8 @@ int main( int argc, char * argv[] )
         commandLine += labelfolder;
         commandLine += labelList[0] ;
         commandLine += " -weightedMajorityVoting ";
-        int z = 0;
-        for (int i = 0; i < NUMBER_OF_CASE; i++){
-            if (cases[i] != atoi(argv[argc - 3]) && cases[i] != 0) {
-                z++;
-            }
-        }
         int k = 0;
         for (int i = 0; i < NUMBER_OF_ATLAS; i++){
-            std::ostringstream strSource;
-            strSource << cases[i];
             if (cases[i] != 0) {
                 commandLine += labelfolder + labelList[i] + " ";
             }
