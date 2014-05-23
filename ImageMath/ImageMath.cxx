@@ -80,6 +80,7 @@ using namespace std;
 #include <itkImageRegionIterator.h>
 #include <itkMetaDataObject.h>
 #include <itkDanielssonDistanceMapImageFilter.h>
+#include <itkOtsuThresholdImageFilter.h>
 
 #include "argio.h"
 #include "ImageMath.h" 
@@ -117,6 +118,7 @@ typedef ImageFileWriter< ShortImageType >     ShortVolumeWriterType;
 typedef CastImageFilter< ImageType, BinaryImageType > castBinaryFilterType;
 typedef CastImageFilter< ImageType,  ShortImageType > castShortFilterType; 
 
+typedef itk::OtsuThresholdImageFilter< ImageType, ImageType > OtsuFilterType;
 typedef ThresholdImageFilter< ImageType > maskThreshFilterType;
 typedef BinaryThresholdImageFilter< ImageType , ImageType > threshFilterType;
 typedef BinaryThresholdImageFilter< ShortImageType , ImageType > ShortthreshFilterType;
@@ -273,6 +275,7 @@ int main(const int argc, const char **argv)
        << "   -relabel              labels in infile2 will be relabeled to succeed labels in infile (no label overlap)" << endl;
     cout << "       labels in infile2 overwrite only the background label in infile1" << endl; 
     cout << "-extractLabel label    extract the mentioned label from the file" << endl;
+    cout << "-otsu                  apply a standard 2 class otsu threshold" << endl;
     cout << "-threshold min,max     threshold: everything I < min , I > max is set to 0, otherwise 1" << endl;
     cout << "-threshMask min,max    mask threshold: everything I < min , I > max is set to 0, otherwise is left as is" << endl;
     cout << "-mask infile2          use infile2 as a binary mask (intensities > 0 ) and combine with inputfile  " << endl ;
@@ -314,9 +317,11 @@ int main(const int argc, const char **argv)
     cout << "-NaNCor                Removes NaN and set the value of those voxels the average of the (non-NaN) neighbor values" << endl;
     cout << "-std infile2 infile3...             Compute the standard deviation from a set of images (one image has to be specified for the input, but it's not included in the process)" << endl;
     cout << "-rescale min,max       Applies a linear transformation to the intensity levels of the input Image" << endl;
+    cout << "-rescalePerc lowPerc,lowVal,upPerc,upVal       Applies a linear transformation to the intensity levels of the input Image, setting the provided lower and upper percentiles to the provided values" << endl;
+    cout << "   -rescaleMask mask   Uses the provided mask for the computation of the percentiles" << endl;
     cout << "-correl images2,mask   Computes the correlation between 2 images voxelwize" << endl;
-    cout << "-RegionAvg mask   Computes the average intensities over a masked region" << endl;
-    cout << "-RegionStd mask   Computes the standard deviation of image intensities over a masked region" << endl;
+    cout << "-RegionAvg mask        Computes the average intensities over a masked region" << endl;
+    cout << "-RegionStd mask        Computes the standard deviation of image intensities over a masked region" << endl;
     cout << "-pixelLookup x,y,z     Outputs the pixel intensity for a given coordinate" << endl ;
     cout << "-danDistanceMap        Outputs the Danielsson Distance Map" << endl ;
     cout << "-mosaic                Creates a mosaic image from 2 images" << endl ;
@@ -411,6 +416,7 @@ int main(const int argc, const char **argv)
   bool divOn   = ipExistsArgument(argv, "-div"); 
   char *divFile    = ipGetStringArgument(argv, "-div", NULL); 
 
+  bool OtsuOn   = ipExistsArgument(argv, "-otsu"); 
   bool thresholdOn    = ipExistsArgument(argv, "-threshold"); 
   char * tmp_str      = ipGetStringArgument(argv, "-threshold", NULL);
   PixelType tmin = 0;
@@ -1042,6 +1048,30 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       return EXIT_FAILURE;	
     }        
     inputImage = threshFilter->GetOutput();
+    
+  } else if (OtsuOn) {
+    outFileName.erase();
+    outFileName.append(base_string);
+    outFileName.append("_Otsu");
+
+    if (debug) cout << "Otsu thresholding ..." << endl; 
+    
+    OtsuFilterType::Pointer otsuFilter = OtsuFilterType::New();
+    otsuFilter->SetInput(inputImage);
+
+    otsuFilter->SetOutsideValue (FGVAL);
+    otsuFilter->SetInsideValue (BGVAL);
+    try {
+      otsuFilter->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;	
+    }
+    int threshold = otsuFilter->GetThreshold(); 
+    if (debug) cout << "Otsu threshold " << threshold << endl;        
+    inputImage = otsuFilter->GetOutput();
     
   }  else if (thresholdOn) {
     outFileName.erase();
