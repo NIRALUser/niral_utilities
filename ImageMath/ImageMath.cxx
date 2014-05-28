@@ -81,12 +81,15 @@ using namespace std;
 #include <itkMetaDataObject.h>
 #include <itkDanielssonDistanceMapImageFilter.h>
 #include <itkOtsuThresholdImageFilter.h>
+#include <itkMaskedImageToHistogramFilter.h>
+#include <itkImageToHistogramFilter.h>
+#include <itkShiftScaleImageFilter.h>
 
 #include "argio.h"
 #include "ImageMath.h" 
 
-#define IMAGEMATH_VERSION "1.12"
-#define IMAGEMATH_DATE "March 2014"
+#define IMAGEMATH_VERSION "1.13"
+#define IMAGEMATH_DATE "May 2014"
 #define DEFAULT_SAMP 2
 // number of samples by default
 
@@ -153,6 +156,9 @@ typedef MaximumImageFilter<ImageType, ImageType> MaximumImageFilterType;
 typedef MinimumImageFilter<ImageType, ImageType> MinimumImageFilterType;
 
 typedef itk::MinimumMaximumImageCalculator<ImageType> MaxFilterType;
+typedef itk::Statistics::MaskedImageToHistogramFilter< ImageType , ImageType > MaskedHistogramFilterType;
+typedef itk::Statistics::ImageToHistogramFilter< ImageType > HistogramFilterType;
+typedef itk::ShiftScaleImageFilter< ImageType, ImageType > ShiftScaleFilterType;
 
 static int debug = 0;
 
@@ -317,7 +323,7 @@ int main(const int argc, const char **argv)
     cout << "-NaNCor                Removes NaN and set the value of those voxels the average of the (non-NaN) neighbor values" << endl;
     cout << "-std infile2 infile3...             Compute the standard deviation from a set of images (one image has to be specified for the input, but it's not included in the process)" << endl;
     cout << "-rescale min,max       Applies a linear transformation to the intensity levels of the input Image" << endl;
-    cout << "-rescalePerc lowPerc,lowVal,upPerc,upVal       Applies a linear transformation to the intensity levels of the input Image, setting the provided lower and upper percentiles to the provided values" << endl;
+    cout << "-rescalePerc lowPerc,lowVal,upPerc,upVal       Applies a linear transformation to the intensity levels of the input Image, setting the provided lower and upper percentiles to the provided values. Does not use background in percentile computation." << endl;
     cout << "   -rescaleMask mask   Uses the provided mask for the computation of the percentiles" << endl;
     cout << "-correl images2,mask   Computes the correlation between 2 images voxelwize" << endl;
     cout << "-RegionAvg mask        Computes the average intensities over a masked region" << endl;
@@ -827,6 +833,21 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       return EXIT_FAILURE ;
     }
   }
+
+  bool rescalingPercOn = ipExistsArgument( argv , "-rescalePerc" ) ; 
+  tmp_str = ipGetStringArgument( argv , "-rescalePerc" , NULL ) ;
+  float rescalingPercPara[4] ;
+  if (tmp_str)
+  {
+    int num = ipExtractFloatTokens(rescalingPercPara, tmp_str, 4);
+    if( 4 != num)
+    {
+      cerr << "Rescale needs 4 comma separated entries: lowPerc,lowVal,upPerc,upVal" << endl ;
+      return EXIT_FAILURE ;
+    }
+  }
+  bool rescalingMaskOn = ipExistsArgument( argv , "-rescaleMask" ) ;
+  char *rescalingMask  = ipGetStringArgument(argv, "-rescaleMask", NULL);
 
   // **********************************************
   // **********************************************
@@ -2742,6 +2763,142 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
      outFileName.erase();
      outFileName.append(base_string);
      outFileName.append("_rescale");
+  }else if( rescalingPercOn )
+  { 
+    double lowPerc = rescalingPercPara[0];
+    double highPerc = rescalingPercPara[2];
+    double lowPercInt = rescalingPercPara[1];
+    double highPercInt = rescalingPercPara[3];
+    if (debug) std::cout << "lower Percentile: " <<  lowPerc << ", upper Percentile: " << highPerc << std::endl;
+
+    maskFilterType::Pointer maskFilter = maskFilterType::New() ;
+
+    if (rescalingMaskOn) {
+      VolumeReaderType::Pointer rescalemaskReader = VolumeReaderType::New();
+      rescalemaskReader->SetFileName(rescalingMask) ;
+      rescalemaskReader->Update();
+      if (debug) std::cout << "Reading " << rescalingMask  << std::endl;
+
+      maskFilter->SetInput1( inputImage ) ;
+      maskFilter->SetInput2( rescalemaskReader->GetOutput() ) ;
+      maskFilter->SetCoordinateTolerance( 0.01 ) ;
+      maskFilter->SetDirectionTolerance( 0.01 ) ;
+      try
+      {
+        maskFilter->Update() ;
+      }
+      catch (ExceptionObject & err)
+      {
+        cerr << "ExceptionObject caught!" << endl ;
+        cerr << err << endl ;
+        return EXIT_FAILURE ;
+      }
+    }
+    const int numberOfBins = 1000;
+    HistogramFilterType::HistogramType::SizeType size(1);
+    size.Fill(numberOfBins);
+    
+    HistogramFilterType::Pointer histoFilter = HistogramFilterType::New();
+    if (rescalingMaskOn) {
+      histoFilter->SetInput(maskFilter->GetOutput());
+    } else {
+      histoFilter->SetInput(inputImage);
+    }
+
+    histoFilter->SetAutoMinimumMaximum(true);
+    histoFilter->SetHistogramSize( size );
+    try
+      {
+	histoFilter->Update();
+      }
+    catch (ExceptionObject & err)
+      {
+        cerr << "ExceptionObject caught!" << endl ;
+        cerr << err << endl ;
+        return EXIT_FAILURE ;
+      }
+    
+    HistogramFilterType::HistogramType::Pointer histogram = histoFilter->GetOutput();
+    
+    HistogramFilterType::HistogramType::ConstIterator histogramIterator = histogram->Begin();
+    HistogramFilterType::HistogramType::MeasurementVectorType mv;
+    HistogramFilterType::HistogramType::AbsoluteFrequencyType f, total, cur_total;
+    
+    HistogramFilterType::HistogramType::MeasurementVectorType lowPercMV, highPercMV, MaxMV;
+    
+    ++histogramIterator ;
+    // Skip first bin, not interested in background...
+    
+    total = 0;
+    while( histogramIterator  != histogram->End() )
+      {
+	mv =  histogramIterator.GetMeasurementVector();
+	f = histogramIterator.GetFrequency();
+	
+	//if (debug) std::cout << mv  << "," << f <<  std::endl;
+	total = total + f;
+	++histogramIterator ;
+      }
+    if (debug) std::cout << "Total " << histogram->GetTotalFrequency () << ", using only " << 100.0 * total / histogram->GetTotalFrequency () << "% due to background & mask removal" << std::endl;
+    
+    // Get quantiles
+    cur_total = 0;
+    MaxMV = mv; // mv of last bin
+    lowPercMV = MaxMV; // mv of last bin
+    highPercMV = MaxMV; // mv of last bin
+    
+    histogramIterator = histogram->Begin();
+    if (lowPerc == 0) {
+      lowPercMV = histogramIterator.GetMeasurementVector();
+    }
+    ++histogramIterator ;
+    
+    while( histogramIterator  != histogram->End() ) 
+      {
+	mv =  histogramIterator.GetMeasurementVector();
+	f = histogramIterator.GetFrequency();
+	cur_total = cur_total + f;
+	double percentile = 100.0 * cur_total / total;
+	if ( (lowPercMV == MaxMV) && (percentile > lowPerc) ) {
+	  lowPercMV = mv;
+	}
+	if ( (highPercMV == MaxMV) && (percentile > highPerc) ) {
+	  highPercMV = mv;
+	}
+	
+	++histogramIterator ;
+      }
+    
+    if (debug) std::cout << "Image lowPerc " << lowPercMV[0] << ", highPerc " << highPercMV[0] << std::endl;
+    
+    double scale = (highPercInt - lowPercInt) / (highPercMV[0] - lowPercMV[0]);
+    double shift = highPercInt/scale - highPercMV[0];
+    
+    if (debug) std::cout << "shift: " << shift << ", scale " << scale << " - " 
+			 <<  scale * (shift + lowPercMV[0]) << ", "  
+			 <<  scale * (shift + highPercMV[0]) << std::endl;
+    ShiftScaleFilterType::Pointer shiftScaleFilter = ShiftScaleFilterType::New();
+    shiftScaleFilter->SetInput(inputImage);
+    shiftScaleFilter->SetShift(shift);
+    shiftScaleFilter->SetScale(scale);
+    try
+      {
+	shiftScaleFilter->Update();
+      }
+    catch (ExceptionObject & err)
+      {
+        cerr << "ExceptionObject caught!" << endl ;
+        cerr << err << endl ;
+        return EXIT_FAILURE ;
+      }
+    
+    inputImage = shiftScaleFilter->GetOutput();
+    
+    // Get Quantiles
+    outFileName.erase();
+    outFileName.append(base_string);
+    outFileName.append("_rescalePerc");
+    
   } else if (pixelLookupOn )
     {
       // IO 2012
