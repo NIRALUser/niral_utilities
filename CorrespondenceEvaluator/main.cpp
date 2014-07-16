@@ -49,6 +49,7 @@ bool readShapes ( std::string listName, evaluatorType::Pointer evaluator, unsign
   MeshConverterType * itkConverter = new MeshConverterType() ;
   for ( int i = 0 ; i < numSamples ; i++ )
   {
+    std::cout << "reading " << fileNames[i] << std::endl;
     meshSOType::Pointer meshSO = itkConverter->ReadMeta ( fileNames[i].c_str() ) ;
     meshType::Pointer mesh = meshSO->GetMesh() ;
     evaluator->SetInput ( i, mesh ) ;
@@ -69,7 +70,8 @@ int main( int argc, char *argv[] )
     std::cout << "OutputFile: Where to store the evaluation results" << std::endl;
     std::cout << "-gen: Compute generalization" << std::endl;
     std::cout << "-spec: Compute specificity" << std::endl;
-  std::cout << "-uniform: Use uniform distribution for random numbers (default is Gaussian)" << std::endl ;
+    std::cout << "-uniform: Use uniform distribution for random numbers (default is Gaussian)" << std::endl ;
+    std::cout << "-numSpec: number of samples created for specificity" << std::endl ;
     std::cout << std::endl ;
     return -1;
   }
@@ -81,6 +83,8 @@ int main( int argc, char *argv[] )
   bool computeGeneralization = false ;
   bool computeSpecificity = false ;
   bool gaussian = true ;
+  
+  int N = 1000 ;
 
   if ( argc > 3 )
   {
@@ -94,10 +98,14 @@ int main( int argc, char *argv[] )
       {
         computeSpecificity = true ;
       }
-    if ( (gaussian) && ( !strcmp ( "-uniform", argv[i] ) ) )
-      {
-      gaussian = false ;
-      }
+      if ( (gaussian) && ( !strcmp ( "-uniform", argv[i] ) ) )
+	{
+	  gaussian = false ;
+	}
+      if (( !strcmp ( "-numSpec", argv[i] ) ) )
+	{
+	  N = atoi(argv[i+1]);
+	}
     }
   }
 
@@ -109,6 +117,7 @@ int main( int argc, char *argv[] )
   {
     return -1 ;
   }
+    std::cout << "reading done " << std::endl;
 
   // evaluate correspondence
   std::vector < double > generalization, specificity ;
@@ -130,7 +139,6 @@ int main( int argc, char *argv[] )
   if ( computeSpecificity ) 
   {
   evaluator->SetDistribution ( gaussian ) ;
-  const int N = 1000 ;
     for ( unsigned int i = 0 ; i < numSamples ; i++ )
   {
     std::cout << "Starting specificity computation with " << i << " shape parameters... " ;
