@@ -88,8 +88,8 @@ using namespace std;
 #include "argio.h"
 #include "ImageMath.h" 
 
-#define IMAGEMATH_VERSION "1.13"
-#define IMAGEMATH_DATE "May 2014"
+#define IMAGEMATH_VERSION "1.14"
+#define IMAGEMATH_DATE "July 2014"
 #define DEFAULT_SAMP 2
 // number of samples by default
 
@@ -276,6 +276,8 @@ int main(const int argc, const char **argv)
     cout << "infile                 input dataset" << endl;;
     cout << "-outbase outbase       base-outputfilename, if omitted then the same as base of input" << endl; 
     cout << "-outfile outfile       outfilename, will only be applied to main output (if multiple output are given)" << endl;
+    cout << "-verbose               verbose mode " << endl;
+    cout << "-extension ext         Extension of the output (determines output FORMAT)" << endl; 
     cout << "-nocomp                don't automatically compress the output image" << endl;
     cout << "-combine infile2       combine the inputfile by interpreting them as labelfiles. " << endl 
        << "   -relabel              labels in infile2 will be relabeled to succeed labels in infile (no label overlap)" << endl;
@@ -300,13 +302,11 @@ int main(const int argc, const char **argv)
     cout << "-matchHistogram infile2  match the image histogram to the one in infile2" << endl;
     cout << "-matchHistoPara bins,points,thresh  optional parameters for matchHistogram (bins= number of histogram bins" << endl;
     cout << "                        points = number of control points, thresh = boolean for mean intensity threshol [0/1])" << endl;
-    cout << "-smooth -gauss -curveEvol -grayOpen -grayClose -grayDilate -grayErode -grayFillHole -meanFilter -anisoDiff [-size val] [-iter num]" << endl;
+    cout << "-smooth -gauss -curveEvol -grayOpen -grayClose -grayDilate -grayErode -grayFillHole -meanFilter -anisoDiff [-size val] [-iter num] [-siz3 val1,val2,val3]" << endl;
     cout << "                       smoothing of image using any of the mentioned smoothing filters" << endl;
-    cout << "                       size is stuctural element size, variance, or timestep depending on the filter choice" << endl;
+    cout << "                       size is stuctural element size, variance, or timestep depending on the filter choice, alternatively can specify 3 elements via siz3" << endl;
     cout << "                       iter is number of iterations" << endl;
-    cout << "-verbose               verbose mode " << endl;
     cout << "-type byte|short|float Type of processing image (computations are always done with float images), default is short" << endl; 
-    cout << "-extension ext         Extension of the output (determines output format)" << endl; 
     cout << "-conComp Lbl           For a binary image, rank all the connected components according to their sizes and create a binary image with the 'Lbl' biggest ones" << endl;
     cout << "                       if Lbl=0 outputs the labeled image with all the components labeled according to their size" << endl;
     cout << "-changeOrig px,py,pz [or filename]   Change the origin of the image" << endl;
@@ -389,7 +389,7 @@ int main(const int argc, const char **argv)
   if (typeChat && !strcmp(typeChat,"byte")) writeByte = true;
   if (typeChat && !strcmp(typeChat,"float"))writeFloat = true;
 
-  char * formatChar = ipGetStringArgument(argv, "-extension", ".gipl");
+  char * formatChar = ipGetStringArgument(argv, "-extension", ".nrrd");
   string format;
   if (! strchr(formatChar, '.')) {
     format = string(".") + string(formatChar);
@@ -704,6 +704,28 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     curveEvolOn = true; 
   };
   double smoothSize = ipGetDoubleArgument(argv,"-size",-1);
+  tmp_str      = ipGetStringArgument(argv, "-siz3", NULL);
+  float smoothSizes[3];
+  for( unsigned int i = 0 ; i < 3 ; i++ )
+  {
+    smoothSizes[ i ] = -1.0 ;
+  }
+  if (tmp_str) {
+      int num = ipExtractFloatTokens(textend, tmp_str, 3);
+      if (3 != num)
+      {
+        cerr << "siz3 needs 3 comma separated entries: Sx,Sy,Sz " << endl;
+        return EXIT_FAILURE ;
+      }
+      else
+      {
+        smoothSizes[0] = static_cast<float>(textend[0]);
+        smoothSizes[1] = static_cast<float>(textend[1]);
+        smoothSizes[2] = static_cast<float>(textend[2]);
+      }
+    }
+
+
   unsigned int numIter = ipGetIntArgument(argv,"-iter",1);
 
   bool MaxOn   = ipExistsArgument(argv, "-max"); 
@@ -1636,12 +1658,19 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       }    
       inputImage = smoothFilter->GetOutput();
     } else if (gaussianOn) {
-      if (smoothSize == -1) smoothSize = 1.0;
-      cout << "smoothing  (Gaussian): size " << smoothSize << ", iterations " << numIter << endl;
       gaussFilterType::Pointer smoothFilter = gaussFilterType::New();  
+
+      if (smoothSize == -1) smoothSize = 1.0;
+      if (smoothSizes[0] != -1) {
+	smoothFilter->SetVariance(smoothSizes);
+	cout << "smoothing  (Gaussian): size " << smoothSizes[0] <<"," << smoothSizes[1] <<","
+	     << smoothSizes[2] <<", iterations " << numIter << endl;
+      } else {
+	smoothFilter->SetVariance(smoothSize);
+	cout << "smoothing  (Gaussian): size " << smoothSize << ", iterations " << numIter << endl;
+      } 
       for (unsigned int i=0; i < numIter; i++) {
 	smoothFilter->SetInput(inputImage);
-	smoothFilter->SetVariance(smoothSize);
 	try {
 	  smoothFilter->Update();
 	}
@@ -1853,17 +1882,19 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       }
     }
     else{
-      inputImage = EMSImages[0];}
+      inputImage = EMSImages[0];
+    }
     vector<IteratorType> EMSIters;    
 
     IteratorType restIter (restImage, restImage->GetBufferedRegion());      
     IteratorType normIter (inputImage, inputImage->GetBufferedRegion());
 
     for (int i = 0; i < EMScount; i++){
-
+      
       if(debug) cout << "EMSImage_" <<i << endl;
       IteratorType EMSIter (EMSImages[i], inputImage->GetBufferedRegion());
-      EMSIters.push_back(EMSIter);}
+      EMSIters.push_back(EMSIter);
+    }
     while ( !normIter.IsAtEnd() )  {
       PixelType normVal =  normIter.Get();
       if (normVal < 255) {
