@@ -84,12 +84,13 @@ using namespace std;
 #include <itkMaskedImageToHistogramFilter.h>
 #include <itkImageToHistogramFilter.h>
 #include <itkShiftScaleImageFilter.h>
+#include <itkImageDuplicator.h>
 
 #include "argio.h"
 #include "ImageMath.h" 
 
-#define IMAGEMATH_VERSION "1.14"
-#define IMAGEMATH_DATE "July 2014"
+#define IMAGEMATH_VERSION "1.15"
+#define IMAGEMATH_DATE "August 2014"
 #define DEFAULT_SAMP 2
 // number of samples by default
 
@@ -2396,16 +2397,13 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 	  }
 	vLabelImages.push_back(LabelImageReader->GetOutput());
       }
-    
+    typedef itk::ImageDuplicator< ImageType > DuplicatorType;
+    DuplicatorType::Pointer duplicator = DuplicatorType::New();
+    duplicator->SetInputImage(vLabelImages[0]);
+    duplicator->Update();
+
     // Creating output image
-    ImagePointer MajVotingImage = ImageType::New();
-    ImageType::SpacingType spacing;
-    spacing[0] = inputImage->GetSpacing()[0];
-    spacing[1] = inputImage->GetSpacing()[1];
-    spacing[2] = inputImage->GetSpacing()[2];
-    MajVotingImage->SetSpacing(spacing);
-    MajVotingImage->SetRegions(inputImage->GetRequestedRegion());
-    MajVotingImage->Allocate();
+    ImagePointer MajVotingImage =  duplicator->GetOutput();
     
     //  Iterators initialization
     vector<ConstIteratorType> vConstLabelIterator;
@@ -2479,16 +2477,16 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 
     //  Relabeling: considering neighborhood
     NeighborhoodIteratorType::RadiusType Radius;
-      Radius.Fill(1);
-      NeighborhoodIteratorType NeighborhoodOutputIterator(Radius,MajVotingImage,MajVotingImage->GetRequestedRegion());
-      NeighborhoodIteratorType::OffsetType offset1 = {{-1,0,0}};
-      NeighborhoodIteratorType::OffsetType offset2 = {{1,0,0}};
-      NeighborhoodIteratorType::OffsetType offset3 = {{0,-1,0}};
-      NeighborhoodIteratorType::OffsetType offset4 = {{0,1,0 }};
-      NeighborhoodIteratorType::OffsetType offset5 = {{0,0,-1}};
-      NeighborhoodIteratorType::OffsetType offset6 = {{0,0,1}};
-
-      for (OutputIterator.GoToBegin(), NeighborhoodOutputIterator.GoToBegin(); !OutputIterator.IsAtEnd(); ++OutputIterator, ++NeighborhoodOutputIterator)
+    Radius.Fill(1);
+    NeighborhoodIteratorType NeighborhoodOutputIterator(Radius,MajVotingImage,MajVotingImage->GetRequestedRegion());
+    NeighborhoodIteratorType::OffsetType offset1 = {{-1,0,0}};
+    NeighborhoodIteratorType::OffsetType offset2 = {{1,0,0}};
+    NeighborhoodIteratorType::OffsetType offset3 = {{0,-1,0}};
+    NeighborhoodIteratorType::OffsetType offset4 = {{0,1,0 }};
+    NeighborhoodIteratorType::OffsetType offset5 = {{0,0,-1}};
+    NeighborhoodIteratorType::OffsetType offset6 = {{0,0,1}};
+    
+    for (OutputIterator.GoToBegin(), NeighborhoodOutputIterator.GoToBegin(); !OutputIterator.IsAtEnd(); ++OutputIterator, ++NeighborhoodOutputIterator)
 	{
 	  PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
 	  PixelType *LabelArray;
@@ -2547,15 +2545,13 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
         
       }
     
+    typedef itk::ImageDuplicator< ImageType > DuplicatorType;
+    DuplicatorType::Pointer duplicator = DuplicatorType::New();
+    duplicator->SetInputImage(vLabelImages[0]);
+    duplicator->Update();
+
     // Creating output image
-    ImagePointer MajVotingImage = ImageType::New();
-    ImageType::SpacingType spacing;
-    spacing[0] = inputImage->GetSpacing()[0];
-    spacing[1] = inputImage->GetSpacing()[1];
-    spacing[2] = inputImage->GetSpacing()[2];
-    MajVotingImage->SetSpacing(spacing);
-    MajVotingImage->SetRegions(inputImage->GetRequestedRegion());
-    MajVotingImage->Allocate();
+    ImagePointer MajVotingImage =  duplicator->GetOutput();
     
     //  Iterators initialization
     vector<ConstIteratorType> vConstLabelIterator;
