@@ -90,7 +90,7 @@ using namespace std;
 #include "ImageMath.h" 
 
 #define IMAGEMATH_VERSION "1.2"
-#define IMAGEMATH_DATE "August 2014"
+#define IMAGEMATH_DATE "September 2014"
 #define DEFAULT_SAMP 2
 // number of samples by default
 
