@@ -89,7 +89,7 @@ using namespace std;
 #include "argio.h"
 #include "ImageMath.h" 
 
-#define IMAGEMATH_VERSION "1.15"
+#define IMAGEMATH_VERSION "1.2"
 #define IMAGEMATH_DATE "August 2014"
 #define DEFAULT_SAMP 2
 // number of samples by default
@@ -333,6 +333,7 @@ int main(const int argc, const char **argv)
     cout << "-danDistanceMap        Outputs the Danielsson Distance Map" << endl ;
     cout << "-mosaic                Creates a mosaic image from 2 images" << endl ;
     cout << "  -mosaicStep size     Size of each window in the mosaic (default:10 voxels)" << endl;
+    cout << "-setLocationTolerance  Sets the coordinate and direction tolerance allowed for the ITK filters" << endl ;
     cout << endl << endl;
     return EXIT_SUCCESS ;
   }
@@ -785,6 +786,9 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
   bool DanDistanceMapOn = ipExistsArgument(argv, "-danDistanceMap");
   char *mosaic = ipGetStringArgument(argv, "-mosaic", NULL);  
   int mosaicStepSize = ipGetIntArgument(argv,"-mosaicStep",10);
+
+  double locationTolerance = ipGetDoubleArgument(argv,"-setLocationTolerance",0.001);
+
   bool StdOn = ipExistsArgument(argv, "-std");
   if (StdOn)
   {
@@ -1225,8 +1229,8 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       maskFilterType::Pointer maskFilter = maskFilterType::New() ;
       maskFilter->SetInput1( inputImage ) ;
       maskFilter->SetInput2( inputImage2 ) ;
-      maskFilter->SetCoordinateTolerance( 0.001 ) ;
-      maskFilter->SetDirectionTolerance( 0.001 ) ;
+      maskFilter->SetCoordinateTolerance( locationTolerance ) ;
+      maskFilter->SetDirectionTolerance( locationTolerance ) ;
       try
       {
         maskFilter->Update() ;
@@ -1260,6 +1264,8 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     if (debug) cout << "adding images  " << endl;
 
     addFilterType::Pointer addFilter = addFilterType::New();
+    addFilter->SetCoordinateTolerance( locationTolerance ) ;
+    addFilter->SetDirectionTolerance( locationTolerance ) ;
     addFilter->SetInput1(inputImage);
     addFilter->SetInput2(inputImage2);
     try {
@@ -1295,6 +1301,8 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     subFilterType::Pointer subFilter = subFilterType::New();
     subFilter->SetInput1(inputImage);
     subFilter->SetInput2(inputImage2);
+    subFilter->SetCoordinateTolerance( locationTolerance ) ;
+    subFilter->SetDirectionTolerance( locationTolerance ) ;
     try {
       subFilter->Update();    
     }
@@ -1328,6 +1336,8 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     mulFilterType::Pointer mulFilter = mulFilterType::New();
     mulFilter->SetInput1(inputImage);
     mulFilter->SetInput2(inputImage2);
+    mulFilter->SetCoordinateTolerance( locationTolerance ) ;
+    mulFilter->SetDirectionTolerance( locationTolerance ) ;
     try {
        mulFilter->Update();  
     }
@@ -1361,6 +1371,8 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     divFilterType::Pointer divFilter = divFilterType::New();
     divFilter->SetInput1(inputImage);
     divFilter->SetInput2(inputImage2);
+    divFilter->SetCoordinateTolerance( locationTolerance ) ;
+    divFilter->SetDirectionTolerance( locationTolerance ) ;
     try {
       divFilter->Update();
     }
@@ -2220,6 +2232,8 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 	// Adding image
 	addFilter->SetInput1(inputImage);
 	addFilter->SetInput2(ImageReader->GetOutput());
+  addFilter->SetCoordinateTolerance( locationTolerance ) ;
+  addFilter->SetDirectionTolerance( locationTolerance ) ;
 	try
 	  {
 	    addFilter->Update();
@@ -2275,6 +2289,8 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 	// Adding image
         addFilter->SetInput1(inputImage);
         addFilter->SetInput2(ImageReader->GetOutput());
+        addFilter->SetCoordinateTolerance( locationTolerance ) ;
+        addFilter->SetDirectionTolerance( locationTolerance ) ;
         try
         {
            addFilter->Update();
@@ -2303,6 +2319,8 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 	
         addFilterSquare->SetInput1(squareSumImage);
         addFilterSquare->SetInput2(squareFilter->GetOutput());
+        addFilterSquare->SetCoordinateTolerance( locationTolerance ) ;
+        addFilterSquare->SetDirectionTolerance( locationTolerance ) ;
         try
         {
            addFilterSquare->Update();
@@ -3037,23 +3055,31 @@ else
     }
     
     BinaryVolumeWriterType::Pointer writer = BinaryVolumeWriterType::New();
-    if(!nocompOn) writer->UseCompressionOn();
+    if(!nocompOn)
+    {
+      writer->UseCompressionOn();
+    }
     writer->SetFileName(outFileName.c_str()); 
     writer->SetInput(castFilter->GetOutput());
     writer->Write();
   } else if (writeFloat) {
     VolumeWriterType::Pointer writer = VolumeWriterType::New();
-    if(!nocompOn) writer->UseCompressionOn();
+    if(!nocompOn)
+    {
+      writer->UseCompressionOn();
+    }
     writer->SetFileName(outFileName.c_str()); 
     writer->SetInput(inputImage);
     writer->Write();
   } else {
     castShortFilterType::Pointer castFilter = castShortFilterType::New();
     castFilter->SetInput(inputImage);
-    try {
+    try
+    {
       castFilter->Update();
     }
-    catch (ExceptionObject & err) {
+    catch (ExceptionObject & err)
+    {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
       return EXIT_FAILURE;	
@@ -3061,7 +3087,10 @@ else
     
     ShortVolumeWriterType::Pointer writer = ShortVolumeWriterType::New();
     writer->SetFileName(outFileName.c_str()); 
-    if(!nocompOn) writer->UseCompressionOn();
+    if(!nocompOn)
+    {
+      writer->UseCompressionOn();
+    }
     writer->SetInput(castFilter->GetOutput());
     writer->Write();
   }
