@@ -26,6 +26,6 @@ SET(src polydatatransform.cpp)
 GENERATECLP(src polydatatransform.xml)
 
 add_executable(polydatatransform  ${src}  )
-target_link_libraries( polydatatransform library ${ITK_LIBRARIES} vtkHybrid vtkCommon ${VTK_LIBRARIES})
+target_link_libraries( polydatatransform library ${ITK_LIBRARIES} ${VTK_LIBRARIES})
 
 install( TARGETS polydatatransform RUNTIME DESTINATION bin )

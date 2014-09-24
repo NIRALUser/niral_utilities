@@ -21,6 +21,7 @@
 #include <vtkLine.h>
 #include <vtkPolyLine.h>
 #include <vtkAppendPolyData.h>
+#include <vtkVersion.h>
 
 #include "polydatamergeCLP.h"
 
@@ -67,8 +68,13 @@ int main(int argc, char* argv[])
  vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
 
  vtkAppendPolyData *apd = vtkAppendPolyData::New(); 
+ #if (VTK_MAJOR_VERSION < 6)
  apd->AddInput (polydata2);
  apd->AddInput (polydata1);
+ #else
+ apd->AddInputData (polydata2);
+ apd->AddInputData (polydata1);
+ #endif
  polydata=apd->GetOutput ();
 
   if(fiberOutput != "")
@@ -78,7 +84,11 @@ int main(int argc, char* argv[])
   std::cout<<fiberOutput<<std::endl;
   vtkPolyDataWriter * fiberwriter = vtkPolyDataWriter::New();
   fiberwriter->SetFileName(fiberOutput.c_str());
+  #if (VTK_MAJOR_VERSION < 6)
   fiberwriter->SetInput(polydata);
+  #else
+  fiberwriter->SetInputData(polydata);
+  #endif
   fiberwriter->SetFileTypeToBinary();
   fiberwriter->Update();
   try

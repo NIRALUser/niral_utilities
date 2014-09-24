@@ -20,6 +20,7 @@
 #include <vtkPolyDataReader.h>
 #include <vtkPolyDataWriter.h>
 #include <vtkLine.h>
+#include <vtkVersion.h>
 
 // ITK includes
 #include <itkDiffusionTensor3D.h>
@@ -146,7 +147,11 @@ int main(int argc, char* argv[])
   std::cout<<fiberOutput<<std::endl;
   vtkPolyDataWriter * fiberwriter = vtkPolyDataWriter::New();
   fiberwriter->SetFileName(fiberOutput.c_str());
+  #if (VTK_MAJOR_VERSION < 6)
   fiberwriter->SetInput(polydata);
+  #else
+  fiberwriter->SetInputData(polydata);
+  #endif
   fiberwriter->SetFileTypeToBinary();
   fiberwriter->Update();
   try
