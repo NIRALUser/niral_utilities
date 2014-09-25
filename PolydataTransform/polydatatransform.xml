@@ -4,7 +4,7 @@
 	<title>PolyData Transform (DTIProcess)</title>
 	<description>Transform a PolyData with an HField or a displacement field</description>
 	<contributor>Gwendoline Roger, Francois Budin</contributor>
-	<version>1.0.1</version>
+	<version>1.2.1</version>
 	<parameters advanced="false">
 		<geometry type="fiberbundle">
 			<name>fiberOutput</name>

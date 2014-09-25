@@ -5,7 +5,7 @@
 	<category>Diffusion.Tractography</category>
 	<description>Merges two VTK PolyData files together</description>
 	<contributor>Gwendoline Roger, Francois Budin</contributor>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<parameters>
 		<label>Input/Output</label>
 		<description>Add two VTK PolyData files</description>
