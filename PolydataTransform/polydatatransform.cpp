@@ -39,12 +39,16 @@ int main(int argc, char* argv[])
 {
   PARSE_ARGS;
 
-  if(fiberFile == "")
-    {
-      std::cerr << "A fiber file has to be specified" << std::endl;
-      return EXIT_FAILURE;
-    }
- 
+  if( fiberFile.empty() )
+  {
+    std::cerr << "An input fiber file has to be specified" << std::endl;
+    return EXIT_FAILURE;
+  }
+  if( fiberOutput.empty() )
+  {
+    std::cerr << "An output fiber file has to be specified" << std::endl;
+    return EXIT_FAILURE;
+  }
   
   vtkSmartPointer<vtkPolyDataReader> reader = vtkSmartPointer<vtkPolyDataReader>::New();
   std::cout << "Reading " << fiberFile<< std::endl;
@@ -57,22 +61,29 @@ int main(int argc, char* argv[])
   
  
   DeformationImageType::Pointer deformationfield(NULL);
-  if(hField != "")
+  if( !hField.empty() )
+  {
     deformationfield = readDeformationField(hField, HField);
-  else if(displacementField != "")
+  }
+  else if( !displacementField.empty() )
+  {
     deformationfield = readDeformationField(displacementField, Displacement);
+  }
   else
+  {
     deformationfield = NULL;
-  
+  }
   typedef itk::VectorLinearInterpolateImageFunction<DeformationImageType, double> DeformationInterpolateType;
   DeformationInterpolateType::Pointer definterp(NULL);
   if(deformationfield)
   {
     definterp = DeformationInterpolateType::New();
     definterp->SetInputImage(deformationfield);
-  } else {
+  }
+  else
+  {
     std::cout << "A deformation field has to be specified" << std::endl;
-      return EXIT_FAILURE;
+    return EXIT_FAILURE;
   }
   
     
@@ -114,22 +125,32 @@ int main(int argc, char* argv[])
         }
         DeformationPixelType warp(definterp->EvaluateAtContinuousIndex(ci).GetDataPointer());
         for(unsigned int j =0; j < 3; j++)
+        {
           fiberpoint[j] +=warp[j]; 
-
+        }
 	//convert LPS to RAS (vtk)
-	if (invx) {
+	if (invx)
+        {
 	  fiberpoint[0] = - fiberpoint[0];
-	} else {
+	}
+        else
+        {
 	  fiberpoint[0] = + fiberpoint[0];
 	}
-	if (invy) {
+	if (invy)
+        {
 	  fiberpoint[1] = - fiberpoint[1];
-	} else {
+	}
+        else
+        {
 	  fiberpoint[1] = + fiberpoint[1];
 	}
-	if (invz) {
+	if (invz)
+        {
 	  fiberpoint[2] = - fiberpoint[2];
-	} else {
+	}
+        else
+        {
 	  fiberpoint[2] = + fiberpoint[2];	
 	}
 
@@ -140,8 +161,6 @@ int main(int argc, char* argv[])
     
 
   
-  if(fiberOutput != "")
-  {
   std::cout<<std::endl;
   std::cout<<"Saving fibers...."<<std::endl;
   std::cout<<fiberOutput<<std::endl;
@@ -165,7 +184,6 @@ int main(int argc, char* argv[])
     std::cout << "Error while saving fiber file." << std::endl;
     throw;
     }
-	}
 
   return EXIT_SUCCESS;
 }

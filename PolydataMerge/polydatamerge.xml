@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <executable>
-	<title>PolydataMerge</title>
-	<description>Add two vtk polydata files together</description>
-	<contributor>Gwendoline Roger</contributor>
+	<title>PolyData Merge (DTIProcess)</title>
+	<category>Diffusion.Tractography</category>
+	<description>Merges two VTK PolyData files together</description>
+	<contributor>Gwendoline Roger, Francois Budin</contributor>
+	<version>1.0.0</version>
 	<parameters>
-		<label>Add two vtk polydata files: Input/Output</label>
-		<description>Add two vtk polydata files</description>
-		<string-vector>
-			<name>fiberFiles</name>
+		<label>Input/Output</label>
+		<description>Add two VTK PolyData files</description>
+		<geometry type="fiberbundle">
+			<name>fiberFile1</name>
 			<flag>-f</flag>
-			<longflag>--vtkFiles</longflag>
-			<label>vtk polydata files to add</label>
+			<longflag>--vtkFile1</longflag>
+			<label>Input VTK PolyData 1</label>
 			<channel>input</channel>
-			<description>Input vtk polydata(fibers) to add, separate it by a comma</description>
-		</string-vector>
-		<file>
+			<description>First input vtk PolyData (Fibers)</description>
+		</geometry>
+		<geometry type="fiberbundle">
+			<name>fiberFile2</name>
+			<flag>-g</flag>
+			<longflag>--vtkFile2</longflag>
+			<label>Input VTK PolyData 2</label>
+			<channel>input</channel>
+			<description>Second input VTK PolyData (Fibers)</description>
+		</geometry>
+		<geometry type="fiberbundle">
 			<name>fiberOutput</name>
 			<longflag>--vtk_output</longflag>
 			<flag>o</flag>
-			<label>vtk polydata (Fiber) Output</label>
-			<description>Output vtk polydata (fiber) file</description>
+			<label>VTK PolyData (Fibers) Output</label>
+			<description>Output VTK PolyData (Fibers) file</description>
 			<channel>output</channel>
-		</file>
+		</geometry>
 	</parameters>
 </executable>

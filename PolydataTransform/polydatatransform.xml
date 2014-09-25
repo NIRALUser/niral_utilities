@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <executable>
-	<category>DTI.DTIProcess</category>
-	<title>PolydataTransform</title>
-	<description>Transform a polydata with a HField or a displacement field</description>
-	<contributor>Gwendoline Roger</contributor>
-	<version>1.0.0</version>
+	<category>Diffusion.Tractography</category>
+	<title>PolyData Transform (DTIProcess)</title>
+	<description>Transform a PolyData with an HField or a displacement field</description>
+	<contributor>Gwendoline Roger, Francois Budin</contributor>
+	<version>1.0.1</version>
 	<parameters advanced="false">
-		<file>
+		<geometry type="fiberbundle">
 			<name>fiberOutput</name>
 			<longflag>--fiber_output</longflag>
 			<flag>o</flag>
-			<label>Fiber Output</label>
-			<description>Output fiber file. </description>
+			<label>Output Fiber Bundle</label>
+			<description>Output fiber file</description>
 			<channel>output</channel>
-		</file>
-		<file>
+		</geometry>
+		<image type="vector">
 			<name>hField</name>
 			<longflag>--h_field</longflag>
 			<flag>H</flag>
 			<label>HField</label>
 			<description>HField for warp</description>
 			<channel>input</channel>
-		</file>
-		<file>
+		</image>
+		<image type="vector">
 			<name>displacementField</name>
 			<longflag>--displacement_field</longflag>
 			<flag>D</flag>
 			<label>DisplacementField</label>
 			<description>Displacement Field for warp</description>
 			<channel>input</channel>
-		</file>
-		<file>
+		</image>
+		<geometry type="fiberbundle">
 			<name>fiberFile</name>
 			<longflag>--fiber_file</longflag>
-			<label>Fiber File</label>
+			<label>Input Fiber Bundle</label>
 			<description>DTI fiber file</description>
 			<channel>input</channel>
-		</file>    
+		</geometry>
 		<boolean>
 		  <name>invx</name>
 		  <longflag>--invertx</longflag>

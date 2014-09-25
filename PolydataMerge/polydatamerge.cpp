@@ -29,27 +29,27 @@ int main(int argc, char* argv[])
 {
   PARSE_ARGS;
 
-  if(fiberFiles[0] == "")
+  if( fiberFile1.empty() )
     {
       std::cerr << "An first input fiber file has to be specified" << std::endl;
       return EXIT_FAILURE;
     }
 
- if(fiberFiles[1] == "")
+ if( fiberFile2.empty() )
     {
 	std::cerr << "An second input fiber file has to be specified" << std::endl;
       return EXIT_FAILURE;
     }
 
- if(fiberOutput== "")
+ if( fiberOutput.empty() )
    {
 	std::cerr << "An output fiber file name has to be specified" << std::endl;
       return EXIT_FAILURE;
     }
 
   vtkSmartPointer<vtkPolyDataReader> reader1 = vtkSmartPointer<vtkPolyDataReader>::New();
-  std::cout << "Reading " << fiberFiles[0]<< std::endl;
-  reader1->SetFileName(fiberFiles[0].c_str());
+  std::cout << "Reading " << fiberFile1<< std::endl;
+  reader1->SetFileName(fiberFile1.c_str());
   reader1->Update();
  
   // Extract the polydata 1
@@ -57,8 +57,8 @@ int main(int argc, char* argv[])
     reader1->GetOutput();
 
   vtkSmartPointer<vtkPolyDataReader> reader2 = vtkSmartPointer<vtkPolyDataReader>::New();
-  std::cout << "Reading " << fiberFiles[1]<< std::endl;
-  reader2->SetFileName(fiberFiles[1].c_str());
+  std::cout << "Reading " << fiberFile2<< std::endl;
+  reader2->SetFileName(fiberFile2.c_str());
   reader2->Update();
  
   // Extract the polydata 2
@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
  #endif
  polydata=apd->GetOutput ();
 
-  if(fiberOutput != "")
+  if( !fiberOutput.empty() )
   {
   std::cout<<std::endl;
   std::cout<<"Saving fibers...."<<std::endl;
