@@ -3,7 +3,7 @@
  *
  * author:  Martin Styner 
  * 
- * changes: Yundi Shi
+ * changes: Yundi Shi, Ipek Oguz, and many many more
  *
  */
 
@@ -89,8 +89,8 @@ using namespace std;
 #include "argio.h"
 #include "ImageMath.h" 
 
-#define IMAGEMATH_VERSION "1.2"
-#define IMAGEMATH_DATE "September 2014"
+#define IMAGEMATH_VERSION "1.3"
+#define IMAGEMATH_DATE "November 2014"
 #define DEFAULT_SAMP 2
 // number of samples by default
 
@@ -162,6 +162,8 @@ typedef itk::Statistics::ImageToHistogramFilter< ImageType > HistogramFilterType
 typedef itk::ShiftScaleImageFilter< ImageType, ImageType > ShiftScaleFilterType;
 
 static int debug = 0;
+static const int BGVAL = 0;
+static const int FGVAL = 1;
 
 double Average( vector< double > vec )
 {
@@ -266,6 +268,153 @@ void GetImageType( char* fileName ,
 }
 
 
+ImagePointer RunCleanComponent(ImagePointer image, int cleanLabel, float cleanPercent)
+{
+  // 0. Get max on the label image
+  MaxFilterType::Pointer maxFilter = MaxFilterType::New();
+  maxFilter->SetImage(image);
+  maxFilter->ComputeMaximum();
+  int MaxLabel = (int) maxFilter->GetMaximum();
+  
+  // 1. first extract the label
+  threshFilterType::Pointer threshFilter = threshFilterType::New();
+  threshFilter->SetInput(image);
+  threshFilter->SetLowerThreshold(cleanLabel);
+  threshFilter->SetUpperThreshold(cleanLabel);
+  threshFilter->SetOutsideValue (BGVAL);
+  threshFilter->SetInsideValue (FGVAL);
+  try {
+    threshFilter->Update();
+  }
+  catch (ExceptionObject & err) {
+    cerr << "ExceptionObject caught!" << endl;
+    cerr << err << endl;
+    exit(EXIT_FAILURE);	
+  }        
+
+  // 2. get the connected components of the label
+  ConnectiveFilterType::Pointer Connective = ConnectiveFilterType::New();
+  RelabelFilterType::Pointer relabelFilter = RelabelFilterType::New();
+  Connective->SetInput(threshFilter->GetOutput());
+  try {
+    Connective->Update();
+  }
+  catch (ExceptionObject & err) {
+    cerr << "ExceptionObject caught!" << endl;
+    cerr << err << endl;
+    exit(EXIT_FAILURE);	
+  } 
+  
+  //3. Sort the components according to their size
+  relabelFilter->SetInput(Connective->GetOutput());
+  try {
+    relabelFilter->Update();
+  }
+  catch (ExceptionObject & err) {
+    cerr << "ExceptionObject caught!" << endl;
+    cerr << err << endl;
+    exit(EXIT_FAILURE);
+  }
+  // 4. get largest component that is smaller than the cutoff
+  RelabelFilterType::ObjectSizeInPixelsContainerType compSizes = relabelFilter->GetSizeOfObjectsInPixels();
+  // note, sizes are in pixels -> int
+  int numComp = compSizes.size();
+  int totalSize = 0;
+  for (int comp = 0; comp < numComp; comp++) { totalSize += compSizes[comp];}
+  int cutoff = numComp;
+  float minSize = (totalSize / 100 * cleanPercent);
+  for (int comp = 0; comp < cutoff; comp++) {
+    if (compSizes[comp] < minSize) {
+      cutoff = comp;
+    }
+  }
+  if (debug) cout << "numComps: " << numComp << "; total Size: " << totalSize << "; cutOff size " << minSize << "; cutOff component " << cutoff + 1 << endl;
+  if (cutoff == numComp) {
+      // nothing to do, return
+      if (debug) cout << "No components smaller than cutoff, doing nothing" << endl;
+      return image;
+    }
+
+  // relabel all components that are too small
+  for (int comp = cutoff; comp < numComp; comp++) {
+    PixelType compLabel = comp + 1; // component indexing is 1 off from label number
+
+    if (debug) cout << "relabeling sorted component " << comp + 1 << " with size " << compSizes[comp] << endl;
+    
+    // 5. relabel the selected component that is too small
+    // 5a) find neighboring labels (with number of neighboring voxels)
+    IteratorType iterLabel (image, image->GetBufferedRegion());
+    IteratorType iterComp (relabelFilter->GetOutput(), image->GetBufferedRegion());
+          
+    //  Relabeling: considering neighborhood, 6 connectedness
+    NeighborhoodIteratorType::RadiusType Radius;
+    Radius.Fill(1);
+    NeighborhoodIteratorType NeighborhoodIterator(Radius,image,image->GetBufferedRegion());
+    NeighborhoodIteratorType::OffsetType offset1 = {{-1,0,0}};
+    NeighborhoodIteratorType::OffsetType offset2 = {{1,0,0}};
+    NeighborhoodIteratorType::OffsetType offset3 = {{0,-1,0}};
+    NeighborhoodIteratorType::OffsetType offset4 = {{0,1,0 }};
+    NeighborhoodIteratorType::OffsetType offset5 = {{0,0,-1}};
+    NeighborhoodIteratorType::OffsetType offset6 = {{0,0,1}};
+
+    PixelType *LabelVotes = new PixelType[MaxLabel + 1];
+    for (int Label = 0; Label <= MaxLabel; Label++)
+      LabelVotes[Label] = 0;
+      
+    while ( !iterComp.IsAtEnd() )  {
+      PixelType compVal =  iterComp.Get();
+
+      if (compLabel == compVal) {
+	// get votes from neighbors
+	LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset1)]++;
+	LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset2)]++;
+	LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset3)]++;
+	LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset4)]++;
+	LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset5)]++;
+	LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset6)]++; 	  		
+      }     
+      
+      ++iterComp;
+      ++NeighborhoodIterator;
+    }
+    // reset current label to 0, as we don't care about it
+    LabelVotes[cleanLabel] = 0;
+    LabelVotes[0] = 0;
+
+    PixelType MaxVoteLabel = 0;
+    PixelType MaxVoteValue = 0;
+    // now get the label with the max vote
+    for (int Label = 0; Label <= MaxLabel; Label++)
+      {
+	if (LabelVotes[Label] > MaxVoteValue)
+	  {
+	    MaxVoteValue = LabelVotes[Label];
+	    MaxVoteLabel = Label;
+	  }
+      }
+    
+    delete[] LabelVotes;
+    iterComp.GoToBegin();
+    if (debug) cout << "relabeling to  " << MaxVoteLabel << endl;
+    
+    // 5b. now reassign that component to the majority vote
+    while ( !iterComp.IsAtEnd() )  {
+      PixelType compVal =  iterComp.Get();
+
+      if (compLabel == compVal) {
+	iterLabel.Set(MaxVoteLabel);
+      }
+      
+      ++iterComp;
+      ++iterLabel;
+    }
+  
+  }
+
+  return image;
+  
+}
+
 int main(const int argc, const char **argv)
 {
   if (argc <=1 || ipExistsArgument(argv, "-usage") || ipExistsArgument(argv, "-help")) {
@@ -308,7 +457,8 @@ int main(const int argc, const char **argv)
     cout << "                       size is stuctural element size, variance, or timestep depending on the filter choice, alternatively can specify 3 elements via siz3" << endl;
     cout << "                       iter is number of iterations" << endl;
     cout << "-type byte|short|float Type of processing image (computations are always done with float images), default is short" << endl; 
-    cout << "-conComp Lbl           For a binary image, rank all the connected components according to their sizes and create a binary image with the 'Lbl' biggest ones" << endl;
+    cout << "-conComp n           For a binary image, rank all the connected components according to their sizes and create a binary image with the 'n' biggest ones" << endl;
+    cout << "-cleanComp Label,perc  Extract Label 'label' from image, run connected components and clean up any components of size smaller tthn 'perc' percent size via majority vote over neighboring label" << endl;
     cout << "                       if Lbl=0 outputs the labeled image with all the components labeled according to their size" << endl;
     cout << "-changeOrig px,py,pz [or filename]   Change the origin of the image" << endl;
     cout << "-createIm X,Y,Z,px,py,pz Create an empty image with the specified parameters: image dimensions X,Y,Z, image resolution px,py,pz" << endl;
@@ -342,8 +492,6 @@ int main(const int argc, const char **argv)
     cout << "ImageMath version:"<<IMAGEMATH_VERSION<<" ("<<IMAGEMATH_DATE<<")" << endl;
     return EXIT_SUCCESS ;
   }
-  const int BGVAL = 0;
-  const int FGVAL = 1;
 
   const unsigned int MaxNumFiles = 1000;
   unsigned int NbFiles = 0;
@@ -522,6 +670,23 @@ int main(const int argc, const char **argv)
       Lbl = (int) textend[0];
     }
   }
+  
+  //-cleanComp Label,perc  Extract Label 'label' from image, run connected components and clean up any components of size smaller tthn 'perc' percent size via majority vote over neighboring label
+  bool cleanCompOn  =  ipExistsArgument(argv, "-cleanComp");
+  tmp_str =     ipGetStringArgument(argv, "-cleanComp", NULL);
+  int cleanLabel = 1;
+  float cleanPercent = 5;
+  if(tmp_str) {
+    int num = ipExtractFloatTokens(textend, tmp_str, 2);
+    if(2 != num){
+      cerr << "cleanComp needs exactlt 2 values" << endl;
+      return EXIT_FAILURE ;
+    } else {
+      cleanLabel = (int) textend[0];
+      cleanPercent = textend[1];
+    }
+  }
+  
 
   bool normalizeEMSOn    = ipExistsArgument(argv, "-normalizeEMS"); 
   int EMScount = ipGetIntArgument(argv,"-normalizeEMS",1);   
@@ -1505,6 +1670,14 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 	}
 	inputImage = threshFilter->GetOutput();
       }
+  } else if (cleanCompOn) {
+    outFileName.erase();
+    outFileName.append(base_string);
+    outFileName.append("_cleanComp");
+    if (debug) cout << "cleaning component " << cleanLabel << " regions of smaller than " << cleanPercent << " Percent" << endl;
+    
+    inputImage = RunCleanComponent(inputImage, cleanLabel, cleanPercent);
+    
   } else if (dilateOn) {
     outFileName.erase();
     outFileName.append(base_string);
@@ -2459,16 +2632,6 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
           {
 	    LabelArray[(ShortPixelType)vConstLabelIterator[LabelFileNumber].Get()]++;
           }
-/*	
-	for (int Label = 0; Label < MaxLabel; Label++)
-	  {
-	    if (LabelArray[Label] > MaxVoxelValue)
-	      {
-		MaxVoxelValue = LabelArray[Label];
-		MaxLabelValue = Label;
-	      }
-	  }
-*/
 	for (int Label = 0; Label < MaxLabel; Label++)
 	  {
 	    if (LabelArray[Label] > MaxVoxelValue)
@@ -2809,9 +2972,9 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
      outFileName.append(base_string);
      outFileName.append("_rescale");
   }else if( rescalingPercOn )
-  { 
-    double lowPerc = rescalingPercPara[0];
-    double highPerc = rescalingPercPara[2];
+   { 
+     double lowPerc = rescalingPercPara[0];
+     double highPerc = rescalingPercPara[2];
     double lowPercInt = rescalingPercPara[1];
     double highPercInt = rescalingPercPara[3];
     if (debug) std::cout << "lower Percentile: " <<  lowPerc << ", upper Percentile: " << highPerc << std::endl;
@@ -3011,89 +3174,89 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
   // write image
   if (debug) cout << "writing output data " << outFileName << endl;
 
-if( diffusionImage )
-{
-    typedef itk::ImageFileWriter< DiffusionImageType > DiffusionImageWriter ;
-    DiffusionImageType::Pointer outputDiffusionImage ;
-    outputDiffusionImage = dynamic_cast< DiffusionImageType* >( inputBaseImage.GetPointer() ) ;
-    if( !outputDiffusionImage ) 
+  if( diffusionImage )
     {
-       std::cerr << "Error saving output diffusion image" << std::endl ;
-       return EXIT_FAILURE ;
+      typedef itk::ImageFileWriter< DiffusionImageType > DiffusionImageWriter ;
+      DiffusionImageType::Pointer outputDiffusionImage ;
+      outputDiffusionImage = dynamic_cast< DiffusionImageType* >( inputBaseImage.GetPointer() ) ;
+      if( !outputDiffusionImage ) 
+	{
+	  std::cerr << "Error saving output diffusion image" << std::endl ;
+	  return EXIT_FAILURE ;
+	}
+      DiffusionImageWriter::Pointer writer = DiffusionImageWriter::New() ;
+      if( !nocompOn )
+	{
+	  writer->UseCompressionOn() ;
+	}
+      writer->SetFileName( outFileName.c_str() ); 
+      writer->SetInput( outputDiffusionImage ) ;
+      try
+	{
+	  writer->Write() ;
+	}
+      catch( ExceptionObject & err )
+	{
+	  cerr << "ExceptionObject caught!" << endl ;
+	  cerr << err << endl ;
+	  return EXIT_FAILURE ;
+	}
+      
     }
-    DiffusionImageWriter::Pointer writer = DiffusionImageWriter::New() ;
-    if( !nocompOn )
+  else
     {
-      writer->UseCompressionOn() ;
+      if (writeByte){
+	castBinaryFilterType::Pointer castFilter = castBinaryFilterType::New();
+	castFilter->SetInput(inputImage);
+	try {
+	  castFilter->Update();
+	}
+	catch (ExceptionObject & err) {
+	  cerr << "ExceptionObject caught!" << endl;
+	  cerr << err << endl;
+	  return EXIT_FAILURE;	
+	}
+	
+	BinaryVolumeWriterType::Pointer writer = BinaryVolumeWriterType::New();
+	if(!nocompOn)
+	  {
+	    writer->UseCompressionOn();
+	  }
+	writer->SetFileName(outFileName.c_str()); 
+	writer->SetInput(castFilter->GetOutput());
+	writer->Write();
+      } else if (writeFloat) {
+	VolumeWriterType::Pointer writer = VolumeWriterType::New();
+	if(!nocompOn)
+	  {
+	    writer->UseCompressionOn();
+	  }
+	writer->SetFileName(outFileName.c_str()); 
+	writer->SetInput(inputImage);
+	writer->Write();
+      } else {
+	castShortFilterType::Pointer castFilter = castShortFilterType::New();
+	castFilter->SetInput(inputImage);
+	try
+	  {
+	    castFilter->Update();
+	  }
+	catch (ExceptionObject & err)
+	  {
+	    cerr << "ExceptionObject caught!" << endl;
+	    cerr << err << endl;
+	    return EXIT_FAILURE;	
+	  }
+	
+	ShortVolumeWriterType::Pointer writer = ShortVolumeWriterType::New();
+	writer->SetFileName(outFileName.c_str()); 
+	if(!nocompOn)
+	  {
+	    writer->UseCompressionOn();
+	  }
+	writer->SetInput(castFilter->GetOutput());
+	writer->Write();
+      }
     }
-    writer->SetFileName( outFileName.c_str() ); 
-    writer->SetInput( outputDiffusionImage ) ;
-    try
-    {
-      writer->Write() ;
-    }
-    catch( ExceptionObject & err )
-    {
-      cerr << "ExceptionObject caught!" << endl ;
-      cerr << err << endl ;
-      return EXIT_FAILURE ;
-    }
-
-}
-else
-{
-  if (writeByte){
-    castBinaryFilterType::Pointer castFilter = castBinaryFilterType::New();
-    castFilter->SetInput(inputImage);
-    try {
-      castFilter->Update();
-    }
-    catch (ExceptionObject & err) {
-      cerr << "ExceptionObject caught!" << endl;
-      cerr << err << endl;
-      return EXIT_FAILURE;	
-    }
-    
-    BinaryVolumeWriterType::Pointer writer = BinaryVolumeWriterType::New();
-    if(!nocompOn)
-    {
-      writer->UseCompressionOn();
-    }
-    writer->SetFileName(outFileName.c_str()); 
-    writer->SetInput(castFilter->GetOutput());
-    writer->Write();
-  } else if (writeFloat) {
-    VolumeWriterType::Pointer writer = VolumeWriterType::New();
-    if(!nocompOn)
-    {
-      writer->UseCompressionOn();
-    }
-    writer->SetFileName(outFileName.c_str()); 
-    writer->SetInput(inputImage);
-    writer->Write();
-  } else {
-    castShortFilterType::Pointer castFilter = castShortFilterType::New();
-    castFilter->SetInput(inputImage);
-    try
-    {
-      castFilter->Update();
-    }
-    catch (ExceptionObject & err)
-    {
-      cerr << "ExceptionObject caught!" << endl;
-      cerr << err << endl;
-      return EXIT_FAILURE;	
-    }
-    
-    ShortVolumeWriterType::Pointer writer = ShortVolumeWriterType::New();
-    writer->SetFileName(outFileName.c_str()); 
-    if(!nocompOn)
-    {
-      writer->UseCompressionOn();
-    }
-    writer->SetInput(castFilter->GetOutput());
-    writer->Write();
-  }
-}
   return EXIT_SUCCESS;
 }
