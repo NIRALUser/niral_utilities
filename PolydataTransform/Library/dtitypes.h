@@ -5,12 +5,9 @@
 #include <itkImage.h>
 #include <itkVectorContainer.h>
 #include <itkVector.h>
-#include <itkCovariantVector.h>
 #include <itkDiffusionTensor3D.h>
 #include <itkAffineTransform.h>
 #include <itkDTITubeSpatialObject.h>
-#include <itkGroupSpatialObject.h>
-#include <itkRGBPixel.h>
 #include <itkVectorImage.h>
 
 // VNL Includes
@@ -26,18 +23,15 @@ const unsigned int DIM = 3;
 typedef unsigned short ScalarPixelType;
 typedef itk::DiffusionTensor3D<double> TensorPixelType;
 typedef itk::Vector<double,3> DeformationPixelType;
-typedef itk::CovariantVector<double,3> GradientPixelType;
 
 typedef itk::VectorImage<ScalarPixelType, DIM> VectorImageType;
 typedef itk::Image<TensorPixelType, DIM> TensorImageType;
 
 typedef itk::Image<DeformationPixelType, DIM> DeformationImageType;
-typedef itk::Image<GradientPixelType, DIM> GradientImageType;
 
 typedef itk::Image<RealType, DIM> RealImageType;
 typedef itk::Image<ScalarPixelType, DIM> IntImageType;
-typedef itk::Image<LabelType, DIM> LabelImageType;
-typedef itk::Image<itk::RGBPixel<unsigned char>,3> RGBImageType;
+
 
 typedef TensorImageType::SizeType ImageSizeType;
 typedef TensorImageType::SpacingType ImageSpacingType;
@@ -56,7 +50,5 @@ typedef itk::DTITubeSpatialObject<3> DTITubeType;
 typedef DTITubeType::TubePointType DTIPointType;
 typedef DTITubeType::PointListType DTIPointListType;
 
-typedef itk::GroupSpatialObject<3> GroupType;
-typedef GroupType::ChildrenListType ChildrenListType;
 
 #endif
