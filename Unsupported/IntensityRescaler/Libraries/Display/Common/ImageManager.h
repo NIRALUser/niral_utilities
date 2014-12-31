@@ -22,7 +22,7 @@ class ImageManager
       typedef typename ImageType::SpacingType SpacingType;
 
   ImageManager();
-  ~ImageManager(); 
+  ~ImageManager();
 
   void SetSourceImage(ImageType* image);
   void SetTargetImage(ImageType* image);

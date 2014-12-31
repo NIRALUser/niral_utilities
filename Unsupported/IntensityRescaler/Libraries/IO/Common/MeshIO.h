@@ -12,7 +12,7 @@
 
 class MeshIO
 {
- public: 
+ public:
   MeshIO () ;
   ~MeshIO () ;
 
@@ -24,9 +24,9 @@ class MeshIO
   vtkFloatArray *GetAttributes ()
     {
       return this->m_attributes ;
-    } 
+    }
 
-  vtkPolyData *GetMesh () 
+  vtkPolyData *GetMesh ()
     {
       vtkPolyData *result = vtkPolyData::New () ;
       result->DeepCopy ( m_mesh ) ;

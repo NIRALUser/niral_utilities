@@ -1,17 +1,17 @@
-#ifndef _matMacro_H 
-#define _matMacro_H 
+#ifndef _matMacro_H
+#define _matMacro_H
 
 #define matSetMacro(name,type) \
   type m_##name; \
     virtual void Set##name (type _arg) \
 { \
     this->m_##name = _arg; \
-} 
+}
 
 #define matGetMacro(name,type) \
     virtual type Get##name () const { \
     return this->m_##name; \
-} 
+}
 
 #define matSetFilterMacro(caption,name,type,defaultparam) \
   m_param.param = #name ; \
@@ -33,4 +33,4 @@
 
 #define ABS(x) (((x) > 0) ? (x) : (-1*(x)))
 
-#endif 
+#endif

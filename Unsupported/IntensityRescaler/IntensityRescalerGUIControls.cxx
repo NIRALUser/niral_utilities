@@ -6,7 +6,7 @@
 #include "Vector2D.h"
 #include <qmessagebox.h>
 #include "FunctionPlot2DBox.h"
-  
+
 #define _DEBUG false
 
 IntensityRescalerGUIControls::IntensityRescalerGUIControls( QWidget* parent,  const char* name, WFlags fl )
@@ -26,12 +26,12 @@ IntensityRescalerGUIControls::IntensityRescalerGUIControls( QWidget* parent,  co
   g_Window2DY->SetSlider(g_SliderY);
   g_Window2DY->SetLabel(g_LabelY);
   g_Window2DY->SetId(1);
-  
+
   g_Window2DZ->SetManager(m_imagemanager);
   g_Window2DZ->SetSlider(g_SliderZ);
   g_Window2DZ->SetLabel(g_LabelZ);
   g_Window2DZ->SetId(2);
-  
+
   m_intensitycurve = IntensityCurveVTK::New();
   m_intensitycurve->Initialize(5);
   g_intensitycurve->SetCurve(m_intensitycurve);
@@ -54,7 +54,7 @@ IntensityRescalerGUIControls::~IntensityRescalerGUIControls()
 
 void IntensityRescalerGUIControls::LoadImg()
 {
-  QtImageLoader<PixelType> * m_loader = new QtImageLoader<PixelType>();  
+  QtImageLoader<PixelType> * m_loader = new QtImageLoader<PixelType>();
   ImageType::Pointer m_inputimage = m_loader->GetOutput();
   g_LoadImg->setDown(false);
   if (m_inputimage.IsNull()) return;
@@ -105,7 +105,7 @@ void IntensityRescalerGUIControls::LoadSeg()
 
 void IntensityRescalerGUIControls::UnloadImage()
 {
-  m_SourceImage.erase(m_SourceImage.begin() + g_image->currentItem()); 
+  m_SourceImage.erase(m_SourceImage.begin() + g_image->currentItem());
 
   if (g_targetimage->currentItem() == g_image->currentItem()+1);
   {
@@ -122,12 +122,12 @@ void IntensityRescalerGUIControls::UnloadImage()
   g_targetimage->removeItem(g_image->currentItem()+1);
   g_sourceimage->removeItem(g_image->currentItem()+1);
   g_image->removeItem(g_image->currentItem());
-}     
+}
 
 void IntensityRescalerGUIControls::UnloadOverlay()
 {
-  m_SourceOverlay.erase(m_SourceOverlay.begin() + g_overlay->currentItem()); 
-  
+  m_SourceOverlay.erase(m_SourceOverlay.begin() + g_overlay->currentItem());
+
   if (g_targetoverlay->currentItem() == g_overlay->currentItem()+1);
   {
     SelectTargetOverlay(0);
@@ -139,11 +139,11 @@ void IntensityRescalerGUIControls::UnloadOverlay()
     SelectSourceOverlay(0);
     g_sourceoverlay->setCurrentItem(0);
   }
-  
+
   g_targetoverlay->removeItem(g_overlay->currentItem()+1);
   g_sourceoverlay->removeItem(g_overlay->currentItem()+1);
   g_overlay->removeItem(g_overlay->currentItem());
-}     
+}
 
 
 void IntensityRescalerGUIControls::ChangeSliceX(int value)
@@ -168,7 +168,7 @@ void IntensityRescalerGUIControls::IntensityMouseMove()
 
   double t = 0.0;
   double tStep = 1.0f / m_max2;
-  
+
   for (int i=0;i<=m_max2;i++)
   {
     m_correspondingarray[i] = (int)(m_intensitycurve->Evaluate(t)*m_max2);
@@ -192,7 +192,7 @@ void IntensityRescalerGUIControls::SelectTargetImage(int value)
     ImagePointer m_inputimage = m_SourceImage[value-1];
     m_imagemanager->SetSourceImage(m_inputimage);
     m_image1 = m_inputimage;
-    if (m_image2) 
+    if (m_image2)
       m_imagemanager->ChangeAlpha(50);
     else
      m_imagemanager->ChangeAlpha(100);
@@ -214,12 +214,12 @@ void IntensityRescalerGUIControls::SelectSourceImage(int value)
     typedef MinimumMaximumImageCalculator<ImageType> CalculatorType;
     CalculatorType::Pointer calculator = CalculatorType::New();
     calculator->SetImage( m_image2 );
-    calculator->Compute();     
+    calculator->Compute();
     m_min2 = calculator->GetMinimum();
     m_max2 = calculator->GetMaximum();
     if (m_correspondingarray) delete m_correspondingarray;
       m_correspondingarray = new int[m_max2+1];
-    if (m_image1) 
+    if (m_image1)
       m_imagemanager->ChangeAlpha(50);
     else
      m_imagemanager->ChangeAlpha(0);
@@ -282,27 +282,27 @@ void IntensityRescalerGUIControls::ChangeImageOverlay(int value)
 
 void IntensityRescalerGUIControls::Compute()
 {
-  if (m_image1.IsNull()) 
+  if (m_image1.IsNull())
   {
-    QMessageBox::information( this, "IntensityRescaler (Qt)","No target image");  
+    QMessageBox::information( this, "IntensityRescaler (Qt)","No target image");
     g_compute->setDown(false);
     return;
   }
-  if (m_image2.IsNull()) 
+  if (m_image2.IsNull())
   {
-    QMessageBox::information( this, "IntensityRescaler (Qt)","No source image");  
-    g_compute->setDown(false);
-    return;
-  }  
-  if (m_overlay1.IsNull()) 
-  {
-    QMessageBox::information( this, "IntensityRescaler (Qt)","No target segmentation");  
+    QMessageBox::information( this, "IntensityRescaler (Qt)","No source image");
     g_compute->setDown(false);
     return;
   }
-  if (m_overlay2.IsNull()) 
+  if (m_overlay1.IsNull())
   {
-    QMessageBox::information( this, "IntensityRescaler (Qt)","No source segmentation");  
+    QMessageBox::information( this, "IntensityRescaler (Qt)","No target segmentation");
+    g_compute->setDown(false);
+    return;
+  }
+  if (m_overlay2.IsNull())
+  {
+    QMessageBox::information( this, "IntensityRescaler (Qt)","No source segmentation");
     g_compute->setDown(false);
     return;
   }
@@ -332,7 +332,7 @@ void IntensityRescalerGUIControls::Compute()
 
     item = (QCheckListItem*)item->nextSibling();
   }
-  
+
   if (g_targetwindowing->isChecked())
   {
     //Compute Mean values for target
@@ -341,7 +341,7 @@ void IntensityRescalerGUIControls::Compute()
     //Intensity Windowing for target
     m_targetrescaled = m_imageIntensityNormalizer->TargetIntensityWindowing(m_image1,*m_vectorlist,sigma,&newmax);
     m_imagemanager->SetSourceImage(m_targetrescaled);
-    
+
     //Update Combo Box
     g_targetimage->insertItem(g_targetimage->currentText()+ "-rescaled");
     g_targetimage->setCurrentItem(g_targetimage->count()-1);
@@ -381,7 +381,7 @@ void IntensityRescalerGUIControls::Compute()
 
   //Update IntensityCurve
   if (g_classematching->isChecked())
-  {  
+  {
     //Update Values
     ImagePointer m_image;
     ImagePointer m_imagetemp;
@@ -389,7 +389,7 @@ void IntensityRescalerGUIControls::Compute()
 
     double m_error = 99998;
     double m_previouserror = 99999;
-    
+
     m_vectorlist = m_imageIntensityNormalizer->ComputeMean(m_image1,m_overlay1);
     m_vectorlist2 = m_imageIntensityNormalizer->ComputeMean(m_image2,m_overlay2);
 
@@ -398,17 +398,17 @@ void IntensityRescalerGUIControls::Compute()
 
     if (_DEBUG)  std::cout << "Vector Size: " << m_vectorlist2->size() <<std::endl;
     m_intensitycurve->Initialize(m_vectorlist2->size()+2);
-    
+
     int offset=1;
     for (int i=0;i<(int) m_vectorlist2->size();i++)
     {
-      m_intensitycurve->UpdateControlPoint(offset,(*sourceit)[1]/newmax,(*targetit)[1]/newmax);  
+      m_intensitycurve->UpdateControlPoint(offset,(*sourceit)[1]/newmax,(*targetit)[1]/newmax);
       if (_DEBUG)  std::cout << "Update: " <<  (*sourceit)[1] << " -> " << (*targetit)[1] <<std::endl;
       sourceit++;
       targetit++;
       offset++;
-    }  
-  
+    }
+
     while (m_error < m_previouserror)
     {
 
@@ -439,7 +439,7 @@ void IntensityRescalerGUIControls::Compute()
       while (targetit != m_vectorlist->end())
       {
         m_errorSum += (((*targetit)[1]) - ((*sourceit)[1])) * (((*targetit)[1]) - ((*sourceit)[1]));
-        m_intensitycurve->UpdateControlPoint(offset,(*sourceit)[1]/newmax,(*targetit)[1]/newmax);  
+        m_intensitycurve->UpdateControlPoint(offset,(*sourceit)[1]/newmax,(*targetit)[1]/newmax);
         offset++;
         targetit++;
         sourceit++;
@@ -449,7 +449,7 @@ void IntensityRescalerGUIControls::Compute()
       m_error = sqrt(m_errorSum);
       if (_DEBUG)  std::cout << "Error: " << m_error <<std::endl;
     }
-      
+
     //Update Combo Box
     g_targetimage->insertItem(g_sourceimage->currentText()+ "-rescaled");
     g_sourceimage->insertItem(g_sourceimage->currentText()+ "-rescaled");
@@ -459,7 +459,7 @@ void IntensityRescalerGUIControls::Compute()
   }
 
 
-  
+
 
 }
 
@@ -471,14 +471,14 @@ void IntensityRescalerGUIControls::Batch()
 
 
 void IntensityRescalerGUIControls::ShowHistoSource()
-{  
+{
   HistoGUI* m_histogui = new HistoGUI(0);
   //Compute Histogramm
   int* histo;
   int maxx,maxy;
 
   histo = ComputeHistogram(m_image2,&maxx,&maxy);
-  
+
 
   //int m_nbPoint = 256;
   float* x = new float[maxx];
@@ -501,12 +501,12 @@ void IntensityRescalerGUIControls::ShowHistoSource()
   //Add mean
     std::vector<int> m_labellist = m_imageIntensityNormalizer->ListLabel(m_overlay2);
   m_imageIntensityNormalizer->SetLabelList(m_labellist);
-  
+
   ImageIntensityNormalizer::VectorList* m_vectorlist;
   m_vectorlist = m_imageIntensityNormalizer->ComputeMean(m_image2,m_overlay2);
   if (_DEBUG)  std::cout << "Mean ---" <<m_vectorlist->size() << std::endl;
 
-  
+
 
 
   for (ImageIntensityNormalizer::VectorList::iterator j = m_vectorlist->begin(); j != m_vectorlist->end(); j++)
@@ -528,7 +528,7 @@ void IntensityRescalerGUIControls::ShowHistoTarget()
   int maxx,maxy;
 
   histo = ComputeHistogram(m_image1,&maxx,&maxy);
-  
+
 
   //int m_nbPoint = 256;
   float* x = new float[maxx];
@@ -548,7 +548,7 @@ void IntensityRescalerGUIControls::ShowHistoTarget()
 
   //Add distribution
   std::vector<int> m_labellist = m_imageIntensityNormalizer->ListLabel(m_overlay1);
-  
+
   for (int k=0;k<(int)m_labellist.size();k++)
   {
     if (_DEBUG) std::cout << "Compute distibution label for k=" << k << std::endl;
@@ -572,12 +572,12 @@ void IntensityRescalerGUIControls::ShowHistoTarget()
   //Add mean
 //  std::vector<int> m_labellist = m_imageIntensityNormalizer->ListLabel(m_overlay1);
   m_imageIntensityNormalizer->SetLabelList(m_labellist);
-  
+
   ImageIntensityNormalizer::VectorList* m_vectorlist;
   m_vectorlist = m_imageIntensityNormalizer->ComputeMean(m_image1,m_overlay1);
   //std::cout << "Mean ---" <<m_vectorlist->size() << std::endl;
 
-  
+
 
 
   for (ImageIntensityNormalizer::VectorList::iterator j = m_vectorlist->begin(); j != m_vectorlist->end(); j++)
@@ -588,7 +588,7 @@ void IntensityRescalerGUIControls::ShowHistoTarget()
     m_histogui->Plot1->GetPlotter().AddMean((*j)[1]+3*(*j)[2]);
   }
 
-  m_histogui->show();  
+  m_histogui->show();
 }
 
 
@@ -599,14 +599,14 @@ int* IntensityRescalerGUIControls::ComputeHistogram(ImagePointer image,int* _max
 
   //Initialize m_histo
   for (int i=0;i<65535;i++)
-      m_histo[i] =0; 
+      m_histo[i] =0;
 
   int maxx = 0;
   int maxy = 0;
 
   IteratorType m_itimage(image,image->GetLargestPossibleRegion());
 //  ImageType::SizeType m_imagesize = (image->GetLargestPossibleRegion().GetSize());
-  
+
   m_itimage.GoToBegin();
   int val;
   while (!m_itimage.IsAtEnd())
@@ -616,7 +616,7 @@ int* IntensityRescalerGUIControls::ComputeHistogram(ImagePointer image,int* _max
     {
       if (val > maxx) maxx = val;
       m_histo[val] += m_itimage.Get();
-  
+
       if(m_histo[val]>maxy) maxy=m_histo[val];
     }
     ++m_itimage;
@@ -635,19 +635,19 @@ int* IntensityRescalerGUIControls::ComputeDistribution(ImagePointer image,ImageP
 
   //Initialize m_histo
   for (int i=0;i<65535;i++)
-      m_histo[i] =0; 
+      m_histo[i] =0;
 
   int maxx = 0;
   int maxy = 0;
 
   IteratorType m_itimage(image,image->GetLargestPossibleRegion());
   IteratorType m_itseg(seg,seg->GetLargestPossibleRegion());
-  
-    
+
+
   if (_DEBUG)  std::cout << "Compute distibution label for label" << label << std::endl;
-  
+
   m_itimage.GoToBegin();
-  m_itseg.GoToBegin();  
+  m_itseg.GoToBegin();
   int val;
   while (!m_itimage.IsAtEnd())
   {
@@ -656,7 +656,7 @@ int* IntensityRescalerGUIControls::ComputeDistribution(ImagePointer image,ImageP
       val = (int)m_itimage.Get();
       if (val > maxx) maxx = val;
       m_histo[val] += m_itimage.Get();
-  
+
       if(m_histo[val]>maxy) maxy=m_histo[val];
     }
 
@@ -673,7 +673,7 @@ int* IntensityRescalerGUIControls::ComputeDistribution(ImagePointer image,ImageP
 
 void IntensityRescalerGUIControls::SaveImage()
 {
-  QtImageWriter<PixelType> * m_writer = new QtImageWriter<PixelType>(g_image->currentText()+".gipl");  
-  m_writer->SetInput(m_SourceImage[g_image->currentItem()]);  
+  QtImageWriter<PixelType> * m_writer = new QtImageWriter<PixelType>(g_image->currentText()+".gipl");
+  m_writer->SetInput(m_SourceImage[g_image->currentItem()]);
   m_writer->Write();
 }

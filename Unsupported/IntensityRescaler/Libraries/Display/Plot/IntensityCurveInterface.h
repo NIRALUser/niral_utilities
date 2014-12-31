@@ -8,8 +8,8 @@
   Copyright (c) 2003 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #ifndef __IntensityCurveInterface_h_
@@ -42,7 +42,7 @@ public:
   /**
    * Get the value of a control point
    */
-  virtual void GetControlPoint(unsigned int iControlPoint, 
+  virtual void GetControlPoint(unsigned int iControlPoint,
     float &t, float &x) const = 0;
 
   /**
@@ -53,13 +53,13 @@ public:
   /**
    * Update the value of a control point
    */
-  virtual void UpdateControlPoint(unsigned int iControlPoint, 
+  virtual void UpdateControlPoint(unsigned int iControlPoint,
     float t, float x) = 0;
 
   /**
-   * This method linearly maps the t-values of all the control points to 
-   * the range between tMin and tMax.  It's used for intensity windowing 
-   * where we want to adjust the domain of the curve without changing its 
+   * This method linearly maps the t-values of all the control points to
+   * the range between tMin and tMax.  It's used for intensity windowing
+   * where we want to adjust the domain of the curve without changing its
    * shape
    */
   virtual void ScaleControlPointsToWindow(float tMin, float tMax) = 0;

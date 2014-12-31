@@ -10,8 +10,8 @@
   Copyright (c) 2005 NeuroImaging Lab @ UNC. All rights reserved.
   See NeuroLibCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,9 +28,9 @@
 #include <vector>
 
 class QtDisclaimer : public QtDisclaimerGUI, public Disclaimer
-{ 
+{
 public:
-    
+
   QtDisclaimer( QWidget* parent = 0, const char* name = 0, bool modal= true, WFlags fl = 0 );
   ~QtDisclaimer();
 

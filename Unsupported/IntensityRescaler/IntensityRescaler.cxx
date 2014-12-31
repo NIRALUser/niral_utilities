@@ -7,8 +7,8 @@
 #include <qfiledialog.h>
 #include <qapplication.h>
 #include <qplatinumstyle.h>
-  
-int main( int argc, char* argv[] ) 
+
+int main( int argc, char* argv[] )
 {
   if ((argc==2) && (!strcmp(argv[1],"-version")))
   {
@@ -19,7 +19,7 @@ int main( int argc, char* argv[] )
   if (argc < 2)
   {
     QApplication myApp( argc, argv );
-    
+
     IntensityRescalerGUIControls m_GUI( 0, 0, TRUE );
       myApp.setMainWidget(&m_GUI);
 
@@ -43,14 +43,14 @@ int main( int argc, char* argv[] )
        }
        else
        {
-         m_commandline.Create("IRescalerExample.irs"); 
+         m_commandline.Create("IRescalerExample.irs");
        }
      }
      else
      if ((argc>2) && ((!strcmp(argv[1],"-input")) || (!strcmp(argv[1],"-i"))))
      {
        m_commandline.Load(argv[2]);
-       
+
        if ((argc==4) && (!strcmp(argv[3],"-v")))
        {
          m_commandline.DisplayOptions();

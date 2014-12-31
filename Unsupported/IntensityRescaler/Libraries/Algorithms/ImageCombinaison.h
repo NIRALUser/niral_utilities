@@ -11,7 +11,7 @@ class ImageCombinaison
 public:
   ImageCombinaison();
   ~ImageCombinaison();
-  
+
   typedef float								PixelType;
   typedef itk::Image< PixelType,  3 >			ImageType;
   typedef ImageType::Pointer					ImagePointer;

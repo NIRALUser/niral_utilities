@@ -8,8 +8,8 @@
   Copyright (c) 2003 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #ifndef __GenericSliceWindow_h_
@@ -29,7 +29,7 @@
 class IRISApplication;
 class IRISImageData;
 class GlobalState;
-class UserInterfaceLogic;  
+class UserInterfaceLogic;
 
 // Forward references to interaction modes that work with this window
 class CrosshairsInteractionMode;
@@ -50,17 +50,17 @@ template <class TPixel> class OpenGLSliceTexture;
  * display and management, and for interaction mode plugins.
  *
  * The generic window supports two types of interaction modes: crosshairs mode
- * and zoom/pan mode.  
+ * and zoom/pan mode.
  */
 class GenericSliceWindow : public FLTKCanvas
 {
 public:
-  
+
   GenericSliceWindow(int x,int y,int w,int h,const char *l=0);
   virtual ~GenericSliceWindow();
 
   /**
-   * Register the window with its parent UI.  This method assigns an Id to 
+   * Register the window with its parent UI.  This method assigns an Id to
    * the window, which is equal to the coordinate direction in display space
    * along which the window displays slices.
    */
@@ -68,7 +68,7 @@ public:
 
   /** Enter the cross-hairs mode of operation */
   virtual void EnterCrosshairsMode();
-  
+
   /** Enter the zoom/pan mode of operation */
   virtual void EnterZoomPanMode();
 
@@ -87,19 +87,19 @@ public:
 
   /** The FLTK draw method (paints the window) */
   void draw();
-  
+
   /**
    * Map a point in window coordinates to a point in slice coordinates
    * (Window coordinates are the ones stored in FLTKEvent.xSpace)
    */
-  Vector3f MapWindowToSlice(const Vector2f &xWindow); 
-  
+  Vector3f MapWindowToSlice(const Vector2f &xWindow);
+
   /**
    * Map a point in slice coordinates to a point in window coordinates
    * (Window coordinates are the ones stored in FLTKEvent.xSpace)
    */
   Vector2f MapSliceToWindow(const Vector3f &xSlice);
-  
+
   /**
    * Map a point in slice coordinates to a point in the image coordinates
    */
@@ -138,8 +138,8 @@ public:
   public:
     EventHandler(GenericSliceWindow *parent) {
       m_Parent = parent;
-    }    
-    void Register() 
+    }
+    void Register()
     {
       m_Driver = m_Parent->m_Driver;
       m_ParentUI = m_Parent->m_ParentUI;
@@ -170,7 +170,7 @@ protected:
   GlobalState *m_GlobalState;
 
   /** Pointer to GUI that contains this Window3D object */
-  UserInterfaceLogic *m_ParentUI;   
+  UserInterfaceLogic *m_ParentUI;
 
   /** The image data object that is displayed in this window */
   IRISImageData *m_ImageData;
@@ -188,17 +188,17 @@ protected:
   /** Whether or not we have been registered with the parent UI */
   bool m_IsRegistered;
 
-  /** 
-   * Whether or not the sizes have been initialized 
+  /**
+   * Whether or not the sizes have been initialized
    * (synched with the image data)
    */
   bool m_IsSliceInitialized;
 
   // Window id, equal to the direction in display space along which the window
   // shows slices
-  int m_Id;       
+  int m_Id;
 
-  // Current slice number in image coordinates 
+  // Current slice number in image coordinates
   int m_ImageSliceIndex;
 
   // The position of the slice on its z-axis, in the display coordinate space
@@ -206,30 +206,30 @@ protected:
 
   // The index of the image space axes corresponding to the u,v,w of the window
   // (computed by applying a transform to the DisplayAxes)
-  int m_ImageAxes[3]; 
+  int m_ImageAxes[3];
 
   // The transform from image coordinates to display coordinates
   ImageCoordinateTransform m_ImageToDisplayTransform;
-  
+
   // The transform from display coordinates to image coordinates
   ImageCoordinateTransform m_DisplayToImageTransform;
 
   // The transform from display coordinates to patient coordinates
   ImageCoordinateTransform m_DisplayToAnatomyTransform;
-  
+
   // Dimensions of the current slice (the third component is the size of the
   // image in the slice direction)
-  Vector3i m_SliceSize;             
+  Vector3i m_SliceSize;
 
   // Pixel dimensions for the slice.  (the thirs component is the pixel width
   // in the slice direction)
   Vector3f m_SliceSpacing;
-  
+
   // Position of visible window in slice space coordinates
-  Vector2f m_ViewPosition;            
+  Vector2f m_ViewPosition;
 
   // The number of screen pixels per mm of image
-  float m_ViewZoom;  
+  float m_ViewZoom;
 
   // The zoom level at which the slice fits snugly into the window
   float m_OptimalZoom;
@@ -238,7 +238,7 @@ protected:
   // the SliceWindowCoordinator
   bool m_ManagedZoom;
 
-  // The default screen margin (area into which we do not paint) at lest in 
+  // The default screen margin (area into which we do not paint) at lest in
   // default zoom
   unsigned int m_Margin;
 
@@ -246,12 +246,12 @@ protected:
   typedef OpenGLSliceTexture<unsigned char> GreyTextureType;
   // Initialize the Grey slice texture
   m_GreyTexture = new GreyTextureType;
-  
-  
+
+
   // Label texture object typedefs
   typedef LabelImageWrapper::DisplayPixelType RGBAType;
   typedef OpenGLSliceTexture<RGBAType> LabelTextureType;
-    
+
   // Grey texture object
   GreyTextureType *m_GreyTexture;
 
@@ -272,7 +272,7 @@ protected:
 
   // Computes the zoom that gives the best fit for the window
   void ComputeOptimalZoom();
-  
+
   // This method is called in draw() to paint the grey slice
   virtual void DrawGreyTexture();
 

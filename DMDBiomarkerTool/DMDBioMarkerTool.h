@@ -1,17 +1,17 @@
 #define DARK_CALIB 100
-#define BRIGHT_CALIB 1000 
-#define EPSILON 0.1 
+#define BRIGHT_CALIB 1000
+#define EPSILON 0.1
 /*
 //6 muscles
 #define REC_FEM 1
 #define SEMIT 4
 #define CRAN_SART 5
 #define BIC_FEM 2
-#define ADDUCTOR 3 
+#define ADDUCTOR 3
 #define GRACILIS 6
 #define SEMI_MEM 7
 #define VAS_LAT 8
-#define VAS_MED 10 
+#define VAS_MED 10
 #define VAS_INT 9
 #define CAUD_SART 11
 */
@@ -32,8 +32,8 @@
 #define NUMBER_OF_MUSCLE 11
 #define TRUE 1
 #define FALSE 0
-#define T2FIT 
-#define SEG_INTERPOLATE 
+#define T2FIT
+#define SEG_INTERPOLATE
 #define false 0
 #define true !false
 #define progtitle    "POLYFIT"

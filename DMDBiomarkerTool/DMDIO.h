@@ -10,8 +10,8 @@
  * Update  :   1. Created the base class (06-04-10)
  * Copyright (c) Nero Image Research and Analysis Lab.@UNC All rights reserved.
  *
- * This software is distributed WITHOUT ANY WARRANTY; without even 
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * This software is distributed WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE.
  *
 =========================================================================*/
@@ -28,5 +28,5 @@ class DMDIO : public DMDBase
 	  //  const unsigned int                                      Dimension = 3;
 	  //  typedef itk::OrientedImage< PixelType, 3 >              ImageType;
 	}
-    
+
 };

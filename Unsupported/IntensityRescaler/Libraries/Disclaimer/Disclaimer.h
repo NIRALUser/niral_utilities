@@ -10,8 +10,8 @@
   Copyright (c) 2005 NeuroImaging Lab @ UNC. All rights reserved.
   See NeuroLibCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,10 +27,10 @@
 #include <vector>
 #include <string>
 
-class Disclaimer 
-{ 
+class Disclaimer
+{
 public:
-    
+
   Disclaimer();
   virtual ~Disclaimer();
 

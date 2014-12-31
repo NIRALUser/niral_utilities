@@ -11,7 +11,7 @@
 namespace itk
 {
 /** \class TransformDeformationFieldFilter
- * 
+ *
  * Resample diffusion tensor images
  * A transformation and a interpolation have to be set
  */

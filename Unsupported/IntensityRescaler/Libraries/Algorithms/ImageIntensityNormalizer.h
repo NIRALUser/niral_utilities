@@ -1,7 +1,7 @@
 #ifndef __ImageIntensityNormalizer_h_
 #define __ImageIntensityNormalizer_h_
 
-  
+
 
 #include "itkImage.h"
 #include "itkImageFileReader.h"
@@ -18,7 +18,7 @@ class ImageIntensityNormalizer
 public:
   ImageIntensityNormalizer();
   ~ImageIntensityNormalizer();
-  
+
   typedef unsigned short            PixelType;
   typedef itk::Image< PixelType,  3 >      ImageType;
   typedef itk::ImageFileReader< ImageType  >  ReaderType;
@@ -52,7 +52,7 @@ public:
   ImagePointer IntensityWindowing(ImagePointer image,VectorList& m_vectorlist,double sigma,double newmax);
   ImagePointer IntensityWindowing(ImagePointer image,double max,double _newmax);
   ImagePointer IntensityWindowing(ImagePointer image,double inmin,double inmax, double outmin,double outmax);
-  
+
   ImagePointer TargetIntensityWindowing(ImagePointer image,VectorList& m_vectorlist,double sigma,double* _newmax);
   ImagePointer AdjustClasses(ImagePointer target,ImagePointer targetseg,ImagePointer source, ImagePointer sourceseg);
   ImagePointer Normalize(ImagePointer image,int* m_correspondingarray);

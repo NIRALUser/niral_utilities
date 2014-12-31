@@ -10,8 +10,8 @@
  * Update  :   1. Created the base class (06-04-10)
  * Copyright (c) Nero Image Research and Analysis Lab.@UNC All rights reserved.
  *
- * This software is distributed WITHOUT ANY WARRANTY; without even 
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * This software is distributed WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE.
  *
 =========================================================================*/
@@ -20,15 +20,15 @@
 
 class DMDBase {
     private:
-  
+
     public:
         const unsigned int                                          Dimension;
 	typedef float                                               PixelType;
-        DMDBase( int d ) : Dimension(3)    //  use a member initialization list to initialize a data member 
-	{                       
+        DMDBase( int d ) : Dimension(3)    //  use a member initialization list to initialize a data member
+	{
 	  //    typedef float                                           PixelType;
-	    //            typedef itk::OrientedImage< PixelType, Dimension>       ImageType;   
+	    //            typedef itk::OrientedImage< PixelType, Dimension>       ImageType;
 	}
 };
 
-      
+

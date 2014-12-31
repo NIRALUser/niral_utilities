@@ -8,5 +8,5 @@ public:
   virtual void Accept() = 0;
   virtual void Reject() = 0;
 };
-  
+
 #endif

@@ -1,7 +1,7 @@
 #include "IntensityRescalerCommandLine.h"
 
 #define QT_ALTERNATE_QTSMANIP
-  
+
 #include <qtextstream.h>
 #include <iostream>
 #include <qfile.h>
@@ -24,7 +24,7 @@ IntensityRescalerCommandLine::IntensityRescalerCommandLine()
 }
 
 IntensityRescalerCommandLine::~IntensityRescalerCommandLine()
-{ 
+{
 }
 
 
@@ -38,70 +38,70 @@ void IntensityRescalerCommandLine::Create(QString filename)
   {
      std::ofstream m_file;
       m_file.open(filename.latin1(),std::ofstream::binary);
-     m_file << "# Example script for Intensity Rescaler" << std::endl; 
-     m_file << std::endl; 
-     m_file << "# Target image: One image which is the reference" << std::endl; 
-     m_file << "Target=/compute/target.gipl" << std::endl; 
+     m_file << "# Example script for Intensity Rescaler" << std::endl;
      m_file << std::endl;
-     m_file << "# Target segmentation image: EM Segmentation of the target image" << std::endl; 
-     m_file << "TargetEMS=/compute/EMS-target.gipl" << std::endl; 
-     m_file << std::endl;   
+     m_file << "# Target image: One image which is the reference" << std::endl;
+     m_file << "Target=/compute/target.gipl" << std::endl;
+     m_file << std::endl;
+     m_file << "# Target segmentation image: EM Segmentation of the target image" << std::endl;
+     m_file << "TargetEMS=/compute/EMS-target.gipl" << std::endl;
+     m_file << std::endl;
 
-     m_file << "# Source image(s): Image(s) to be intensity rescaled base on reference image" << std::endl; 
-     m_file << "# Source segmentation image(s): EM Segmentation image(s)" << std::endl;  
+     m_file << "# Source image(s): Image(s) to be intensity rescaled base on reference image" << std::endl;
+     m_file << "# Source segmentation image(s): EM Segmentation image(s)" << std::endl;
      m_file << "Source=/compute/source1.gipl" << std::endl;
      m_file << "SourceEMS=/compute/EMS-source1.gipl" << std::endl;
      m_file << "Source=/compute/source2.gipl" << std::endl;
      m_file << "SourceEMS=/compute/EMS-source2.gipl" << std::endl;
-     m_file << std::endl; 
+     m_file << std::endl;
 
-     m_file << "# Label List: Usually 1,2 and 3 are the labels for White, Gray and CSF pattern" << std::endl; 
-     m_file << "Label=1" << std::endl; 
-     m_file << "Label=2" << std::endl; 
-     m_file << "Label=3" << std::endl; 
-     m_file << std::endl; 
+     m_file << "# Label List: Usually 1,2 and 3 are the labels for White, Gray and CSF pattern" << std::endl;
+     m_file << "Label=1" << std::endl;
+     m_file << "Label=2" << std::endl;
+     m_file << "Label=3" << std::endl;
+     m_file << std::endl;
 
-     m_file << "# Target instensity windowing: Do you want to adjust min/max intensity of the target ? [ON/OFF]" << std::endl; 
-     m_file << "TargetWindowing=ON" << std::endl; 
-     m_file << std::endl; 
+     m_file << "# Target instensity windowing: Do you want to adjust min/max intensity of the target ? [ON/OFF]" << std::endl;
+     m_file << "TargetWindowing=ON" << std::endl;
+     m_file << std::endl;
 
-     m_file << "# Source instensity windowing: Do you want to adjust min/max intensity of source image(s) ? [ON/OFF]" << std::endl; 
-     m_file << "SourceWindowing=ON" << std::endl; 
-     m_file << std::endl; 
+     m_file << "# Source instensity windowing: Do you want to adjust min/max intensity of source image(s) ? [ON/OFF]" << std::endl;
+     m_file << "SourceWindowing=ON" << std::endl;
+     m_file << std::endl;
 
-     m_file << "# Class matching: Do you want to iteratively adjust classes ? [ON/OFF]" << std::endl; 
-     m_file << "ClassMatching=ON" << std::endl; 
-     m_file << std::endl; 
+     m_file << "# Class matching: Do you want to iteratively adjust classes ? [ON/OFF]" << std::endl;
+     m_file << "ClassMatching=ON" << std::endl;
+     m_file << std::endl;
 
-     m_file << "# Sigma for class matching: Standard deviation for min/max adjustment" << std::endl; 
-     m_file << "Sigma=3" << std::endl; 
-     m_file << std::endl; 
+     m_file << "# Sigma for class matching: Standard deviation for min/max adjustment" << std::endl;
+     m_file << "Sigma=3" << std::endl;
+     m_file << std::endl;
 
-     m_file << "# OutputSuffix: Suffix for output filename" << std::endl; 
-     m_file << "OutputSuffix=-irescaled" << std::endl; 
-     m_file << std::endl; 
+     m_file << "# OutputSuffix: Suffix for output filename" << std::endl;
+     m_file << "OutputSuffix=-irescaled" << std::endl;
+     m_file << std::endl;
 
-     m_file << "# OutputDir: Output Directory (Not necessary)" << std::endl; 
-     m_file << "# OutputDir=C:/IntensityRescaling" << std::endl; 
-     m_file << std::endl; 
+     m_file << "# OutputDir: Output Directory (Not necessary)" << std::endl;
+     m_file << "# OutputDir=C:/IntensityRescaling" << std::endl;
+     m_file << std::endl;
 
-     m_file << "# Intensity rescaler script end" << std::endl; 
-     m_file << std::endl; 
+     m_file << "# Intensity rescaler script end" << std::endl;
+     m_file << std::endl;
   }
 }
 
 void IntensityRescalerCommandLine::Load(QString filename)
 {
   QFile f(filename);
-  if ( f.open(IO_ReadOnly) ) 
-  {   
-    QTextStream t( &f );  
+  if ( f.open(IO_ReadOnly) )
+  {
+    QTextStream t( &f );
     QString s;
-    while (!t.eof()) 
-    {  
-      s = t.readLine(); 
-      s = s.stripWhiteSpace();            
-      if (!s.startsWith("#") && (s.length()>2)) 
+    while (!t.eof())
+    {
+      s = t.readLine();
+      s = s.stripWhiteSpace();
+      if (!s.startsWith("#") && (s.length()>2))
       {
         QString m_name = s.mid(0,s.find("="));
         m_name = m_name.stripWhiteSpace();
@@ -206,7 +206,7 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
   }
 
   if (m_source.size() == 0)
-  { 
+  {
     std::cerr << "Warning: No source images! Only target intensity windowing can be performed!" << std::endl;
   }
 
@@ -215,7 +215,7 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
 
   ImageIntensityNormalizer::ImagePointer m_image;
   ImageIntensityNormalizer::VectorList* m_vectorlist;
-  
+
   ImageIntensityNormalizer::ImagePointer m_sourceimg;
   ImageIntensityNormalizer::ImagePointer m_sourcesegimg;
   ImageIntensityNormalizer::ImagePointer m_targetimg;
@@ -248,7 +248,7 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
     //Intensity windowing
     m_targetimg = m_rescaler.TargetIntensityWindowing(m_targetimg,*m_vectorlist,m_sigma,&newmax);
     if (m_verbose) std::cout << " done!" << std::endl;
-    //Save target 
+    //Save target
 
     QString m_extension = m_target.mid(m_target.findRev("."));
     QString m_targetfilename = m_target.mid(0,m_target.findRev("."));
@@ -262,22 +262,22 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
       m_targetfilename = m_outputdir + "/" + m_targetfilename.mid(m_targetfilename.findRev("/")+1);
 
     QString m_classfilename = m_targetfilename + m_outputsuffix + "-class.txt";
-    m_targetfilename = m_targetfilename + m_outputsuffix + m_extension; 
+    m_targetfilename = m_targetfilename + m_outputsuffix + m_extension;
     if (m_verbose) std::cout << "Save target irescaled: " << m_targetfilename.latin1() << "...";
     m_rescaler.SaveImage(m_targetimg,m_targetfilename);
     if (m_verbose) std::cout << " done!" << std::endl;
 
     if (m_verbose) std::cout << "Save target class model info : " << m_classfilename.latin1() << " ...";
-      
+
     // recompute class means and write the model to disk
     m_vectorlist = m_rescaler.ComputeMax(m_targetimg,m_targetsegimg);
-    ofstream efile(m_classfilename.latin1(), ios::out);  
+    ofstream efile(m_classfilename.latin1(), ios::out);
     if (!efile) {
       cerr << "Error: open of file \"" << m_classfilename.latin1() << "\" failed." << endl;
       exit(-1);
     }
     for (unsigned int i = 0; i < m_vectorlist->size(); i++) {
-      efile << "class " << ((*m_vectorlist)[i])[0] << " " << ((*m_vectorlist)[i])[1] 
+      efile << "class " << ((*m_vectorlist)[i])[0] << " " << ((*m_vectorlist)[i])[1]
             << " " << ((*m_vectorlist)[i])[2] << endl;
     }
     efile.close();
@@ -289,14 +289,14 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
     CalculatorType::Pointer calculator  =  CalculatorType::New();
     calculator->SetImage(m_targetimg);
     calculator->Compute();
-    newmax = calculator->GetMaximum(); 
+    newmax = calculator->GetMaximum();
   }
 
-  
+
   for (unsigned int i=0;i<m_source.size();i++)
   {
     if (m_verbose) std::cout << "Processing source: " << m_source[i].latin1() << ": ";
-    m_sourceimg = m_rescaler.ReadImage(m_source[i].latin1()); 
+    m_sourceimg = m_rescaler.ReadImage(m_source[i].latin1());
     m_sourcesegimg = m_rescaler.ReadImage(m_sourceems[i].latin1());
 
     if (m_sourceimg.IsNull())
@@ -323,11 +323,11 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
       if (m_classmatching)
       {
         if (m_verbose) std::cout << "Source class matching ...";
-        m_sourceimg = m_rescaler.AdjustClasses(m_targetimg,m_targetsegimg,m_sourceimg,m_sourcesegimg);  
+        m_sourceimg = m_rescaler.AdjustClasses(m_targetimg,m_targetsegimg,m_sourceimg,m_sourcesegimg);
         if (m_verbose) std::cout << " done!" << std::endl;
       }
 
-   
+
       QString m_extension = m_source[i].mid(m_source[i].findRev("."));
       QString m_sourcefilename = m_source[i].mid(0,m_source[i].findRev("."));
 
@@ -340,23 +340,23 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
       if (m_outputdir.length() != 0)
         m_sourcefilename = m_outputdir + "/" + m_sourcefilename.mid(m_sourcefilename.findRev("/")+1);
 
-      QString m_classfilename = m_sourcefilename + m_outputsuffix + "-class.txt"; 
-      m_sourcefilename = m_sourcefilename + m_outputsuffix + m_extension; 
+      QString m_classfilename = m_sourcefilename + m_outputsuffix + "-class.txt";
+      m_sourcefilename = m_sourcefilename + m_outputsuffix + m_extension;
       if (m_verbose) std::cout << "Save source irescaled: " << m_sourcefilename.latin1() << " ...";
       m_rescaler.SaveImage(m_sourceimg,m_sourcefilename.latin1());
       if (m_verbose) std::cout << " done!" << std::endl;
 
       if (m_verbose) std::cout << "Save source class model info: " << m_classfilename.latin1() << " ...";
-      
+
       // recompute class means and write the model to disk
       m_vectorlist = m_rescaler.ComputeMax(m_sourceimg,m_sourcesegimg);
-      ofstream efile(m_classfilename.latin1(), ios::out);  
+      ofstream efile(m_classfilename.latin1(), ios::out);
       if (!efile) {
         cerr << "Error: open of file \"" << m_classfilename.latin1() << "\" failed." << endl;
         exit(-1);
       }
       for (unsigned int i = 0; i < m_vectorlist->size(); i++) {
-        efile << "class " << ((*m_vectorlist)[i])[0] << " " << ((*m_vectorlist)[i])[1] 
+        efile << "class " << ((*m_vectorlist)[i])[0] << " " << ((*m_vectorlist)[i])[1]
               << " " << ((*m_vectorlist)[i])[2] << endl;
       }
       efile.close();

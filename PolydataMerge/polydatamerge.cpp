@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
   std::cout << "Reading " << fiberFile1<< std::endl;
   reader1->SetFileName(fiberFile1.c_str());
   reader1->Update();
- 
+
   // Extract the polydata 1
   vtkSmartPointer<vtkPolyData> polydata1 =
     reader1->GetOutput();
@@ -60,14 +60,14 @@ int main(int argc, char* argv[])
   std::cout << "Reading " << fiberFile2<< std::endl;
   reader2->SetFileName(fiberFile2.c_str());
   reader2->Update();
- 
+
   // Extract the polydata 2
   vtkSmartPointer<vtkPolyData> polydata2 =
     reader2->GetOutput();
 
  vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
 
- vtkAppendPolyData *apd = vtkAppendPolyData::New(); 
+ vtkAppendPolyData *apd = vtkAppendPolyData::New();
  #if (VTK_MAJOR_VERSION < 6)
  apd->AddInput (polydata2);
  apd->AddInput (polydata1);

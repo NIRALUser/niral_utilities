@@ -15,7 +15,7 @@
 #include <qmotifplusstyle.h>
 #include <qcdestyle.h>
 
-int main( int argc, char* argv[] ) 
+int main( int argc, char* argv[] )
 {
 
   QApplication myApp( argc, argv );
@@ -42,7 +42,7 @@ int main( int argc, char* argv[] )
     std::cerr << e << std::endl;
     return EXIT_FAILURE;
     }
- 
+
   return 0;
 
 }

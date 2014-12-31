@@ -8,8 +8,8 @@
   Copyright (c) 2003 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "IntensityCurveBox.h"
@@ -19,7 +19,7 @@
 #include <cstdio>
 #include <iostream>
 
-#include <qgl.h> 
+#include <qgl.h>
 
 #define CURVE_RESOLUTION 256
 
@@ -36,15 +36,15 @@ IntensityCurveBox
     installEventFilter(this);
 }
 
-void 
+void
 IntensityCurveBox
-::paintGL() 
-{       
- 
+::paintGL()
+{
+
       if (m_iscurve == false)
             return;
 
-  //if (!valid()) 
+  //if (!valid())
     {
     // Set up the basic projection
     glMatrixMode(GL_PROJECTION);
@@ -69,7 +69,7 @@ IntensityCurveBox
 
   // Clear the viewport
   glClearColor(0.81,0.81,0.81,1.0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // Push the related attributes
   glPushAttrib(GL_LIGHTING_BIT | GL_COLOR_BUFFER_BIT | GL_LINE_BIT);
@@ -112,7 +112,7 @@ IntensityCurveBox
 
   float t = 0.0;
   float tStep = 1.0f / (CURVE_RESOLUTION);
-  for (unsigned int i=0;i<=CURVE_RESOLUTION;i++) 
+  for (unsigned int i=0;i<=CURVE_RESOLUTION;i++)
     {
     glVertex2f(t,m_Curve->Evaluate(t));
     t+=tStep;
@@ -121,7 +121,7 @@ IntensityCurveBox
   glEnd();
 
   // Draw the handles
-  for (unsigned int c=0;c<m_Curve->GetControlPointCount();c++) 
+  for (unsigned int c=0;c<m_Curve->GetControlPointCount();c++)
     {
     // Get the next control point
     float t,x;
@@ -138,7 +138,7 @@ IntensityCurveBox
     glVertex2d(t+rx,x);
     glVertex2d(t,x+ry);
     glVertex2d(t-rx,x);
-    glEnd();       
+    glEnd();
 
     glColor3d(0,0,0);
     glLineWidth(1.0);
@@ -159,9 +159,9 @@ IntensityCurveBox
   glFlush();
 }
 
-int 
+int
 IntensityCurveBox
-::GetControlPointInVincinity(float x, float y, int pixelRadius) 
+::GetControlPointInVincinity(float x, float y, int pixelRadius)
 {
   float rx = pixelRadius * 1.0f / width();
   float ry = pixelRadius * 1.0f / height();
@@ -231,7 +231,7 @@ void IntensityCurveBox::mouseMoveEvent(QMouseEvent * e)
       x = pos.x();
       y = pos.y();
       updatePos(&x,&y);
-   if (m_MovingControlPoint >= 0) 
+   if (m_MovingControlPoint >= 0)
     {
     // Update the moving control point
         Vector3D<float> myvector(x,y,0);
@@ -239,8 +239,8 @@ void IntensityCurveBox::mouseMoveEvent(QMouseEvent * e)
       {
              repaint();
       }
-    }      
-   
+    }
+
    emit MouseMove();
 //   m_Parent->UpdateIntensity();
 }
@@ -256,7 +256,7 @@ void IntensityCurveBox::updatePos(float* x,float*y)
 
   // Make this window the current context
 //  make_current();
-makeCurrent(); 
+makeCurrent();
   // Convert the event coordinates into the model view coordinates
   double modelMatrix[16], projMatrix[16];
   int viewport[4];
@@ -279,7 +279,7 @@ makeCurrent();
                  modelMatrix,projMatrix,viewport,
                  &xProjection[0],&xProjection[1],&xProjection[2]);
 #endif
-  
+
   *x = xProjection[0];
   *y = xProjection[1];
 
@@ -288,17 +288,17 @@ makeCurrent();
 
 
 /*IntensityCurveBox::DefaultHandler
-::DefaultHandler(IntensityCurveBox *parent) 
+::DefaultHandler(IntensityCurveBox *parent)
 {
   this->m_Parent = parent;
 }*/
 
-/*int 
+/*int
 IntensityCurveBox::DefaultHandler
 ::OnMousePress(const FLTKEvent &event)
 {
   // Check the control point affected by the event
-  m_MovingControlPoint = 
+  m_MovingControlPoint =
     m_Parent->GetControlPointInVincinity(event.XSpace[0],event.XSpace[1],5);
 
   SetCursor(m_MovingControlPoint);
@@ -306,7 +306,7 @@ IntensityCurveBox::DefaultHandler
   return 1;
 }
 
-int 
+int
 IntensityCurveBox::DefaultHandler
 ::OnMouseRelease(const FLTKEvent &event,
                  const FLTKEvent &irisNotUsed(dragEvent))
@@ -329,15 +329,15 @@ IntensityCurveBox::DefaultHandler
   return 1;
 }
 
-int 
+int
 IntensityCurveBox::DefaultHandler
 ::OnMouseDrag(const FLTKEvent &event,
               const FLTKEvent &irisNotUsed(dragEvent))
 {
-  if (m_MovingControlPoint >= 0) 
+  if (m_MovingControlPoint >= 0)
     {
     // Update the moving control point
-    if (UpdateControl(event.XSpace)) 
+    if (UpdateControl(event.XSpace))
       {
       // Repaint parent
       m_Parent->redraw();
@@ -350,25 +350,25 @@ IntensityCurveBox::DefaultHandler
   return 1;
 }
 
-int 
+int
 IntensityCurveBox::DefaultHandler
 ::OnMouseEnter(const FLTKEvent &irisNotUsed(event))
 {
   return 1;
 }
 
-int 
+int
 IntensityCurveBox::DefaultHandler
 ::OnMouseLeave(const FLTKEvent &irisNotUsed(event))
 {
   return 1;
 }
 
-int 
+int
 IntensityCurveBox::DefaultHandler
 ::OnMouseMotion(const FLTKEvent &event)
 {
-  int cp = 
+  int cp =
     m_Parent->GetControlPointInVincinity(event.XSpace[0],event.XSpace[1],5);
 
   SetCursor(cp);
@@ -376,27 +376,27 @@ IntensityCurveBox::DefaultHandler
   return 1;
 }
 
-void 
+void
 IntensityCurveBox::DefaultHandler
-::SetCursor(int cp) 
+::SetCursor(int cp)
 {
-  if (cp < 0) 
+  if (cp < 0)
     {
     fl_cursor(FL_CURSOR_DEFAULT);
-    }   
-  else if (cp == 0 || 
-           cp == (int)(m_Parent->GetCurve()->GetControlPointCount()-1)) 
+    }
+  else if (cp == 0 ||
+           cp == (int)(m_Parent->GetCurve()->GetControlPointCount()-1))
     {
     fl_cursor(FL_CURSOR_WE);
-    } 
-  else     
+    }
+  else
     {
     fl_cursor(FL_CURSOR_MOVE);
     }
 }
 */
 
-bool IntensityCurveBox::UpdateControl(Vector3D<float> &p) 
+bool IntensityCurveBox::UpdateControl(Vector3D<float> &p)
 {
   // Take a pointer to the spline for convenience
   IntensityCurveInterface &curve = *m_Curve;
@@ -413,48 +413,48 @@ bool IntensityCurveBox::UpdateControl(Vector3D<float> &p)
 
   // First and last control points are treated specially because they
   // provide windowing style behavior
-  if (m_MovingControlPoint == 0 || m_MovingControlPoint == last) 
+  if (m_MovingControlPoint == 0 || m_MovingControlPoint == last)
     {
     // Get the current domain
-    float xMin,xMax,yMin,yMax;        
+    float xMin,xMax,yMin,yMax;
     curve.GetControlPoint(0,xMin,yMin);
     curve.GetControlPoint(last,xMax,yMax);
 
     // Check if the new domain is valid
     float epsilon = 0.02;
-    if (m_MovingControlPoint == 0 && p[0] < xMax - epsilon && yMin < 0+epsilon) 
+    if (m_MovingControlPoint == 0 && p[0] < xMax - epsilon && yMin < 0+epsilon)
       {
        xMin = p[0];
          curve.ScaleControlPointsToWindow(xMin,xMax);
          yMin = 0;
-         curve.ScaleControlPointsYToWindow(yMin,yMax); 
-      } 
-    else if (m_MovingControlPoint == last && p[0] > xMin + epsilon && yMax > 1-epsilon)  
+         curve.ScaleControlPointsYToWindow(yMin,yMax);
+      }
+    else if (m_MovingControlPoint == last && p[0] > xMin + epsilon && yMax > 1-epsilon)
       {
         xMax = p[0];
           curve.ScaleControlPointsToWindow(xMin,xMax);
             yMax = 1;
-          curve.ScaleControlPointsYToWindow(yMin,yMax); 
+          curve.ScaleControlPointsYToWindow(yMin,yMax);
       }
 
-    if (m_MovingControlPoint == 0 && p[1] < yMax - epsilon  && xMin < 0+ epsilon) 
+    if (m_MovingControlPoint == 0 && p[1] < yMax - epsilon  && xMin < 0+ epsilon)
       {
             yMin = p[1];
             xMin = 0;
           curve.ScaleControlPointsToWindow(xMin,xMax);
-            curve.ScaleControlPointsYToWindow(yMin,yMax); 
-      } 
-      else if (m_MovingControlPoint == last && p[1] > yMin + epsilon  && xMax > 1- epsilon) 
+            curve.ScaleControlPointsYToWindow(yMin,yMax);
+      }
+      else if (m_MovingControlPoint == last && p[1] > yMin + epsilon  && xMax > 1- epsilon)
     {
             yMax = p[1];
             xMax = 1;
           curve.ScaleControlPointsToWindow(xMin,xMax);
             curve.ScaleControlPointsYToWindow(yMin,yMax);
-    } 
+    }
 
 
-    } 
-  else if (m_MovingControlPoint > 0) 
+    }
+  else if (m_MovingControlPoint > 0)
     {
     // Check whether the Y coordinate is in range
     if (p[1] < 0.0 || p[1] > 1.0)

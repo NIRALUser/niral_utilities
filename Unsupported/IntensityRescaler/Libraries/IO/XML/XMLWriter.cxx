@@ -19,7 +19,7 @@ int XMLWriter::Open(const char* filename)
    /** Open file for writing */
    networkfile.open(filename,std::ofstream::binary);
    if (networkfile == NULL) return -1;
-   
+
    return 0;
 }
 
@@ -34,7 +34,7 @@ void XMLWriter::End(char* name)
 {
    endTab();
    networkfile << "</" << name << ">" << std::endl;
-   
+
 }
 
 void XMLWriter::startTab()
@@ -79,7 +79,7 @@ void XMLWriter::Write(QString balise,float value)
 
 void XMLWriter::Close()
 {
-   networkfile.close();   
+   networkfile.close();
 }
 
 }

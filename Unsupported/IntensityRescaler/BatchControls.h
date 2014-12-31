@@ -1,6 +1,6 @@
 #ifndef BatchControls_h
 #define BatchControls_h
-  
+
 #include "Batch.h"
 #include "ImageIntensityNormalizer.h"
 #include <qlineedit.h>

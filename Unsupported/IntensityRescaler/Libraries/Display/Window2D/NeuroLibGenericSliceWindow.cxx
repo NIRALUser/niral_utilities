@@ -8,8 +8,8 @@
   Copyright (c) 2003 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "GenericSliceWindow.h"
@@ -37,11 +37,11 @@ using namespace itk;
 using namespace std;
 
 GenericSliceWindow
-::GenericSliceWindow(int x, int y, int w, int h, const char *l) 
+::GenericSliceWindow(int x, int y, int w, int h, const char *l)
 : FLTKCanvas(x, y, w, h, l)
 {
   // Start with a blank ID
-  m_Id = -1;  
+  m_Id = -1;
 
   // Initialize the interaction modes
   m_CrosshairsMode = new CrosshairsInteractionMode(this);
@@ -54,7 +54,7 @@ GenericSliceWindow
 
   // Initialize the Grey slice texture
   m_GreyTexture = new GreyTextureType;
-  
+
   // Initialize the Segmentation slice texture (not default)
   m_LabelTexture = new LabelTextureType;
   m_LabelTexture->SetGlComponents(4);
@@ -93,13 +93,13 @@ GenericSliceWindow
   // Copy parent pointers
   m_ParentUI = ui;
   m_Driver = m_ParentUI->GetDriver();
-  m_GlobalState = m_Driver->GetGlobalState();    
+  m_GlobalState = m_Driver->GetGlobalState();
 
   // This array describes the conjugate axes for the three display orientations
   // static const unsigned int linkedAxes[3][2] = {{1,2},{0,2},{0,1}};
   // static const unsigned int linkedAxes[3][2] = {{2,1},{0,2},{0,1}};
 
-  // Initialize the axes indices (these indices map u,v coordinates of the 
+  // Initialize the axes indices (these indices map u,v coordinates of the
   // slice to the x,y,z coordinates of the display space
   m_Id = index;
   // m_DisplayAxes[0] = linkedAxes[m_Id][0];
@@ -113,9 +113,9 @@ GenericSliceWindow
 
   // We have been registered
   m_IsRegistered = true;
-}    
+}
 
-void 
+void
 GenericSliceWindow
 ::InitializeSlice(IRISImageData *imageData)
 {
@@ -134,20 +134,20 @@ GenericSliceWindow
     m_ImageData->GetSegmentation()->GetDisplaySlice(m_Id));
 
   // Store the transforms between the display and image spaces
-  m_ImageToDisplayTransform = 
+  m_ImageToDisplayTransform =
     imageData->GetImageGeometry().GetImageToDisplayTransform(m_Id);
   m_DisplayToImageTransform =
     imageData->GetImageGeometry().GetDisplayToImageTransform(m_Id);
-  m_DisplayToAnatomyTransform = 
+  m_DisplayToAnatomyTransform =
     imageData->GetImageGeometry().GetAnatomyToDisplayTransform(m_Id).Inverse();
-  
+
   // Get the volume extents & voxel scale factors
   Vector3ui imageSizeInImageSpace = m_ImageData->GetVolumeExtents();
   Vector3f imageScalingInImageSpace = to_float(m_ImageData->GetImageSpacing());
 
   // Initialize quantities that depend on the image and its transform
-  for(unsigned int i = 0;i < 3;i++) 
-    {    
+  for(unsigned int i = 0;i < 3;i++)
+    {
     // Get the direction in image space that corresponds to the i'th
     // direction in slice space
     m_ImageAxes[i] = m_DisplayToImageTransform.GetCoordinateIndexZeroBased(i);
@@ -163,11 +163,11 @@ GenericSliceWindow
 
   // We have been initialized
   m_IsSliceInitialized = true;
-  
+
   // If the is no current interaction mode, enter the crosshairs mode
   if(GetInteractionModeCount() == 0)
     PushInteractionMode(m_CrosshairsMode);
-  
+
   // setup default view - fit to window
   ResetViewToFit();
 }
@@ -189,13 +189,13 @@ GenericSliceWindow
 
   // Reduce the width and height of the slice by the margin
   Vector2i szCanvas = Vector2i(w(),h()) - Vector2i(2 * m_Margin);
-  
+
   // Compute the ratios of window size to slice size
   Vector2f ratios(
     szCanvas(0) / worldSize(0),
     szCanvas(1) / worldSize(1));
 
-  // The zoom factor is the bigger of these ratios, the number of pixels 
+  // The zoom factor is the bigger of these ratios, the number of pixels
   // on the screen per millimeter in world space
   m_OptimalZoom = ratios.min_value();
 }
@@ -210,7 +210,7 @@ GenericSliceWindow
   // Compute slice size in spatial coordinates
   ComputeOptimalZoom();
 
-  // The zoom factor is the bigger of these ratios, the number of pixels 
+  // The zoom factor is the bigger of these ratios, the number of pixels
   // on the screen per millimeter in world space
   m_ViewZoom = m_OptimalZoom;
 
@@ -218,9 +218,9 @@ GenericSliceWindow
   redraw();
 }
 
-Vector3f 
+Vector3f
 GenericSliceWindow
-::MapSliceToImage(const Vector3f &xSlice) 
+::MapSliceToImage(const Vector3f &xSlice)
 {
   assert(m_IsSliceInitialized);
 
@@ -231,9 +231,9 @@ GenericSliceWindow
 /**
  * Map a point in image coordinates to slice coordinates
  */
-Vector3f 
+Vector3f
 GenericSliceWindow
-::MapImageToSlice(const Vector3f &xImage) 
+::MapImageToSlice(const Vector3f &xImage)
 {
   assert(m_IsSliceInitialized);
 
@@ -242,7 +242,7 @@ GenericSliceWindow
 }
 
 
-Vector2f 
+Vector2f
 GenericSliceWindow
 ::MapSliceToWindow(const Vector3f &xSlice)
 {
@@ -253,23 +253,23 @@ GenericSliceWindow
     xSlice(0) * m_SliceSpacing(0),xSlice(1) * m_SliceSpacing(1));
 
   // Compute the window coordinates
-  Vector2f uvWindow = 
+  Vector2f uvWindow =
     m_ViewZoom * (uvScaled - m_ViewPosition) + Vector2f(0.5f*w(),0.5f*h());
-  
+
   // That's it, the projection matrix is set up in the scaled-slice coordinates
   return uvWindow;
 }
 
-Vector3f 
+Vector3f
 GenericSliceWindow
 ::MapWindowToSlice(const Vector2f &uvWindow)
 {
   assert(m_IsSliceInitialized && m_ViewZoom > 0);
 
   // Compute the scaled slice coordinates
-  Vector2f uvScaled = 
+  Vector2f uvScaled =
     m_ViewPosition + (uvWindow - Vector2f(0.5f*w(),0.5f*h())) / m_ViewZoom;
-  
+
   // The window coordinates are already in the scaled-slice units
   Vector3f uvSlice(
     uvScaled(0) / m_SliceSpacing(0),
@@ -285,7 +285,7 @@ GenericSliceWindow
 ::draw()
 {
   // Set up the projection if necessary
-  if(!valid()) 
+  if(!valid())
   {
     // The window will have coordinates (0,0) to (w,h), i.e. the same as the window
     // coordinates.
@@ -301,7 +301,7 @@ GenericSliceWindow
     // Compute the optimal zoom
     if(m_IsRegistered && m_IsSliceInitialized)
       {
-      // If the zoom is set to fit, maintain the fit, otherwise, maintain the 
+      // If the zoom is set to fit, maintain the fit, otherwise, maintain the
       // optimal zoom level
       if(!m_ManagedZoom && m_ViewZoom == m_OptimalZoom)
         {
@@ -316,21 +316,21 @@ GenericSliceWindow
   }
 
   // Get the properties for the background color
-  Vector3d clrBack = 
+  Vector3d clrBack =
     m_ParentUI->GetAppearanceSettings()->GetUIElement(
       SNAPAppearanceSettings::BACKGROUND_2D).NormalColor;
 
   // Clear the display, using a blue shade when under focus
   glClearColor(clrBack[0],clrBack[1],clrBack[2],1.0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // Slice should be initialized before display
-  if (!m_IsSliceInitialized) 
+  if (!m_IsSliceInitialized)
     return;
 
   // Compute the position of the cross-hairs in display space
   Vector3ui cursorImageSpace = m_GlobalState->GetCrosshairsPosition();
-  Vector3f cursorDisplaySpace = 
+  Vector3f cursorDisplaySpace =
     m_ImageToDisplayTransform.TransformPoint(
       to_float(cursorImageSpace) + Vector3f(0.5f));
 
@@ -339,9 +339,9 @@ GenericSliceWindow
   m_DisplayAxisPosition = cursorDisplaySpace[2];
 
   // Set up lighting attributes
-  glPushAttrib(GL_LIGHTING_BIT | GL_DEPTH_BUFFER_BIT | 
-               GL_PIXEL_MODE_BIT | GL_TEXTURE_BIT );  
-  
+  glPushAttrib(GL_LIGHTING_BIT | GL_DEPTH_BUFFER_BIT |
+               GL_PIXEL_MODE_BIT | GL_TEXTURE_BIT );
+
   glDisable(GL_LIGHTING);
 
   // glDisable(GL_DEPTH);
@@ -353,7 +353,7 @@ GenericSliceWindow
   glScalef(m_ViewZoom,m_ViewZoom,1.0);
   glTranslated(-m_ViewPosition(0),-m_ViewPosition(1),0.0);
   glScalef(m_SliceSpacing[0],m_SliceSpacing[1],1.0);
-  
+
   // Make the grey and segmentation image textures up-to-date
   DrawGreyTexture();
   DrawSegmentationTexture();
@@ -373,9 +373,9 @@ GenericSliceWindow
   glFlush();
 }
 
-void 
+void
 GenericSliceWindow
-::DrawGreyTexture() 
+::DrawGreyTexture()
 {
   // We should have a slice to return
   assert(m_ImageData->IsGreyLoaded() && m_ImageSliceIndex >= 0);
@@ -390,12 +390,12 @@ GenericSliceWindow
   m_GreyTexture->Draw(clrBackground);
 }
 
-void 
+void
 GenericSliceWindow
-::DrawSegmentationTexture() 
+::DrawSegmentationTexture()
 {
   // We should have a slice to return
-  assert(m_ImageData->IsSegmentationLoaded() 
+  assert(m_ImageData->IsSegmentationLoaded()
     && m_ImageSliceIndex >= 0);
 
   // Update the texture memory
@@ -407,7 +407,7 @@ GenericSliceWindow
 ::DrawThumbnail()
 {
   // Get the thumbnail appearance properties
-  const SNAPAppearanceSettings::Element &elt = 
+  const SNAPAppearanceSettings::Element &elt =
     m_ParentUI->GetAppearanceSettings()->GetUIElement(
       SNAPAppearanceSettings::ZOOM_THUMBNAIL);
 
@@ -415,17 +415,17 @@ GenericSliceWindow
   if(!elt.Visible) return;
 
   // Indicate the fact that we are currently drawing in thumbnail mode
-  m_ThumbnailIsDrawing = true;  
-  
+  m_ThumbnailIsDrawing = true;
+
   // The dimensions of the canvas on which we are working, in pixels
   Vector2i xCanvas( w(), h() );
 
   // The thumbnail will occupy a specified fraction of the target canvas
-  float xFraction = 0.01f * 
+  float xFraction = 0.01f *
     m_ParentUI->GetAppearanceSettings()->GetZoomThumbnailSizeInPercent();
 
   // But it must not exceed a predefined size in pixels in either dimension
-  float xThumbMax = 
+  float xThumbMax =
     m_ParentUI->GetAppearanceSettings()->GetZoomThumbnailMaximumSize();
 
   // Recompute the fraction based on maximum size restriction
@@ -444,7 +444,7 @@ GenericSliceWindow
   m_ThumbnailPosition.fill(5);
   m_ThumbnailSize[0] = (int)(m_SliceSize[0] * m_SliceSpacing[0] * m_ThumbnailZoom);
   m_ThumbnailSize[1] = (int)(m_SliceSize[1] * m_SliceSpacing[1] * m_ThumbnailZoom);
-  
+
   glPushMatrix();
   glLoadIdentity();
   glTranslated((double) m_ThumbnailPosition[0], (double) m_ThumbnailPosition[1], 0.0);
@@ -456,7 +456,7 @@ GenericSliceWindow
 
   // Draw the grey scale image (the background will be picked automatically)
   DrawGreyTexture();
- 
+
   // Draw the crosshairs and stuff
   DrawOverlays();
 
@@ -489,14 +489,14 @@ GenericSliceWindow
   glPopMatrix();
 
   // Indicate the fact that we are not drawing in thumbnail mode
-  m_ThumbnailIsDrawing = false;  
+  m_ThumbnailIsDrawing = false;
 }
 
-void 
+void
 GenericSliceWindow
-::DrawOverlays() 
+::DrawOverlays()
 {
-  if(!m_ThumbnailIsDrawing) 
+  if(!m_ThumbnailIsDrawing)
     {
     // Display the letters (RAI)
     DrawOrientationLabels();
@@ -506,10 +506,10 @@ GenericSliceWindow
     }
 
   // Draw the crosshairs
-  m_CrosshairsMode->OnDraw(); 
+  m_CrosshairsMode->OnDraw();
 }
 
-void 
+void
 GenericSliceWindow
 ::DrawOrientationLabels()
 {
@@ -518,7 +518,7 @@ GenericSliceWindow
   const char *labels[2][2];
 
   // Get the properties for the labels
-  const SNAPAppearanceSettings::Element &elt = 
+  const SNAPAppearanceSettings::Element &elt =
     m_ParentUI->GetAppearanceSettings()->GetUIElement(
       SNAPAppearanceSettings::MARKERS);
 
@@ -526,14 +526,14 @@ GenericSliceWindow
   if(!elt.Visible) return;
 
   // Repeat for X and Y directions
-  for(unsigned int i=0;i<2;i++) 
+  for(unsigned int i=0;i<2;i++)
     {
     // Which axis are we on in anatomy space?
-    unsigned int anatomyAxis = 
+    unsigned int anatomyAxis =
       m_DisplayToAnatomyTransform.GetCoordinateIndexZeroBased(i);
 
     // Which direction is the axis facing (returns -1 or 1)
-    unsigned int anatomyAxisDirection = 
+    unsigned int anatomyAxisDirection =
       m_DisplayToAnatomyTransform.GetCoordinateOrientation(i);
 
     // Map the direction onto 0 or 1
@@ -559,7 +559,7 @@ GenericSliceWindow
   gl_font(FL_COURIER_BOLD, elt.FontSize);
   int offset = 4 + elt.FontSize * 2;
   int margin = elt.FontSize / 3;
-  
+
   gl_draw(labels[0][0],margin,0,offset,h(),FL_ALIGN_LEFT);
   gl_draw(labels[0][1],w() - (offset+margin),0,offset,h(),FL_ALIGN_RIGHT);
   gl_draw(labels[1][0],0,0,w(),offset,FL_ALIGN_BOTTOM);
@@ -569,7 +569,7 @@ GenericSliceWindow
   glPopAttrib();
 }
 
-void 
+void
 GenericSliceWindow
 ::EnterInteractionMode(InteractionMode *mode)
 {
@@ -586,28 +586,28 @@ GenericSliceWindow
   // Push the thumbnail mode
   PushInteractionMode(m_ThumbnailMode);
 }
-  
-void 
+
+void
 GenericSliceWindow
 ::EnterCrosshairsMode()
 {
   EnterInteractionMode(m_CrosshairsMode);
 }
 
-void 
+void
 GenericSliceWindow
 ::EnterZoomPanMode()
 {
   EnterInteractionMode(m_ZoomPanMode);
 }
 
-void 
+void
 GenericSliceWindow
 ::SetViewZoom(float newZoom)
 {
   // Update the zoom
-  m_ViewZoom = newZoom;  
-  // cout << m_Id << " : " << newZoom 
+  m_ViewZoom = newZoom;
+  // cout << m_Id << " : " << newZoom
 
   // Repaint the window
   redraw();
@@ -624,7 +624,7 @@ GenericSliceWindow
 bool
 GenericSliceWindow
 ::IsThumbnailOn()
-{ 
-  return m_ParentUI->GetAppearanceSettings()->GetFlagDisplayZoomThumbnail() 
-    && m_ViewZoom > m_OptimalZoom; 
+{
+  return m_ParentUI->GetAppearanceSettings()->GetFlagDisplayZoomThumbnail()
+    && m_ViewZoom > m_OptimalZoom;
 }

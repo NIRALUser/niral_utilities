@@ -21,7 +21,7 @@ void XMLIniIO::Read()
 {
    if (m_reader->Open(m_filename) == -1)
      return;
-   
+
    balisestruct m_value;
    m_value.balise = "none";
    while(m_value.balise.length() != 0)
@@ -32,7 +32,7 @@ void XMLIniIO::Read()
          m_list.push_back(m_value);
    }
    m_reader->Close();
-   
+
 }
 
 void XMLIniIO::Write()

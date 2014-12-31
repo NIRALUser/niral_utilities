@@ -41,7 +41,7 @@ MeshToVTKPolyDataFilter
 
 
 /**
- * Set mesh as input 
+ * Set mesh as input
  */
 void
 MeshToVTKPolyDataFilter
@@ -125,7 +125,7 @@ MeshToVTKPolyDataFilter
 
   // Now create the cells using the MulitVisitor
   // 1. Create a MultiVisitor
-  MeshType::CellType::MultiVisitor::Pointer mv = 
+  MeshType::CellType::MultiVisitor::Pointer mv =
     MeshType::CellType::MultiVisitor::New();
 
   // 2. Create a triangle and quadrilateral visitor
@@ -187,7 +187,7 @@ MeshToVTKPolyDataFilter
 
       if ( npts!=3 ) {
 	std::cerr << " Npts = " << npts << std::endl;
-      } 
+      }
 
 
 
@@ -195,7 +195,7 @@ MeshToVTKPolyDataFilter
 
     }
   }
-  
+
   */
 
   /*std::cout << "Number of mesh cells " << numCells << std::endl;

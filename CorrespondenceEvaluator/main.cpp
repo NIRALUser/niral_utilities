@@ -16,7 +16,7 @@ typedef itk::CorrespondenceEvaluator <meshType> evaluatorType ;
 
 //////////////////////////////////////////////////////////////////////////////////
 
-bool readShapes ( std::string listName, evaluatorType::Pointer evaluator, unsigned int &nSamples ) 
+bool readShapes ( std::string listName, evaluatorType::Pointer evaluator, unsigned int &nSamples )
 {
   std::ifstream shapeListFile;
   shapeListFile.open( listName.c_str(), std::ios_base::in );
@@ -30,7 +30,7 @@ bool readShapes ( std::string listName, evaluatorType::Pointer evaluator, unsign
   int numSamples = 0 ;
   std::string currentFileName ;
   std::vector < std::string > fileNames ;
-  
+
   while (!shapeListFile.eof())
   {
     std::getline( shapeListFile, currentFileName );
@@ -55,7 +55,7 @@ bool readShapes ( std::string listName, evaluatorType::Pointer evaluator, unsign
     evaluator->SetInput ( i, mesh ) ;
   }
   delete (itkConverter);
-  
+
   nSamples = numSamples ;
 
   return true ;
@@ -79,11 +79,11 @@ int main( int argc, char *argv[] )
   // parse command line arguments
   std::string meshListFileName = argv[1];
   std::string outputFileName = argv[2];
-  
+
   bool computeGeneralization = false ;
   bool computeSpecificity = false ;
   bool gaussian = true ;
-  
+
   int N = 1000 ;
 
   if ( argc > 3 )
@@ -112,8 +112,8 @@ int main( int argc, char *argv[] )
   // read input meshes
   unsigned int numSamples ;
   evaluatorType::Pointer evaluator = evaluatorType::New() ;
-  
-  if ( ! readShapes ( meshListFileName, evaluator, numSamples ) ) 
+
+  if ( ! readShapes ( meshListFileName, evaluator, numSamples ) )
   {
     return -1 ;
   }
@@ -126,8 +126,8 @@ int main( int argc, char *argv[] )
   specificity.resize ( numSamples ) ;
   generalizationError.resize ( numSamples - 1 ) ;
   specificityError.resize ( numSamples ) ;
-  
-  if ( computeGeneralization ) 
+
+  if ( computeGeneralization )
   {
   for ( unsigned int i = 0  ; i < numSamples - 1 ; i++ )
   {
@@ -136,7 +136,7 @@ int main( int argc, char *argv[] )
     std::cout << "Finished." << std::endl ;
   }
   }
-  if ( computeSpecificity ) 
+  if ( computeSpecificity )
   {
   evaluator->SetDistribution ( gaussian ) ;
     for ( unsigned int i = 0 ; i < numSamples ; i++ )
@@ -146,7 +146,7 @@ int main( int argc, char *argv[] )
     std::cout << "Finished." << std::endl ;
     }
   }
-  
+
   // write out evaluation results
   std::ofstream outputFile ;
   outputFile.open ( outputFileName.c_str() ) ;
@@ -168,7 +168,7 @@ int main( int argc, char *argv[] )
     }
   }
   outputFile.close () ;
-  
+
   return 0 ;
 }
 

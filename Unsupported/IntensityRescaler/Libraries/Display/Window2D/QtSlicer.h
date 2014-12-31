@@ -6,12 +6,12 @@
 #include <QtSlicerHelpGUI.h>
 
 class QtSlicer : public Gui
-{ 
+{
 public:
-    
+
   QtSlicer( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
   ~QtSlicer();
-  
+
   typedef itk::Image<double,3> ImageType;
   typedef itk::Image<unsigned short,3> OverlayType;
 

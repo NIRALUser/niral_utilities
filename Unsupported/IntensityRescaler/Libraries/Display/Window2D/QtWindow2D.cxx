@@ -35,11 +35,11 @@ private:
 } // End of namespace
 
 const unsigned char itk::NumericTraits<ColorPixel>::ZeroArray[4] = {0,0,0,0};
-const ColorPixel itk::NumericTraits<ColorPixel>::Zero = 
+const ColorPixel itk::NumericTraits<ColorPixel>::Zero =
   ColorPixel(itk::NumericTraits<ColorPixel>::ZeroArray);
 
 const unsigned char itk::NumericTraits<ColorPixel>::OneArray[4] = {1,1,1,1};
-const ColorPixel itk::NumericTraits<ColorPixel>::One = 
+const ColorPixel itk::NumericTraits<ColorPixel>::One =
   ColorPixel(itk::NumericTraits<ColorPixel>::OneArray);
 
 
@@ -130,17 +130,17 @@ QtWindow2D::QtWindow2D( QWidget *parent, const char *name)
   m_imageinfosize[0] = 0;
   m_imageinfosize[1] = 0;
   m_imageinfosize[2] = 0;
-  
+
   m_imageinfopixdim[0] = 0.0;
   m_imageinfopixdim[1] = 0.0;
   m_imageinfopixdim[2] = 0.0;
 }
-  
-  
+
+
 // QtWindow2D::
 // QtWindow2D( QGLFormat glf, QWidget *parent, const char *name)
 // : QGLWidget(glf,parent, name)
-// {    
+// {
 //   cValidOverlayData     = false;
 //   cViewOverlayData      = false;
 //   cViewOverlayCallBack  = NULL;
@@ -148,17 +148,17 @@ QtWindow2D::QtWindow2D( QWidget *parent, const char *name)
 //   cWinOverlayData       = NULL;
 //   cColorTable = ColorTableType::New();
 //   cColorTable->useDiscrete();
-  
+
 //   // Initialize the Grey slice texture
 // }
-  
+
 
 QtWindow2D::~QtWindow2D()
 {
   delete[] m_Color;
 }
-  
-void 
+
+void
 QtWindow2D::
 SetInputImage(ImageType * newImData)
 {
@@ -169,20 +169,20 @@ SetInputImage(ImageType * newImData)
 
   calculator->SetImage( cImData );
   calculator->Compute();
-   
+
   if (!m_manualintensity)
   {
     cIWMin      = calculator->GetMinimum();
     cIWMax      = calculator->GetMaximum();
   }
-    
-  if( !newImData )    
+
+  if( !newImData )
   {
     return;
   }
 
   RegionType region = newImData->GetLargestPossibleRegion();
-  if( region.GetNumberOfPixels() == 0 ) 
+  if( region.GetNumberOfPixels() == 0 )
   {
     return;
   }
@@ -192,7 +192,7 @@ SetInputImage(ImageType * newImData)
   {
     RegionType overlay_region = cOverlayData->GetLargestPossibleRegion();
     SizeType   overlay_size   = overlay_region.GetSize();
-      
+
     for( int i=0; i<3; i++ )
     {
       if( size[i] != overlay_size[i] )
@@ -200,7 +200,7 @@ SetInputImage(ImageType * newImData)
         return;
       }
     }
-  } 
+  }
 
 
   cDimSize[0]=size[0];
@@ -209,13 +209,13 @@ SetInputImage(ImageType * newImData)
 
   cIWModeMin  = IW_MIN;
   cIWModeMax  = IW_MAX;
-    
+
   cImageMode = IMG_VAL;
-    
+
   cWinCenter[0] = cDimSize[0]/2;
   cWinCenter[1] = cDimSize[1]/2;
   cWinCenter[2] = 0;
-  
+
   cWinZoom = 1;
   cWinOrientation = m_id;
   cWinOrder[0] = 2;
@@ -230,7 +230,7 @@ SetInputImage(ImageType * newImData)
   {
   cWinDataSizeX = cDimSize[0];
   cWinDataSizeY = cDimSize[1];
-  cWinMaxX  = cDimSize[0] - 1;  
+  cWinMaxX  = cDimSize[0] - 1;
   cWinMaxY  = cDimSize[1] - 1;
   numslice = cDimSize[2]/2;
   cSpacing[0]= cImData->GetSpacing()[0];
@@ -241,7 +241,7 @@ SetInputImage(ImageType * newImData)
   {
   cWinDataSizeX = cDimSize[0];
   cWinDataSizeY = cDimSize[2];
-  cWinMaxX  = cDimSize[0] - 1;  
+  cWinMaxX  = cDimSize[0] - 1;
   cWinMaxY  = cDimSize[2] - 1;
   numslice = cDimSize[1]/2;
   cSpacing[0]= cImData->GetSpacing()[0];
@@ -250,7 +250,7 @@ SetInputImage(ImageType * newImData)
 
   if (m_id == 2)
   {
-  cWinMaxX  = cDimSize[1] - 1;  
+  cWinMaxX  = cDimSize[1] - 1;
   cWinMaxY  = cDimSize[2] - 1;
   cWinDataSizeX = cDimSize[1];
   cWinDataSizeY = cDimSize[2];
@@ -263,7 +263,7 @@ SetInputImage(ImageType * newImData)
   cValidImData = true;
 
   m_isImage1 = true;
-  
+
   this->update();
 
   if (m_isslicer)
@@ -294,7 +294,7 @@ SetInputImage(ImageType * newImData)
    this->updateGL();
 }
 
-void 
+void
 QtWindow2D::
 ChangeId(int id)
 {
@@ -320,7 +320,7 @@ ChangeId(int id)
   }
 
 
-  cWinMaxX  = cDimSize[m_x] - 1;  
+  cWinMaxX  = cDimSize[m_x] - 1;
   cWinMaxY  = cDimSize[m_y] - 1;
   cWinDataSizeX = cDimSize[m_x];
   cWinDataSizeY = cDimSize[m_y];
@@ -333,27 +333,27 @@ ChangeId(int id)
     delete [] cWinImData;
     delete [] cWinRotData;
   }
-    
+
   cWinImData = new unsigned char[ cWinDataSizeX * cWinDataSizeY ];
   cWinRotData = new unsigned char[ cWinDataSizeX * cWinDataSizeY ];
 
 
-   if(cWinOverlayData != NULL) 
+   if(cWinOverlayData != NULL)
    {
      delete [] cWinOverlayData;
    }
-    
+
    cWinOverlayData = new unsigned char[ cWinDataSizeX * cWinDataSizeY * 4 ];
 
 
-  if(cWinZBuffer != NULL) 
+  if(cWinZBuffer != NULL)
   {
     delete [] cWinZBuffer;
   }
-    
+
   cWinZBuffer = new unsigned short[ cWinDataSizeX * cWinDataSizeY ];*/
 
-  
+
   int x,y,z;
   m_manager->GetCrosshair(&x,&y,&z);
   int cross[3];
@@ -391,20 +391,20 @@ ChangeId(int id)
   }
 
   //this->update();
-  //this->updateGL();  
+  //this->updateGL();
 }
 
-void 
+void
 QtWindow2D::
 SetInputImage2(ImageType * newImData)
 {
-  if( !newImData )    
+  if( !newImData )
   {
     return;
   }
 
   RegionType region = newImData->GetLargestPossibleRegion();
-  if( region.GetNumberOfPixels() == 0 ) 
+  if( region.GetNumberOfPixels() == 0 )
   {
     return;
   }
@@ -414,7 +414,7 @@ SetInputImage2(ImageType * newImData)
   {
     RegionType overlay_region = cOverlayData->GetLargestPossibleRegion();
     SizeType   overlay_size   = overlay_region.GetSize();
-      
+
     for( int i=0; i<3; i++ )
     {
       if( size[i] != overlay_size[i] )
@@ -422,17 +422,17 @@ SetInputImage2(ImageType * newImData)
         return;
       }
     }
-  } 
+  }
 
   cImData2 = newImData;
-    
+
   typedef MinimumMaximumImageCalculator<ImageType> CalculatorType;
   CalculatorType::Pointer calculator = CalculatorType::New();
   calculator->SetImage( cImData2 );
   calculator->Compute();
   cIWMin2      = calculator->GetMinimum();
   cIWMax2      = calculator->GetMaximum();
-  
+
   //Select the alpha in the middle slice
  /* if (m_id == 0)
   {
@@ -465,13 +465,13 @@ QtWindow2D
 }
 
 
-void 
+void
 QtWindow2D
 ::SetInputOverlay( OverlayType * newOverlayData )
 {
   RegionType newoverlay_region = newOverlayData->GetLargestPossibleRegion();
   SizeType   newoverlay_size  = newoverlay_region.GetSize();
- 
+
   SizeType   cImData_size;
   cImData_size[0] = 0;
   cImData_size[1] = 0;
@@ -486,14 +486,14 @@ QtWindow2D
   if ( (!m_isImage1) || (cImData_size == newoverlay_size))
   {
     cOverlayData = newOverlayData;
-    
+
     cViewOverlayData  = true;
     cValidOverlayData = true;
     //cOverlayOpacity   = (float)0.5;
 
     m_isOverlay1 = true;
 
-  /*  if(cWinOverlayData != NULL) 
+  /*  if(cWinOverlayData != NULL)
     {
       delete [] cWinOverlayData;
     }
@@ -502,7 +502,7 @@ QtWindow2D
     typedef MinimumMaximumImageCalculator<OverlayType> CalculatorType;
     CalculatorType::Pointer calculator = CalculatorType::New();
     calculator->SetImage(newOverlayData);
-    calculator->Compute();     
+    calculator->Compute();
     int m_min = calculator->GetMinimum();
     int m_max = calculator->GetMaximum();
     SetOverlayMinMax(m_min,m_max);
@@ -516,13 +516,13 @@ QtWindow2D
 }
 
 
-void 
+void
 QtWindow2D
 ::SetInputOverlay2( OverlayType * newOverlayData )
 {
   RegionType newoverlay_region = newOverlayData->GetLargestPossibleRegion();
   SizeType   newoverlay_size  = newoverlay_region.GetSize();
- 
+
   SizeType   cImData_size;
   cImData_size[0] = 0;
   cImData_size[1] = 0;
@@ -542,7 +542,7 @@ QtWindow2D
     typedef MinimumMaximumImageCalculator<OverlayType> CalculatorType;
     CalculatorType::Pointer calculator = CalculatorType::New();
     calculator->SetImage(newOverlayData);
-    calculator->Compute();     
+    calculator->Compute();
     int m_min = calculator->GetMinimum();
     int m_max = calculator->GetMaximum();
     SetOverlayMinMax2(m_min,m_max);
@@ -554,7 +554,7 @@ QtWindow2D
 }
 
 
-void 
+void
 QtWindow2D
 ::UnSetInputImage()
 {
@@ -563,7 +563,7 @@ QtWindow2D
 }
 
 
-void 
+void
 QtWindow2D
 ::UnSetInputImage2()
 {
@@ -571,7 +571,7 @@ QtWindow2D
   update();
 }
 
-void 
+void
 QtWindow2D
 ::UnSetInputOverlay()
 {
@@ -580,7 +580,7 @@ QtWindow2D
   update();
 }
 
-void 
+void
 QtWindow2D
 ::UnSetInputOverlay2()
 {
@@ -594,30 +594,30 @@ QtWindow2D
 
 
 const QtWindow2D::OverlayType::Pointer &
-QtWindow2D::GetInputOverlay( void ) 
+QtWindow2D::GetInputOverlay( void )
 const
 {
   return cOverlayData;
 }
 
 
-void 
+void
 QtWindow2D::
 ViewOverlayData( bool newViewOverlayData)
-{ 
+{
   cViewOverlayData = newViewOverlayData;
-  
+
   if( cViewOverlayCallBack != NULL )
   {
     cViewOverlayCallBack();
   }
-  
+
   this->paintGL();
 }
 
 
 
-bool 
+bool
 QtWindow2D::ViewOverlayData(void)
 {
   return cViewOverlayData;
@@ -625,51 +625,51 @@ QtWindow2D::ViewOverlayData(void)
 
 
 
-void 
+void
 QtWindow2D::ViewOverlayCallBack(
-void (* newViewOverlayCallBack)(void) 
+void (* newViewOverlayCallBack)(void)
 )
 {
   cViewOverlayCallBack = newViewOverlayCallBack;
 }
 
 
-void 
+void
 QtWindow2D::OverlayOpacity(float newOverlayOpacity)
 {
-  cOverlayOpacity = newOverlayOpacity; 
-  if(cViewOverlayCallBack != NULL) 
+  cOverlayOpacity = newOverlayOpacity;
+  if(cViewOverlayCallBack != NULL)
   {
     cViewOverlayCallBack();
   }
 }
 
-float 
+float
 QtWindow2D::OverlayOpacity(void)
 {
   return cOverlayOpacity;
 }
 
 
-QtWindow2D::ColorTableType 
+QtWindow2D::ColorTableType
 * QtWindow2D::GetColorTable(void)
 {
   return cColorTable.GetPointer();
 }
 
 
-void 
+void
 QtWindow2D::update()
 {
-  if( !cValidImData ) 
+  if( !cValidImData )
   {
     return;
   }
-  
+
   IndexType ind;
-  
+
   int l;
-  
+
   float tf  = 0.0;
   float tf2 = 0.0;
 
@@ -681,13 +681,13 @@ QtWindow2D::update()
   //Create 2D image
   Image2DType::Pointer m_2Dimage = Image2DType::New();
   float values[2];
-  values[0]= cSpacing[0]; 
+  values[0]= cSpacing[0];
   values[1]= cSpacing[1];
 
   float origin_x= ((cWinDataSizeX/2)*values[0]*(-1));
   float origin_y=((cWinDataSizeY/2)*values[1]*(-1));
   float origin[2] = {origin_x, origin_y};
- 
+
   Image2DType::RegionType region2D;
   Image2DType::SizeType size2D;
   size2D[0]= cWinDataSizeX;
@@ -711,8 +711,8 @@ QtWindow2D::update()
     if (m_id == 1) ind[2] = k;
     if (m_id == 2) ind[2] = k;
 
-    for(int j=cWinMinX; j <= cWinMaxX; j++) 
-    { 
+    for(int j=cWinMinX; j <= cWinMaxX; j++)
+    {
       if (m_id == 0) ind[0] = j;
       if (m_id == 1) ind[0] = j;
       if (m_id == 2) ind[1] = j;
@@ -724,7 +724,7 @@ QtWindow2D::update()
          tf = 0;
       else
        tf = (float)((cImData->GetPixel(ind)-cIWMin)/(cIWMax-cIWMin)*255);
-   
+
       l = j + k*cWinDataSizeX;
 
       if (m_blendingmode == 0)
@@ -735,17 +735,17 @@ QtWindow2D::update()
               it2DS.Set((unsigned char)tf);
           else
                it2DS.Set((unsigned char)0);
-      
+
         }
          else
         {
           if (m_isImage2)
-          {  
+          {
               tf2 = (float)((cImData2->GetPixel(ind)-cIWMin2)/(cIWMax2-cIWMin2)*255);
               it2DS.Set((unsigned char)tf2);
           }
           else
-              it2DS.Set((unsigned char)0);  
+              it2DS.Set((unsigned char)0);
         }
       }
       else
@@ -755,11 +755,11 @@ QtWindow2D::update()
           else
           {
             if ((m_isImage1) && (m_isImage2))
-            {  
+            {
               tf2 = (float)((cImData2->GetPixel(ind)-cIWMin2)/(cIWMax2-cIWMin2)*255);
               float m_alphab = ((float)m_alpha)/(float)100;
               it2DS.Set((unsigned char)((tf*m_alphab)+(tf2*(1-m_alphab))));
-            } 
+            }
         }
       }
 
@@ -776,7 +776,7 @@ QtWindow2D::update()
 
 
   //int m_texturealpha = 100;
-  
+
   if (m_overlaymax <= 3)
   {
     //Update color label table
@@ -790,13 +790,13 @@ QtWindow2D::update()
     //Create 2D Label image
     Image2DLabelType::Pointer m_2Dlabelimage = Image2DLabelType::New();
     float values[2];
-    values[0]= cSpacing[0]; 
+    values[0]= cSpacing[0];
     values[1]= cSpacing[1];
 
     float origin_x= ((cWinDataSizeX/2)*values[0]*(-1));
     float origin_y=((cWinDataSizeY/2)*values[1]*(-1));
     float origin[2] = {origin_x, origin_y};
- 
+
     Image2DType::RegionType region2D;
     Image2DType::SizeType size2D;
     size2D[0]= cWinDataSizeX;
@@ -817,8 +817,8 @@ QtWindow2D::update()
       if (m_id == 1) ind[2] = k;
       if (m_id == 2) ind[2] = k;
 
-      for(int j=cWinMinX; j <= cWinMaxX; j++) 
-      { 
+      for(int j=cWinMinX; j <= cWinMaxX; j++)
+      {
         if (m_id == 0) ind[0] = j;
         if (m_id == 1) ind[0] = j;
         if (m_id == 2) ind[1] = j;
@@ -835,7 +835,7 @@ QtWindow2D::update()
             else
              tf = cOverlayData->GetPixel(ind);
           }
-       
+
         if (m_isOverlay2)
         {
           if (m_overlaymax2 > 3)
@@ -843,7 +843,7 @@ QtWindow2D::update()
           else
             tf2 = cOverlayData2->GetPixel(ind);
         }
-      
+
         l = j + k*cWinDataSizeX;
 
         if (k<=(cWinMaxY*m_alpha)/100)
@@ -852,7 +852,7 @@ QtWindow2D::update()
           m_value.SetRed((unsigned char)(m_Color[(int)tf*255].r/256));
           m_value.SetGreen((unsigned char)(m_Color[(int)tf*255].g/256));
           m_value.SetBlue((unsigned char)(m_Color[(int)tf*255].b/256));
-          m_value.SetAlpha((unsigned char)(255)); 
+          m_value.SetAlpha((unsigned char)(255));
 
 
           if (m_displayoverlayzero)
@@ -879,12 +879,12 @@ QtWindow2D::update()
          else
         {
           if (m_isOverlay2)
-          {  
+          {
             LabelPixelType m_value;
             m_value.SetRed((unsigned char)(m_Color[(int)tf2*255].r/256));
             m_value.SetGreen((unsigned char)(m_Color[(int)tf2*255].g/256));
             m_value.SetBlue((unsigned char)(m_Color[(int)tf2*255].b/256));
-            m_value.SetAlpha((unsigned char)(255)); 
+            m_value.SetAlpha((unsigned char)(255));
 
             if (m_overlaymax2 > 3)
             {
@@ -903,7 +903,7 @@ QtWindow2D::update()
 
           }
           else
-              it2LabelDS.Set((unsigned char)0);  
+              it2LabelDS.Set((unsigned char)0);
         }
         ++it2LabelDS;
       }
@@ -932,11 +932,11 @@ void QtWindow2D::resizeGL( int w, int h )
 }
 
 /** Initialize the OpenGL Window */
-void QtWindow2D::initializeGL() 
+void QtWindow2D::initializeGL()
 {
- /* glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);          
+ /* glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);
   glShadeModel(GL_FLAT);*/
-    
+
   //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  //if you don't include this
     //image size differences distort
     //glPixelStorei(GL_PACK_ALIGNMENT, 1);
@@ -958,15 +958,15 @@ void QtWindow2D::paintGL(void)
 
  // Clear the display, using a blue shade when under focus
   glClearColor(0,0,0,1.0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   //Set up lighting attributes
-  glPushAttrib(GL_LIGHTING_BIT | GL_DEPTH_BUFFER_BIT | 
-               GL_PIXEL_MODE_BIT | GL_TEXTURE_BIT );  
-  
+  glPushAttrib(GL_LIGHTING_BIT | GL_DEPTH_BUFFER_BIT |
+               GL_PIXEL_MODE_BIT | GL_TEXTURE_BIT );
+
   glDisable(GL_LIGHTING);
 
-  if( !cImData ) 
+  if( !cImData )
     return;
 
   // Prepare for overlay drawing.  The model view is set up to correspond
@@ -989,10 +989,10 @@ void QtWindow2D::paintGL(void)
   if (m_isOverlay1 && m_overlayvisible)
   {
    m_LabelTexture.DrawTransparent((unsigned char)(cOverlayOpacity*255));
-  } 
-     
-  
- 
+  }
+
+
+
   if (m_crosshairvisible)
   {
     glPushAttrib(GL_LINE_BIT | GL_COLOR_BUFFER_BIT);
@@ -1008,12 +1008,12 @@ void QtWindow2D::paintGL(void)
     glColor4dv(clrCrosshair);
     // Refit matrix so that the lines are centered on the current pixel
     glPushMatrix();
-  
+
     glTranslated( m_crosshairx+0.5f, m_crosshairy+0.5f, 0.0 );
- 
 
 
-    glBegin(GL_LINES); 
+
+    glBegin(GL_LINES);
     glVertex2f(0, 0); glVertex2f(cWinDataSizeX-m_crosshairx, 0);
     glVertex2f(0, 0); glVertex2f(-m_crosshairx, 0);
     glVertex2f(0, 0); glVertex2f(0, cWinDataSizeY-m_crosshairy);
@@ -1026,7 +1026,7 @@ void QtWindow2D::paintGL(void)
 
   // Clean up the GL state
   glPopMatrix();
-  glPopAttrib(); 
+  glPopAttrib();
 
   DrawString();
 
@@ -1045,11 +1045,11 @@ void QtWindow2D::DrawString()
   }
 
   ImageType::IndexType ind;
-  
+
   ind[0] = (unsigned long)cClickSelect[0];
   ind[1] = (unsigned long)cClickSelect[1];
   ind[2] = (unsigned long)cClickSelect[2];
- 
+
   if (m_drawposition)
   {
     OutputString(0,offset,QString("Pos: [%1,%2,%3]").arg(ind[0]).arg(ind[1]).arg(ind[2]));
@@ -1168,7 +1168,7 @@ void QtWindow2D::OutputString ( float x, float y,const char *string)
   glRasterPos2f ( x, y );
   for (int i = 0; i < length; i++ )
   glutBitmapCharacter ( GLUT_BITMAP_8_BY_13 , string[i] );
-} 
+}
 
 void QtWindow2D::SetZoomFactor(float zoom)
 {
@@ -1178,13 +1178,13 @@ void QtWindow2D::SetZoomFactor(float zoom)
 
 void QtWindow2D::SetViewPosition(float posx,float posy)
 {
-   view_pos_x = posx; 
+   view_pos_x = posx;
    view_pos_y = posy;
 
    updateGL();
 }
 
-void QtWindow2D::mouseMoveEvent( QMouseEvent *event ) 
+void QtWindow2D::mouseMoveEvent( QMouseEvent *event )
 {
   QPoint pos = static_cast<QMouseEvent *>( event )->pos();
   if (m_currentbutton == 1)
@@ -1194,7 +1194,7 @@ void QtWindow2D::mouseMoveEvent( QMouseEvent *event )
         view_pos_x += (float)(shift_x/(view_zoom)); //*cSpacing[0]));//*cSpacing[0]);
         view_pos_y += (float)(-shift_y/(view_zoom));//*cSpacing[1])); //*cSpacing[1]);
 
-        if( event->state() & ShiftButton ) 
+        if( event->state() & ShiftButton )
           m_manager->SetViewPosition(view_pos_x,view_pos_y);
 
         start_x = pos.x();
@@ -1209,8 +1209,8 @@ void QtWindow2D::mouseMoveEvent( QMouseEvent *event )
         view_zoom += (float)shift_y/20;
         if (view_zoom < 0) view_zoom = 0;
         start_y = pos.y();
-        
-        if( event->state() & ShiftButton ) 
+
+        if( event->state() & ShiftButton )
           m_manager->SetZoomFactor(view_zoom);
 
         updateGL();
@@ -1221,11 +1221,11 @@ void QtWindow2D::mouseMoveEvent( QMouseEvent *event )
 
 
 
-void QtWindow2D::mousePressEvent( QMouseEvent *event ) 
+void QtWindow2D::mousePressEvent( QMouseEvent *event )
 {
    if (m_isImage1 || m_isImage2 || m_isOverlay1 || m_isOverlay2)
   {
-     
+
     if(( event->button() & LeftButton ) && !( event->state() & ControlButton ))
     {
       QPoint pos = static_cast<QMouseEvent *>( event )->pos();
@@ -1233,7 +1233,7 @@ void QtWindow2D::mousePressEvent( QMouseEvent *event )
       start_y = (float)pos.y();
       m_currentbutton = 1;
 
-      if( event->state() & ShiftButton ) 
+      if( event->state() & ShiftButton )
       {
       }
      }
@@ -1243,24 +1243,24 @@ void QtWindow2D::mousePressEvent( QMouseEvent *event )
 
        //float shift_x = ((float)view_pos_x*view_zoom*cSpacing[0]) + (float)width()/2.0  - ((float)cWinDataSizeX* (float)view_zoom*cSpacing[0])/2.0;
        //float shift_y = ((float)view_pos_y*view_zoom*cSpacing[1]) + (float)height()/2.0 - ((float)cWinDataSizeY* (float)view_zoom*cSpacing[1])/2.0;
-    
+
        float shift_x = ((float)view_pos_x*view_zoom) + (float)width()/2.0  - ((float)cWinDataSizeX* (float)view_zoom*cSpacing[0])/2.0;
        float shift_y =  ((float)view_pos_y*view_zoom) + (float)height()/2.0 - ((float)cWinDataSizeY* (float)view_zoom*cSpacing[1])/2.0;
-   
+
        float m_image_x = (int)(((float)pos.x() - shift_x)/((float)view_zoom*cSpacing[0]));
        float m_image_y = (int)(((height()-(float)pos.y())- shift_y)/((float)view_zoom*cSpacing[1]));
-       if (m_image_x <0) 
+       if (m_image_x <0)
          image_x = 0;
        else
          image_x = (unsigned int) m_image_x;
 
 
-       if (m_image_y <0) 
+       if (m_image_y <0)
          image_y = 0;
        else
          image_y = (unsigned int) m_image_y;
 
-      
+
        if (image_x >= cDimSize[m_x])
          image_x = cDimSize[m_x]-1;
 
@@ -1268,7 +1268,7 @@ void QtWindow2D::mousePressEvent( QMouseEvent *event )
          image_y = cDimSize[m_y]-1;
 
       m_currentbutton = 2;
-      
+
       if (m_id == 0)
         m_manager->SetCrosshair(image_x,image_y,numslice);
 
@@ -1285,16 +1285,16 @@ void QtWindow2D::mousePressEvent( QMouseEvent *event )
       //QObject::connect( this->stepTimer, SIGNAL(timeout()),
       //                  this->middleButtonFunction );
      }
-     else if( event->button() & RightButton ) 
+     else if( event->button() & RightButton )
      {
       QPoint pos = static_cast<QMouseEvent *>( event )->pos();
       start_x = (float)pos.x();
       start_y = (float)pos.y();
-      m_currentbutton = 3; 
+      m_currentbutton = 3;
 
      }
    }
- 
+
    emit Clicked(m_currentbutton);
    this->updateGL();
 }
@@ -1377,32 +1377,32 @@ unsigned int QtWindow2D::sliceNum()
 }
 
 void QtWindow2D::clickSelect(float newX, float newY, float newZ)
-  {    
+  {
   cClickSelect[0] = newX;
   if(cClickSelect[0]<0)
     cClickSelect[0] = 0;
   if(cClickSelect[0] >= cDimSize[0])
     cClickSelect[0] = cDimSize[0]-1;
-  
+
   cClickSelect[1] = newY;
   if(cClickSelect[1]<0)
     cClickSelect[1] = 0;
   if(cClickSelect[1] >= cDimSize[1])
     cClickSelect[1] = cDimSize[1]-1;
-  
+
   cClickSelect[2] = newZ;
   if(cClickSelect[2]<0)
     cClickSelect[2] = 0;
   if(cClickSelect[2] >= cDimSize[2])
     cClickSelect[2] = cDimSize[2]-1;
-  
+
   ImageType::IndexType ind;
-  
+
   ind[0] = (unsigned long)cClickSelect[0];
   ind[1] = (unsigned long)cClickSelect[1];
   ind[2] = (unsigned long)cClickSelect[2];
   cClickSelectV = cImData->GetPixel(ind);
- 
+
   emit Position(ind[0],ind[1],ind[2],cClickSelectV);
 }
 
@@ -1419,14 +1419,14 @@ void QtWindow2D::SetIntensityMin(int value)
   cIWMin = value;
   update();
 }
- 
+
 void QtWindow2D::ZoomIn()
 {
   cWinZoom += 1;
   update();
   //this->updateGL();
 }
- 
+
 void QtWindow2D::ZoomOut()
 {
   cWinZoom -= 0.1;
@@ -1538,14 +1538,14 @@ int QtWindow2D::Bicubic_Interpol(unsigned char *m_image, int newx, int newy, int
 
    sum = 0;
 
-   /* Find pixel value */ 
-   index = ((newx + newy*xsize));   
+   /* Find pixel value */
+   index = ((newx + newy*xsize));
 
    for (m = -1; m <=2; m++) {
        for (n = -1; n <= 2; n++) {
    if ((newx+m >= 1) && (newx+m < xsize-1)) {
-              if ((newy+n >=1) && (newy+n < ysize-1)) {  
-    /* Find surrounding pixels values */ 
+              if ((newy+n >=1) && (newy+n < ysize-1)) {
+    /* Find surrounding pixels values */
                  imageval = m_image[index + (m + xsize*n)];
               } else {
      imageval = 0;
@@ -1557,8 +1557,8 @@ int QtWindow2D::Bicubic_Interpol(unsigned char *m_image, int newx, int newy, int
          cubsum = CubicFunc(f, (float)(-a+m))*CubicFunc(f, (float)(-b+n));
          /* Add it to do a complete weighted average */
          sum = sum + imageval*cubsum;
-      
-       } 
+
+       }
    }
 
    return((int) sum);
@@ -1576,13 +1576,13 @@ float QtWindow2D::CubicBSpline(float x) {
    float result;
 
    result=0;
- 
+
    if (x < 0) {
-      y = -x; 
+      y = -x;
    } else {
       y = x;
    }
-   
+
    y2=y*y;
    y3=y2*y;
 
@@ -1602,10 +1602,10 @@ float QtWindow2D::CubicInterpolation(float x) {
      sine between -2 .. 2  */
 
    float a, y, y2, y3, result;
-  
+
    a=0.1;  /* arbitrary value */
    result=0;
- 
+
    if (x < 0) {
       y = -x;
    } else {
@@ -1622,7 +1622,7 @@ float QtWindow2D::CubicInterpolation(float x) {
         result=(a*y3 - 5*a*y2 + 8*a*y - 4*a);
      }
    }
-   
+
    return(result);
 }
 
@@ -1642,14 +1642,14 @@ float QtWindow2D::SquareFunction(float x) {
 
 float QtWindow2D::TriangleFunction(float x) {
 
-  /* Returns the triangle function 
-     between -1.0 .. 1.0            */ 
+  /* Returns the triangle function
+     between -1.0 .. 1.0            */
 
    float result;
 
    result = 0;
 
-   if ((x >= -1) && (x <= 0)){ 
+   if ((x >= -1) && (x <= 0)){
       result = x + 1;
    } else {
       if ((x > 0) && (x <= 1)) result = 1 - x;
@@ -1671,12 +1671,12 @@ float QtWindow2D::CubicFunc(int f, float x) {
         case 1: result = CubicInterpolation(x);
                 break;
    }
-   
+
    return(result);
 }
 
 float QtWindow2D::BilinearFunc(int f, float x) {
-    
+
   /* Returns the different linear functions */
   /* 0 = Square ; 1 = Triangle              */
 
@@ -1688,7 +1688,7 @@ float QtWindow2D::BilinearFunc(int f, float x) {
         case 1: result = TriangleFunction(x);
                 break;
    }
-   
+
    return(result);
 }
 
@@ -1740,7 +1740,7 @@ QPixmap QtWindow2D::RenderPixmap()
   paintGL();
   QPixmap pixmap = renderPixmap();
    //QPixmap pixmap2(width(),height());
-  // 
+  //
   // paintGL();
   // glReadPixels(0,0,width(),height(),GL_RGB,GL_UNSIGNED_BYTE,&pixmap2);
   // bitBlt(&pixmap,0,0,&pixmap2,0,0,width(),height(),CopyROP);

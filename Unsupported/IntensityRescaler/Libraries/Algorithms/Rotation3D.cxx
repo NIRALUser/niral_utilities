@@ -103,7 +103,7 @@ void Rotation3D::Put(int i, double x)
   default:
 	  return;
   }
-  
+
   // Update transformation matrix
   this->UpdateMatrix();
 }

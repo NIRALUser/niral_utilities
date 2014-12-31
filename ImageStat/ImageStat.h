@@ -1,8 +1,8 @@
-/* 
+/*
  * headerfile for ImageStat.cc
  *
- * author:  Martin Styner 
- * 
+ * author:  Martin Styner
+ *
  * changes:
  *
  */

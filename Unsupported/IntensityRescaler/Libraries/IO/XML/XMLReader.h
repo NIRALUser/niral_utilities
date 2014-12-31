@@ -11,7 +11,7 @@ using namespace std;
 
 
 namespace neurolib {
-  
+
 class XMLReader
 {
 public:

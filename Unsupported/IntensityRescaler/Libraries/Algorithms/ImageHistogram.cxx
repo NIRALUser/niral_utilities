@@ -1,5 +1,5 @@
 #include "ImageHistogram.h"
-  
+
 ImageHistogram::ImageHistogram()
 {
 }

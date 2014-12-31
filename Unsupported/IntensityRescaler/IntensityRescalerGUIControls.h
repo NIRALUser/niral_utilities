@@ -18,10 +18,10 @@
 #include "HistoGUI.h"
 
 class IntensityRescalerGUIControls : public IntensityRescalerGUI
-{ 
+{
     Q_OBJECT
 public:
-    
+
   IntensityRescalerGUIControls( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
   ~IntensityRescalerGUIControls();
 

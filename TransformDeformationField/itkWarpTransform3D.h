@@ -10,14 +10,14 @@
 namespace itk
 {
 /** \class WarpTransform3D
- * 
+ *
  * This is a class to represent warp transforms
  */
 template< class FieldData >
 class WarpTransform3D : public Transform< FieldData , 3 , 3 >
 {
 public:
-  typedef FieldData FieldDataType ; 
+  typedef FieldData FieldDataType ;
   typedef WarpTransform3D Self ;
   typedef Transform< FieldDataType  , 3 , 3 > Superclass ;
   typedef typename Superclass::JacobianType JacobianType ;
@@ -27,7 +27,7 @@ public:
   typedef SmartPointer<Self> Pointer;
   typedef SmartPointer<const Self> ConstPointer;
   typedef ConstNeighborhoodIterator<DeformationImageType> ConstNeighborhoodIteratorType;
-  typedef typename ConstNeighborhoodIteratorType::RadiusType RadiusType;  
+  typedef typename ConstNeighborhoodIteratorType::RadiusType RadiusType;
 
   itkNewMacro( Self ) ;
   itkTypeMacro( WarpTransform3D, Transform ) ;
