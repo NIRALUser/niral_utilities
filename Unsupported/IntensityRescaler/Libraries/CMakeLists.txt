@@ -7,8 +7,8 @@ mark_as_advanced(COMPILE_DISPLAY)
 # 	option(COMPILE_IO "Compile IO library." ON)
 # 	set(NeuroLib_COMPILE_IO ${COMPILE_IO})
 # 	mark_as_advanced(COMPILE_IO)
-#   endif(USE_ITK_LIB)
-# endif(USE_QT_LIB)
+#   endif()
+# endif()
 
 #-----------------------------------------------------------------------------
 # Compile disclaimer library

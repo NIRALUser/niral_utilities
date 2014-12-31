@@ -19,10 +19,10 @@ include_directories(${PROJECT_SOURCE_DIR})
 find_package(GenerateCLP REQUIRED)
 if(GenerateCLP_FOUND)
   include(${GenerateCLP_USE_FILE})
-else(GenerateCLP_FOUND)
+else()
   message(FATAL_ERROR
           "GenerateCLP not found. Please set GenerateCLP_DIR.")
-endif(GenerateCLP_FOUND)
+endif()
 
 set(src polydatamerge.cpp)
 GENERATECLP(src polydatamerge.xml)

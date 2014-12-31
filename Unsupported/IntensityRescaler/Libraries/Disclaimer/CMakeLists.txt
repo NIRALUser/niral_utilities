@@ -1,13 +1,13 @@
 if(USE_QT_LIB)
   subdirs(Qt)
-endif(USE_QT_LIB)
+endif()
 
 find_package(FLTK QUIET)
 if(FLTK_FOUND)
     subdirs(Fltk)
-else(FLTK_FOUND)
+else()
   message(WARNING, "FLTK not found. FLTK disclaimer will not be built. please set FLTK_DIR.")
-endif(FLTK_FOUND)
+endif()
 
 include_directories(
      	${CMAKE_CURRENT_SOURCE_DIR}

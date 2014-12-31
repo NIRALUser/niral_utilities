@@ -27,15 +27,15 @@ if(WIN32)
     )
 
 
-  else(CYGWIN)
+  else()
 
     find_library( GLUT_glut_LIBRARY glut32
       ${OPENGL_LIBRARY_DIR}
     )
 
-  endif(CYGWIN)
+  endif()
 
-else(WIN32)
+else()
 
   if(APPLE)
 # These values for Apple could probably do with improvement.
@@ -43,7 +43,7 @@ else(WIN32)
       ${OPENGL_LIBRARY_DIR}
     )
     set(GLUT_glut_LIBRARY "-framework Glut" CACHE STRING "GLUT library for OSX")
-  else(APPLE)
+  else()
 
     find_path( GLUT_INCLUDE_DIR GL/glut.h
       /usr/include
@@ -78,9 +78,9 @@ else(WIN32)
       /usr/X11R6/lib
     )
 
-  endif(APPLE)
+  endif()
 
-endif(WIN32)
+endif()
 
 set( GLUT_FOUND "NO" )
 if(GLUT_INCLUDE_DIR)
@@ -98,10 +98,10 @@ if(GLUT_INCLUDE_DIR)
     set(GLUT_LIBRARY ${GLUT_LIBRARIES})
     set(GLUT_INCLUDE_PATH ${GLUT_INCLUDE_DIR})
 
-  endif(GLUT_glut_LIBRARY)
-else(GLUT_INCLUDE_DIR)
+  endif()
+else()
    message(FATAL_ERROR "GLUT library not found!\n" "Please go to http://www.ia.unc.edu/dev/tutorials/InstallLib")
-endif(GLUT_INCLUDE_DIR)
+endif()
 
 mark_as_advanced(
   GLUT_INCLUDE_DIR

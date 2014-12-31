@@ -3,9 +3,9 @@
 find_package(ITK REQUIRED)
 if(ITK_FOUND)
    include(${ITK_USE_FILE})
-else(ITK_FOUND)
+else()
    message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-endif(ITK_FOUND)
+endif()
 
 include(${NIRAL_UTILITIES_SOURCE_DIR}/CMake/qtSetup.cmake)
 

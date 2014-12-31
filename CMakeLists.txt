@@ -13,84 +13,84 @@ include(CTest)
 
 if(CMAKE_COMPILER_2005)
   add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
-endif(CMAKE_COMPILER_2005)
+endif()
 
 if(${CMAKE_SOURCE_DIR} STREQUAL ${NIRAL_UTILITIES_SOURCE_DIR})
   set(LIBRARY_OUTPUT_PATH ${NIRAL_UTILITIES_BINARY_DIR}/lib CACHE PATH "Single output directory for building all libraries.")
   set(EXECUTABLE_OUTPUT_PATH ${NIRAL_UTILITIES_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
-endif(${CMAKE_SOURCE_DIR} STREQUAL ${NIRAL_UTILITIES_SOURCE_DIR})
+endif()
 
 include_directories( Common )
 
 option(COMPILE_CORREVAL "Compile CorrespondenceEvaluator." OFF)
 if(COMPILE_CORREVAL)
   subdirs(CorrespondenceEvaluator)
-endif(COMPILE_CORREVAL)
+endif()
 
 option(COMPILE_IMAGEMATH "Compile ImageMath." ON)
 if(COMPILE_IMAGEMATH)
   subdirs(ImageMath)
-endif(COMPILE_IMAGEMATH)
+endif()
 
 option(COMPILE_IMAGESTAT "Compile ImageStat." OFF)
 if(COMPILE_IMAGESTAT)
   subdirs(ImageStat)
-endif(COMPILE_IMAGESTAT)
+endif()
 
 option(COMPILE_CROPTOOLS "Compile CropTools." ON)
 if(COMPILE_CROPTOOLS)
   subdirs(CropTools)
-endif(COMPILE_CROPTOOLS)
+endif()
 
 option(COMPILE_CONVERTITKFORMATS "Compile convertITKformats." OFF)
 if(COMPILE_CONVERTITKFORMATS)
   subdirs(convertITKformats)
-endif(COMPILE_CONVERTITKFORMATS)
+endif()
 
 option(COMPILE_DWI_NIFTINRRDCONVERSION "Compile DWI_NiftiNrrdConversion." ON)
 if(COMPILE_DWI_NIFTINRRDCONVERSION)
   subdirs(DWI_NiftiNrrdConversion)
-endif(COMPILE_DWI_NIFTINRRDCONVERSION)
+endif()
 
 option(COMPILE_POLYDATATRANSFORM "Compile PolydataTransform." ON)
 if(COMPILE_POLYDATATRANSFORM)
   subdirs(PolydataTransform)
-endif(COMPILE_POLYDATATRANSFORM)
+endif()
 
 option(COMPILE_TRANSFORMDEFORMATIONFIELD "Compile TransformDeformationField." OFF)
 if(COMPILE_TRANSFORMDEFORMATIONFIELD)
   subdirs(TransformDeformationField)
-endif(COMPILE_TRANSFORMDEFORMATIONFIELD)
+endif()
 
 option(COMPILE_POLYDATAMERGE "Compile PolydataMerge." ON)
 if(COMPILE_POLYDATAMERGE)
   subdirs(PolydataMerge)
-endif(COMPILE_POLYDATAMERGE)
+endif()
 
 option(COMPILE_CURVECOMPARE "Compile CurveCompare." OFF)
 if(COMPILE_CURVECOMPARE)
   subdirs(CurveCompare)
-endif(COMPILE_CURVECOMPARE)
+endif()
 
 option(COMPILE_DTIAtlasBuilder "Compile DTIAtlasBuilder." OFF)
 if(COMPILE_DTIAtlasBuilder)
   subdirs(DTIAtlasBuilder)
-endif(COMPILE_DTIAtlasBuilder)
+endif()
 
 option(COMPILE_MULTIATLASSEG "Compile MultiAtlasSeg." OFF)
 if(COMPILE_MULTIATLASSEG)
   subdirs(MultiAtlasSeg)
-endif(COMPILE_MULTIATLASSEG)
+endif()
 
 option(COMPILE_TEXTUREBIOMARKERTOOL "Compile TextureBiomarkerTool." OFF)
 if(COMPILE_TEXTUREBIOMARKERTOOL)
   subdirs(TextureBiomarkerTool)
-endif(COMPILE_TEXTUREBIOMARKERTOOL)
+endif()
 
 option(COMPILE_DMDBIOMARKERTOOL "Compile DMDBiomarkerTool." OFF)
 if(COMPILE_DMDBIOMARKERTOOL)
   subdirs(DMDBiomarkerTool)
-endif(COMPILE_DMDBIOMARKERTOOL)
+endif()
 
 
 

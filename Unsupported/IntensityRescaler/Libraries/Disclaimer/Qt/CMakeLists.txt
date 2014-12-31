@@ -24,7 +24,7 @@ set(QtDisclaimer_GUI_SRCS
 
 if(QT_WRAP_UI)
 	qt_wrap_ui(QtDisclaimer QtDisclaimer_HDRS  QtDisclaimer_SRCS  ${QtDisclaimer_GUI_SRCS} )
-endif(QT_WRAP_UI)
+endif()
 
 add_definitions(-DQT_DLL)
 add_definitions(-DQT_THREAD_SUPPORT)

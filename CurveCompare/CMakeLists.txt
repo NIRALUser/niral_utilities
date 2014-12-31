@@ -6,17 +6,17 @@ cmake_policy(VERSION 2.8)
 find_package(ITK 4 REQUIRED)
 if(ITK_FOUND)
    include(${ITK_USE_FILE})
-else(ITK_FOUND)
+else()
    message(FATAL_ERROR, "ITKv4 not found. Please set ITK_DIR.")
-endif(ITK_FOUND)
+endif()
 
 find_package(GenerateCLP REQUIRED)
 if(GenerateCLP_FOUND)
   include(${GenerateCLP_USE_FILE})
-else(GenerateCLP_FOUND)
+else()
   message(FATAL_ERROR
           "GenerateCLP not found. Please set GenerateCLP_DIR.")
-endif(GenerateCLP_FOUND)
+endif()
 
 find_package(VTK COMPONENTS
     vtkCommonCore

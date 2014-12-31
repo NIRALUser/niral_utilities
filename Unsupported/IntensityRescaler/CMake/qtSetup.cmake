@@ -50,16 +50,16 @@ if(WIN32)
     $ENV{QTDIR}/lib C:/Progra~1/qt/lib
     DOC "This Library is only needed by and included with Qt3 on MSWindows. It should be NOTFOUND, undefined or IGNORE otherwise."
     )
-endif(WIN32)
+endif()
 
 
 if(QT_MOC_EXECUTABLE)
   set( QT_WRAP_CPP "YES")
-endif(QT_MOC_EXECUTABLE)
+endif()
 
 if(QT_UIC_EXECUTABLE)
   set( QT_WRAP_UI "YES")
-endif(QT_UIC_EXECUTABLE)
+endif()
 
 
 if(QT_INCLUDE_DIR)
@@ -75,13 +75,13 @@ if(QT_INCLUDE_DIR)
         set(QT_DEFINITIONS "-DQT_DLL -DQT_THREAD_SUPPORT -DNO_DEBUG")
         set(QT_LIBRARIES imm32.lib  ${QT_QT_LIBRARY} ${QT_QTMAIN_LIBRARY} )
         set(QT_LIBRARIES ${QT_LIBRARIES} winmm wsock32)
-      else(QT_QTMAIN_LIBRARY)
+      else()
         # for version 2
         set(QT_LIBRARIES imm32.lib ws2_32.lib  ${QT_QT_LIBRARY} )
-      endif(QT_QTMAIN_LIBRARY)
-    else(WIN32)
+      endif()
+    else()
       set(QT_LIBRARIES ${QT_QT_LIBRARY} )
-    endif(WIN32)
+    endif()
 
     # Backwards compatibility for CMake1.4 and 1.2
     set(QT_MOC_EXE ${QT_MOC_EXECUTABLE} )
@@ -91,20 +91,20 @@ if(QT_INCLUDE_DIR)
       include( ${CMAKE_ROOT}/Modules/FindX11.cmake )
       if(X11_FOUND)
         set(QT_LIBRARIES ${QT_LIBRARIES} ${X11_LIBRARIES})
-      endif(X11_FOUND)
+      endif()
       if(CMAKE_DL_LIBS)
         set(QT_LIBRARIES ${QT_LIBRARIES} ${CMAKE_DL_LIBS})
-      endif(CMAKE_DL_LIBS)
-    endif(UNIX)
+      endif()
+    endif()
     if(QT_QT_LIBRARY MATCHES "qt-mt")
       include( ${CMAKE_ROOT}/Modules/FindThreads.cmake )
       set(QT_LIBRARIES ${QT_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-    endif(QT_QT_LIBRARY MATCHES "qt-mt")
+    endif()
 
-  endif(QT_QT_LIBRARY)
-else(QT_INCLUDE_DIR)
+  endif()
+else()
    message(FATAL_ERROR "QT library not found!\n" "Please go to http://www.ia.unc.edu/dev/tutorials/InstallLib")
-endif(QT_INCLUDE_DIR)
+endif()
 
 
 mark_as_advanced(

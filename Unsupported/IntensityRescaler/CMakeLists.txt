@@ -9,25 +9,25 @@ cmake_policy(VERSION 2.8)
 find_package(ITK REQUIRED)
 if(ITK_FOUND)
    include(${ITK_USE_FILE})
-else(ITK_FOUND)
+else()
    message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-endif(ITK_FOUND)
+endif()
 
 find_package(VTK REQUIRED)
 if(VTK_FOUND)
   include(${VTK_USE_FILE})
-else(VTK_FOUND)
+else()
   message(FATAL_ERROR, "VTK not found. Please set VTK_DIR.")
-endif(VTK_FOUND)
+endif()
 
 include(CMake/qtSetup.cmake)
 #find_package( QT REQUIRED )
 #Find_Package( QT )
 #if(QT_FOUND)
 #  include(${QT_USE_FILE})
-#else(QT_FOUND)
+#else()
 #  message(FATAL_ERROR, "Qt not found. Please set QT_DIR.")
-#endif(QT_FOUND)
+#endif()
 
 
 #Find_package( GLUT )
@@ -54,7 +54,7 @@ include_directories(
 
 if(WIN32)
  #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /subsystem:windows")
-endif(WIN32)
+endif()
 
 set(IntensityRescaler_MOC_SRCS
    IntensityRescalerGUIControls.h
@@ -62,7 +62,7 @@ set(IntensityRescaler_MOC_SRCS
 
 if(QT_WRAP_CPP)
   qt_wrap_cpp(IntensityRescaler IntensityRescalerMoced_SRCS ${IntensityRescaler_MOC_SRCS})
-endif(QT_WRAP_CPP)
+endif()
 
 set(IntensityRescaler_SRCS
   ${IntensityRescalerMoced_SRCS}
@@ -83,7 +83,7 @@ set(IntensityRescaler_GUI_SRCS
 
 if(QT_WRAP_UI)
 	qt_wrap_ui(IntensityRescaler IntensityRescaler_HDRS  IntensityRescaler_SRCS  ${IntensityRescaler_GUI_SRCS} )
-endif(QT_WRAP_UI)
+endif()
 
 
 
