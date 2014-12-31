@@ -58,7 +58,7 @@ inline T ipGetArgument( const char **argv , const char *keystr ,
 
 inline charp ipGetStringArgument( const char **argv , const char keystr[] , const char defval[] )
 {
-  char *_defval = ( defval ? strdup( defval ) : NULL ) ;
+  char *_defval = ( defval ? strdup( defval ) : ITK_NULLPTR ) ;
   for( int i = 1 ; argv[ i ] ; i++ )
   {
     if( !strcmp( argv[ i ] , keystr ) )
@@ -240,8 +240,8 @@ inline int ipLineWordCount( const char *s )
 inline char *ipGetBaseName( const char *string )
 {
   unsigned int i ;
-  char *ret = NULL ;
-  char *retp = NULL ;
+  char *ret = ITK_NULLPTR ;
+  char *retp = ITK_NULLPTR ;
   if( !( ret = strdup( string ) ) )
   {
     fprintf( stderr , "Error: ipGetBaseName [%s, line %d]: strdup() failed:" ,

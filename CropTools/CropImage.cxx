@@ -96,7 +96,7 @@ int main(int argc, const char* argv[])
   if (borderOn)
     border = ipGetIntArgument(argv,"-border",0);
   if (regionOn) {
-    char *tmp_str    = ipGetStringArgument(argv, "-region", NULL);
+    char *tmp_str    = ipGetStringArgument(argv, "-region", ITK_NULLPTR);
     int numDim       = ipExtractIntTokens(cropParam, tmp_str, numCropParam);
     if (numDim != numCropParam) {
       cerr << argv[0] << ": region needs "<< numCropParam << " parameters.\n";
@@ -105,7 +105,7 @@ int main(int argc, const char* argv[])
     free(tmp_str);
   }
   if (embedOn) {
-    char *tmp_str    = ipGetStringArgument(argv, "-embed", NULL);
+    char *tmp_str    = ipGetStringArgument(argv, "-embed", ITK_NULLPTR);
     int numDim       = ipExtractIntTokens(cropParam, tmp_str, numCropParam);
     if (numDim != numCropParam) {
       cerr << argv[0] << ": region needs "<< numCropParam << " parameters.\n";

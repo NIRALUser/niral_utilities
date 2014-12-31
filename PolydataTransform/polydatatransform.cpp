@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
     reader->GetOutput();
 
 
-  DeformationImageType::Pointer deformationfield(NULL);
+  DeformationImageType::Pointer deformationfield(ITK_NULLPTR);
   if( !hField.empty() )
   {
     deformationfield = readDeformationField(hField, HField);
@@ -71,10 +71,10 @@ int main(int argc, char* argv[])
   }
   else
   {
-    deformationfield = NULL;
+    deformationfield = ITK_NULLPTR;
   }
   typedef itk::VectorLinearInterpolateImageFunction<DeformationImageType, double> DeformationInterpolateType;
-  DeformationInterpolateType::Pointer definterp(NULL);
+  DeformationInterpolateType::Pointer definterp(ITK_NULLPTR);
   if(deformationfield)
   {
     definterp = DeformationInterpolateType::New();

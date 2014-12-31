@@ -88,7 +88,7 @@ int main(int argc, const char* argv[])
 
 	if (regionOn)
 	{
-		char *tmp_str    = ipGetStringArgument(argv, "-region", NULL);
+		char *tmp_str    = ipGetStringArgument(argv, "-region", ITK_NULLPTR);
 		int numDim       = ipExtractIntTokens(cropParam, tmp_str, numCropParam);
 		if (numDim != numCropParam) {
 			cerr << argv[0] << ": region needs "<< numCropParam << " parameters.\n";
@@ -106,7 +106,7 @@ int main(int argc, const char* argv[])
 
 	if (sizeOn)
 	{
-		char *tmp_str    = ipGetStringArgument(argv, "-size", NULL);
+		char *tmp_str    = ipGetStringArgument(argv, "-size", ITK_NULLPTR);
 		int numDim       = ipExtractIntTokens(sizeParam, tmp_str, numSizeParam);
 		if (numDim != numSizeParam) {
 			cerr << argv[0] << ": size needs "<< numSizeParam << " parameters.\n";
