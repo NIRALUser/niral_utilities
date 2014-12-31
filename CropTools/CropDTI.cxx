@@ -135,14 +135,10 @@ int main(int argc, const char* argv[])
 	typedef double DoublePixelType;
 
 	typedef DiffusionTensor3DReconstructionImageFilter< ShortPixelType, ShortPixelType, DoublePixelType >  TensorReconstructionImageFilterType;
-	typedef TensorReconstructionImageFilterType::GradientDirectionContainerType    GradientDirectionContainerType;
 	typedef TensorReconstructionImageFilterType::TensorPixelType    TensorPixelType;
 
 	const int Dimension = 3;
-	typedef itk::Point< double, Dimension >			PointType;
 	typedef itk::Image< TensorPixelType, Dimension> DtiImageType;
-	typedef DtiImageType::RegionType				DtiImageRegionType;
-	typedef TensorPixelType::RealValueType          RealValueType;
 
 	typedef itk::ImageFileReader<DtiImageType>  DTIReaderType;
 	typedef itk::ImageFileWriter<DtiImageType>  DTIWriterType;
