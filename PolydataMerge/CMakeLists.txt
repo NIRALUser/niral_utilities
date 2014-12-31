@@ -6,7 +6,11 @@ PROJECT(polydatamerge)
 find_package(ITK REQUIRED)
 include(${ITK_USE_FILE})
  
-find_package(VTK REQUIRED)
+find_package(VTK COMPONENTS
+    vtkCommonCore
+    vtkFiltersCore
+    vtkIOLegacy
+)
 include(${VTK_USE_FILE})
 
 include_directories(${PROJECT_SOURCE_DIR})

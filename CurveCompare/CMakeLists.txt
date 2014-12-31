@@ -18,9 +18,16 @@ ELSE(GenerateCLP_FOUND)
           "GenerateCLP not found. Please set GenerateCLP_DIR.")
 ENDIF(GenerateCLP_FOUND)
 
-find_package(VTK REQUIRED)
+find_package(VTK COMPONENTS
+    vtkCommonCore
+    vtkCommonExecutionModel
+    vtkFiltersSources
+    vtkIOLegacy
+    vtkIOXML
+    vtkInteractionWidgets
+    vtkViewsInfovis
+)
 include(${VTK_USE_FILE})
-
 
 IF( ${ITK_VERSION_MAJOR} VERSION_LESS 4 )
   MESSAGE( FATAL_ERROR "CurveCompare needs ITKv4 to compile" )
