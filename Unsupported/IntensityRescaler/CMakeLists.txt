@@ -1,44 +1,44 @@
-PROJECT(IntensityRescaler)
+project(IntensityRescaler)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-CMAKE_POLICY(VERSION 2.8)
-
-
+cmake_minimum_required(VERSION 2.8)
+cmake_policy(VERSION 2.8)
 
 
-FIND_PACKAGE(ITK REQUIRED)
-IF (ITK_FOUND)
-   INCLUDE(${ITK_USE_FILE})
-ELSE(ITK_FOUND)
-   MESSAGE(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-ENDIF (ITK_FOUND)
 
-FIND_PACKAGE(VTK REQUIRED)
-IF (VTK_FOUND)
-  INCLUDE (${VTK_USE_FILE})
-ELSE(VTK_FOUND)
-  MESSAGE(FATAL_ERROR, "VTK not found. Please set VTK_DIR.")
-ENDIF (VTK_FOUND)
+
+find_package(ITK REQUIRED)
+if(ITK_FOUND)
+   include(${ITK_USE_FILE})
+else(ITK_FOUND)
+   message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
+endif(ITK_FOUND)
+
+find_package(VTK REQUIRED)
+if(VTK_FOUND)
+  include(${VTK_USE_FILE})
+else(VTK_FOUND)
+  message(FATAL_ERROR, "VTK not found. Please set VTK_DIR.")
+endif(VTK_FOUND)
 
 include(CMake/qtSetup.cmake)
 #find_package( QT REQUIRED )
 #Find_Package( QT )
-#IF (QT_FOUND)
-#  INCLUDE (${QT_USE_FILE})
-#ELSE(QT_FOUND)
-#  MESSAGE(FATAL_ERROR, "Qt not found. Please set QT_DIR.")
-#ENDIF (QT_FOUND)
+#if(QT_FOUND)
+#  include(${QT_USE_FILE})
+#else(QT_FOUND)
+#  message(FATAL_ERROR, "Qt not found. Please set QT_DIR.")
+#endif(QT_FOUND)
 
 
 #Find_package( GLUT )
 #Find_package( opengl )
 include(CMake/glutSetup.cmake)
 
-INCLUDE (${CMAKE_ROOT}/Modules/FindOpenGL.cmake)
-INCLUDE (${CMAKE_ROOT}/Modules/FindGLU.cmake)
+include(${CMAKE_ROOT}/Modules/FindOpenGL.cmake)
+include(${CMAKE_ROOT}/Modules/FindGLU.cmake)
 
 
-INCLUDE_DIRECTORIES(
+include_directories(
   ${QT_INCLUDE_DIR}
   ${GLUT_INCLUDE_DIR}
   Libraries/Display/Plot
@@ -52,27 +52,27 @@ INCLUDE_DIRECTORIES(
   ${CMAKE_CURRENT_BINARY_DIR}
   )
 
-IF(WIN32)
- #SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /subsystem:windows")
-ENDIF(WIN32)
+if(WIN32)
+ #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /subsystem:windows")
+endif(WIN32)
 
-SET(IntensityRescaler_MOC_SRCS 
+set(IntensityRescaler_MOC_SRCS
    IntensityRescalerGUIControls.h
 )
 
-IF(QT_WRAP_CPP)
-  QT_WRAP_CPP(IntensityRescaler IntensityRescalerMoced_SRCS ${IntensityRescaler_MOC_SRCS})
-ENDIF(QT_WRAP_CPP)
+if(QT_WRAP_CPP)
+  qt_wrap_cpp(IntensityRescaler IntensityRescalerMoced_SRCS ${IntensityRescaler_MOC_SRCS})
+endif(QT_WRAP_CPP)
 
-SET(IntensityRescaler_SRCS 
-  ${IntensityRescalerMoced_SRCS} 
+set(IntensityRescaler_SRCS
+  ${IntensityRescalerMoced_SRCS}
   IntensityRescaler.cxx
   BatchControls.cxx
   IntensityRescalerGUIControls.cxx
   IntensityRescalerCommandLine.cxx
 )
 
-SET(IntensityRescaler_GUI_SRCS 
+set(IntensityRescaler_GUI_SRCS
    Batch.ui
    HistoGUI.ui
    IntensityRescalerGUI.ui
@@ -81,18 +81,18 @@ SET(IntensityRescaler_GUI_SRCS
 
 
 
-IF(QT_WRAP_UI)
-	QT_WRAP_UI(IntensityRescaler IntensityRescaler_HDRS  IntensityRescaler_SRCS  ${IntensityRescaler_GUI_SRCS} )
-ENDIF(QT_WRAP_UI)
+if(QT_WRAP_UI)
+	qt_wrap_ui(IntensityRescaler IntensityRescaler_HDRS  IntensityRescaler_SRCS  ${IntensityRescaler_GUI_SRCS} )
+endif(QT_WRAP_UI)
 
 
 
-ADD_DEFINITIONS(-DQT_DLL)
-ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
+add_definitions(-DQT_DLL)
+add_definitions(-DQT_THREAD_SUPPORT)
 
-ADD_EXECUTABLE(IntensityRescaler ${IntensityRescaler_SRCS})
+add_executable(IntensityRescaler ${IntensityRescaler_SRCS})
 
-TARGET_LINK_LIBRARIES(IntensityRescaler
+target_link_libraries(IntensityRescaler
   Display
   Algorithms
   ${ITK_LIBRARIES}

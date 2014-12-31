@@ -1,17 +1,17 @@
-PROJECT(MultiAtlasSeg)
+project(MultiAtlasSeg)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-CMAKE_POLICY(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
+cmake_policy(VERSION 2.8)
 
 
-FIND_PACKAGE(ITK REQUIRED)
-IF (ITK_FOUND)
-   INCLUDE(${ITK_USE_FILE})
-ELSE(ITK_FOUND)
-   MESSAGE(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-ENDIF (ITK_FOUND)
+find_package(ITK REQUIRED)
+if(ITK_FOUND)
+   include(${ITK_USE_FILE})
+else(ITK_FOUND)
+   message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
+endif(ITK_FOUND)
 
-ADD_EXECUTABLE(MultiAtlasSeg MultiAtlasSeg.cxx)
-TARGET_LINK_LIBRARIES(MultiAtlasSeg ${ITK_LIBRARIES}) 
+add_executable(MultiAtlasSeg MultiAtlasSeg.cxx)
+target_link_libraries(MultiAtlasSeg ${ITK_LIBRARIES})
 
 #install( TARGETS MultiAtlasSeg RUNTIME DESTINATION bin )

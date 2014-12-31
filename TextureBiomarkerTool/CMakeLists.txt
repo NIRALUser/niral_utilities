@@ -1,19 +1,19 @@
-PROJECT(TextureBioMarkerTool)
+project(TextureBioMarkerTool)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-CMAKE_POLICY(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
+cmake_policy(VERSION 2.8)
 
-FIND_PACKAGE(ITK)
-IF(ITK_FOUND)
-  INCLUDE(${ITK_USE_FILE})
-ELSE(ITK_FOUND)
-  MESSAGE(FATAL_ERROR
+find_package(ITK)
+if(ITK_FOUND)
+  include(${ITK_USE_FILE})
+else(ITK_FOUND)
+  message(FATAL_ERROR
           "ITK not found. Please set ITK_DIR.")
-ENDIF(ITK_FOUND)
+endif(ITK_FOUND)
 list( FIND ITK_MODULES_ENABLED ITKReview FOUNDITKReview )
 if( FOUNDITKReview EQUAL -1 )
   message(FATAL_ERROR "TextureBiomarkerTool: ITK needs to be compiled with Module_ITKReview set to ON")
 endif()
-ADD_EXECUTABLE(TextureBioMarkerTool TextureBioMarkerTool.cxx)
-TARGET_LINK_LIBRARIES(TextureBioMarkerTool ${ITK_LIBRARIES}) 
+add_executable(TextureBioMarkerTool TextureBioMarkerTool.cxx)
+target_link_libraries(TextureBioMarkerTool ${ITK_LIBRARIES})
 

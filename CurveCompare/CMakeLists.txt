@@ -1,22 +1,22 @@
-PROJECT(CurveCompare)
+project(CurveCompare)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-CMAKE_POLICY(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
+cmake_policy(VERSION 2.8)
 
-FIND_PACKAGE(ITK 4 REQUIRED)
-IF (ITK_FOUND)
-   INCLUDE(${ITK_USE_FILE})
-ELSE(ITK_FOUND)
-   MESSAGE(FATAL_ERROR, "ITKv4 not found. Please set ITK_DIR.")
-ENDIF (ITK_FOUND)
+find_package(ITK 4 REQUIRED)
+if(ITK_FOUND)
+   include(${ITK_USE_FILE})
+else(ITK_FOUND)
+   message(FATAL_ERROR, "ITKv4 not found. Please set ITK_DIR.")
+endif(ITK_FOUND)
 
-FIND_PACKAGE(GenerateCLP REQUIRED)
-IF(GenerateCLP_FOUND)
-  INCLUDE(${GenerateCLP_USE_FILE})
-ELSE(GenerateCLP_FOUND)
-  MESSAGE(FATAL_ERROR
+find_package(GenerateCLP REQUIRED)
+if(GenerateCLP_FOUND)
+  include(${GenerateCLP_USE_FILE})
+else(GenerateCLP_FOUND)
+  message(FATAL_ERROR
           "GenerateCLP not found. Please set GenerateCLP_DIR.")
-ENDIF(GenerateCLP_FOUND)
+endif(GenerateCLP_FOUND)
 
 find_package(VTK COMPONENTS
     vtkCommonCore
@@ -29,9 +29,9 @@ find_package(VTK COMPONENTS
 )
 include(${VTK_USE_FILE})
 
-IF( ${ITK_VERSION_MAJOR} VERSION_LESS 4 )
-  MESSAGE( FATAL_ERROR "CurveCompare needs ITKv4 to compile" )
-ENDIF()
+if( ${ITK_VERSION_MAJOR} VERSION_LESS 4 )
+  message( FATAL_ERROR "CurveCompare needs ITKv4 to compile" )
+endif()
 
 include(ExternalProject)
 
@@ -46,7 +46,7 @@ ExternalProject_Add(${proj}
     GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/CurveCompare.git"
     SOURCE_DIR ${proj}
     BINARY_DIR ${proj}-build
-    CMAKE_ARGS 
+    CMAKE_ARGS
       -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
       -DGenerateCLP_DIR:PATH=${GenerateCLP_DIR}
       -DITK_DIR:PATH=${ITK_DIR}

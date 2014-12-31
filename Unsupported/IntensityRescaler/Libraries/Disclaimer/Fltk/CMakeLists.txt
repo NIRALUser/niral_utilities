@@ -1,18 +1,18 @@
 
-INCLUDE_DIRECTORIES(
+include_directories(
  ${FLTK_INCLUDE_DIR}
  ${CMAKE_CURRENT_BINARY_DIR}
  ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 
-SET(FltkDisclaimer_UI
+set(FltkDisclaimer_UI
   FltkDisclaimerGUI.fl
 )
 
 
 
-SET(FltkDisclaimer_SRCS
+set(FltkDisclaimer_SRCS
   ../Disclaimer.h
   ../Disclaimer.cxx
   FltkDisclaimer.cxx
@@ -21,5 +21,5 @@ SET(FltkDisclaimer_SRCS
 )
 
 
-FLTK_WRAP_UI(FltkDisclaimer ${FltkDisclaimer_UI})
-ADD_LIBRARY(FltkDisclaimer ${FltkDisclaimer_SRCS} ${FltkDisclaimer_FLTK_UI_SRCS})
+fltk_wrap_ui(FltkDisclaimer ${FltkDisclaimer_UI})
+add_library(FltkDisclaimer ${FltkDisclaimer_SRCS} ${FltkDisclaimer_FLTK_UI_SRCS})
