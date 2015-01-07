@@ -3,16 +3,38 @@ project(DTIAtlasBuilder)
 cmake_minimum_required(VERSION 2.8)
 cmake_policy(VERSION 2.8)
 
-find_package(ITK REQUIRED)
-if(NOT ITK_FOUND)
-  message(FATAL_ERROR "ITK not found. Please set ITK_DIR.")
+find_package(SlicerExecutionModel REQUIRED)
+if(NOT SlicerExecutionModel_FOUND)
+  message(FATAL_ERROR "SlicerExecutionModel not found. Please set
+SlicerExecutionModel_DIR.")
 endif()
 
-find_package(GenerateCLP REQUIRED)
-if(NOT GenerateCLP_FOUND)
-  message(FATAL_ERROR "GenerateCLP not found. Please set GenerateCLP_DIR.")
-endif()
+find_package(ITK COMPONENTS
+  ITKCommon
+  ITKIOImageBase
+  ${ITK_IO_MODULES_USED}
+  REQUIRED
+)
 
+find_package(VTK COMPONENTS
+          vtkCommonComputationalGeometry
+          vtkCommonCore
+          vtkCommonDataModel
+          vtkCommonExecutionModel
+          vtkCommonMath
+          vtkCommonMisc
+          vtkCommonSystem
+          vtkCommonTransforms
+          vtkFiltersCore
+          vtkFiltersGeneral
+          vtkFiltersModeling
+          vtkFiltersSources
+          vtkImagingCore
+          vtkRenderingCore
+          vtkRenderingOpenGL
+          vtkTestingCore
+          vtkTestingRendering
+        )
 
 find_package(Qt4 REQUIRED)
 if(NOT QT_USE_FILE)
@@ -37,8 +59,9 @@ ExternalProject_Add(${proj}
     BINARY_DIR ${proj}-build
     CMAKE_ARGS
       -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
-      -DGenerateCLP_DIR:PATH=${GenerateCLP_DIR}
+      -DSlicerExecutionModel_DIR:PATH=${SlicerExecutionModel_DIR}
       -DITK_DIR:PATH=${ITK_DIR}
+      -DVTK_DIR:PATH=${VTK_DIR}
       -DQT_QMAKE_EXECUTABLE:PATH=${QT_QMAKE_EXECUTABLE}
       -DEXECUTABLE_OUTPUT_PATH:PATH=${EXECUTABLE_OUTPUT_PATH}
     INSTALL_COMMAND ""

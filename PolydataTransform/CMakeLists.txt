@@ -10,17 +10,14 @@ else()
           "GenerateCLP not found. Please set GenerateCLP_DIR.")
 endif()
 
-set(${PROJECT_NAME}_ITK_COMPONENTS
+find_package(ITK COMPONENTS
   ITKCommon
   ITKIOImageBase
-  ITKIONRRD
-  ITKImageFilterBase
-  ITKIOTransformHDF5
-  ITKIOTransformInsightLegacy
-  ITKIOTransformMatlab
-  ${ModuleDescriptionParser_ITK_COMPONENTS}
-  )
-find_package(ITK COMPONENTS ${${PROJECT_NAME}_ITK_COMPONENTS} REQUIRED)
+  ITKImageFunction
+  ITKSpatialObjects
+  ITKTransform
+  ${ITK_IO_MODULES_USED}
+)
 include(${ITK_USE_FILE})
 
 find_package(VTK REQUIRED)
@@ -37,5 +34,4 @@ GENERATECLP(src polydatatransform.xml)
 
 add_executable(polydatatransform  ${src} )
 target_link_libraries( polydatatransform library ${ITK_LIBRARIES} ${VTK_LIBRARIES})
-
 install( TARGETS polydatatransform RUNTIME DESTINATION bin )

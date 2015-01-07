@@ -3,13 +3,6 @@ project(CurveCompare)
 cmake_minimum_required(VERSION 2.8)
 cmake_policy(VERSION 2.8)
 
-find_package(ITK 4 REQUIRED)
-if(ITK_FOUND)
-   include(${ITK_USE_FILE})
-else()
-   message(FATAL_ERROR, "ITKv4 not found. Please set ITK_DIR.")
-endif()
-
 find_package(GenerateCLP REQUIRED)
 if(GenerateCLP_FOUND)
   include(${GenerateCLP_USE_FILE})
@@ -18,14 +11,67 @@ else()
           "GenerateCLP not found. Please set GenerateCLP_DIR.")
 endif()
 
+find_package(ITK COMPONENTS
+  ITKCommon
+  ITKIOImageBase
+  ITKImageAdaptors
+  ITKImageFunction
+  ITKImageStatistics
+  ITKRegistrationCommon
+  ITKSpatialObjects
+  ITKTransform
+  ${ITK_IO_MODULES_USED}
+  REQUIRED
+)
+include(${ITK_USE_FILE})
+
 find_package(VTK COMPONENTS
-    vtkCommonCore
-    vtkCommonExecutionModel
-    vtkFiltersSources
-    vtkIOLegacy
-    vtkIOXML
-    vtkInteractionWidgets
-    vtkViewsInfovis
+  vtkCommonCore
+  vtkFiltersSources
+  vtkIOLegacy
+  vtkIOXML
+  vtkInteractionWidgets
+  vtkViewsInfovis
+  vtkChartsCore
+  vtkCommonColor
+  vtkCommonComputationalGeometry
+  vtkCommonDataModel
+  vtkCommonExecutionModel
+  vtkCommonMath
+  vtkCommonMisc
+  vtkCommonSystem
+  vtkCommonTransforms
+  vtkFiltersCore
+  vtkFiltersExtraction
+  vtkFiltersGeneral
+  vtkFiltersHybrid
+  vtkFiltersImaging
+  vtkFiltersModeling
+  vtkFiltersStatistics
+  vtkIOCore
+  vtkIOGeometry
+  vtkIOImage
+  vtkIOXMLParser
+  vtkImagingColor
+  vtkImagingCore
+  vtkImagingFourier
+  vtkImagingGeneral
+  vtkImagingHybrid
+  vtkImagingSources
+  vtkInfovisCore
+  vtkInfovisLayout
+  vtkInteractionStyle
+  vtkRenderingAnnotation
+  vtkRenderingContext2D
+  vtkRenderingCore
+  vtkRenderingFreeType
+  vtkRenderingLabel
+  vtkRenderingVolume
+  vtkViewsCore
+  vtkalglib
+  vtkfreetype
+  vtkftgl
+  vtkzlib
 )
 include(${VTK_USE_FILE})
 

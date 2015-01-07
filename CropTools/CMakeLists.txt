@@ -7,7 +7,15 @@ if(CMAKE_COMPILER_2005)
   add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
 endif()
 
-find_package(ITK REQUIRED)
+find_package(ITK COMPONENTS
+  ITKCommon
+  ITKDiffusionTensorImage
+  ITKIOImageBase
+  ITKIOMeta
+  ITKImageFilterBase
+  ITKImageGrid
+  ${ITK_IO_MODULES_USED}
+)
 if(ITK_FOUND)
    include(${ITK_USE_FILE})
 else()

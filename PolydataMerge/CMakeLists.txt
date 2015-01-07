@@ -2,8 +2,11 @@ cmake_minimum_required(VERSION 2.6)
 
 project(polydatamerge)
 
-
-find_package(ITK REQUIRED)
+find_package(ITK COMPONENTS
+  ITKCommon
+  ITKIOImageBase
+  ${ITK_IO_MODULES_USED}
+)
 include(${ITK_USE_FILE})
 
 find_package(VTK COMPONENTS

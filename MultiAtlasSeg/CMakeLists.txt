@@ -3,12 +3,15 @@ project(MultiAtlasSeg)
 cmake_minimum_required(VERSION 2.8)
 cmake_policy(VERSION 2.8)
 
-
 find_package(ITK REQUIRED)
 if(ITK_FOUND)
    include(${ITK_USE_FILE})
 else()
    message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
+endif()
+
+if( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
+  message( FATAL_ERROR "CorrespondenceEvaluator needs ITKv3 to compile" )
 endif()
 
 add_executable(MultiAtlasSeg MultiAtlasSeg.cxx)

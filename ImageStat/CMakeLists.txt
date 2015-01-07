@@ -3,14 +3,18 @@ cmake_policy(VERSION 2.8)
 
 project(ImageStat)
 
-find_package(ITK REQUIRED)
-if(ITK_FOUND)
-   include(${ITK_USE_FILE})
-else()
-   message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-endif()
-
 add_executable( ImageStat ImageStat.cc)
+find_package(ITK COMPONENTS
+  ITKCommon
+  ITKDistanceMap
+  ITKIOImageBase
+  ITKImageFilterBase
+  ITKImageIntensity
+  ITKStatistics
+  ITKThresholding
+  ${ITK_IO_MODULES_USED}
+)
+include(${ITK_USE_FILE})
 target_link_libraries( ImageStat ${ITK_LIBRARIES} )
 
 if( NOT ${ITK_USE_REVIEW_STATISTICS} )

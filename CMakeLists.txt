@@ -20,6 +20,24 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${NIRAL_UTILITIES_SOURCE_DIR})
   set(EXECUTABLE_OUTPUT_PATH ${NIRAL_UTILITIES_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
 endif()
 
+set(ITK_IO_MODULES_USED
+# IO Components
+ITKIOImageBase
+ITKIOGDCM
+ITKIOGIPL
+ITKIOMeta
+ITKIONIFTI
+ITKIONRRD
+ITKIOTIFF
+ITKIOTransformInsightLegacy
+ITKIOVTK
+ITKIOSpatialObjects
+ITKIOTransformBase
+ITKIOHDF5
+ITKIOTransformMatlab
+ITKIOTransformHDF5
+)
+
 include_directories( Common )
 
 option(COMPILE_CORREVAL "Compile CorrespondenceEvaluator." OFF)

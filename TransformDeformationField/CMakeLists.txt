@@ -11,7 +11,7 @@ else()
   message(FATAL_ERROR "GenerateCLP not found. Please set GenerateCLP_DIR.")
 endif()
 
-find_package(ITK REQUIRED)
+find_package(ITK  REQUIRED)
 if(ITK_FOUND)
    include(${ITK_USE_FILE})
 else()
