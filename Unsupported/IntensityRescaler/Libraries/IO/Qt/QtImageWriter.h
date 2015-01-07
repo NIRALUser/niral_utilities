@@ -13,13 +13,13 @@ class QtImageWriter
    typedef TPixel PixelType;
    typedef itk::Image<PixelType,3> ImageType;
    typedef itk::ImageFileWriter<ImageType> WriterType;
-   
+
    void Write();
    void SetInput(typename ImageType::Pointer image);
 
    QtImageWriter();
    QtImageWriter(QString filename);
-   ~QtImageWriter(); 
+   ~QtImageWriter();
 
   protected:
    typename ImageType::Pointer m_image;

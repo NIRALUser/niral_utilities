@@ -8,8 +8,8 @@
   Copyright (c) 2003 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "IntensityCurveVTK.h"
@@ -35,10 +35,10 @@ IntensityCurveVTK
   m_Spline->Delete();
 }
 
-void 
+void
 IntensityCurveVTK
-::Initialize(unsigned int nControlPoints) 
-{   
+::Initialize(unsigned int nControlPoints)
+{
   // Set up the intervals for the control points
   float interval = 1.0 / (nControlPoints - 1);
   float t = 0;
@@ -47,7 +47,7 @@ IntensityCurveVTK
   m_ControlPoints.clear();
   m_Spline->RemoveAllPoints();
 
-  for(unsigned int i=0;i<nControlPoints;i++,t+=interval) 
+  for(unsigned int i=0;i<nControlPoints;i++,t+=interval)
     {
     ControlPoint c = {t,t};
     m_ControlPoints.push_back(c);
@@ -57,7 +57,7 @@ IntensityCurveVTK
   m_Spline->Compute();
 }
 
-void 
+void
 IntensityCurveVTK
 ::GetControlPoint(unsigned int iControlPoint,float &t,float &x)  const
 {
@@ -66,9 +66,9 @@ IntensityCurveVTK
   x = m_ControlPoints[iControlPoint].x;
 }
 
-void 
+void
 IntensityCurveVTK
-::UpdateControlPoint(unsigned int iControlPoint, float t, float x) 
+::UpdateControlPoint(unsigned int iControlPoint, float t, float x)
 {
   assert(iControlPoint < m_ControlPoints.size());
 
@@ -86,7 +86,7 @@ IntensityCurveVTK
   m_Spline->Compute();
 }
 
-bool 
+bool
 IntensityCurveVTK
 ::IsMonotonic() const
 {
@@ -111,7 +111,7 @@ IntensityCurveVTK
   return true;
 }
 
-void 
+void
 IntensityCurveVTK
 ::ScaleControlPointsToWindow(float tMin, float tMax)
 {
@@ -136,7 +136,7 @@ IntensityCurveVTK
   m_Spline->Compute();
 }
 
-void 
+void
 IntensityCurveVTK
 ::ScaleControlPointsYToWindow(float tMin, float tMax)
 {

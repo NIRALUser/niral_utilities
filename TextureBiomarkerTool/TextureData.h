@@ -7,8 +7,8 @@
  * Update  :   1. Created the data class (06-04-10)
  * Copyright (c) Nero Image Research and Analysis Lab.@UNC All rights reserved.
  *
- * This software is distributed WITHOUT ANY WARRANTY; without even 
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * This software is distributed WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE.
  *
 =========================================================================*/
@@ -60,7 +60,7 @@
 //using namespace std;
 
 #ifndef DMDDATA    // prevent for redefine
-#define DMDDATA    
+#define DMDDATA
 #define SEARCHED_PIXEL_VALUE -1
 #define TEMP_PIXEL_VALUE -2
 
@@ -68,7 +68,7 @@
 class DMDData
 {
     private:
-        
+
     public:
         typedef float                                                      PixelType;
         typedef long			                                   uncharPixelType;
@@ -90,15 +90,15 @@ class DMDData
         typedef itk::ImageSeriesReader< OrientedImageType >                OrientedSeriesReaderType;
         typedef itk::ImageFileWriter< OrientedImageType >                  OrientedWriterType;
 	typedef itk::Image< PixelType, 3 >                                 ImageReaderInputType;
-	typedef itk::ImageFileReader< ImageReaderInputType >               segMuscleReaderType;  
+	typedef itk::ImageFileReader< ImageReaderInputType >               segMuscleReaderType;
 	//	typedef itk::Image< PixelType, 3 >                                 ImageReaderInputType;
         // dicomIO was created to connect GDCMImage (provide services for reading and writing DICOM files) and reader
         typedef itk::GDCMImageIO                                           ImageIOType;
         // to identify from a given directory the set of filenames that belong together to the same volumetric image
         typedef itk::RecursiveGaussianImageFilter<OrientedImageType, OrientedImageType>    FilterType;
-	typedef itk::GDCMSeriesFileNames                                   NamesGeneratorType;    
-        typedef itk::MetaDataDictionary                                    DictionaryType;            
-        typedef std::vector< StrITKType >                                  FileNamesContainer;        
+	typedef itk::GDCMSeriesFileNames                                   NamesGeneratorType;
+        typedef itk::MetaDataDictionary                                    DictionaryType;
+        typedef std::vector< StrITKType >                                  FileNamesContainer;
 	typedef itk::ImageFileReader< OrientedImageType >                  OrientedImageReaderType;
         typedef itk::ImageRegionConstIterator< OrientedImageType >         ConstIteratorType;
         typedef itk::ImageRegionIterator< OrientedImageType >              IteratorType;
@@ -107,7 +107,7 @@ class DMDData
         // connected component filter
 	typedef itk::ConnectedComponentImageFilter<uncharOrientedImageType, uncharOrientedImageType> itkConnectedComponentFilterType;
         typedef itk::RelabelComponentImageFilter<uncharOrientedImageType, uncharOrientedImageType>    itkRelabelComponentFilterType;
- 
+
 
 
 	FileNamesContainer                                                 fileNames;
@@ -116,7 +116,7 @@ class DMDData
         itkRelabelComponentFilterType::Pointer relabeller;// = itkRelabelComponentFilterType::New();
 	
         // tells the GDCMSereiesFileNames object to use additional DICOM information to distinguish unique volumes within the directory.
-        // note that SetUseSeriesDetails(true) must be called before SetDirectory()	          
+        // note that SetUseSeriesDetails(true) must be called before SetDirectory()	
 	void dataReader ( StrITKType fileName, OrientedImageReaderType::Pointer & reader );
 	void seriesDataReader ( StrITKType seriesIdentifie, OrientedSeriesReaderType::Pointer & reader, ImageIOType::Pointer & dicomIO );
 	void dataWriter ( OrientedWriterType::Pointer writer, StrITKType outputFilename );
@@ -128,7 +128,7 @@ class DMDData
         //void imageInitialize ( OrientedSeriesReaderType::Pointer input, OrientedImageType::Pointer &data );
 	void imageInitialize (OrientedImageType::Pointer input, OrientedImageType::Pointer &data, float &voxelVol );
         void imageInitialize ( OrientedImageType::Pointer input, OrientedImageType::Pointer &data );
-        float muscleMean ( OrientedSeriesReaderType::Pointer input, OrientedImageReaderType::Pointer mask, int &volume ) ;     
+        float muscleMean ( OrientedSeriesReaderType::Pointer input, OrientedImageReaderType::Pointer mask, int &volume ) ;
         void morphErod ( OrientedImageType::Pointer input, OrientedImageType::Pointer &output, IntITKType size ) ;
         void morphDilat ( OrientedImageType::Pointer input, OrientedImageType::Pointer &output, IntITKType size ) ;
         void morphMultiGrayErod2DIn3D ( OrientedImageType::Pointer input, OrientedImageType::Pointer &output, IntITKType size ) ;
@@ -145,7 +145,7 @@ class DMDData
         int connectedComponentLabeling (OrientedImageType::Pointer & input);
 
 
-        
+
 };
 ////////////////////////////////////l//////////////////////////////////////////////////////////////////////////////
 void DMDData::seriesDataReader( StrITKType seriesIdentifier, OrientedSeriesReaderType::Pointer & reader, ImageIOType::Pointer & dicomIO )
@@ -156,29 +156,29 @@ void DMDData::seriesDataReader( StrITKType seriesIdentifier, OrientedSeriesReade
     nameGenerator->SetDirectory(inputDirectory.c_str());
     reader = OrientedSeriesReaderType::New();
     dicomIO = ImageIOType::New();
-    //   std::cout << "Now reading series: " << seriesIdentifier.c_str() << std::endl; 
+    //   std::cout << "Now reading series: " << seriesIdentifier.c_str() << std::endl;
     fileNames = nameGenerator->GetFileNames( seriesIdentifier );
-    
-    std::cout << "Now reading series: " << seriesIdentifier << std::endl; 
+
+    std::cout << "Now reading series: " << seriesIdentifier << std::endl;
     reader->SetImageIO( dicomIO );
-    std::cout << "Now reading series: " << fileNames[0] << std::endl; 
+    std::cout << "Now reading series: " << fileNames[0] << std::endl;
     reader->SetFileNames( fileNames );
-    
-    
+
+
     try {
         reader->Update();
-       
+
     }
     catch (itk::ExceptionObject &ex) {
        std::cout << ex << std::endl;
        //  continue;
        exit(0);
-    }            
+    }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DMDData::dataWriter(OrientedWriterType::Pointer writer, StrITKType outputFilename )
 {
-    writer->SetFileName(outputFilename);   
+    writer->SetFileName(outputFilename);
     //    std::cout  << "Writing the image as " << outputFilename << std::endl << std::endl;
     try {
         writer->Update();
@@ -200,15 +200,15 @@ void DMDData::readDicomTag( ImageIOType::Pointer & dicomIO, std::vector<StrITKTy
         typedef itk::MetaDataObject<StrITKType> MetaDataStringType;
         itk::MetaDataObjectBase::Pointer  entry = itr->second;
         MetaDataStringType::Pointer entryvalue = dynamic_cast<MetaDataStringType *>( entry.GetPointer() ) ;
-        // take DICOM tag and pass it to the GetLabelFromTag() method of the GDCMImageIO class. 
-        // This method checks the DICOM dictionary and returns the string label associated to the tag that we are providing in the tagkey variable. 
+        // take DICOM tag and pass it to the GetLabelFromTag() method of the GDCMImageIO class.
+        // This method checks the DICOM dictionary and returns the string label associated to the tag that we are providing in the tagkey variable.
         // The method itself return false if the tagkey is not found in the dictionary.
         if( entryvalue ) {
 	    tagkey.push_back(itr->first);
             StrITKType labelId;
-            //  bool found =  itk::GDCMImageIO::GetLabelFromTag( tagkey, labelId ); 
+            //  bool found =  itk::GDCMImageIO::GetLabelFromTag( tagkey, labelId );
             // The actual value of the dictionary entry is obtained as a string with the GetMetaDataObjectValue() method.
-	    tagvalue.push_back(entryvalue->GetMetaDataObjectValue()); 
+	    tagvalue.push_back(entryvalue->GetMetaDataObjectValue());
             // print out an entry by concatenating the DICOM Name or label, the numeric tag and its actual value.
 		    /*  if( found ) {
                 std::cout << "(" << tagkey << ") " << labelId;
@@ -217,8 +217,8 @@ void DMDData::readDicomTag( ImageIOType::Pointer & dicomIO, std::vector<StrITKTy
 	            else {
               std::cout << "(" << tagkey <<  ") " << "Unknown";
               std::cout << " = " << tagvalue.c_str() << std::endl;
-		      }*/                
-	    
+		      }*/
+	
         }
         // Finally we just close the loop that will walk through all the Dictionary entries.
         ++itr;
@@ -246,7 +246,7 @@ void DMDData::smoothGradAnisoDiff( OrientedImageType::Pointer input, OrientedIma
     filter->Update();
 
     output = filter->GetOutput();
-    
+
 
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -283,7 +283,7 @@ void DMDData::smoothGaussian( OrientedImageType::Pointer input, OrientedImageTyp
     filterZ->Update();
 
     output = filterZ->GetOutput();
-    
+
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //void DMDData::imageInitialize ( OrientedSeriesReaderType::Pointer input, OrientedImageType::Pointer &data, float &voxelVol )
@@ -298,7 +298,7 @@ void DMDData::imageInitialize ( OrientedImageType::Pointer input, OrientedImageT
     data->SetRegions( region );
     data->SetSpacing( spacing );
     data->SetDirection( direction );
-    data->SetOrigin( origin );                    
+    data->SetOrigin( origin );
     data->Allocate();
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -313,7 +313,7 @@ void DMDData::imageInitialize ( OrientedImageType::Pointer input, OrientedImageT
     data->SetRegions( region );
     data->SetSpacing( spacing );
     data->SetDirection( direction );
-    data->SetOrigin( origin );                    
+    data->SetOrigin( origin );
     data->Allocate();
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -328,7 +328,7 @@ void DMDData::dataReader ( StrITKType fileName, OrientedImageReaderType::Pointer
 float DMDData::muscleMean ( OrientedSeriesReaderType::Pointer input, OrientedImageReaderType::Pointer mask, int &volume )
 {
     float mean = 0;
-    
+
     DMDData::OrientedImageType::Pointer origImage = input->GetOutput();
     ConstIteratorType constOrigIterator( origImage, origImage->GetRequestedRegion() );
     OrientedImageType::Pointer maskImage = mask->GetOutput();
@@ -341,21 +341,21 @@ float DMDData::muscleMean ( OrientedSeriesReaderType::Pointer input, OrientedIma
             }
         }
     }
-    
+
     return mean;
-} 
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void DMDData::morphErod ( OrientedImageType::Pointer input, OrientedImageType::Pointer &output, IntITKType size ) 
+void DMDData::morphErod ( OrientedImageType::Pointer input, OrientedImageType::Pointer &output, IntITKType size )
 {
     typedef unsigned char   InputPixelType;
     typedef itk::Image< PixelType, 3 >   InputImageType;
-    typedef itk::BinaryBallStructuringElement< PixelType, 3 >                             StructuringElementType;        
+    typedef itk::BinaryBallStructuringElement< PixelType, 3 >                             StructuringElementType;
     typedef itk::GrayscaleErodeImageFilter< InputImageType, InputImageType, StructuringElementType >  ErodeFilterType;
     typedef itk::GrayscaleDilateImageFilter< InputImageType, InputImageType, StructuringElementType > DilateFilterType;
-    
+
     ErodeFilterType::Pointer  grayscaleErode  = ErodeFilterType::New();
     DilateFilterType::Pointer grayscaleDilate = DilateFilterType::New();
-   
+
     StructuringElementType  structuringElement;
 
     structuringElement.SetRadius( size );  // ( size x 2 + 1 ) x ( size x 2 + 1 ) structuring element
@@ -365,26 +365,26 @@ void DMDData::morphErod ( OrientedImageType::Pointer input, OrientedImageType::P
     grayscaleErode->SetKernel( structuringElement );
     //grayscaleDilate->SetKernel( structuringElement );
     grayscaleErode->SetInput( input );
-    
+
     typedef itk::ImageFileWriter< InputImageType >  WriterType;
     WriterType::Pointer writerErosion  = WriterType::New();
     writerErosion->SetFileName( "erosion.nrrd" );
     writerErosion->SetInput( grayscaleErode->GetOutput() );
     writerErosion->Update();
-     
+
     output = grayscaleErode->GetOutput();
-    output->Update(); 
-} 
+    output->Update();
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void DMDData::morphDilat ( OrientedImageType::Pointer input, OrientedImageType::Pointer &output, IntITKType size ) 
+void DMDData::morphDilat ( OrientedImageType::Pointer input, OrientedImageType::Pointer &output, IntITKType size )
 {
     typedef unsigned char   InputPixelType;
     typedef itk::Image< PixelType, 3 >   InputImageType;
-    typedef itk::BinaryBallStructuringElement< PixelType, 3 >                             StructuringElementType;        
+    typedef itk::BinaryBallStructuringElement< PixelType, 3 >                             StructuringElementType;
     typedef itk::GrayscaleDilateImageFilter< InputImageType, InputImageType, StructuringElementType > DilateFilterType;
-    
+
     DilateFilterType::Pointer grayscaleDilate = DilateFilterType::New();
-   
+
     StructuringElementType  structuringElement;
 
     structuringElement.SetRadius( size );  // ( size x 2 + 1 ) x ( size x 2 + 1 ) structuring element
@@ -394,24 +394,24 @@ void DMDData::morphDilat ( OrientedImageType::Pointer input, OrientedImageType::
     grayscaleDilate->SetKernel( structuringElement );
     //grayscaleDilate->SetKernel( structuringElement );
     grayscaleDilate->SetInput( input );
-    
+
     typedef itk::ImageFileWriter< InputImageType >  WriterType;
     WriterType::Pointer writerErosion  = WriterType::New();
     writerErosion->SetFileName( "dilation.nrrd" );
     writerErosion->SetInput( grayscaleDilate->GetOutput() );
     writerErosion->Update();
-     
+
     output = grayscaleDilate->GetOutput();
-    output->Update(); 
-} 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
-void DMDData::morphMultiGrayErod2DIn3D ( OrientedImageType::Pointer input, OrientedImageType::Pointer &output, IntITKType size ) 
+    output->Update();
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void DMDData::morphMultiGrayErod2DIn3D ( OrientedImageType::Pointer input, OrientedImageType::Pointer &output, IntITKType size )
 {
     // apply 2D morphological erosion to each slice of 3D volumetric data
     typedef unsigned char   InputPixelType;
     typedef itk::Image< PixelType, 3 >   InputImageType;
     typedef itk::Image< PixelType, 2 >   OutputImageType;
-    typedef itk::BinaryBallStructuringElement< PixelType, 2 >                             StructuringElementType;        
+    typedef itk::BinaryBallStructuringElement< PixelType, 2 >                             StructuringElementType;
 //    typedef itk::GrayscaleErodeImageFilter< OutputImageType, OutputImageType, StructuringElementType >  ErodeFilterType;
 //    typedef itk::GrayscaleDilateImageFilter< OutputImageType, OutputImageType, StructuringElementType > DilateFilterType;
 
@@ -426,7 +426,7 @@ void DMDData::morphMultiGrayErod2DIn3D ( OrientedImageType::Pointer input, Orien
     typedef itk::GrayscaleDilateImageFilter< slicebysliceFilterType::InternalInputImageType, slicebysliceFilterType::InternalOutputImageType, StructuringElementType > DilateFilterType;
     ErodeFilterType::Pointer  grayscaleErode  = ErodeFilterType::New();
     DilateFilterType::Pointer grayscaleDilate = DilateFilterType::New();
-   
+
     StructuringElementType  structuringElement;
 
     structuringElement.SetRadius( size );  // ( size x 2 + 1 ) x ( size x 2 + 1 ) structuring element
@@ -444,17 +444,17 @@ void DMDData::morphMultiGrayErod2DIn3D ( OrientedImageType::Pointer input, Orien
     writerErosion->SetFileName( "erosion.nrrd" );
     writerErosion->SetInput( grayscaleErode->GetOutput() );
     writerErosion->Update();*/
-    
+
     //output = grayscaleErode->GetOutput();
     output = slicebyslicefilter->GetOutput();
-    output->Update(); 
- 
+    output->Update();
+
     typedef itk::ImageFileWriter< InputImageType >  WriterType;
     WriterType::Pointer writerErosion  = WriterType::New();
     writerErosion->SetFileName( "../data/erosion.nrrd" );
     writerErosion->SetInput( output );
     writerErosion->Update();
-    
+
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DMDData::outHistogram ( OrientedImageType::Pointer data, OrientedImageType::Pointer roi, OrientedImageType::Pointer mask, StrITKType Identify )
@@ -463,10 +463,10 @@ void DMDData::outHistogram ( OrientedImageType::Pointer data, OrientedImageType:
     ConstIteratorType constMaskIterator( mask, mask->GetRequestedRegion() ) ;
     IteratorType roiIterator( roi, roi->GetRequestedRegion() ) ;
     StrITKType histofile, musclename[3] = {"semit", "rect", "cran"};
-    float min = 0, max = 0;    
+    float min = 0, max = 0;
     int minBin = 0, maxBin = 0 ;
     int label[3] = {SEMIT, REC_FEM, CRAN_SART} ;
- 
+
     for ( int i = 0; i < 3; i++ ) {
         histofile = Identify + musclename[i] + "_histogram";
         std::ofstream efile( histofile.c_str(), std::ios::out );
@@ -475,17 +475,17 @@ void DMDData::outHistogram ( OrientedImageType::Pointer data, OrientedImageType:
         for ( constIterator.GoToBegin(), constMaskIterator.GoToBegin(), roiIterator.GoToBegin() ; !constIterator.IsAtEnd(); ++constIterator, ++constMaskIterator, ++roiIterator ) {
             if ( constMaskIterator.Get() == label[i] ) {
                 if (constIterator.Get() < min)
-                    min = constIterator.Get(); 
+                    min = constIterator.Get();
                 if (constIterator.Get() > max)
-                    max = constIterator.Get(); 
+                    max = constIterator.Get();
                 roiIterator.Set( constIterator.Get() );
             }
             else {
                 roiIterator.Set( 0 );
             }
         }
-        
-  //      cout << Identify << "  " << musclename[i] << ":  " << min << "  " << max << endl; 
+
+  //      cout << Identify << "  " << musclename[i] << ":  " << min << "  " << max << endl;
         minBin = (int)min;
         maxBin = (int)max;
         if(min < 0) {
@@ -497,13 +497,13 @@ void DMDData::outHistogram ( OrientedImageType::Pointer data, OrientedImageType:
                 }
                 else {
                     roiIterator.Set( 0 );
-                }   
+                }
             }
             max = max - min + 1;
             min = min - min + 1;
         }
-   //     cout << Identify << "  " << musclename[i] << ":  " << min << "  " << max << "  " << minBin << "  " << maxBin  << endl; 
-         
+   //     cout << Identify << "  " << musclename[i] << ":  " << min << "  " << max << "  " << minBin << "  " << maxBin  << endl;
+
         typedef itk::Statistics::ScalarImageToHistogramGenerator< OrientedImageType >   HistogramGeneratorType;
         HistogramGeneratorType::Pointer histogramGenerator = HistogramGeneratorType::New();
         histogramGenerator->SetInput( roi );
@@ -542,10 +542,10 @@ void DMDData::interpolate3D ( const OrientedImageType::Pointer input, StrITKType
     OrientedImageType::PointType                   origin = input->GetOrigin() ;
     OrientedImageType::SizeType                    size = input->GetLargestPossibleRegion().GetSize();
     OrientedImageType::IndexType                   indexInput, indexOutput;
-    float interpolatedVal = 0, upperVal = 0, bottomVal = 0, pixelVal = 0; 
+    float interpolatedVal = 0, upperVal = 0, bottomVal = 0, pixelVal = 0;
     float distance = 5.0, upperIndex = 0, bottomIndex = 0;
     float upperFactor = 0, bottomFactor = 0, interpolatThresh = 0.5, inplane = 0, upperSum = 0, bottomSum = 0;
-    float currentLabel = 0; 
+    float currentLabel = 0;
     std::string outputfilename;
 
 
@@ -554,48 +554,48 @@ void DMDData::interpolate3D ( const OrientedImageType::Pointer input, StrITKType
     output->SetRegions( region );
     output->SetSpacing( spacing );
     output->SetDirection( direction );
-    output->SetOrigin( origin );                    
+    output->SetOrigin( origin );
     output->Allocate();
     referenceVolume->SetRegions( region );
     referenceVolume->SetSpacing( spacing );
     referenceVolume->SetDirection( direction );
-    referenceVolume->SetOrigin( origin );                    
+    referenceVolume->SetOrigin( origin );
     referenceVolume->Allocate();
 
     referenceSemit->SetRegions( region );
     referenceSemit->SetSpacing( spacing );
     referenceSemit->SetDirection( direction );
-    referenceSemit->SetOrigin( origin );                    
+    referenceSemit->SetOrigin( origin );
     referenceSemit->Allocate();
     referenceRecFem->SetRegions( region );
     referenceRecFem->SetSpacing( spacing );
     referenceRecFem->SetDirection( direction );
-    referenceRecFem->SetOrigin( origin );                    
+    referenceRecFem->SetOrigin( origin );
     referenceRecFem->Allocate();
     referenceCranSart->SetRegions( region );
     referenceCranSart->SetSpacing( spacing );
     referenceCranSart->SetDirection( direction );
-    referenceCranSart->SetOrigin( origin );                    
+    referenceCranSart->SetOrigin( origin );
     referenceCranSart->Allocate();
     segVolume->SetRegions( region );
     segVolume->SetSpacing( spacing );
     segVolume->SetDirection( direction );
-    segVolume->SetOrigin( origin );                    
+    segVolume->SetOrigin( origin );
     segVolume->Allocate();
     segSemit->SetRegions( region );
     segSemit->SetSpacing( spacing );
     segSemit->SetDirection( direction );
-    segSemit->SetOrigin( origin );                    
+    segSemit->SetOrigin( origin );
     segSemit->Allocate();
     segRecFem->SetRegions( region );
     segRecFem->SetSpacing( spacing );
     segRecFem->SetDirection( direction );
-    segRecFem->SetOrigin( origin );                    
+    segRecFem->SetOrigin( origin );
     segRecFem->Allocate();
     segCranSart->SetRegions( region );
     segCranSart->SetSpacing( spacing );
     segCranSart->SetDirection( direction );
-    segCranSart->SetOrigin( origin );                    
+    segCranSart->SetOrigin( origin );
     segCranSart->Allocate();
 
     for(int l = CRAN_SART; l < CAUD_SART; l++){
@@ -633,8 +633,8 @@ void DMDData::interpolate3D ( const OrientedImageType::Pointer input, StrITKType
                     inplane = 0; upperSum = 0; bottomSum = 0;
                     for (int i = -k / 2 ; i <= k / 2; i++){
                         for (int j = -k / 2 ; j <= k / 2; j++){
-                            indexInput[0] = indexOutput[0] + i; 
-                            indexInput[1] = indexOutput[1] + j; 
+                            indexInput[0] = indexOutput[0] + i;
+                            indexInput[1] = indexOutput[1] + j;
                             upperIndex = (indexOutput[2] / (int)distance + 1) * distance + minSlice;
                             indexInput[2] = (int)upperIndex;
                             upperVal = input->GetPixel(indexInput);
@@ -671,7 +671,7 @@ void DMDData::interpolate3D ( const OrientedImageType::Pointer input, StrITKType
         }
     }
     //output interpolated muscle volume
-    writer->SetInput( output );  
+    writer->SetInput( output );
     std::stringstream fs;
     fs << distance;
     //outputfilename = "../data/" + caseID + "_intervolfull_left_femur_mask" + ".nrrd";
@@ -680,13 +680,13 @@ void DMDData::interpolate3D ( const OrientedImageType::Pointer input, StrITKType
 
     float overlapRate = 0;
     //calculate overlap of semitendinaus
-    overlapRate = overlap(input, output, SEMIT, 1, distance);    
+    overlapRate = overlap(input, output, SEMIT, 1, distance);
     std::cout << "the overlap of semit is:  " << overlapRate << std::endl;
     //calculate overlap of rec fem
-    overlapRate = overlap(input, output, REC_FEM, 1, distance);    
+    overlapRate = overlap(input, output, REC_FEM, 1, distance);
     std::cout << "the overlap of rec fem is:  " << overlapRate << std::endl;
     //calculate overlap of cran sart
-    overlapRate = overlap(input, output, CRAN_SART, 1, distance);    
+    overlapRate = overlap(input, output, CRAN_SART, 1, distance);
     std::cout << "the overlap of cran sart is:  " << overlapRate << std::endl;
 
     for(indexOutput[2] = 1; indexOutput[2] < (int)size[2] - 1; indexOutput[2]++) {
@@ -697,15 +697,15 @@ void DMDData::interpolate3D ( const OrientedImageType::Pointer input, StrITKType
                     segVolume->SetPixel(indexOutput, output->GetPixel(indexOutput));
                     referenceVolume->SetPixel(indexOutput, input->GetPixel(indexOutput));
                     if(output->GetPixel(indexOutput) == SEMIT)
-                        segSemit->SetPixel(indexOutput, SEMIT);    
+                        segSemit->SetPixel(indexOutput, SEMIT);
                     if(input->GetPixel(indexOutput) == SEMIT)
                         referenceSemit->SetPixel(indexOutput, SEMIT);
                     if(output->GetPixel(indexOutput) == REC_FEM)
-                        segRecFem->SetPixel(indexOutput, REC_FEM);    
+                        segRecFem->SetPixel(indexOutput, REC_FEM);
                     if(input->GetPixel(indexOutput) == REC_FEM)
                         referenceRecFem->SetPixel(indexOutput, REC_FEM);
                     if(output->GetPixel(indexOutput) == CRAN_SART)
-                        segCranSart->SetPixel(indexOutput, CRAN_SART);    
+                        segCranSart->SetPixel(indexOutput, CRAN_SART);
                     if(input->GetPixel(indexOutput) == CRAN_SART)
                         referenceCranSart->SetPixel(indexOutput, CRAN_SART);
                 }
@@ -716,7 +716,7 @@ void DMDData::interpolate3D ( const OrientedImageType::Pointer input, StrITKType
                 }
             }
         }
-    }         
+    }
 /*
     //output interpolated muscle volume without reference slices
     writer->SetInput( segVolume );
@@ -780,7 +780,7 @@ float DMDData::overlap ( OrientedImageType::Pointer input, OrientedImageType::Po
                             referVol++;
                         if((segVal == label))
                             segVol++;
-                    }                
+                    }
                 }
                 else{
                     referVal = input->GetPixel(index);
@@ -797,16 +797,16 @@ float DMDData::overlap ( OrientedImageType::Pointer input, OrientedImageType::Po
             }
         }
     }
-   
+
     std::cout << "number of pixels outside reference standard:  " << numberofoutside << "  " << 100 * numberofoutside / segVol << std::endl;
     return interVol / unionVol * 100;  // percentage
-   
+
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DMDData::connectedLabeling2D ( const OrientedImage2DType::Pointer input)
 {
-   
- 
+
+
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void DMDData::connectedLabeling3D ( const OrientedImageType::Pointer input)
@@ -823,17 +823,17 @@ void DMDData::connectedLabeling3D ( const OrientedImageType::Pointer input)
     OrientedImageType::IndexType                   index;
     OrientedImageType::Pointer                     morphOutput = OrientedImageType::New() ;
     uncharOrientedImageType::Pointer               output = uncharOrientedImageType::New() ;
-    
+
     morphOutput->SetRegions( region );
     morphOutput->SetSpacing( spacing );
     morphOutput->SetDirection( direction );
-    morphOutput->SetOrigin( origin );                    
+    morphOutput->SetOrigin( origin );
     morphOutput->Allocate();
 
     output->SetRegions( region );
     output->SetSpacing( spacing );
     output->SetDirection( direction );
-    output->SetOrigin( origin );                    
+    output->SetOrigin( origin );
     output->Allocate();
 
     morphErod ( input, morphOutput, 2 ) ;
@@ -846,14 +846,14 @@ void DMDData::connectedLabeling3D ( const OrientedImageType::Pointer input)
                 output->SetPixel(index, (unsigned char)morphOutput->GetPixel(index));
             }
         }
-    }     
+    }
 
 //    itkMetaImageIOType::Pointer		labellerMetaWriterIO  = itkMetaImageIOType::New();
 
     labeller = itkConnectedComponentFilterType::New();
     labeller->SetInput( output );
     labeller->Update();
-   
+
     relabeller = itkRelabelComponentFilterType::New();
     relabeller->SetInput( labeller->GetOutput() );
     relabeller->Update();
@@ -872,8 +872,8 @@ void DMDData::waterTubeSegmentation (const OrientedImageType::Pointer input )
     OrientedImageType::IndexType                   index;
     OrientedImageType::SizeType                    size = input->GetLargestPossibleRegion().GetSize();
     float actualVolWaterTube = 50000, diffVolActualLabel = 50000;
-    int selectedLabel = 0; 
-    
+    int selectedLabel = 0;
+
     filter->SetInput( input );
     filter->SetOutsideValue( 1 );
     filter->SetInsideValue( 0 );
@@ -881,9 +881,9 @@ void DMDData::waterTubeSegmentation (const OrientedImageType::Pointer input )
     filter->Update();
     writer->SetInput(filter->GetOutput());
     dataWriter(writer, "../data/otsuThresholdOutput.nrrd");
-    
+
     connectedLabeling3D ( filter-> GetOutput());
- 
+
     unsigned long nObjects = relabeller->GetNumberOfObjects();
     const std::vector<unsigned long> sizeOfObjects = relabeller->GetSizeOfObjectsInPixels();
     std::cout << "Number of objects : " << nObjects << std::endl;
@@ -907,24 +907,24 @@ void DMDData::waterTubeSegmentation (const OrientedImageType::Pointer input )
         cylinderRadius[i] = 0;
         cylinderLength[i] = 0;
     }
-     
+
     for(index[2] = 0; index[2] < (int)size[2]; index[2]++) {
-        float radius[(const int)nObjects]; 
+        float radius[(const int)nObjects];
         for (int i = 0; i < nObjects; i++) {
             radius[i] = 0; }
         for(index[1] = 0; index[1] < (int)size[1]; index[1]++) {
             for(index[0] = 0; index[0] < (int)size[0]; index[0]++) {
                 int pixelLabel = relabeller->GetOutput()->GetPixel(index);
-                if(pixelLabel <= smallObjThresh){ 
-                    labeller->GetOutput()->SetPixel(index, pixelLabel); 
+                if(pixelLabel <= smallObjThresh){
+                    labeller->GetOutput()->SetPixel(index, pixelLabel);
                 }
                 else{
-                    labeller->GetOutput()->SetPixel(index, 0); 
+                    labeller->GetOutput()->SetPixel(index, 0);
                 }
             }
         }
     }
-   
+
 
     std::cout << "small object threshold: " <<  smallObjThresh << std::endl;
     typedef itk::Image< uncharPixelType, 3 >   LabelImageType;
@@ -940,8 +940,8 @@ void DMDData::waterTubeSegmentation (const OrientedImageType::Pointer input )
     std::cout << "\n\nRUNNING THE FILTER WITHOUT AN INTENSITY IMAGE..." << std::endl;
     labelGeometryFilter->Print(std::cout);
 
-    for( int i = 1; i <= smallObjThresh; i++) { 
-        float axelength[3], volume = labelGeometryFilter->GetVolume(i), rater = 0 ; 
+    for( int i = 1; i <= smallObjThresh; i++) {
+        float axelength[3], volume = labelGeometryFilter->GetVolume(i), rater = 0 ;
         const VectorType EigenValue = labelGeometryFilter->GetEigenvalues( i );
         VectorType::const_iterator itr = EigenValue.begin();
 
@@ -978,11 +978,11 @@ void DMDData::waterTubeSegmentation (const OrientedImageType::Pointer input )
         for(index[1] = 0; index[1] < (int)size[1]; index[1]++) {
             for(index[0] = 0; index[0] < (int)size[0]; index[0]++) {
                 int pixelLabel = labeller->GetOutput()->GetPixel(index);
-                if(pixelLabel == selectedLabel){ 
-                    labeller->GetOutput()->SetPixel(index, 1); 
+                if(pixelLabel == selectedLabel){
+                    labeller->GetOutput()->SetPixel(index, 1);
                 }
                 else{
-                    labeller->GetOutput()->SetPixel(index, 0); 
+                    labeller->GetOutput()->SetPixel(index, 0);
                 }
             }
         }
@@ -996,7 +996,7 @@ void DMDData::waterTubeSegmentation (const OrientedImageType::Pointer input )
         std::cout << "write:" << ex << std::endl;
         //return EXIT_FAILURE;
         exit(0);
-    }   
+    }
     std::cout << "output selected label" << std::endl;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1006,12 +1006,12 @@ void DMDData::fatSuppressBiasIdentify (const OrientedImageType::Pointer inputT2,
     OrientedImageType::IndexType                   index;
     OrientedImageType::SizeType                    size = inputT2->GetLargestPossibleRegion().GetSize();
     OrientedWriterType::Pointer                    writer = OrientedWriterType::New();
-   
+
     for(index[2] = 0; index[2] < (int)size[2]; index[2]++) {
         for(index[1] = 0; index[1] < (int)size[1]; index[1]++) {
             for(index[0] = 0; index[0] < (int)size[0]; index[0]++) {
                 int pixelLabel = labeller->GetOutput()->GetPixel(index);
-                if(pixelLabel == 1){ 
+                if(pixelLabel == 1){
                     meanIntT2 += inputT2->GetPixel(index);
                     meanIntT2FS += inputT2FS->GetPixel(index);
                     volume++;
@@ -1019,7 +1019,7 @@ void DMDData::fatSuppressBiasIdentify (const OrientedImageType::Pointer inputT2,
             }
         }
     }
-   
+
     meanIntT2 = meanIntT2 / volume;
     meanIntT2FS = meanIntT2FS / volume;
     std::cout << "mean intensity is  " << meanIntT2 << "  " << meanIntT2FS << std::endl;
@@ -1028,8 +1028,8 @@ void DMDData::fatSuppressBiasIdentify (const OrientedImageType::Pointer inputT2,
         for(index[2] = 0; index[2] < (int)size[2]; index[2]++) {
             for(index[1] = 0; index[1] < (int)size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < (int)size[0]; index[0]++) {
-                    float correctPixel = inputT2FS->GetPixel(index) * meanIntT2 / meanIntT2FS ; 
-                    inputT2FS->SetPixel(index, 1); 
+                    float correctPixel = inputT2FS->GetPixel(index) * meanIntT2 / meanIntT2FS ;
+                    inputT2FS->SetPixel(index, 1);
                 }
             }
         }
@@ -1042,13 +1042,13 @@ void DMDData::histogramMatchinMask (const OrientedImageType::Pointer inputMove, 
 {
     OrientedImageType::IndexType                   index;
     OrientedImageType::SizeType                    size = inputMove->GetLargestPossibleRegion().GetSize();
-    
-    
+
+
     // build histogram
     for(index[2] = 0; index[2] < (int)size[2]; index[2]++) {
         for(index[1] = 0; index[1] < (int)size[1]; index[1]++) {
             for(index[0] = 0; index[0] < (int)size[0]; index[0]++) {
-           
+
             }
         }
     }
@@ -1074,7 +1074,7 @@ int  DMDData::connectedComponentRegionGrowing (float lower, float upper, Oriente
     connectedThreshold->SetConnectivity( connectivity );
     std::cout << connectedThreshold->GetConnectivity() << std::endl;
 */
-    connectivity = ConnectedFilterType::FullConnectivity; 
+    connectivity = ConnectedFilterType::FullConnectivity;
     connectedThreshold->SetConnectivity( connectivity );
  //   std::cout << connectedThreshold->GetConnectivity() << std::endl;
     connectedThreshold->SetReplaceValue( TEMP_PIXEL_VALUE );
@@ -1124,7 +1124,7 @@ int  DMDData::connectedComponentLabeling (OrientedImageType::Pointer & input)
     output->SetRegions( region );
     output->SetSpacing( spacing );
     output->SetDirection( direction );
-    output->SetOrigin( origin );                    
+    output->SetOrigin( origin );
     output->Allocate();
 
     // initialized the volume data
@@ -1134,7 +1134,7 @@ int  DMDData::connectedComponentLabeling (OrientedImageType::Pointer & input)
                 output->SetPixel(index, (unsigned char)input->GetPixel(index));
             }
         }
-    }   
+    }
     //    itkMetaImageIOType::Pointer		labellerMetaWriterIO  = itkMetaImageIOType::New();
     labeller = itkConnectedComponentFilterType::New();
     labeller->SetInput( output );

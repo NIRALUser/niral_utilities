@@ -95,8 +95,8 @@ void ResampleDeformationField( DeformationImageType::Pointer &field ,
 template< class PixelType >
 int Do( parameters list )
 {
-  
-    //read the reference volume 
+
+    //read the reference volume
     typedef itk::Image< unsigned char , 3 > ImageType ;
     typedef itk::ImageFileReader< ImageType > ReaderType ;
     typedef typename ReaderType::Pointer ReaderTypePointer ;
@@ -135,12 +135,12 @@ int Do( parameters list )
 
       //Create warp transform
       typedef itk::WarpTransform3D< double > WarpTransformType ;
-      
+
       typename WarpTransformType::Pointer warpTransform2 = WarpTransformType::New() ;
 
-        //Resample the deformation field so that it has the same properties as the reference image 
+        //Resample the deformation field so that it has the same properties as the reference image
       ResampleDeformationField( fieldPointer1 ,m_Origin , m_Spacing ,m_Size ,m_Direction) ;
-        //Resample the deformation field so that it has the same properties as the reference image 
+        //Resample the deformation field so that it has the same properties as the reference image
       ResampleDeformationField( fieldPointer2 ,m_Origin ,m_Spacing , m_Size ,m_Direction) ;
 
       //Compute the transformation field adding all the deformation field together
@@ -157,11 +157,11 @@ int Do( parameters list )
       //Save HField
         typedef itk::ImageFileWriter< DeformationImageType > HFieldWriterType ;
         typedef typename HFieldWriterType::Pointer HFieldWriterTypePointer ;
-        HFieldWriterTypePointer hfwriter = HFieldWriterType::New() ; 
+        HFieldWriterTypePointer hfwriter = HFieldWriterType::New() ;
 
         hfwriter->SetInput( fieldPointer1 ) ;
         hfwriter->SetFileName( list.outputConcatenate ) ;
-	hfwriter->UseCompressionOn(); 
+	hfwriter->UseCompressionOn();
         try
         {
           hfwriter->Update() ;
@@ -174,7 +174,7 @@ int Do( parameters list )
           return EXIT_FAILURE ;
         }
 
-    
+
     return EXIT_SUCCESS ;
 }
 
@@ -183,7 +183,7 @@ int Do( parameters list )
 template< class PixelType >
 int averageDeformationField(parameters list )
 {
-//read the reference volume 
+//read the reference volume
     typedef itk::Image< unsigned char , 3 > ImageType ;
     typedef itk::ImageFileReader< ImageType > ReaderType ;
     typedef typename ReaderType::Pointer ReaderTypePointer ;
@@ -211,7 +211,7 @@ int averageDeformationField(parameters list )
 		}
 	//reads deformation field and if it is a h-field, it transforms it to a displacement field
 	fieldPointer1 = readDeformationField( list.deffieldtoaverage[0] , dftype1 ) ;
-	//Resample the deformation field so that it has the same properties as the reference image 
+	//Resample the deformation field so that it has the same properties as the reference image
       	ResampleDeformationField( fieldPointer1 ,m_Origin , m_Spacing ,m_Size ,m_Direction) ;
 	
 	typedef itk::ImageRegionIterator< DeformationImageType > DeformationConstIteratorType;
@@ -231,7 +231,7 @@ int averageDeformationField(parameters list )
 		//reads deformation field and if it is a h-field, it transforms it to a displacement field
 		fieldPointer2 = readDeformationField( list.deffieldtoaverage[i] , dftype2 ) ;
 	 	
-        	//Resample the deformation field so that it has the same properties as the reference image 
+        	//Resample the deformation field so that it has the same properties as the reference image
       		ResampleDeformationField( fieldPointer2 ,m_Origin ,m_Spacing , m_Size ,m_Direction) ;
 		
 		it1.GoToBegin();
@@ -258,11 +258,11 @@ int averageDeformationField(parameters list )
 	//Save HField
         typedef itk::ImageFileWriter< DeformationImageType > HFieldWriterType ;
         typedef typename HFieldWriterType::Pointer HFieldWriterTypePointer ;
-        HFieldWriterTypePointer hfwriterAvg = HFieldWriterType::New() ; 
+        HFieldWriterTypePointer hfwriterAvg = HFieldWriterType::New() ;
 
         hfwriterAvg->SetInput( fieldPointer1 ) ;
         hfwriterAvg->SetFileName( list.outputAvg ) ;
-	hfwriterAvg->UseCompressionOn(); 
+	hfwriterAvg->UseCompressionOn();
         try
         {
           hfwriterAvg->Update() ;

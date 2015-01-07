@@ -24,7 +24,7 @@ itkMeshTovtkPolyData
 itkMeshTovtkPolyData
 ::~itkMeshTovtkPolyData()
 {
-  
+
 }
 
 void
@@ -51,19 +51,19 @@ itkMeshTovtkPolyData
   InputPointsContainerPointer      myPoints = m_itkTriangleMesh->GetPoints();
   InputPointsContainerIterator     points = myPoints->Begin();
   PointType point;
-  
+
   if (numPoints == 0)
     {
       printf( "Aborting: No Points in GRID\n");
-      return; 
+      return;
     }
 
   m_Points->SetNumberOfPoints(numPoints);
-  
+
   int idx=0;
   double vpoint[3];
-  while( points != myPoints->End() ) 
-    {   
+  while( points != myPoints->End() )
+    {
     point = points.Value();
     vpoint[0]= point[0];
     vpoint[1]= point[1];
@@ -85,18 +85,18 @@ itkMeshTovtkPolyData
     CellType::PointIdIterator pointIt = nextCell->PointIdsBegin() ;
     PointType  p;
     int i;
-    
+
     switch (nextCell->GetType())
       {
       case CellType::VERTEX_CELL:
       case CellType::LINE_CELL:
       case CellType::POLYGON_CELL:
-        break;        
+        break;
       case CellType::TRIANGLE_CELL:
         i=0;
-        while (pointIt != nextCell->PointIdsEnd() ) 
+        while (pointIt != nextCell->PointIdsEnd() )
         {
-        pts[i++] = *pointIt++;  
+        pts[i++] = *pointIt++;
         }
         m_Polys->InsertNextCell(3,pts);
         break;
@@ -104,9 +104,9 @@ itkMeshTovtkPolyData
         printf("something \n");
       }
     cellIt++;
-    
+
     }
-  
+
   m_PolyData->SetPolys(m_Polys);
   m_Polys->Delete();
 

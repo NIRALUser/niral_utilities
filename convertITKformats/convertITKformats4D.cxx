@@ -7,7 +7,7 @@
 #include <itkImage.h>
 #include <itkVector.h>
 #include <itkImageRegionIterator.h>
-#include <itkImageFileReader.h> 
+#include <itkImageFileReader.h>
 #include <itkImageSeriesReader.h>
 #include <itkImageFileWriter.h>
 #include <itkCastImageFilter.h>
@@ -112,7 +112,7 @@ int main(int argc, const char* argv[])
   typedef ImageFileReader< ImageType > VolumeReaderType;
   typedef ImageSeriesReader< ImageType > VolumeSeriesReaderType;
   typedef ImageFileWriter< ImageType > VolumeWriterType;
-  try 
+  try
     {
       // load image
       if (debug) cout << "Loading file " << inputFileName << endl;
@@ -121,7 +121,7 @@ int main(int argc, const char* argv[])
    imageReader->SetFileNames(names) ;
    imageReader->Update() ;
    ImageType::Pointer output = imageReader->GetOutput();
-   
+
    // Problems with size of slices -> take difference in position
    if (output->GetSpacing()[2] == 1.0) {
      DICOMPARSER_NAMESPACE::DICOMAppHelper m_AppHelper;
@@ -141,7 +141,7 @@ int main(int argc, const char* argv[])
      m_Parser.ReadHeader();
      allpos = m_AppHelper.GetImagePositionPatient();
      pos2 = allpos[2];
-     
+
      double slice_thickness = fabs(pos2 - pos1);
      if (slice_thickness == 0) {
        slice_thickness= 1.0;
@@ -153,7 +153,7 @@ int main(int argc, const char* argv[])
      newpixdims[1] = origpixdims[1];
      newpixdims[2] = slice_thickness;
      newpixdims[3] = origpixdims[3];
-     
+
      output->SetSpacing(newpixdims);
    }
      ImageType::Pointer image = imageReader->GetOutput();
@@ -167,14 +167,14 @@ int main(int argc, const char* argv[])
             << inSpacing[2] << " , " << inSpacing[3] << "," << std::endl;
      }
 
-   
+
    // write output
    if (writeFlag) {
      if (debug) cout << "writing output data" << endl;
      VolumeWriterType::Pointer writer = VolumeWriterType::New();
 	 writer->UseCompressionOn();
-     writer->SetFileName(outfileName.c_str()); 
-     
+     writer->SetFileName(outfileName.c_str());
+
      writer->SetInput(imageReader->GetOutput());
      writer->Write();
    }
@@ -187,12 +187,12 @@ int main(int argc, const char* argv[])
         sortFilename->SetFileNameSortingOrder(DICOMSeriesFileNames::SortByImagePositionPatient);
      }
      names = sortFilename->GetFileNames();
-     
+
      VolumeSeriesReaderType::Pointer imageReader = VolumeSeriesReaderType::New();
      imageReader->SetFileNames(names) ;
      imageReader->Update() ;
      ImageType::Pointer output = imageReader->GetOutput();
-     
+
      // Problems with size of slices -> take difference in position
      if (output->GetSpacing()[2] == 1.0) {
        DICOMPARSER_NAMESPACE::DICOMAppHelper m_AppHelper;
@@ -212,7 +212,7 @@ int main(int argc, const char* argv[])
        m_Parser.ReadHeader();
        allpos = m_AppHelper.GetImagePositionPatient();
        pos2 = allpos[2];
-       
+
        double slice_thickness = fabs(pos2 - pos1);
        if (debug) cout << "adjusting spacing to " << slice_thickness << endl;
        const itk::Vector<double,4> origpixdims = output->GetSpacing();
@@ -221,7 +221,7 @@ int main(int argc, const char* argv[])
        newpixdims[1] = origpixdims[1];
        newpixdims[2] = slice_thickness;
        newpixdims[3] = origpixdims[3];
-       
+
        output->SetSpacing(newpixdims);
      }
      ImageType::Pointer image = output;
@@ -239,9 +239,9 @@ int main(int argc, const char* argv[])
      if (writeFlag) {
        if (debug) cout << "writing output data" << endl;
        VolumeWriterType::Pointer writer = VolumeWriterType::New();
-       writer->SetFileName(outfileName.c_str()); 
+       writer->SetFileName(outfileName.c_str());
 	   writer->UseCompressionOn();
-       
+
        writer->SetInput(output);
        writer->Write();
      }
@@ -249,7 +249,7 @@ int main(int argc, const char* argv[])
    VolumeDoubleReaderType::Pointer imageReader = VolumeDoubleReaderType::New();
    imageReader->SetFileName(inputFileName.c_str()) ;
    imageReader->Update() ;
-   DoubleImageType::Pointer inputImage = imageReader->GetOutput(); 
+   DoubleImageType::Pointer inputImage = imageReader->GetOutput();
    MinMaxDoubleCalcType::Pointer minmaxCalc = MinMaxDoubleCalcType::New();
    minmaxCalc->SetImage(inputImage);
    minmaxCalc->Compute();
@@ -266,10 +266,10 @@ int main(int argc, const char* argv[])
 
    //RescaleDoubleFilterType::Pointer scaleFilter  = RescaleDoubleFilterType::New();
    //scaleFilter->SetInput(imageReader->GetOutput());
-   
+
    //scaleFilter->SetOutputMinimum(minmaxCalc->GetMinimum() * doubleConvFactor);
    //scaleFilter->SetOutputMaximum(minmaxCalc->GetMaximum() * doubleConvFactor);
-   
+
    CastDoubleFilterType::Pointer castFilter = CastDoubleFilterType::New();
    castFilter->SetInput(inputImage);
    castFilter->Update();
@@ -282,14 +282,14 @@ int main(int argc, const char* argv[])
      std::cout << "voxdims: " << inSpacing[0] << " , "  << inSpacing[1] << " , "
           << inSpacing[2] << " , " << inSpacing[3] << std::endl;
    }
-   
+
    // write output
    if (writeFlag) {
      if (debug) cout << "writing output data" << endl;
      VolumeWriterType::Pointer writer = VolumeWriterType::New();
-     writer->SetFileName(outfileName.c_str()); 
+     writer->SetFileName(outfileName.c_str());
      writer->UseCompressionOn();
-     
+
      writer->SetInput(castFilter->GetOutput());
      writer->Write();
    }
@@ -303,10 +303,10 @@ int main(int argc, const char* argv[])
 			   cout << minmaxCalc->GetMinimum() << "," << minmaxCalc->GetMaximum() << "," << intConvFactor << endl;
 			   RescaleIntFilterType::Pointer scaleFilter  = RescaleIntFilterType::New();
 			   scaleFilter->SetInput(imageReader->GetOutput());
-			   
+			
 			   scaleFilter->SetOutputMinimum((int) ((double) minmaxCalc->GetMinimum() * intConvFactor));
 			   scaleFilter->SetOutputMaximum((int) ((double) minmaxCalc->GetMaximum() * intConvFactor));
-			   
+			
 			   CastIntFilterType::Pointer castFilter = CastIntFilterType::New();
 			   castFilter->SetInput(scaleFilter->GetOutput());
 			   castFilter->Update();
@@ -321,14 +321,14 @@ int main(int argc, const char* argv[])
 				 std::cout << "voxdims: " << inSpacing[0] << " , "  << inSpacing[1] << " , "
 				  << inSpacing[2] << " , " << inSpacing[3] << std::endl;
 			   }
-			   
+			
 			   // write output
 			   if (writeFlag) {
 				 if (debug) cout << "writing output data" << endl;
 				 VolumeWriterType::Pointer writer = VolumeWriterType::New();
-				 writer->SetFileName(outfileName.c_str()); 
+				 writer->SetFileName(outfileName.c_str());
 				 writer->UseCompressionOn();
-				 
+				
 				 writer->SetInput(castFilter->GetOutput());
 				 writer->Write();
 			   }
@@ -348,14 +348,14 @@ int main(int argc, const char* argv[])
 		 std::cout << "voxdims: " << inSpacing[0] << " , "  << inSpacing[1] << " , "
 			  << inSpacing[2] << " , " << inSpacing[3] << std::endl;
 	   }
-	   
+	
 	   // write output
 	   if (writeFlag) {
 		 if (debug) cout << "writing output data " << outfileName << endl;
 		 VolumeWriterType::Pointer writer = VolumeWriterType::New();
-		 writer->SetFileName(outfileName.c_str()); 
+		 writer->SetFileName(outfileName.c_str());
 		 writer->UseCompressionOn();
-		 
+		
 		 writer->SetInput(imageReader->GetOutput());
 		 writer->Write();
 	   }

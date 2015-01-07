@@ -8,8 +8,8 @@
   Copyright (c) 2003 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #ifndef __OpenGLSliceTexture_h_
@@ -26,11 +26,11 @@
 /**
  * \class OpenGLSliceTexture
  * \brief This class is used to turn a 2D ITK image of (arbitrary) type
- * into a GL texture.  
+ * into a GL texture.
  *
- * The calls to Update will make sure that the texture is up to date.  
+ * The calls to Update will make sure that the texture is up to date.
  */
-template<class TPixel> class OpenGLSliceTexture 
+template<class TPixel> class OpenGLSliceTexture
 {
 public:
   // Image typedefs
@@ -42,7 +42,7 @@ public:
 
   /** Destructor, deallocates texture memory */
   virtual ~OpenGLSliceTexture();
-  
+
   /** Pass in a pointer to a 2D image */
   void SetImage(ImagePointer inImage);
 
@@ -87,7 +87,7 @@ public:
   void DrawTransparent(unsigned char alpha);
 
 private:
-  
+
   // Filter typedefs
   typedef itk::ConstantPadImageFilter<ImageType,ImageType> FilterType;
   typedef typename itk::SmartPointer<FilterType> FilterPointer;

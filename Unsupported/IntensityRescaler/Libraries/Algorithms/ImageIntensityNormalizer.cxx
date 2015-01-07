@@ -75,12 +75,12 @@ void ImageIntensityNormalizer::LoadSegmentation(const char* filename)
 
 void ImageIntensityNormalizer::UnloadImage(int index)
 {
-     m_SourceImage.erase(m_SourceImage.begin() + index); 
+     m_SourceImage.erase(m_SourceImage.begin() + index);
 }
-  
+
 void ImageIntensityNormalizer::UnloadSegmentation(int index)
 {
-     m_SegImage.erase(m_SegImage.begin() + index); 
+     m_SegImage.erase(m_SegImage.begin() + index);
 }
 
 
@@ -133,7 +133,7 @@ std::vector<int> ImageIntensityNormalizer::ListLabel(ImagePointer segmentation)
 
   IteratorType m_itimage(segmentation,segmentation->GetLargestPossibleRegion());
   ImageType::SizeType m_imagesize = (segmentation->GetLargestPossibleRegion().GetSize());
-  
+
   m_itimage.GoToBegin();
   for (unsigned int z=0;z<m_imagesize[2];z++)
     for (unsigned int y=0;y<m_imagesize[1];y++)
@@ -149,7 +149,7 @@ std::vector<int> ImageIntensityNormalizer::ListLabel(ImagePointer segmentation)
 
   for (int i=0;i<256;i++)
   {
-    if (label[i]) 
+    if (label[i])
     {
       labellist.push_back(i);
     }
@@ -161,10 +161,10 @@ std::vector<int> ImageIntensityNormalizer::ListLabel(ImagePointer segmentation)
 
 ImageIntensityNormalizer::VectorList* ImageIntensityNormalizer::ComputeMean(ImagePointer image,ImagePointer segmentation)
 {
-  
+
 
   VectorList* m_vectorlist= new VectorList();
-  
+
   double label[256];
   double numlabel[256];
 
@@ -176,7 +176,7 @@ ImageIntensityNormalizer::VectorList* ImageIntensityNormalizer::ComputeMean(Imag
 
   IteratorType m_itimage(image,image->GetLargestPossibleRegion());
   ImageType::SizeType m_imagesize = (image->GetLargestPossibleRegion().GetSize());
-  
+
   IteratorType m_itsegmentation(segmentation,segmentation->GetLargestPossibleRegion());
 
   m_itsegmentation.GoToBegin();
@@ -193,12 +193,12 @@ ImageIntensityNormalizer::VectorList* ImageIntensityNormalizer::ComputeMean(Imag
         {
           if ((*j) == m_itsegmentation.Get()) ok = true;
         }
-        
+
         if (ok)
         {
             label[(unsigned char)m_itsegmentation.Get()] += m_itimage.Get();
-            numlabel[(unsigned char)m_itsegmentation.Get()]++;  
-        }  
+            numlabel[(unsigned char)m_itsegmentation.Get()]++;
+        }
         }
         ++m_itsegmentation;
         ++m_itimage;
@@ -216,7 +216,7 @@ ImageIntensityNormalizer::VectorList* ImageIntensityNormalizer::ComputeMean(Imag
     int* m_histo;
     int maxx,maxy;
     m_histo= ComputeDistribution(image,segmentation,&maxx,&maxy,(*j));
-  
+
     if (NL_DEBUG)  std::cout << " Maxx: " << maxx << " and Maxy: " << maxy << std::endl;
 
     m_itsegmentation.GoToBegin();
@@ -245,7 +245,7 @@ ImageIntensityNormalizer::VectorList* ImageIntensityNormalizer::ComputeMean(Imag
 
     VectorType m_vector;
     m_vector[0] = (*j);
-    m_vector[1] = label[(*j)]/numlabel[(*j)]; 
+    m_vector[1] = label[(*j)]/numlabel[(*j)];
     m_vector[2] = sqrt(variance/numvar);
     m_vectorlist->push_back(m_vector);
   }
@@ -257,10 +257,10 @@ ImageIntensityNormalizer::VectorList* ImageIntensityNormalizer::ComputeMean(Imag
 
 ImageIntensityNormalizer::VectorList* ImageIntensityNormalizer::ComputeMax(ImagePointer image,ImagePointer segmentation)
 {
-  
+
 
   VectorList* m_vectorlist= new VectorList();
-  
+
   double label[256];
   double numlabel[256];
 
@@ -272,7 +272,7 @@ ImageIntensityNormalizer::VectorList* ImageIntensityNormalizer::ComputeMax(Image
 
   IteratorType m_itimage(image,image->GetLargestPossibleRegion());
   ImageType::SizeType m_imagesize = (image->GetLargestPossibleRegion().GetSize());
-  
+
   IteratorType m_itsegmentation(segmentation,segmentation->GetLargestPossibleRegion());
 
 
@@ -290,12 +290,12 @@ ImageIntensityNormalizer::VectorList* ImageIntensityNormalizer::ComputeMax(Image
         {
           if ((*j) == m_itsegmentation.Get()) ok = true;
         }
-        
+
         if (ok)
         {
             label[(unsigned char)m_itsegmentation.Get()] += m_itimage.Get();
-            numlabel[(unsigned char)m_itsegmentation.Get()]++;  
-        }  
+            numlabel[(unsigned char)m_itsegmentation.Get()]++;
+        }
         }
         ++m_itsegmentation;
         ++m_itimage;
@@ -315,7 +315,7 @@ ImageIntensityNormalizer::VectorList* ImageIntensityNormalizer::ComputeMax(Image
     int* m_histo;
     int maxx,maxy;
     m_histo= ComputeDistribution(image,segmentation,&maxx,&maxy,(*j));
-  
+
     if (NL_DEBUG) std::cout << "Maxx: " << maxx << "and maxy: " << maxy << std::endl;
 
     m_itsegmentation.GoToBegin();
@@ -344,7 +344,7 @@ ImageIntensityNormalizer::VectorList* ImageIntensityNormalizer::ComputeMax(Image
 
     VectorType m_vector;
     m_vector[0] = (*j);
-    m_vector[1] = maxx; //label[(*j)]/numlabel[(*j)]; 
+    m_vector[1] = maxx; //label[(*j)]/numlabel[(*j)];
     m_vector[2] = sqrt(variance/numvar);
     m_vectorlist->push_back(m_vector);
   }
@@ -360,7 +360,7 @@ ImageIntensityNormalizer::ImagePointer ImageIntensityNormalizer::IntensityWindow
   calculator->SetImage(image );
   calculator->Compute();
   int minbefore = calculator->GetMinimum();
-  int maxbefore = calculator->GetMaximum(); 
+  int maxbefore = calculator->GetMaximum();
 
   if (NL_DEBUG) std::cout << "Min target before: " << minbefore <<std::endl;
   if (NL_DEBUG)  std::cout << "Max target before: " << maxbefore <<std::endl;
@@ -368,7 +368,7 @@ ImageIntensityNormalizer::ImagePointer ImageIntensityNormalizer::IntensityWindow
   //find min and max mean
   //int min= calculator->GetMinimum();
   //int max = calculator->GetMaximum();
-  
+
   int newmin;
   int newmax;
 
@@ -378,13 +378,13 @@ ImageIntensityNormalizer::ImagePointer ImageIntensityNormalizer::IntensityWindow
   //Fix maximum value
   for (VectorList::iterator j = m_vectorlist.begin(); j != m_vectorlist.end(); j++)
   {
-    if ((*j)[1] < meanmin) 
+    if ((*j)[1] < meanmin)
     {
       newmin = (int)((*j)[1]-(*j)[2]);
       meanmin = (*j)[1];
     }
 
-    if ((*j)[1]>meanmax) 
+    if ((*j)[1]>meanmax)
     {
       newmax = (int)((*j)[1]+(sigma*(*j)[2]));
       meanmax = (*j)[1];
@@ -421,7 +421,7 @@ ImageIntensityNormalizer::ImagePointer ImageIntensityNormalizer::IntensityWindow
   calculator->SetImage(image );
   calculator->Compute();
   int minbefore = calculator->GetMinimum();
-  int maxbefore = calculator->GetMaximum(); 
+  int maxbefore = calculator->GetMaximum();
 
   if (NL_DEBUG) std::cout << "Min target before: " << minbefore <<std::endl;
   if (NL_DEBUG) std::cout << "Max target before: " << maxbefore <<std::endl;
@@ -452,7 +452,7 @@ ImageIntensityNormalizer::ImagePointer ImageIntensityNormalizer::IntensityWindow
   calculator->SetImage(image );
   calculator->Compute();
   int minbefore = calculator->GetMinimum();
-  int maxbefore = calculator->GetMaximum(); 
+  int maxbefore = calculator->GetMaximum();
 
   if (NL_DEBUG) std::cout << "Min target before: " << minbefore <<std::endl;
   if (NL_DEBUG) std::cout << "Max target before: " << maxbefore <<std::endl;
@@ -487,14 +487,14 @@ ImageIntensityNormalizer::ImagePointer ImageIntensityNormalizer::TargetIntensity
   if (NL_DEBUG) std::cout << "Min source before: " << calculator->GetMinimum() <<std::endl;
   if (NL_DEBUG) std::cout << "Max source before: " << calculator->GetMaximum() <<std::endl;
 
-  
+
   double newmax;
   double meanmax=0;
 
   //Fix maximum value
   for (VectorList::iterator j = m_vectorlist.begin(); j != m_vectorlist.end(); j++)
   {
-    if ((*j)[1]>meanmax) 
+    if ((*j)[1]>meanmax)
     {
       if (NL_DEBUG) std::cout << "Mean target " << (*j)[0] << " : " << sigma << " | " << (*j)[1] << " | " << (*j)[2] << std::endl;
       newmax = (int) ((*j)[1] + (sigma*((*j)[2])));
@@ -530,13 +530,13 @@ ImageIntensityNormalizer::ImagePointer  ImageIntensityNormalizer::AdjustClasses(
 {
   ImageIntensityNormalizer::VectorList* m_vectorlisttarget;
   ImageIntensityNormalizer::VectorList* m_vectorlistsource;
-  
+
   //Compute Mean values for target
   m_vectorlisttarget = ComputeMean(target,targetseg);
 
   //Compute Mean values for target
   m_vectorlistsource = ComputeMean(source,sourceseg);
-  
+
   for (ImageIntensityNormalizer::VectorList::iterator j = m_vectorlistsource->begin(); j != m_vectorlistsource->end(); j++)
   {
     if (NL_DEBUG) std::cout <<"Labels: " <<(*j)[0] << " | " << (*j)[1]  << " | " << (*j)[2]  << std::endl;
@@ -544,7 +544,7 @@ ImageIntensityNormalizer::ImagePointer  ImageIntensityNormalizer::AdjustClasses(
 
   //Get number of control points
   int m_nbcontrols = m_vectorlistsource->size();
-  
+
   //Copmute Max of these images
   typedef itk::MinimumMaximumImageCalculator< ImageType > CalculatorType;
   CalculatorType::Pointer calculator  =  CalculatorType::New();
@@ -553,7 +553,7 @@ ImageIntensityNormalizer::ImagePointer  ImageIntensityNormalizer::AdjustClasses(
   double m_imagemax = calculator->GetMaximum();
 
 
-  //Create VTK curve 
+  //Create VTK curve
   m_curve = IntensityCurveVTK::New();
   m_curve->Initialize(m_nbcontrols+2);
 
@@ -561,7 +561,7 @@ ImageIntensityNormalizer::ImagePointer  ImageIntensityNormalizer::AdjustClasses(
   VectorList::iterator k = m_vectorlisttarget->begin();
   for (int i=0;i<m_nbcontrols;i++)
   {
-    m_curve->UpdateControlPoint(i+1,(*j)[1]/m_imagemax,(*k)[1]/m_imagemax);  
+    m_curve->UpdateControlPoint(i+1,(*j)[1]/m_imagemax,(*k)[1]/m_imagemax);
     j++;
     k++;
   }
@@ -624,14 +624,14 @@ int* ImageIntensityNormalizer::ComputeHistogram(ImagePointer image,int* _maxx,in
 
   //Initialize m_histo
   for (int i=0;i<65535;i++)
-      m_histo[i] =0; 
+      m_histo[i] =0;
 
   int maxx = 0;
   int maxy = 0;
 
   IteratorType m_itimage(image,image->GetLargestPossibleRegion());
   //ImageType::SizeType m_imagesize = (image->GetLargestPossibleRegion().GetSize());
-  
+
   m_itimage.GoToBegin();
   int val;
   while (!m_itimage.IsAtEnd())
@@ -641,7 +641,7 @@ int* ImageIntensityNormalizer::ComputeHistogram(ImagePointer image,int* _maxx,in
     {
       if (val > maxx) maxx = val;
       m_histo[val] += m_itimage.Get();
-  
+
       if(m_histo[val]>maxy) maxy=m_histo[val];
     }
     ++m_itimage;
@@ -660,19 +660,19 @@ int* ImageIntensityNormalizer::ComputeDistribution(ImagePointer image,ImagePoint
 
   //Initialize m_histo
   for (int i=0;i<65535;i++)
-      m_histo[i] = 0; 
+      m_histo[i] = 0;
 
   int maxx = 0;
   int maxy = 0;
 
   IteratorType m_itimage(image,image->GetLargestPossibleRegion());
   IteratorType m_itseg(seg,seg->GetLargestPossibleRegion());
-  
-    
+
+
   if (NL_DEBUG) std::cout << "Compute distibution label for label" << label << std::endl;
-  
+
   m_itimage.GoToBegin();
-  m_itseg.GoToBegin();  
+  m_itseg.GoToBegin();
   int val;
   while (!m_itimage.IsAtEnd())
   {
@@ -683,14 +683,14 @@ int* ImageIntensityNormalizer::ComputeDistribution(ImagePointer image,ImagePoint
       if (val < 0) val = 0;
       if (val > 65535) val = 65535;
       m_histo[val] += m_itimage.Get();
-  
-      if(m_histo[val]>maxy) 
+
+      if(m_histo[val]>maxy)
       {
         maxx = val;
         maxy = m_histo[val];
       }
     }
-  
+
     ++m_itimage;
     ++m_itseg;
   }

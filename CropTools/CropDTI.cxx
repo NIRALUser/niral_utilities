@@ -1,13 +1,13 @@
 /*=========================================================================
 
-Program:   DTI crop 
+Program:   DTI crop
 Module:    $RCSfile: CropDTI.cxx,v $
 Language:  C++
 Date:      $Date: 2009/04/14 11:53:47 $
 Version:   $Revision: 1.2 $
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -24,7 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include <cmath>
 
 #include <itkImage.h>
-#include <itkImageFileReader.h> 
+#include <itkImageFileReader.h>
 #include <itkCastImageFilter.h>
 #include <itkImageRegionIterator.h>
 #include <itkImageRegionConstIterator.h>
@@ -47,7 +47,7 @@ int main(int argc, const char* argv[])
 {
 
 
-	if (argc <= 1 || ipExistsArgument(argv,"-h ") || ipExistsArgument(argv,"-help") || 
+	if (argc <= 1 || ipExistsArgument(argv,"-h ") || ipExistsArgument(argv,"-help") ||
 		ipExistsArgument(argv,"-usage"))
 	{
 		cout << "usage: " << argv[0] <<" infile [-o outfile] [-region  px,py,pz,w,h,d | -size w,h,d] [-v] " << endl
@@ -62,7 +62,7 @@ int main(int argc, const char* argv[])
 		exit(0) ;
 	}
 
-  int version =  ipExistsArgument(argv,"-version"); 
+  int version =  ipExistsArgument(argv,"-version");
   if( version )
   {
     std::cout << "CropDTI  version: " << VERSION_NUMBER << std::endl ;
@@ -71,26 +71,26 @@ int main(int argc, const char* argv[])
 	// argument processing
 	string fileName(argv[1]);
 
-	debug =  ipExistsArgument(argv,"-v"); 
+	debug =  ipExistsArgument(argv,"-v");
 
 	string outfileName(ipGetStringArgument(argv, "-o", ""));
 
 	if (outfileName.empty()) {
 		outfileName = "output.mha";
 		cout << "no outputname specified using " << outfileName << endl;
-	} 
+	}
 
 	if (debug) cout << "Output filename: " << outfileName << endl;
 
-	bool regionOn = ipExistsArgument(argv,"-region"); 
+	bool regionOn = ipExistsArgument(argv,"-region");
 	const int numCropParam = 6;
 	int cropParam[numCropParam];
 
 	if (regionOn)
-	{  
-		char *tmp_str    = ipGetStringArgument(argv, "-region", NULL);
+	{
+		char *tmp_str    = ipGetStringArgument(argv, "-region", ITK_NULLPTR);
 		int numDim       = ipExtractIntTokens(cropParam, tmp_str, numCropParam);
-		if (numDim != numCropParam) {              
+		if (numDim != numCropParam) {
 			cerr << argv[0] << ": region needs "<< numCropParam << " parameters.\n";
 			exit(-1);
 		}
@@ -100,15 +100,15 @@ int main(int argc, const char* argv[])
 		free(tmp_str);
 	}
 
-	bool sizeOn = ipExistsArgument(argv,"-size"); 
+	bool sizeOn = ipExistsArgument(argv,"-size");
 	const int numSizeParam = 3;
 	int sizeParam[numSizeParam];
 
 	if (sizeOn)
-	{  
-		char *tmp_str    = ipGetStringArgument(argv, "-size", NULL);
+	{
+		char *tmp_str    = ipGetStringArgument(argv, "-size", ITK_NULLPTR);
 		int numDim       = ipExtractIntTokens(sizeParam, tmp_str, numSizeParam);
-		if (numDim != numSizeParam) {              
+		if (numDim != numSizeParam) {
 			cerr << argv[0] << ": size needs "<< numSizeParam << " parameters.\n";
 			exit(-1);
 		}
@@ -120,7 +120,7 @@ int main(int argc, const char* argv[])
 	if (regionOn && sizeOn) {
 		cerr << "region and size cannot be used at the same time" << endl;
 		exit(-1);
-	}  
+	}
 
 	if( !regionOn && !sizeOn)
 	{
@@ -135,14 +135,10 @@ int main(int argc, const char* argv[])
 	typedef double DoublePixelType;
 
 	typedef DiffusionTensor3DReconstructionImageFilter< ShortPixelType, ShortPixelType, DoublePixelType >  TensorReconstructionImageFilterType;
-	typedef TensorReconstructionImageFilterType::GradientDirectionContainerType    GradientDirectionContainerType;
 	typedef TensorReconstructionImageFilterType::TensorPixelType    TensorPixelType;
 
 	const int Dimension = 3;
-	typedef itk::Point< double, Dimension >			PointType;
 	typedef itk::Image< TensorPixelType, Dimension> DtiImageType;
-	typedef DtiImageType::RegionType				DtiImageRegionType;
-	typedef TensorPixelType::RealValueType          RealValueType;
 
 	typedef itk::ImageFileReader<DtiImageType>  DTIReaderType;
 	typedef itk::ImageFileWriter<DtiImageType>  DTIWriterType;
@@ -170,27 +166,27 @@ int main(int argc, const char* argv[])
 
 	if(sizeOn)
 	{
-		cropParam[0] = (imageOriginalSize[0] - sizeParam[0])/2; 
-		cropParam[1] = (imageOriginalSize[1] - sizeParam[1])/2; ; 
-		cropParam[2] = (imageOriginalSize[2] - sizeParam[2])/2; ; 
+		cropParam[0] = (imageOriginalSize[0] - sizeParam[0])/2;
+		cropParam[1] = (imageOriginalSize[1] - sizeParam[1])/2; ;
+		cropParam[2] = (imageOriginalSize[2] - sizeParam[2])/2; ;
 
 		cropParam[3] = sizeParam[0];
 		cropParam[4] = sizeParam[1];
 		cropParam[5] = sizeParam[2];
 	}
 
-/*	outputIndex[0] = 0;//cropParam[0]; 
-	outputIndex[1] = 0;//cropParam[1]; 
+/*	outputIndex[0] = 0;//cropParam[0];
+	outputIndex[1] = 0;//cropParam[1];
 	outputIndex[2] = 0;//ropParam[2]; */
 
-	outputIndex[0] = 0;//cropParam[0]; 
-	outputIndex[1] = 0;//cropParam[1]; 
-	outputIndex[2] = 0;//cropParam[2]; 
+	outputIndex[0] = 0;//cropParam[0];
+	outputIndex[1] = 0;//cropParam[1];
+	outputIndex[2] = 0;//cropParam[2];
 
 
-	outputSize[0] = cropParam[3]; 
-	outputSize[1] = cropParam[4]; 
-	outputSize[2] = cropParam[5]; 
+	outputSize[0] = cropParam[3];
+	outputSize[1] = cropParam[4];
+	outputSize[2] = cropParam[5];
 
 	outputRegion.SetIndex(outputIndex);
 	outputRegion.SetSize( outputSize);
@@ -218,7 +214,7 @@ int main(int argc, const char* argv[])
 	PaddedDTI->SetOrigin( newOrigin ) ;
 	PaddedDTI->SetDirection( direction ) ;
 	PaddedDTI->Allocate();
-  PaddedDTI->SetMetaDataDictionary(imageReader->GetOutput()->GetMetaDataDictionary()); 
+  PaddedDTI->SetMetaDataDictionary(imageReader->GetOutput()->GetMetaDataDictionary());
 	double tensorPixel0[6]={0.0,0.0,0.0,0.0,0.0,0.0};
 	//double tensorPixel1[6]={1.0,0.0,0.0,1.0,0.0,1.0};
 	PaddedDTI->FillBuffer(tensorPixel0);
@@ -237,9 +233,9 @@ int main(int argc, const char* argv[])
 	while( !iOutput.IsAtEnd() )
 	{
 		index = iOutput.GetIndex();
-		index[0]=index[0]+cropParam[0]; 
-		index[1]=index[1]+cropParam[1]; 
-		index[2]=index[2]+cropParam[2]; 
+		index[0]=index[0]+cropParam[0];
+		index[1]=index[1]+cropParam[1];
+		index[2]=index[2]+cropParam[2];
 		//std::cout<< "index: "<< index[0] <<" "<< index[1] <<" " << index[2] <<" "  <<std::endl;
 		if(imageOriginalRegion.IsInside(index))
 		{

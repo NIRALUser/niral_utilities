@@ -4,9 +4,9 @@
  * Program :   Insight Segmentation & Registration Toolkit
  * Module  :   DMD MRI Biomarker Tool $ * Language:   C++, ITK, CMake * Date    :   Date: 2010-05-28 18:31:00 $ * Version :   $Revision: 0.20 $ * Authors :   Jiahui Wang, Martin Styner $
  * Update  :   1. Read in and write out images (05-25-2010)
- *             2. Add the series information (not successful) (05-28-2010) 
- *             3. Smooth the images by gaussian filter (06-01-10) 
- *             4. Assign output images by sequnce description (06-03-2010) 
+ *             2. Add the series information (not successful) (05-28-2010)
+ *             3. Smooth the images by gaussian filter (06-01-10)
+ *             4. Assign output images by sequnce description (06-03-2010)
  *             5. Added gaussian smooth for t2 fitting (06-07-2010)
  *             6. Read in gipl images (06-09-2010)
  *             7. Read in manually delineated contiguous fat regions (06-16-2010)
@@ -15,7 +15,7 @@
  *            10. Modified bug of image calibration (06-29-2010)
  *            11. Created calibration class (06-29-2010)
  *            12. Added smooth to t2 and t2FS images (06-30-2010)
- *            13. Initialize the output image with image properties of original images 
+ *            13. Initialize the output image with image properties of original images
  *            14. Added grayscale erosion to muscle mask with a kernel size of 5x5x5 (07-06-2010)
  *            15. Fixed a bug: correctly convert t2 and t2fs images to nrrd format (07-20-2010)
  *            16. Separate the dicom image conversion and feature calculation (07-21-2010)
@@ -36,11 +36,11 @@
  *            31. Output VOI  (08-01-2012)
  *            32. Calculate texture features using T2FS  (08-26-2012)
  *            33. Create some synthetic images (09-04-2012)
- *            34. Create T2 value map computation function (02-18-2013)     
+ *            34. Create T2 value map computation function (02-18-2013)
  * Copyright (c) Neuro Image Research and Analysis Lab.@UNC All rights reserved.
  *
- * This software is distributed WITHOUT ANY WARRANTY; without even 
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * This software is distributed WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE.
  *
 =========================================================================*/
@@ -58,7 +58,7 @@
 #include <iostream>
 #include <fstream>
 
-typedef itk::Image< float, 3>  synImageType;    
+typedef itk::Image< float, 3>  synImageType;
 typedef itk::ImageFileWriter< synImageType >                  ImageWriterType;
 ImageWriterType::Pointer                    syntheticWriter = ImageWriterType::New();
 static void CreateEllipseImage(synImageType::Pointer image);
@@ -79,28 +79,28 @@ int main( int argc, char* argv[] )
         std::cerr << " -h print out this instruction\n" << std::endl;
         std::cerr << "EXAMPLE: ./DMDBioMarkerTool -f /NDRC/DuchenneDystrophy/data/canine/Data/DD_040_09-03-09/ -m 35\n" << std::endl;
         return EXIT_FAILURE;
-    }   
-    // declare variables 
-    DMDData::StrITKType                                     dataDirec = argv[2], caseID, inputDirectory, outputFilename, fileExtension, lastCh, commandLine, InputFilename ;    
-    DMDData::OrientedImageReaderType::Pointer               fatMaskLeft, segMuscleLeft, imagereader, imagereader1, bladderMaskLeft; // reader for muscle mask      
+    }
+    // declare variables
+    DMDData::StrITKType                                     dataDirec = argv[2], caseID, inputDirectory, outputFilename, fileExtension, lastCh, commandLine, InputFilename ;
+    DMDData::OrientedImageReaderType::Pointer               fatMaskLeft, segMuscleLeft, imagereader, imagereader1, bladderMaskLeft; // reader for muscle mask
     DMDData::segMuscleReaderType::Pointer                   segmusclereader = DMDData::segMuscleReaderType::New();
-   // std::vector<DMDData::StrITKType>                        outputFilenameList;   // store the names of files that already processed    
+   // std::vector<DMDData::StrITKType>                        outputFilenameList;   // store the names of files that already processed
     DMDData::PixelType                                      meanT2Left = 0, meanT2FSLeft = 0, meanT2LeftBladder = 0, meanT2FSLeftBladder = 0, fk = 0, fb = 0, integrate = 0, maxMuscleIntT2 = 0, maxMuscleIntT2FS = 0;
-    DMDData::IntITKType                                     volLeftFat = 0, volLeftBladder = 0, t2mm_slice = 35;// volLeftFat: volume of subcutaneous fat region; volLeftBladder: volume of bladder region; t2mm_slice: number of slices in each echo of t2mm;    
+    DMDData::IntITKType                                     volLeftFat = 0, volLeftBladder = 0, t2mm_slice = 35;// volLeftFat: volume of subcutaneous fat region; volLeftBladder: volume of bladder region; t2mm_slice: number of slices in each echo of t2mm;
     DMDData::LfITKType                                      data_array[2][DATA_PAIRS-1] = {{0}};
     DMDData::FITKType                                       voxelVol = 0;
-    DMDData::OrientedImageType::Pointer                     t2LeftFemur = DMDData::OrientedImageType::New(), 
-                                                            t2FSLeftFemur = DMDData::OrientedImageType::New(), 
-                                                            t2LeftFemurSmooth, 
-                                                            t2FSLeftFemurSmooth, 
-                                                            fatPercImgLeftFemur = DMDData::OrientedImageType::New(), 
-                                                            waterPercImgLeftFemur = DMDData::OrientedImageType::New(), 
-                                                            fatOnlyImgLeftFemur = DMDData::OrientedImageType::New(), 
-                                                            fatOnlyImgLeftFemurCalib = DMDData::OrientedImageType::New(), 
-                                                            t2LeftFemurCalib = DMDData::OrientedImageType::New(), 
+    DMDData::OrientedImageType::Pointer                     t2LeftFemur = DMDData::OrientedImageType::New(),
+                                                            t2FSLeftFemur = DMDData::OrientedImageType::New(),
+                                                            t2LeftFemurSmooth,
+                                                            t2FSLeftFemurSmooth,
+                                                            fatPercImgLeftFemur = DMDData::OrientedImageType::New(),
+                                                            waterPercImgLeftFemur = DMDData::OrientedImageType::New(),
+                                                            fatOnlyImgLeftFemur = DMDData::OrientedImageType::New(),
+                                                            fatOnlyImgLeftFemurCalib = DMDData::OrientedImageType::New(),
+                                                            t2LeftFemurCalib = DMDData::OrientedImageType::New(),
                                                             t2FSLeftFemurCalib = DMDData::OrientedImageType::New(),
-                                                            t2FitWaterPerc = DMDData::OrientedImageType::New(), 
-                                                            t2FitFatPerc = DMDData::OrientedImageType::New(), 
+                                                            t2FitWaterPerc = DMDData::OrientedImageType::New(),
+                                                            t2FitFatPerc = DMDData::OrientedImageType::New(),
                                                             erodeSegMuscleLeft = DMDData::OrientedImageType::New(),
                                                             t2Fit = DMDData::OrientedImageType::New(),
                                                             t2FitSegMuscle = DMDData::OrientedImageType::New(),
@@ -109,87 +109,87 @@ int main( int argc, char* argv[] )
                                                             t2CalcSmooth = DMDData::OrientedImageType::New();
     DMDData                                                 t2Data;
     DMDCalib                                                t2calib;
-    DMDMuscleFeature                                        muscleFeatT2, muscleFeatT2FS, muscleFeatFatOnly, muscleFeatFatPerc, muscleFeatT2Fit ; 
+    DMDMuscleFeature                                        muscleFeatT2, muscleFeatT2FS, muscleFeatFatOnly, muscleFeatFatPerc, muscleFeatT2Fit ;
     DMDCurveFit                                             curveFit;
-    // end of declaration 
-    
+    // end of declaration
+
     if ( argc > 4 ) {
-        if ( strchr (argv[4], 'm') != NULL ) { 
+        if ( strchr (argv[4], 'm') != NULL ) {
             t2mm_slice = atoi(argv[5]);
             std::cout << "number of slices: " << t2mm_slice << std::endl;
         }
     }
 
-    #ifdef POMPE     
+    #ifdef POMPE
     caseID = dataDirec.substr(dataDirec.find( "OBS_" ));  // process Pompe
     #else
     caseID = dataDirec.substr(dataDirec.find( "DD_" )); // process DMD
     #endif
     if ( dataDirec[(int)dataDirec.length() - 1] == '/' ) {
-        // remove "/" if "/" is exist in the end of input data directory  
-        caseID.erase(caseID.end() - 1, caseID.end());      
+        // remove "/" if "/" is exist in the end of input data directory
+        caseID.erase(caseID.end() - 1, caseID.end());
     }
     else{
-        // add "/" if "/" is not exist in the end of input data directory 
+        // add "/" if "/" is not exist in the end of input data directory
         dataDirec = dataDirec + "/";
     }
-        
-    inputDirectory = dataDirec + "Dicom";  
+
+    inputDirectory = dataDirec + "Dicom";
     DMDData                                                 data( 3, inputDirectory );
     if( strchr (argv[1], 'c') != NULL ) {
         // convert dicom images to nrrd format
         DMDData::IntITKType                                     t2Identifier = 0, t2FSIdentifier = 0, t2CalcIdentifier = 0, pointDixonIdentifier = 0;
         // create Orig under the data directory and save converted data in it
-        commandLine = "mkdir " + dataDirec + "Orig"; 
-        system(commandLine.c_str());  
+        commandLine = "mkdir " + dataDirec + "Orig";
+        system(commandLine.c_str());
         // unzip the dicom images
-        commandLine = "unzip " + dataDirec + "*.zip" + " -d " + dataDirec + "Dicom/" ; 
-        system(commandLine.c_str());  
+        commandLine = "unzip " + dataDirec + "*.zip" + " -d " + dataDirec + "Dicom/" ;
+        system(commandLine.c_str());
         try {
-            // identify the list of DICOM series       
-            DMDData::NamesGeneratorType::Pointer                nameGenerator = DMDData::NamesGeneratorType::New( );   
+            // identify the list of DICOM series
+            DMDData::NamesGeneratorType::Pointer                nameGenerator = DMDData::NamesGeneratorType::New( );
             nameGenerator->SetUseSeriesDetails( true );
             // transfer input directory to name generator
-            nameGenerator->SetDirectory( inputDirectory.c_str() ); 
+            nameGenerator->SetDirectory( inputDirectory.c_str() );
             typedef std::vector< std::string >                  SeriesIdContainer;    	
-            const                                               SeriesIdContainer & seriesUID = nameGenerator->GetSeriesUIDs( );          
-            DMDData::StrITKType                                 seriesIdentifier;          
+            const                                               SeriesIdContainer & seriesUID = nameGenerator->GetSeriesUIDs( );
+            DMDData::StrITKType                                 seriesIdentifier;
 	    DMDData::OrientedSeriesReaderType::Pointer          reader;
 	    DMDData::OrientedWriterType::Pointer                writer = DMDData::OrientedWriterType::New();
-            DMDData::ImageIOType::Pointer                       dicomIO;       
+            DMDData::ImageIOType::Pointer                       dicomIO;
             // turn output image compression on
-            writer->UseCompressionOn();    
-            for (SeriesIdContainer::const_iterator it = seriesUID.begin() ; it != seriesUID.end(); it++ ){            
-                // We instantiate the iterators that will make possible to walk through all the entries of the MetaDataDictionary.     
+            writer->UseCompressionOn();
+            for (SeriesIdContainer::const_iterator it = seriesUID.begin() ; it != seriesUID.end(); it++ ){
+                // We instantiate the iterators that will make possible to walk through all the entries of the MetaDataDictionary.
 	        std::vector<DMDData::StrITKType>                tagvalue, tagkey;
 	        std::vector<DMDData::StrITKType>::iterator      itr;
                 // specify the location of sequence name
-	        DMDData::StrITKType                             specifiedTag = "0008|103e";            
-                seriesIdentifier = *it;    
+	        DMDData::StrITKType                             specifiedTag = "0008|103e";
+                seriesIdentifier = *it;
                 data.seriesDataReader( seriesIdentifier, reader, dicomIO );
                 data.readDicomTag(dicomIO, tagvalue, tagkey);
-	        itr = find (tagkey.begin(), tagkey.end(), specifiedTag);	   
-                outputFilename = tagvalue[int(itr - tagkey.begin())];	  
+	        itr = find (tagkey.begin(), tagkey.end(), specifiedTag);	
+                outputFilename = tagvalue[int(itr - tagkey.begin())];	
                 fileExtension = ".nrrd";
                 lastCh = outputFilename[outputFilename.size() - 1];
-                if ( !strcmp(lastCh.c_str(), " ")) {  
+                if ( !strcmp(lastCh.c_str(), " ")) {
                     // if the last charactor is space remove the last space of tagvalue then plus .nrrd
-                    outputFilename = outputFilename.erase(outputFilename.size() - 1, 1); 
+                    outputFilename = outputFilename.erase(outputFilename.size() - 1, 1);
                 }
                 while ( outputFilename.find(' ') < outputFilename.size() ){
                     // replace space charactors by "_"
-	            outputFilename.replace(outputFilename.find(' '), 1, "_"); 
-                }	            
+	            outputFilename.replace(outputFilename.find(' '), 1, "_");
+                }	
                 outputFilename = dataDirec + "Orig/" + caseID + "_" + outputFilename;
                 // the sequence for t2 fitting?
-	        std::size_t found = outputFilename.find("calc");                           
-                if( found != std::string::npos ){       
+	        std::size_t found = outputFilename.find("calc");
+                if( found != std::string::npos ){
                     std::cout << "this is the sequence for t2 fitting!"  << std::endl;
                     writer->SetInput(reader->GetOutput());
                     if (!t2CalcIdentifier) {
                         outputFilename = dataDirec + "Orig/" + caseID + "_T2calc";
                         outputFilename += fileExtension;
-                        data.dataWriter(writer, outputFilename);         
+                        data.dataWriter(writer, outputFilename);
                         t2CalcIdentifier++;
                     }
                     else {
@@ -197,29 +197,29 @@ int main( int argc, char* argv[] )
                         identifier << t2CalcIdentifier;
                         outputFilename = dataDirec + "Orig/" + caseID + "_T2calc";
                         outputFilename += identifier.str() + fileExtension;
-                        data.dataWriter(writer, outputFilename);         
+                        data.dataWriter(writer, outputFilename);
                         t2CalcIdentifier++;
                      }
-                     outputFilename = outputFilename.erase(outputFilename.size() - 6, 6); 
+                     outputFilename = outputFilename.erase(outputFilename.size() - 6, 6);
                 }
                 // the sequence for 3 point dixon?
-	        found = outputFilename.find("dixon");                           
-                if( found != std::string::npos ){       
+	        found = outputFilename.find("dixon");
+                if( found != std::string::npos ){
                     std::cout << "this is the sequence for 3 point dixon"  << std::endl;
                     writer->SetInput(reader->GetOutput());
                     if (!pointDixonIdentifier) {
                         outputFilename += fileExtension;
-                        data.dataWriter(writer, outputFilename);         
+                        data.dataWriter(writer, outputFilename);
                         pointDixonIdentifier++;
                     }
                     else {
                         std::stringstream identifier;
                         identifier << pointDixonIdentifier;
                         outputFilename += identifier.str() + fileExtension;
-                        data.dataWriter(writer, outputFilename);         
+                        data.dataWriter(writer, outputFilename);
                         pointDixonIdentifier++;
                      }
-                     outputFilename = outputFilename.erase(outputFilename.size() - 6, 6); 
+                     outputFilename = outputFilename.erase(outputFilename.size() - 6, 6);
                 }
                 found = outputFilename.find("t2_tse");
                 if( found != std::string::npos ){
@@ -227,17 +227,17 @@ int main( int argc, char* argv[] )
                     writer->SetInput(reader->GetOutput());
                     if (!t2Identifier) {
                         outputFilename += fileExtension;
-                        data.dataWriter(writer, outputFilename);         
+                        data.dataWriter(writer, outputFilename);
                         t2Identifier++;
                     }
                     else {
                         std::stringstream identifier;
                         identifier << t2Identifier;
                         outputFilename += identifier.str() + fileExtension;
-                        data.dataWriter(writer, outputFilename);         
+                        data.dataWriter(writer, outputFilename);
                         t2Identifier++;
                      }
-                     outputFilename = outputFilename.erase(outputFilename.size() - 6, 6); 
+                     outputFilename = outputFilename.erase(outputFilename.size() - 6, 6);
                 }
                 found = outputFilename.find("t2fs_tse");
 	        if ( found != std::string::npos ) {
@@ -245,73 +245,73 @@ int main( int argc, char* argv[] )
                     writer->SetInput(reader->GetOutput());
                     if (!t2FSIdentifier) {
                         outputFilename += fileExtension;
-                        data.dataWriter(writer, outputFilename);         
+                        data.dataWriter(writer, outputFilename);
                         t2FSIdentifier++;
                     }
                     else {
                         std::stringstream identifier;
                         identifier << t2FSIdentifier;
                         outputFilename += identifier.str() + fileExtension;
-                        data.dataWriter(writer, outputFilename);         
+                        data.dataWriter(writer, outputFilename);
                         t2FSIdentifier++;
                      }
-                     outputFilename = outputFilename.erase(outputFilename.size() - 6, 6); 
+                     outputFilename = outputFilename.erase(outputFilename.size() - 6, 6);
                 }
-	        found = outputFilename.find("left_femur_T2FS");         
-	        if ( found != std::string::npos ){                       
+	        found = outputFilename.find("left_femur_T2FS");
+	        if ( found != std::string::npos ){
                     std::cout << "this is the left femur aligned t2 weighted fat suppressed sequence!"  << std::endl;
                     DMDData::OrientedImageType::Pointer origImage = reader->GetOutput();
                     outputFilename += fileExtension;
                     // only convert sequence with multiple slices
                     if ( origImage->GetLargestPossibleRegion().GetSize()[2] > 1 ) {
                         writer->SetInput(reader->GetOutput());
-                        data.dataWriter(writer, outputFilename);         
+                        data.dataWriter(writer, outputFilename);
                     }
-                    outputFilename = outputFilename.erase(outputFilename.size() - 6, 6); 
+                    outputFilename = outputFilename.erase(outputFilename.size() - 6, 6);
 	        }
                 else {
                     // use else, otherwise will produce xxxT2FS.nrrd.nrrd because T2 is a subset of T2FS
-	            found = outputFilename.find("left_femur_T2"); 
-	            if ( found != std::string::npos ){                           
+	            found = outputFilename.find("left_femur_T2");
+	            if ( found != std::string::npos ){
                         std::cout << "this is the left aligned t2 weighted sequence!"  << std::endl;
                         DMDData::OrientedImageType::Pointer origImage = reader->GetOutput();
                         outputFilename += fileExtension;
                         // only convert sequence with multiple slices
                         if ( origImage->GetLargestPossibleRegion().GetSize()[2] > 1 ) {
                             writer->SetInput(reader->GetOutput());
-                            data.dataWriter(writer, outputFilename);         
+                            data.dataWriter(writer, outputFilename);
                         }
                     //    outputFilename.erase (outputFilename.end() - 5, outputFilename.end());
-                        outputFilename = outputFilename.erase(outputFilename.size() - 6, 6); 
-	            }	  
+                        outputFilename = outputFilename.erase(outputFilename.size() - 6, 6);
+	            }	
                     else {
                         DMDData::OrientedImageType::Pointer origImage = reader->GetOutput();
                         outputFilename += fileExtension;
                         // only convert sequence with multiple slices
                         if ( origImage->GetLargestPossibleRegion().GetSize()[2] > 1 ) {
                             writer->SetInput(reader->GetOutput());
-                            data.dataWriter(writer, outputFilename);         
+                            data.dataWriter(writer, outputFilename);
                         }
-                        outputFilename = outputFilename.erase(outputFilename.size() - 6, 6); 
+                        outputFilename = outputFilename.erase(outputFilename.size() - 6, 6);
                     }
                 }
-            }        
-            commandLine = "rm -r " + dataDirec + "Dicom/" ; 
-     //       system(commandLine.c_str());  
+            }
+            commandLine = "rm -r " + dataDirec + "Dicom/" ;
+     //       system(commandLine.c_str());
             return EXIT_SUCCESS;
         }
         catch (itk::ExceptionObject &ex){
             std::cout << ex << std::endl;
             return EXIT_FAILURE;
-        }  
+        }
     }
 
-    if ( strchr (argv[1], 'i') != NULL ) { 
-        // conduct feature analysis 
+    if ( strchr (argv[1], 'i') != NULL ) {
+        // conduct feature analysis
         // load original images continuous fat region and segmented muscle
 	DMDData::OrientedWriterType::Pointer                writer = DMDData::OrientedWriterType::New();
         float                                               mint2val = 0, maxt2val = 0;
-        writer->UseCompressionOn();   // turn output image compression on 
+        writer->UseCompressionOn();   // turn output image compression on
         // load segmented muscle regions
         // conduct interpolation between manually segmented slices
         //InputFilename = dataDirec + "Seg/" + caseID + "_manual_full.nrrd" ;
@@ -321,58 +321,58 @@ int main( int argc, char* argv[] )
         std::cout << "finish interpolation" << std::endl;
         return EXIT_SUCCESS;
     }
-     
-    if ( strchr (argv[1], 'f') != NULL ) { // conduct feature analysis 
+
+    if ( strchr (argv[1], 'f') != NULL ) { // conduct feature analysis
 	DMDData::OrientedWriterType::Pointer                writer = DMDData::OrientedWriterType::New();
         float                                               mint2val = 0, maxt2val = 0;
-        writer->UseCompressionOn();   // turn output image compression on 
+        writer->UseCompressionOn();   // turn output image compression on
         // load fat mask of left femur
 //        InputFilename = dataDirec + "fatReg/" + caseID + "_left_femur_fat.nrrd" ;
         InputFilename = argv[3];
         data.dataReader ( InputFilename, fatMaskLeft );
-        
+
         // load bladder mask of left femur to correct intensity inconsistance between t2 and t2fs
  //       InputFilename = dataDirec + "fatReg/" + caseID + "_left_femur_fat.nrrd" ;
         InputFilename = argv[3];
         data.dataReader ( InputFilename, bladderMaskLeft );
-       
+
         // load segmented muscle regions
         #ifdef SEG_INTERPOLATE
         // conduct interpolation between manually segmented slices
-   //    InputFilename = dataDirec + "fatReg/" + caseID + "_intervolfull_every5.nrrd" ; // generally used segmentation 
-      // InputFilename = dataDirec + "fatReg/" + caseID + "_intervolfull_every5_distal.nrrd" ; // generally used segmentation 
-     //  InputFilename = dataDirec + "fatReg/" + caseID + "_intervolfull_every5_medial.nrrd" ; // generally used segmentation 
-    //   InputFilename = dataDirec + "fatReg/" + caseID + "_intervolfull_every5_proximal.nrrd" ; // generally used segmentation 
+   //    InputFilename = dataDirec + "fatReg/" + caseID + "_intervolfull_every5.nrrd" ; // generally used segmentation
+      // InputFilename = dataDirec + "fatReg/" + caseID + "_intervolfull_every5_distal.nrrd" ; // generally used segmentation
+     //  InputFilename = dataDirec + "fatReg/" + caseID + "_intervolfull_every5_medial.nrrd" ; // generally used segmentation
+    //   InputFilename = dataDirec + "fatReg/" + caseID + "_intervolfull_every5_proximal.nrrd" ; // generally used segmentation
    //     InputFilename = dataDirec + "fatReg/" + caseID + "_Seg_5slides_11m.nrrd" ; // 5 central slices
-   //     InputFilename = dataDirec + "fatReg/" + caseID + "_left_femur_seg.nrrd" ; // DD_032, DD_033, DD_034, CS, RF, ST, 
+   //     InputFilename = dataDirec + "fatReg/" + caseID + "_left_femur_seg.nrrd" ; // DD_032, DD_033, DD_034, CS, RF, ST,
         InputFilename = argv[3];
         data.dataReader ( InputFilename, segMuscleLeft );
     //    data.interpolate3D(segMuscleLeft->GetOutput(), caseID);
         #endif
 
-        // N4 intensity correction 
-        commandLine = "N4ITKBiasFieldCorrection --inputimage " + dataDirec + "Orig/" + caseID + "_right_femur_T2.nrrd " + "--outputimage " + dataDirec + "Processed/" + caseID + "_left_femur_T2_N4Correct.nrrd" + " --outputbiasfield " + dataDirec + "Processed/" + caseID + "_T2BiasField.nii";  
+        // N4 intensity correction
+        commandLine = "N4ITKBiasFieldCorrection --inputimage " + dataDirec + "Orig/" + caseID + "_right_femur_T2.nrrd " + "--outputimage " + dataDirec + "Processed/" + caseID + "_left_femur_T2_N4Correct.nrrd" + " --outputbiasfield " + dataDirec + "Processed/" + caseID + "_T2BiasField.nii";
         system(commandLine.c_str());
         // apply the bias field to t2fs
-        //commandLine = "ImageMath " + dataDirec + "Orig/" + caseID + "_left_femur_T2FS.nrrd " + "-div " + dataDirec + "Processed/" + caseID + "_T2BiasField.nii" + " -outfile " + dataDirec + "Processed/" + caseID + "_left_femur_T2FS_N4Correct.nrrd"; 
-        commandLine = "N4ITKBiasFieldCorrection --inputimage " + dataDirec + "Orig/" + caseID + "_right_femur_T2FS.nrrd " + "--outputimage " + dataDirec + "Processed/" + caseID + "_left_femur_T2FS_N4Correct.nrrd";  
+        //commandLine = "ImageMath " + dataDirec + "Orig/" + caseID + "_left_femur_T2FS.nrrd " + "-div " + dataDirec + "Processed/" + caseID + "_T2BiasField.nii" + " -outfile " + dataDirec + "Processed/" + caseID + "_left_femur_T2FS_N4Correct.nrrd";
+        commandLine = "N4ITKBiasFieldCorrection --inputimage " + dataDirec + "Orig/" + caseID + "_right_femur_T2FS.nrrd " + "--outputimage " + dataDirec + "Processed/" + caseID + "_left_femur_T2FS_N4Correct.nrrd";
        // std::cout << commandLine << std::endl;
         system(commandLine.c_str());
-        commandLine = "N4ITKBiasFieldCorrection --inputimage " + dataDirec + "Orig/" + caseID + "_T2calc.nrrd " "--outputimage " + dataDirec + "Processed/" + caseID + "_T2calc_N4Correct.nrrd"; 
+        commandLine = "N4ITKBiasFieldCorrection --inputimage " + dataDirec + "Orig/" + caseID + "_T2calc.nrrd " "--outputimage " + dataDirec + "Processed/" + caseID + "_T2calc_N4Correct.nrrd";
         system(commandLine.c_str());
         std::cout << "N4 inhomogeneous intensity correction finished!" << std::endl;
         // end of N4 correction
-        
+
         // load intensity corrected images
-        // load intensity corrected t2 
+        // load intensity corrected t2
         InputFilename = dataDirec + "Processed/" + caseID + "_left_femur_T2_N4Correct.nrrd" ;
         data.dataReader ( InputFilename, imagereader );
         t2LeftFemur = imagereader->GetOutput();
-        // load intensity corrected t2fs 
+        // load intensity corrected t2fs
         InputFilename = dataDirec + "Processed/" + caseID + "_left_femur_T2FS_N4Correct.nrrd" ;
         data.dataReader ( InputFilename, imagereader );
         t2FSLeftFemur = imagereader->GetOutput();
-        // load intensity corrected t2calc 
+        // load intensity corrected t2calc
         InputFilename = dataDirec + "Processed/" + caseID + "_T2calc_N4Correct.nrrd" ;
         InputFilename = dataDirec + "Orig/" + caseID + "_T2calc.nrrd" ;
         data.dataReader ( InputFilename, imagereader );
@@ -384,22 +384,22 @@ int main( int argc, char* argv[] )
         data.imageInitialize ( t2LeftFemur, waterPercImgLeftFemur, voxelVol );
         data.imageInitialize ( t2LeftFemur, fatOnlyImgLeftFemur );
         data.imageInitialize ( t2LeftFemur, fatOnlyImgLeftFemurCalib );
-        data.imageInitialize ( t2LeftFemur, t2LeftFemurCalib );	    
+        data.imageInitialize ( t2LeftFemur, t2LeftFemurCalib );	
         data.imageInitialize ( t2LeftFemur, t2FSLeftFemurCalib );
-        data.imageInitialize ( t2LeftFemur, erodeSegMuscleLeft ); 
-        data.imageInitialize ( t2LeftFemur, t2FitWaterPerc );	    
-        data.imageInitialize ( t2LeftFemur, t2FitFatPerc );	    
+        data.imageInitialize ( t2LeftFemur, erodeSegMuscleLeft );
+        data.imageInitialize ( t2LeftFemur, t2FitWaterPerc );	
+        data.imageInitialize ( t2LeftFemur, t2FitFatPerc );	
         std::cout << "image volumes were initialized" << std::endl;
         // erode muscle mask by 1 voxel -- morphological erosion
 
         data.morphMultiGrayErod2DIn3D ( segMuscleLeft->GetOutput(), erodeSegMuscleLeft, 0 ) ;
         // smooth t2 weighted left femur image and write it out
-        data.smoothGradAnisoDiff( t2LeftFemur, t2LeftFemurSmooth, 5, 0.0625, 1.00 ); 
+        data.smoothGradAnisoDiff( t2LeftFemur, t2LeftFemurSmooth, 5, 0.0625, 1.00 );
         writer->SetInput( t2LeftFemurSmooth );
         outputFilename = dataDirec + "Processed/" + caseID + "_left_femur_T2_Smooth.nrrd";
-        data.dataWriter(writer, outputFilename);    
+        data.dataWriter(writer, outputFilename);
         // smooth t2fs images
-        t2Data.smoothGradAnisoDiff( t2FSLeftFemur, t2FSLeftFemurSmooth, 5, 0.0625, 1.00 ); 
+        t2Data.smoothGradAnisoDiff( t2FSLeftFemur, t2FSLeftFemurSmooth, 5, 0.0625, 1.00 );
         writer->SetInput( t2FSLeftFemurSmooth );
         outputFilename = dataDirec + "Processed/" + caseID + "_left_femur_T2FS_Smooth.nrrd";
         data.dataWriter(writer, outputFilename);
@@ -427,11 +427,11 @@ int main( int argc, char* argv[] )
 
         // begin create t2 maps
         T2ValueMapCreate(data, t2Calc, t2mm_slice, data_array, dataDirec, caseID, curveFit);
-        // end of create t2 value image 
+        // end of create t2 value image
 
         commandLine = "BRAINSFit --fixedVolume " + dataDirec + "Processed/" + caseID + "_left_femur_T2_Smooth.nrrd --movingVolume " + dataDirec + "Processed/" + caseID + "_left_femur_T2FS_Smooth.nrrd --outputVolume " + dataDirec + "Processed/" + caseID + "_T2FS_registered.nrrd --transformType Rigid";   // transform for t2FS
         system(commandLine.c_str());
-        commandLine = "BRAINSFit --fixedVolume " + dataDirec + "Processed/" + caseID + "_left_femur_T2_Smooth.nrrd --movingVolume " + dataDirec + "Processed/" + caseID + "_T2FIT.nrrd --outputVolume " + dataDirec + "Processed/" + caseID + "_T2FIT_registered.nrrd --transformType Rigid";   // transform for t2FIT 
+        commandLine = "BRAINSFit --fixedVolume " + dataDirec + "Processed/" + caseID + "_left_femur_T2_Smooth.nrrd --movingVolume " + dataDirec + "Processed/" + caseID + "_T2FIT.nrrd --outputVolume " + dataDirec + "Processed/" + caseID + "_T2FIT_registered.nrrd --transformType Rigid";   // transform for t2FIT
         system(commandLine.c_str());
         commandLine = "cp " + dataDirec + "Processed/" + caseID + "_left_femur_T2_Smooth.nrrd " + dataDirec + "Processed/" + caseID + "_T2_registered.nrrd";
         system(commandLine.c_str());
@@ -447,7 +447,7 @@ int main( int argc, char* argv[] )
         InputFilename = dataDirec + "Processed/" + caseID + "_T2FIT_registered.nrrd" ;
         data.dataReader ( InputFilename, imagereader );
         t2Fit = imagereader->GetOutput();
-        // load t2 
+        // load t2
         InputFilename = dataDirec + "Processed/" + caseID + "_T2_registered.nrrd" ;
         data.dataReader ( InputFilename, imagereader );
         t2LeftFemur = imagereader->GetOutput();
@@ -458,52 +458,52 @@ int main( int argc, char* argv[] )
        // DMDData::OrientedImageType::Pointer origImage = t2LeftFemurSmooth;
         DMDData::ConstIteratorType constOrigT2Iterator( t2LeftFemurSmooth, t2LeftFemurSmooth->GetRequestedRegion() );		
         // create iterator of subcutaneous fat
-        DMDData::OrientedImageType::Pointer leftMaskImage = fatMaskLeft->GetOutput();             
-        DMDData::ConstIteratorType constLeftMaskIterator( leftMaskImage, leftMaskImage->GetRequestedRegion() );  
+        DMDData::OrientedImageType::Pointer leftMaskImage = fatMaskLeft->GetOutput();
+        DMDData::ConstIteratorType constLeftMaskIterator( leftMaskImage, leftMaskImage->GetRequestedRegion() );
         // create iterator of bladder region
-        DMDData::OrientedImageType::Pointer leftBladderMaskImage = bladderMaskLeft->GetOutput();         
-        DMDData::ConstIteratorType constLeftBladderMaskIterator( leftBladderMaskImage, leftBladderMaskImage->GetRequestedRegion() ); 
-        DMDData::ConstIteratorType constLeftSegMuscleMaskIterator( erodeSegMuscleLeft, erodeSegMuscleLeft->GetRequestedRegion()); 
+        DMDData::OrientedImageType::Pointer leftBladderMaskImage = bladderMaskLeft->GetOutput();
+        DMDData::ConstIteratorType constLeftBladderMaskIterator( leftBladderMaskImage, leftBladderMaskImage->GetRequestedRegion() );
+        DMDData::ConstIteratorType constLeftSegMuscleMaskIterator( erodeSegMuscleLeft, erodeSegMuscleLeft->GetRequestedRegion());
         for ( constOrigT2Iterator.GoToBegin(), constLeftMaskIterator.GoToBegin(), constLeftBladderMaskIterator.GoToBegin(), constLeftSegMuscleMaskIterator.GoToBegin(); !constOrigT2Iterator.IsAtEnd(); ++constOrigT2Iterator, ++constLeftMaskIterator, ++constLeftBladderMaskIterator, ++constLeftSegMuscleMaskIterator ) {
 	    if ( constLeftMaskIterator.Get() > 0 ) { // calculate sum of pixel value in t2 in subcutaneous fat region
 	        meanT2Left += constOrigT2Iterator.Get();
-                volLeftFat++;                
+                volLeftFat++;
             }
             if ( constLeftBladderMaskIterator.Get() > 0 ) { // calculate sum of pixel value in t2FS in subcutaneous fat region
                 meanT2LeftBladder += constOrigT2Iterator.Get();
                 volLeftBladder++;
-            }   	       
+            }   	
 	    if ( constLeftSegMuscleMaskIterator.Get() > 0 ) { // calculate sum of pixel value in t2 in subcutaneous fat region
                 if ( constOrigT2Iterator.Get() > maxMuscleIntT2)
-                    maxMuscleIntT2 = constOrigT2Iterator.Get(); 
+                    maxMuscleIntT2 = constOrigT2Iterator.Get();
             }
-        }   
-               
+        }
+
         // create iterator of t2 fs left femur image
        // DMDData::OrientedImageType::Pointer origImage = t2FSLeftFemurSmooth;
         DMDData::ConstIteratorType constOrigFSIterator( t2FSLeftFemur, t2FSLeftFemur->GetRequestedRegion() );		   // create iterator of subcutaneous fat
-      //  DMDData::OrientedImageType::Pointer leftMaskImage = fatMaskLeft->GetOutput();         
-       // DMDData::ConstIteratorType constLeftMaskIterator( leftMaskImage, leftMaskImage->GetRequestedRegion() );           
+      //  DMDData::OrientedImageType::Pointer leftMaskImage = fatMaskLeft->GetOutput();
+       // DMDData::ConstIteratorType constLeftMaskIterator( leftMaskImage, leftMaskImage->GetRequestedRegion() );
         // iterator of bladder region
-        //DMDData::OrientedImageType::Pointer leftBladderMaskImage = bladderMaskLeft->GetOutput();         
+        //DMDData::OrientedImageType::Pointer leftBladderMaskImage = bladderMaskLeft->GetOutput();
         //DMDData::ConstIteratorType constLeftBladderMaskIterator( leftBladderMaskImage, leftBladderMaskImage->GetRequestedRegion() );
-        for ( constOrigFSIterator.GoToBegin(), constLeftMaskIterator.GoToBegin(), constLeftBladderMaskIterator.GoToBegin(), constLeftSegMuscleMaskIterator.GoToBegin(); !constOrigFSIterator.IsAtEnd(); ++constOrigFSIterator, ++constLeftMaskIterator, ++constLeftSegMuscleMaskIterator, ++constLeftBladderMaskIterator ) {	        
+        for ( constOrigFSIterator.GoToBegin(), constLeftMaskIterator.GoToBegin(), constLeftBladderMaskIterator.GoToBegin(), constLeftSegMuscleMaskIterator.GoToBegin(); !constOrigFSIterator.IsAtEnd(); ++constOrigFSIterator, ++constLeftMaskIterator, ++constLeftSegMuscleMaskIterator, ++constLeftBladderMaskIterator ) {	
             if ( constLeftMaskIterator.Get() > 0 ) { // calculate sum of pixel value in t2FS in subcutaneous fat region
-	        meanT2FSLeft += constOrigFSIterator.Get();                
+	        meanT2FSLeft += constOrigFSIterator.Get();
             }
             if ( constLeftBladderMaskIterator.Get() > 0 ) { // calculate sum of pixel value in t2FS in subcutaneous fat region
                 meanT2FSLeftBladder += constOrigFSIterator.Get();
-            }   	       
+            }   	
 	    if ( constLeftSegMuscleMaskIterator.Get() > 0 ) { // calculate sum of pixel value in t2 in subcutaneous fat region
                 if ( constOrigFSIterator.Get() > maxMuscleIntT2)
-                    maxMuscleIntT2FS = constOrigFSIterator.Get(); 
+                    maxMuscleIntT2FS = constOrigFSIterator.Get();
             }
         }
         // calculate histogram of t2FS image
         meanT2Left /= volLeftFat;
-        meanT2FSLeft /= volLeftFat;                
+        meanT2FSLeft /= volLeftFat;
         meanT2LeftBladder /= volLeftBladder;
-        meanT2FSLeftBladder /= volLeftBladder;                
+        meanT2FSLeftBladder /= volLeftBladder;
         // begin calibration
         integrate = meanT2LeftBladder - meanT2FSLeftBladder;
         std::cout << "difference between t2 and t2fs:  " << integrate << "  " <<  meanT2LeftBladder << "  " << meanT2FSLeftBladder << std::endl;
@@ -511,7 +511,7 @@ int main( int argc, char* argv[] )
         fb = ( BRIGHT_CALIB * ( meanT2Left - meanT2FSLeft ) - ( BRIGHT_CALIB - DARK_CALIB ) * meanT2Left ) / ( meanT2Left - meanT2FSLeft );
         fk = ( BRIGHT_CALIB - DARK_CALIB ) / ( meanT2Left - meanT2FSLeft );
         //fb += 75.732;
-        std::cout << "the size of region is:  " << volLeftFat << "\n mean of the region in T2 image is:  " << meanT2Left << "\n mean of the region in T2FS image is:  " << meanT2FSLeft << "  " << fk << "  " << fb << std::endl;    
+        std::cout << "the size of region is:  " << volLeftFat << "\n mean of the region in T2 image is:  " << meanT2Left << "\n mean of the region in T2FS image is:  " << meanT2FSLeft << "  " << fk << "  " << fb << std::endl;
         // calibrate T2 images
         if (strcmp(caseID.c_str(), "DD_082_04-30-10") == 0 || strcmp(caseID.c_str(), "DD_083_04-30-10") == 0 || strcmp(caseID.c_str(), "DD_084_04-30-10") == 0) {
             t2calib.linearCalib ( t2LeftFemurSmooth, t2LeftFemurCalib, fatMaskLeft, meanT2Left, meanT2FSLeft, fk, fb, integrate ) ;
@@ -525,21 +525,21 @@ int main( int argc, char* argv[] )
         outputFilename = dataDirec + "Processed/" + caseID + "_left_femur_T2_calib.nrrd";
         data.dataWriter(writer, outputFilename);		
         // calibrate T2FS images
-        // DMDData::OrientedImageType::Pointer leftMaskImage = fatMaskLeft->GetOutput();    
+        // DMDData::OrientedImageType::Pointer leftMaskImage = fatMaskLeft->GetOutput();
         //fb -= 75.732;
         t2calib.linearCalib ( t2FSLeftFemur, t2FSLeftFemurCalib, fatMaskLeft, meanT2Left, meanT2FSLeft, fk, fb, 0) ;
         writer->SetInput( t2FSLeftFemurCalib );
         outputFilename =  dataDirec + "Processed/" + caseID + "_left_femur_T2FS_calib.nrrd";
         data.dataWriter(writer, outputFilename);
         // end of calibration
-        // iterators for fat only, water only, and fat percentage image              
-        DMDData::IteratorType fatPercLeftFemurIterator( fatPercImgLeftFemur, fatPercImgLeftFemur->GetRequestedRegion() );       
-        DMDData::IteratorType waterPercLeftFemurIterator( waterPercImgLeftFemur, waterPercImgLeftFemur->GetRequestedRegion() ); 
-        DMDData::IteratorType fatOnlyImgLeftFemurIterator( fatOnlyImgLeftFemur, fatOnlyImgLeftFemur->GetRequestedRegion() );   
-        DMDData::IteratorType fatOnlyImgLeftFemurCalibIterator( fatOnlyImgLeftFemurCalib, fatOnlyImgLeftFemurCalib->GetRequestedRegion() );   
-        DMDData::IteratorType t2ValWaterPercIterator( t2FitWaterPerc, t2FitWaterPerc->GetRequestedRegion() ); 
-        DMDData::IteratorType t2ValFatPercIterator( t2FitFatPerc, t2FitFatPerc->GetRequestedRegion() ); 
-        DMDData::ConstIteratorType constt2FitIterator( t2Fit, t2Fit->GetRequestedRegion() ); 
+        // iterators for fat only, water only, and fat percentage image
+        DMDData::IteratorType fatPercLeftFemurIterator( fatPercImgLeftFemur, fatPercImgLeftFemur->GetRequestedRegion() );
+        DMDData::IteratorType waterPercLeftFemurIterator( waterPercImgLeftFemur, waterPercImgLeftFemur->GetRequestedRegion() );
+        DMDData::IteratorType fatOnlyImgLeftFemurIterator( fatOnlyImgLeftFemur, fatOnlyImgLeftFemur->GetRequestedRegion() );
+        DMDData::IteratorType fatOnlyImgLeftFemurCalibIterator( fatOnlyImgLeftFemurCalib, fatOnlyImgLeftFemurCalib->GetRequestedRegion() );
+        DMDData::IteratorType t2ValWaterPercIterator( t2FitWaterPerc, t2FitWaterPerc->GetRequestedRegion() );
+        DMDData::IteratorType t2ValFatPercIterator( t2FitFatPerc, t2FitFatPerc->GetRequestedRegion() );
+        DMDData::ConstIteratorType constt2FitIterator( t2Fit, t2Fit->GetRequestedRegion() );
         DMDData::ConstIteratorType constLeftT2Iterator( t2LeftFemur, t2LeftFemur->GetRequestedRegion() );
         DMDData::ConstIteratorType constLeftT2FSIterator( t2FSLeftFemur, t2FSLeftFemur->GetRequestedRegion() );
         DMDData::ConstIteratorType constLeftT2CalibIterator( t2LeftFemurCalib, t2LeftFemurCalib->GetRequestedRegion() );
@@ -550,7 +550,7 @@ int main( int argc, char* argv[] )
         fatonlywriter->UseCompressionOn();   // turn output image compression on
         fatpercwriter->UseCompressionOn();   // turn output image compression on
         waterpercwriter->UseCompressionOn();   // turn output image compression on
-        for ( constLeftT2Iterator.GoToBegin(), constLeftT2FSIterator.GoToBegin(), constLeftT2CalibIterator.GoToBegin(), constLeftT2FSCalibIterator.GoToBegin(), constt2FitIterator.GoToBegin(), fatPercLeftFemurIterator.GoToBegin(), waterPercLeftFemurIterator.GoToBegin(), fatOnlyImgLeftFemurIterator.GoToBegin(), fatOnlyImgLeftFemurCalibIterator.GoToBegin(), t2ValWaterPercIterator, t2ValFatPercIterator; !constLeftT2Iterator.IsAtEnd(); ++constLeftT2Iterator, ++constLeftT2FSIterator, ++constLeftT2CalibIterator, ++constLeftT2FSCalibIterator, ++constt2FitIterator, ++fatPercLeftFemurIterator, ++waterPercLeftFemurIterator, ++fatOnlyImgLeftFemurIterator, ++fatOnlyImgLeftFemurCalibIterator, ++t2ValWaterPercIterator, ++t2ValFatPercIterator) {    
+        for ( constLeftT2Iterator.GoToBegin(), constLeftT2FSIterator.GoToBegin(), constLeftT2CalibIterator.GoToBegin(), constLeftT2FSCalibIterator.GoToBegin(), constt2FitIterator.GoToBegin(), fatPercLeftFemurIterator.GoToBegin(), waterPercLeftFemurIterator.GoToBegin(), fatOnlyImgLeftFemurIterator.GoToBegin(), fatOnlyImgLeftFemurCalibIterator.GoToBegin(), t2ValWaterPercIterator, t2ValFatPercIterator; !constLeftT2Iterator.IsAtEnd(); ++constLeftT2Iterator, ++constLeftT2FSIterator, ++constLeftT2CalibIterator, ++constLeftT2FSCalibIterator, ++constt2FitIterator, ++fatPercLeftFemurIterator, ++waterPercLeftFemurIterator, ++fatOnlyImgLeftFemurIterator, ++fatOnlyImgLeftFemurCalibIterator, ++t2ValWaterPercIterator, ++t2ValFatPercIterator) {
             // calculate fat only image
             fatOnlyImgLeftFemurIterator.Set( constLeftT2Iterator.Get() - constLeftT2FSIterator.Get());
             fatOnlyImgLeftFemurCalibIterator.Set( constLeftT2CalibIterator.Get() - constLeftT2FSCalibIterator.Get());
@@ -583,32 +583,32 @@ int main( int argc, char* argv[] )
                 waterPercLeftFemurIterator.Set( 0 );
                 t2ValWaterPercIterator.Set(0);
             }
-        }   
+        }
 
         // output fat percentage image
-        fatpercwriter->SetInput( fatPercImgLeftFemur );            
+        fatpercwriter->SetInput( fatPercImgLeftFemur );
         outputFilename = dataDirec + "Processed/" + caseID + "_fatPercImgLeftFemur.nrrd";
         data.dataWriter(fatpercwriter, outputFilename);
-        // output fat only image  
-	fatonlywriter->SetInput(fatOnlyImgLeftFemur );       
+        // output fat only image
+	fatonlywriter->SetInput(fatOnlyImgLeftFemur );
         outputFilename = dataDirec + "Processed/" + caseID + "_fatOnlyImgLeftFemur.nrrd";
         data.dataWriter(fatonlywriter, outputFilename);
-        // output calibrated fat only image  
-	fatonlywriter->SetInput(fatOnlyImgLeftFemurCalib );       
+        // output calibrated fat only image
+	fatonlywriter->SetInput(fatOnlyImgLeftFemurCalib );
         outputFilename = dataDirec + "Processed/" + caseID + "_fatOnlyImgLeftFemurCalib.nrrd";
         data.dataWriter(fatonlywriter, outputFilename);
-        // output water percentage  image  
-	waterpercwriter->SetInput(waterPercImgLeftFemur );       
+        // output water percentage  image
+	waterpercwriter->SetInput(waterPercImgLeftFemur );
         outputFilename = dataDirec + "Processed/" + caseID + "_waterPercImgLeftFemur.nrrd";
         data.dataWriter(waterpercwriter, outputFilename);
 
-        std::string featurefilename = "../data/" + caseID + "_features7m.txt"; 
-        commandLine = "rm " + featurefilename ; 
+        std::string featurefilename = "../data/" + caseID + "_features7m.txt";
+        commandLine = "rm " + featurefilename ;
         system(commandLine.c_str()); // remove the old feature file before updating
         std::cout << featurefilename.c_str() << std::endl;
         std::ofstream efile( featurefilename.c_str() , std::ios::app );
         efile << caseID << ":  " << "\n";
-        efile.close();  
+        efile.close();
         #ifdef HISTOGRAM_TEXTURE
         // calculate muscle features in t2 images
         std::string histogramfeaturefilename = "../data/" + caseID + "_histogram_features7m.txt";
@@ -646,16 +646,16 @@ int main( int argc, char* argv[] )
         #endif
     }
 
-    if ( strchr (argv[1], 'p') != NULL ) { 
+    if ( strchr (argv[1], 'p') != NULL ) {
         // conduct feature analysis on point Dixon
         // load original images continuous fat region and segmented muscle
 	DMDData::OrientedWriterType::Pointer                writer = DMDData::OrientedWriterType::New();
         float                                               mint2val = 0, maxt2val = 0;
-        writer->UseCompressionOn();   // turn output image compression on 
+        writer->UseCompressionOn();   // turn output image compression on
         // load segmented muscle regions
         #ifdef SEG_INTERPOLATE
         // conduct interpolation between manually segmented slices
-        InputFilename = dataDirec + "Mask/" + caseID + "_seg.nii.gz" ; // generally used segmentation 
+        InputFilename = dataDirec + "Mask/" + caseID + "_seg.nii.gz" ; // generally used segmentation
         std::cout << InputFilename << std::endl;
         //getchar();
         data.dataReader ( InputFilename, segMuscleLeft );
@@ -663,14 +663,14 @@ int main( int argc, char* argv[] )
         // load interpolated volume
         // InputFilename = dataDirec + "fatReg/" + caseID + "_intervolfull_every8.nrrd" ;
         // data.dataReader ( InputFilename, segMuscleLeft );
-        // N4 intensity correction 
+        // N4 intensity correction
         // begin of correction
-        //commandLine = "N4ITKBiasFieldCorrection --inputimage " + dataDirec + "Orig/" + caseID + "_left_femur_T2.nrrd " + "--outputimage " + dataDirec + "Processed/" + caseID + "_left_femur_T2_N4Correct.nrrd" + " --outputbiasfield " + dataDirec + "Processed/" + caseID + "_T2BiasField.nii";  
+        //commandLine = "N4ITKBiasFieldCorrection --inputimage " + dataDirec + "Orig/" + caseID + "_left_femur_T2.nrrd " + "--outputimage " + dataDirec + "Processed/" + caseID + "_left_femur_T2_N4Correct.nrrd" + " --outputbiasfield " + dataDirec + "Processed/" + caseID + "_T2BiasField.nii";
        // system(commandLine.c_str());
         //std::cout << "N4 inhomogeneous intensity correction finished!" << std::endl;
         // end of correction
         // load intensity corrected images
-        // load intensity corrected t2 
+        // load intensity corrected t2
         InputFilename = dataDirec + "Orig/" + caseID + "_3PD.nii.gz" ;
         data.dataReader ( InputFilename, imagereader );
         t2LeftFemur = imagereader->GetOutput();
@@ -681,16 +681,16 @@ int main( int argc, char* argv[] )
         data.imageInitialize ( t2LeftFemur, waterPercImgLeftFemur, voxelVol );
         data.imageInitialize ( t2LeftFemur, fatOnlyImgLeftFemur );
         data.imageInitialize ( t2LeftFemur, fatOnlyImgLeftFemurCalib );
-        data.imageInitialize ( t2LeftFemur, t2LeftFemurCalib );	    
+        data.imageInitialize ( t2LeftFemur, t2LeftFemurCalib );	
         data.imageInitialize ( t2LeftFemur, t2FSLeftFemurCalib );
-        data.imageInitialize ( t2LeftFemur, erodeSegMuscleLeft ); 
-        data.imageInitialize ( t2LeftFemur, t2FitWaterPerc );	    
-        data.imageInitialize ( t2LeftFemur, t2FitFatPerc );	    
+        data.imageInitialize ( t2LeftFemur, erodeSegMuscleLeft );
+        data.imageInitialize ( t2LeftFemur, t2FitWaterPerc );	
+        data.imageInitialize ( t2LeftFemur, t2FitFatPerc );	
         std::cout << "image volumes were initialized" << std::endl;
         // erode muscle mask by 1 voxel -- morphological erosion
         data.morphMultiGrayErod2DIn3D ( segMuscleLeft->GetOutput(), erodeSegMuscleLeft, 1 ) ;
         // smooth t2 weighted left femur image and write it out
-        data.smoothGradAnisoDiff( t2LeftFemur, t2LeftFemurSmooth, 5, 0.0625, 1.00 ); 
+        data.smoothGradAnisoDiff( t2LeftFemur, t2LeftFemurSmooth, 5, 0.0625, 1.00 );
         writer->SetInput( t2LeftFemurSmooth );
 
         DMDData::OrientedImageType::IndexType                   index;                                                     // image index of t2 calc
@@ -715,13 +715,13 @@ int main( int argc, char* argv[] )
         //exit(1);
         #endif
 
-        std::string featurefilename = "../data/" + caseID + "_features7m.txt"; 
-        commandLine = "rm " + featurefilename ; 
+        std::string featurefilename = "../data/" + caseID + "_features7m.txt";
+        commandLine = "rm " + featurefilename ;
         system(commandLine.c_str()); // remove the old feature file before updating
         std::cout << featurefilename.c_str() << std::endl;
         std::ofstream efile( featurefilename.c_str() , std::ios::app );
         efile << caseID << ":  " << "\n";
-        efile.close();  
+        efile.close();
         // calculate muscle features in t2 images
         #ifdef HISTOGRAM_TEXTURE
         std::cout << "features in t2 images:  " << std::endl;
@@ -731,7 +731,7 @@ int main( int argc, char* argv[] )
         #endif
     }
     return EXIT_SUCCESS;
-} 
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CreateEllipseImage(synImageType::Pointer image)
 {
@@ -742,16 +742,16 @@ void CreateEllipseImage(synImageType::Pointer image)
     int x, y, z, r, noBig = 20;
     SpatialObjectToImageFilterType::Pointer imageFilter = SpatialObjectToImageFilterType::New();
     synImageType::SizeType size;
-  
+
     size[ 0 ] =  256;
     size[ 1 ] =  256;
     size[ 2 ] =  180;
-   
+
     imageFilter->SetSize( size );
     synImageType::SpacingType spacing;
     spacing.Fill(1);
     imageFilter->SetSpacing(spacing);
-   
+
     EllipseType::Pointer ellipse    = EllipseType::New();
     EllipseType::ArrayType radiusArray;
 
@@ -772,14 +772,14 @@ void CreateEllipseImage(synImageType::Pointer image)
         radiusArray[1] = r;
         radiusArray[2] = r;
         ellipse->SetRadius(radiusArray);
-   
+
         typedef EllipseType::TransformType                 TransformType;
         TransformType::Pointer transform = TransformType::New();
         transform->SetIdentity();
-   
+
         TransformType::OutputVectorType  translation;
         TransformType::CenterType        center;
-        //location 
+        //location
         if(i < noBig) { // 30-254
             x = rand() % 205 + 50;
             y = rand() % 205 + 50;
@@ -792,9 +792,9 @@ void CreateEllipseImage(synImageType::Pointer image)
         }
         std::cout << "location:  " << x << "  " << y << "  " << z << std::endl;
 
-        for(int j = z - r; j <= z + r; j++) { 
-            for(int k = y - r; k <= y + r; k++) { 
-                for(int l = x - r; l <= x + r; l++) { 
+        for(int j = z - r; j <= z + r; j++) {
+            for(int k = y - r; k <= y + r; k++) {
+                for(int l = x - r; l <= x + r; l++) {
                     float d = sqrt((l - x) * (l - x) + (k - y) * (k - y) + (j - z) * (j - z));
                     if (d <= r) {
                         float e = 500 * pow(E_CONSTANT, -d);
@@ -835,10 +835,10 @@ static void T2ValueMapCreate(DMDData data, DMDData::OrientedImageType::Pointer t
     DMDData::OrientedImageType::SizeType                    t2MapSize = t2Calc->GetLargestPossibleRegion().GetSize();
     float                                                   mint2val = 0, maxt2val = 0;
     DMDData::OrientedWriterType::Pointer                    writer = DMDData::OrientedWriterType::New();
-    writer->UseCompressionOn();   // turn output image compression on 
+    writer->UseCompressionOn();   // turn output image compression on
     DMDData::StrITKType                                     outputFilename;
 
-    t2MapSize[2] = no_multi_slice; // set the size in depth direction of t2 value image 
+    t2MapSize[2] = no_multi_slice; // set the size in depth direction of t2 value image
     t2Fit->SetRegions( t2MapSize );
     t2Fit->SetOrigin( origin );
     t2Fit->SetSpacing( spacing );
@@ -847,7 +847,7 @@ static void T2ValueMapCreate(DMDData data, DMDData::OrientedImageType::Pointer t
     for (int i = 1; i < data_pairs; i++)       // set time for each echo
         data_array[0][i - 1] = 0.001 * ECHO_TIME * (i + 1);
     // smooth the t2 calc with gaussian filter
-    data.smoothGaussian( t2Calc, t2CalcSmooth, 1 ); 
+    data.smoothGaussian( t2Calc, t2CalcSmooth, 1 );
     for(int j = 0 ; j < (int)t2CalcSize[2] / data_pairs; j++) {
         for(index[1] = 0; index[1] < (int)t2CalcSize[1]; index[1]++) {
             for(index[0] = 0; index[0] < (int)t2CalcSize[0]; index[0]++) {
@@ -860,7 +860,7 @@ static void T2ValueMapCreate(DMDData data, DMDData::OrientedImageType::Pointer t
                         }
                     }
                     index[2] = j + no_multi_slice * i;
-                    // assign value to ten data points 
+                    // assign value to ten data points
                     if (marker == 1){
                         data_array[1][i - 1] = t2CalcSmooth->GetPixel(index);
                         data_array[1][i - 1] = log(data_array[1][i - 1]);
@@ -885,14 +885,14 @@ static void T2ValueMapCreate(DMDData data, DMDData::OrientedImageType::Pointer t
                             maxt2val = t2Fit->GetPixel(index);
                     }
                 }
-                else { 
+                else {
                     index[2] = j;
                     t2Fit->SetPixel(index, 0);
                 }
             }
         }
     }
-    writer->SetInput( t2Fit );       
+    writer->SetInput( t2Fit );
     // write out t2 map
     outputFilename = dataDirec + "Processed/" + caseID + "_T2FIT.nrrd";
     data.dataWriter(writer, outputFilename);

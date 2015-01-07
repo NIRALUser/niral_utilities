@@ -49,18 +49,18 @@ int main(int argc, char* argv[])
     std::cerr << "An output fiber file has to be specified" << std::endl;
     return EXIT_FAILURE;
   }
-  
+
   vtkSmartPointer<vtkPolyDataReader> reader = vtkSmartPointer<vtkPolyDataReader>::New();
   std::cout << "Reading " << fiberFile<< std::endl;
   reader->SetFileName(fiberFile.c_str());
   reader->Update();
- 
+
   // Extract the polydata
   vtkSmartPointer<vtkPolyData> polydata =
     reader->GetOutput();
-  
- 
-  DeformationImageType::Pointer deformationfield(NULL);
+
+
+  DeformationImageType::Pointer deformationfield(ITK_NULLPTR);
   if( !hField.empty() )
   {
     deformationfield = readDeformationField(hField, HField);
@@ -71,10 +71,10 @@ int main(int argc, char* argv[])
   }
   else
   {
-    deformationfield = NULL;
+    deformationfield = ITK_NULLPTR;
   }
   typedef itk::VectorLinearInterpolateImageFunction<DeformationImageType, double> DeformationInterpolateType;
-  DeformationInterpolateType::Pointer definterp(NULL);
+  DeformationInterpolateType::Pointer definterp(ITK_NULLPTR);
   if(deformationfield)
   {
     definterp = DeformationInterpolateType::New();
@@ -85,15 +85,15 @@ int main(int argc, char* argv[])
     std::cout << "A deformation field has to be specified" << std::endl;
     return EXIT_FAILURE;
   }
-  
-    
+
+
     typedef DeformationInterpolateType::ContinuousIndexType ContinuousIndexType;
     ContinuousIndexType ci, origci;
     // For each point along the fiber
      vtkIdType numPoints= polydata->GetNumberOfPoints();
      vtkPoints* inPts = polydata->GetPoints();
      vtkPoints    * points = vtkPoints::New();
-  
+
 
     typedef DTIPointType::PointType PointType;
     PointType fiberpoint;
@@ -126,7 +126,7 @@ int main(int argc, char* argv[])
         DeformationPixelType warp(definterp->EvaluateAtContinuousIndex(ci).GetDataPointer());
         for(unsigned int j =0; j < 3; j++)
         {
-          fiberpoint[j] +=warp[j]; 
+          fiberpoint[j] +=warp[j];
         }
 	//convert LPS to RAS (vtk)
 	if (invx)
@@ -158,9 +158,9 @@ int main(int argc, char* argv[])
 	
     }
     polydata->SetPoints(points);
-    
 
-  
+
+
   std::cout<<std::endl;
   std::cout<<"Saving fibers...."<<std::endl;
   std::cout<<fiberOutput<<std::endl;

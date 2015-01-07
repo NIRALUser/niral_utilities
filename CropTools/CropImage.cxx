@@ -9,8 +9,8 @@ Version:   $Revision: 1.9 $
 Copyright (c) 2002 Insight Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,7 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include <limits>
 
 #include <itkImage.h>
-#include <itkImageFileReader.h> 
+#include <itkImageFileReader.h>
 #include <itkCastImageFilter.h>
 #include <itkImageRegionIterator.h>
 #include <itkImageRegionConstIterator.h>
@@ -47,7 +47,7 @@ int main(int argc, const char* argv[])
 {
 
 
-  if (argc <= 1 || ipExistsArgument(argv,"-h ") || ipExistsArgument(argv,"-help") || 
+  if (argc <= 1 || ipExistsArgument(argv,"-h ") || ipExistsArgument(argv,"-help") ||
       ipExistsArgument(argv,"-usage"))
     {
       cout << "usage: " << argv[0] << endl
@@ -80,12 +80,12 @@ int main(int argc, const char* argv[])
   if (outfileName.empty()) {
     outfileName = "output.mha";
     cout << "no outputname specified using " << outfileName << endl;
-  } 
+  }
   if (debug) cout << "Output filename: " << outfileName << endl;
-  bool borderOn = ipExistsArgument(argv,"-border"); 
-  bool regionOn = ipExistsArgument(argv,"-region"); 
-  bool embedOn = ipExistsArgument(argv,"-embed"); 
-  bool fEmbedOn = ipExistsArgument(argv,"-fEmbed"); 
+  bool borderOn = ipExistsArgument(argv,"-border");
+  bool regionOn = ipExistsArgument(argv,"-region");
+  bool embedOn = ipExistsArgument(argv,"-embed");
+  bool fEmbedOn = ipExistsArgument(argv,"-fEmbed");
   bool autoCropOn = ipExistsArgument(argv,"-autocrop");
   bool zpacksOn = ipExistsArgument(argv,"-zpacks");
   bool interlOn = ipExistsArgument(argv,"-interl");
@@ -93,30 +93,30 @@ int main(int argc, const char* argv[])
   int border = 0;
   const int numCropParam = 6;
   int cropParam[numCropParam];
-  if (borderOn) 
-    border = ipGetIntArgument(argv,"-border",0); 
-  if (regionOn) {  
-    char *tmp_str    = ipGetStringArgument(argv, "-region", NULL);
+  if (borderOn)
+    border = ipGetIntArgument(argv,"-border",0);
+  if (regionOn) {
+    char *tmp_str    = ipGetStringArgument(argv, "-region", ITK_NULLPTR);
     int numDim       = ipExtractIntTokens(cropParam, tmp_str, numCropParam);
-    if (numDim != numCropParam) {              
+    if (numDim != numCropParam) {
       cerr << argv[0] << ": region needs "<< numCropParam << " parameters.\n";
       exit(-1);
     }
     free(tmp_str);
-  } 
-  if (embedOn) {  
-    char *tmp_str    = ipGetStringArgument(argv, "-embed", NULL);
+  }
+  if (embedOn) {
+    char *tmp_str    = ipGetStringArgument(argv, "-embed", ITK_NULLPTR);
     int numDim       = ipExtractIntTokens(cropParam, tmp_str, numCropParam);
-    if (numDim != numCropParam) {              
+    if (numDim != numCropParam) {
       cerr << argv[0] << ": region needs "<< numCropParam << " parameters.\n";
       exit(-1);
     }
     free(tmp_str);
-  } 
+  }
   if ((regionOn && embedOn)||(regionOn && fEmbedOn)) {
     cerr << "embed and region cannot be used at the same time" << endl;
     exit(-1);
-  }  
+  }
   if (fEmbedOn) {
     string EmbedTextFileName = ipGetStringArgument(argv, "-fEmbed", "");
     ifstream file(EmbedTextFileName.c_str(),ios::in);
@@ -150,7 +150,7 @@ int main(int argc, const char* argv[])
     //Give the number of pair ID/name
     nbinter = atoi(values[0]);
     axisinter = atoi(values[1]);
-    coilid_filename = values[2];    
+    coilid_filename = values[2];
 
     if(axisinter < 0 || axisinter > 2) {
       std::cerr << "the axis parameter is either 0,1 or 2" << std::endl;
@@ -159,7 +159,7 @@ int main(int argc, const char* argv[])
     if(nbinter < 1) {
       std::cerr << "The # of images has to be a postive number greater than 0" << std::endl;
       return -1;
-    }    
+    }
     if(coilid_filename.empty()) {
       std::cerr << "File name missing" << std::endl;
       return -1;
@@ -186,7 +186,7 @@ int main(int argc, const char* argv[])
 
   typedef ExtractImageFilter<ImageType, ImageType> CropFilterType;
   typedef ConstantPadImageFilter<ImageType, ImageType> EmbedFilterType;
-  
+
   typedef ImageRegionConstIterator< ImageType > ConstIterator;
   typedef ImageRegionIterator< ImageType > Iterator;
 
@@ -207,8 +207,8 @@ int main(int argc, const char* argv[])
   ImageRegionType extractRegion, fullRegion;
   if (zpacksOn) {
     fullRegion = (imageReader->GetOutput())->GetLargestPossibleRegion();
-    if (debug) cout << "size of the original image " << fullRegion.GetSize(0) 
-		    << "," << fullRegion.GetSize(1) << "," << fullRegion.GetSize(2) << endl; 
+    if (debug) cout << "size of the original image " << fullRegion.GetSize(0)
+		    << "," << fullRegion.GetSize(1) << "," << fullRegion.GetSize(2) << endl;
 
     extractRegion.SetIndex(0,0);
     extractRegion.SetIndex(1,0);
@@ -229,27 +229,27 @@ int main(int argc, const char* argv[])
       cropFilter->SetInput(imageReader->GetOutput());
       cropFilter->SetExtractionRegion(extractRegion);
       cropFilter->Update();
-      
+
       if (debug) cout << "writing output data" << endl;
       VolumeWriterType::Pointer writer = VolumeWriterType::New();
-      
+
       char outfileP[1024];
       sprintf(outfileP, "%s_P%03d.%s",origName,pack, dotPtr);
-      
-      writer->SetFileName(outfileP); 
+
+      writer->SetFileName(outfileP);
       writer->SetInput(cropFilter->GetOutput());
       writer->Write();
     }
   }else if(interlOn){
 
     //Check if the input image  number of slices along the specified axis is a multiple of nbinterl
-    unsigned int nbslices; 
+    unsigned int nbslices;
     int dim[Dimension];
-    ImageType::RegionType imageRegion = imageReader->GetOutput()->GetLargestPossibleRegion(); 
+    ImageType::RegionType imageRegion = imageReader->GetOutput()->GetLargestPossibleRegion();
     dim[0] = imageRegion.GetSize(0);
     dim[1] = imageRegion.GetSize(1);
     dim[2] = imageRegion.GetSize(2);
-    
+
     nbslices = dim[axisinter];
     if(debug) std::cout << "nbslice: " << nbslices << " nbinter: " << nbinter << std::endl;
     float remainer = std::fmod(static_cast<float>(nbslices), static_cast<float>(nbinter));
@@ -267,7 +267,7 @@ int main(int argc, const char* argv[])
 	{
 	  char lineval[30];
 	  coilid_file.getline(lineval,30);
-	  std::string strline = lineval; 
+	  std::string strline = lineval;
 	  //make sure the line is not empty
 	  if(strline.size())
 	    {
@@ -299,24 +299,24 @@ int main(int argc, const char* argv[])
 	if(d == axisinter)
 	  outputSize[d] = sizealongaxis;
 	else
-	  outputSize[d] = dim[d];	   
+	  outputSize[d] = dim[d];	
       }
 
       outputRegion.SetIndex(outputStart);
       outputRegion.SetSize(outputSize);
-      
+
       PointType outputOrigin;
       outputOrigin[0] = 0;
       outputOrigin[1] = 0;
       outputOrigin[2] = 0;
-      
+
       ImageType::SpacingType outputSpacing;
       outputSpacing[0] = imageReader->GetOutput()->GetSpacing()[0];
       outputSpacing[1] = imageReader->GetOutput()->GetSpacing()[1];
       outputSpacing[2] = imageReader->GetOutput()->GetSpacing()[2];
 
       //Create the output images
-      std::vector<ImageType::Pointer> outimages_list;           
+      std::vector<ImageType::Pointer> outimages_list;
       for(int im = 0 ; im < nbinter+1 ; im++) {
 
 	ImageType::Pointer curr_image = ImageType::New();
@@ -331,7 +331,7 @@ int main(int argc, const char* argv[])
 
       if(debug) std::cout << "Output images, initialized" << std::endl;
       //Create the global image from all the slices. Initialization
-      //Iterator init 
+      //Iterator init
       ImageType::Pointer global_outimage = outimages_list.at(nbinter);
       Iterator globoutputIt(global_outimage, global_outimage->GetLargestPossibleRegion());
       globoutputIt.GoToBegin();
@@ -394,19 +394,19 @@ int main(int argc, const char* argv[])
 	globalpix = globalslice.begin();
 
 	//Copy the voxels
-	for(inputIt.GoToBegin() ; !inputIt.IsAtEnd() ; ++inputIt) {       
+	for(inputIt.GoToBegin() ; !inputIt.IsAtEnd() ; ++inputIt) {
 	  ImageRegionType::IndexType outIndex;
-	  
-	  for(int d = 0 ; d < Dimension ; d++) {	    
+	
+	  for(int d = 0 ; d < Dimension ; d++) {	
 	    if(d == axisinter)
 	      outIndex[d] = curr_slice;
 	    else
 	      outIndex[d] = inputIt.GetIndex()[d];
 	  }
-	  outputIt.SetIndex(outIndex);	    
+	  outputIt.SetIndex(outIndex);	
 	  outputIt.Set(inputIt.Get());
 	  (*globalpix) += static_cast<double>(inputIt.Get() * inputIt.Get());
-	  
+	
 	  //If it's the last occurence of the sequence of nbinter slices, we copy the voxel values
 	  //here we save the image which is the average of the nbinter images (Pi = sqrt(p1^2 + p2^2 +...) )
 	  if(outimageID == nbinter-1)
@@ -416,9 +416,9 @@ int main(int argc, const char* argv[])
 	    }
 	  ++globalpix;
 	}	  	
-      }   
+      }
 
-      //Save the output images 
+      //Save the output images
       //Get the extension:
       bool zipfile = false;
       char *zip = new char[10];
@@ -451,7 +451,7 @@ int main(int argc, const char* argv[])
 	writer->Write();
       }
       delete []zip;
-   
+
     } //endif remainer
 
   }else if ((embedOn)||(fEmbedOn)) {
@@ -464,21 +464,21 @@ int main(int argc, const char* argv[])
     unsigned long upperfactors[3];
     unsigned long lowerfactors[3];
     lowerfactors[0] = cropParam[0]; lowerfactors[1] = cropParam[1]; lowerfactors[2] = cropParam[2];
-    upperfactors[0] = cropParam[3]-dim[0]-lowerfactors[0]; 
-    upperfactors[1] = cropParam[4]-dim[1]-lowerfactors[1]; 
-    upperfactors[2] = cropParam[5]-dim[2]-lowerfactors[2]; 
+    upperfactors[0] = cropParam[3]-dim[0]-lowerfactors[0];
+    upperfactors[1] = cropParam[4]-dim[1]-lowerfactors[1];
+    upperfactors[2] = cropParam[5]-dim[2]-lowerfactors[2];
     if (debug) cout << "embedding " << endl;
 
     EmbedFilterType::Pointer embedFilter = EmbedFilterType::New();
     embedFilter->SetInput(imageReader->GetOutput());
-    embedFilter->SetConstant(0);  
+    embedFilter->SetConstant(0);
     embedFilter->SetPadLowerBound(lowerfactors);
     embedFilter->SetPadUpperBound(upperfactors);
     embedFilter->UpdateLargestPossibleRegion();
-    
+
     if (debug) cout << "writing output data " << outfileName << endl;
     VolumeWriterType::Pointer writer = VolumeWriterType::New();
-    writer->SetFileName(outfileName.c_str()); 
+    writer->SetFileName(outfileName.c_str());
     writer->SetInput(embedFilter->GetOutput());
     writer->Write();
 
@@ -503,8 +503,8 @@ int main(int argc, const char* argv[])
       unsigned int minx, miny, minz, maxx, maxy, maxz;
       minx = miny = minz = std::numeric_limits<unsigned int>::max() ;
       maxx = maxy = maxz = std::numeric_limits<unsigned int>::min() ;
-      
-      // first grow for all seed (constrained) and then do connected component labeling 
+
+      // first grow for all seed (constrained) and then do connected component labeling
       Iterator iter (imageReader->GetOutput(), imageReader->GetOutput()->GetLargestPossibleRegion());
       while ( !iter.IsAtEnd() )
 	{
@@ -538,7 +538,7 @@ int main(int argc, const char* argv[])
       else maxy = imageRegion.GetSize(1) - 1;
       if ((long)maxz < (long)(imageRegion.GetSize(2)-autoBorder)) maxz += autoBorder;
       else maxz = imageRegion.GetSize(2) - 1;
-      
+
       extractRegion.SetIndex(0,minx);
       extractRegion.SetIndex(1,miny);
       extractRegion.SetIndex(2,minz);
@@ -546,30 +546,30 @@ int main(int argc, const char* argv[])
       extractRegion.SetSize(1,maxy-miny+1);
       extractRegion.SetSize(2,maxz-minz+1);
     }
-    
+
     int dim[Dimension];
     ImageType::RegionType imageRegion = imageReader->GetOutput()->GetLargestPossibleRegion();
     dim[0] = imageRegion.GetSize(0);
     dim[1] = imageRegion.GetSize(1);
     dim[2] = imageRegion.GetSize(2);
-    if (debug) cout << "size of the original image " << dim[0] 
-		    << "," << dim[1] << "," << dim[2]<< endl; 
+    if (debug) cout << "size of the original image " << dim[0]
+		    << "," << dim[1] << "," << dim[2]<< endl;
     if (debug) cout << "cropping (x,y,z,w,h,d) " << extractRegion.GetIndex(0) << ","
-		    << extractRegion.GetIndex(1) << "," 
-		    << extractRegion.GetIndex(2) << "," 
-		    << extractRegion.GetSize(0) << "," 
-		    << extractRegion.GetSize(1) << "," 
+		    << extractRegion.GetIndex(1) << ","
+		    << extractRegion.GetIndex(2) << ","
+		    << extractRegion.GetSize(0) << ","
+		    << extractRegion.GetSize(1) << ","
 		    << extractRegion.GetSize(2) <<  endl;
-    
+
     CropFilterType::Pointer cropFilter = CropFilterType::New();
     cropFilter->SetInput(imageReader->GetOutput());
     cropFilter->SetExtractionRegion(extractRegion);
     //cropFilter->ReleaseDataFlagOn();
     cropFilter->Update();
-    
+
     if (debug) cout << "writing output data" << outfileName << endl;
     VolumeWriterType::Pointer writer = VolumeWriterType::New();
-    writer->SetFileName(outfileName.c_str()); 
+    writer->SetFileName(outfileName.c_str());
     writer->SetInput(cropFilter->GetOutput());
     writer->Write();
   }

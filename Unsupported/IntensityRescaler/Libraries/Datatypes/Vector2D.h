@@ -7,21 +7,21 @@
 //
 // This struct is meant to be a fast 2D vector class.
 // It is intended for use with build in types (int, float, etc.)
-// 
+//
 // Optimization is important for this struct
 // - almost everything is inlined
-// - readability and maintainability tradeoffs have been made 
+// - readability and maintainability tradeoffs have been made
 //   for speed gains
 //
 // bcd 2003
 //
 
 template <class T>
-class Vector2D 
+class Vector2D
 {
 public:
   //
-  // IMPORTANT: DO NOT change the order of x, y.  
+  // IMPORTANT: DO NOT change the order of x, y.
   // DO NOT add other data members between x, y.
   // Array style access depends on these being adjacent
   // in memory.  This is guarenteed for standards compliant
@@ -31,7 +31,7 @@ public:
   T x, y;
   // IMPORTANT DO NOT TOUCH THE ABOVE LINE //
 
-  // 
+  //
   // constructors
   //
 
@@ -73,7 +73,7 @@ public:
 
   //
   // manipulation methods
-  // 
+  //
   void set(const T& x, const T& y);
   void scale(const T& sx, const T& sy);
   void translate(const T& tx, const T& ty);
@@ -108,7 +108,7 @@ public:
 //
 // comparison operators
 //
-template <class T> 
+template <class T>
 bool operator<(const Vector2D<T>& lhs, const Vector2D<T>& rhs);
 template <class T>
 bool operator==(const Vector2D<T>& lhs, const Vector2D<T>& rhs);

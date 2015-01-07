@@ -1,22 +1,22 @@
 
 
-FIND_PACKAGE(ITK REQUIRED)
-IF (ITK_FOUND)
-   INCLUDE(${ITK_USE_FILE})
-ELSE(ITK_FOUND)
-   MESSAGE(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-ENDIF (ITK_FOUND)
+find_package(ITK REQUIRED)
+if(ITK_FOUND)
+   include(${ITK_USE_FILE})
+else()
+   message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
+endif()
 
-FIND_PACKAGE(VTK REQUIRED)
-IF (VTK_FOUND)
-  INCLUDE (${VTK_USE_FILE})
-ELSE(VTK_FOUND)
-  MESSAGE(FATAL_ERROR, "VTK not found. Please set VTK_DIR.")
-ENDIF (VTK_FOUND)
+find_package(VTK REQUIRED)
+if(VTK_FOUND)
+  include(${VTK_USE_FILE})
+else()
+  message(FATAL_ERROR, "VTK not found. Please set VTK_DIR.")
+endif()
 
 include(${NIRAL_UTILITIES_SOURCE_DIR}/CMake/qtSetup.cmake)
 
-INCLUDE_DIRECTORIES(
+include_directories(
     	${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Datatypes
      	${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Algorithms
      	${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/IO/Common
@@ -26,25 +26,25 @@ INCLUDE_DIRECTORIES(
 	${ITK_SOURCE_DIR}/Utilities/zlib
      )
 
-LINK_LIBRARIES(
+link_libraries(
  ${ITK_LIBRARIES}
  ${QT_QT_LIBRARY}
 )
 
 
-#SET(Display_MOC_SRCS 
+#set(Display_MOC_SRCS
 #)
 
-#IF(QT_WRAP_CPP)
-#  QT_WRAP_CPP(Display Displaymoced_SRCS ${Display_MOC_SRCS})
-#ENDIF(QT_WRAP_CPP)
+#if(QT_WRAP_CPP)
+#  qt_wrap_cpp(Display Displaymoced_SRCS ${Display_MOC_SRCS})
+#endif()
 
-ADD_DEFINITIONS(-DQT_DLL)
-ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
+add_definitions(-DQT_DLL)
+add_definitions(-DQT_THREAD_SUPPORT)
 
-SET(Algorithms_SRCS 
+set(Algorithms_SRCS
   ${Algorithms_SRCS}
-  #${Algorithmsmoced_SRCS} 
+  #${Algorithmsmoced_SRCS}
   ImageHistogram.cxx
   ImageIntensityNormalizer.cxx
   ImageCombinaison.cxx
@@ -52,5 +52,5 @@ SET(Algorithms_SRCS
   Rotation3D.cxx
 )
 
-ADD_LIBRARY(Algorithms ${Algorithms_SRCS} )
+add_library(Algorithms ${Algorithms_SRCS} )
 

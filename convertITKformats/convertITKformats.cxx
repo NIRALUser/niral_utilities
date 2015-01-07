@@ -8,7 +8,7 @@
 #include <itkImageIOBase.h>
 #include <itkVector.h>
 #include <itkImageRegionIterator.h>
-#include <itkImageFileReader.h> 
+#include <itkImageFileReader.h>
 #include <itkImageSeriesReader.h>
 #include <itkImageFileWriter.h>
 #include <itkCastImageFilter.h>
@@ -29,8 +29,8 @@ static int debug = 1;
 template<class im_type>
 int
 disp_image_info(im_type image)
-{  
-  std::cout << "dims: " << image->GetLargestPossibleRegion().GetSize(0) << " , "  
+{
+  std::cout << "dims: " << image->GetLargestPossibleRegion().GetSize(0) << " , "
 	    << image->GetLargestPossibleRegion().GetSize(1) << " , "
 	    << image->GetLargestPossibleRegion().GetSize(2) << " , " << std::endl;
   const itk::Vector<double,3> inSpacing = image->GetSpacing();
@@ -63,22 +63,22 @@ int main(int argc, const char* argv[])
       exit(0) ;
     }
   string inputFileName(argv[1]); // input image
-  
+
   int numFilename = 1;
   debug = ipExistsArgument(argv, "-v");
-  
+
   while (argv[numFilename] && argv[numFilename][0] != '\0' && argv[numFilename][0] != '-')
     {
       numFilename++;
     }
   numFilename-- ;
   numFilename-- ;
-  
+
   string outfileName;
   if (numFilename != 0)
     outfileName = argv[numFilename + 1];
   //  if (numFilename == 0) outfileName.clear();
-  
+
   int Files2DOn = 0, dicomOn = 0, dicom2On = 0, dicom3On = 0;
   Files2DOn = ipExistsArgument(argv, "-2Dfiles");
   dicomOn = ipExistsArgument(argv, "-dicom");
@@ -92,7 +92,7 @@ int main(int argc, const char* argv[])
   if (intConvFactor == 0.0 ) intConvFactor = 1.0;
   //No compression option
   bool nocompOn = ipExistsArgument(argv,"-nocomp");
-  
+
 
   vector<string> names;
   if (Files2DOn || dicom3On) {
@@ -106,11 +106,11 @@ int main(int argc, const char* argv[])
   if (outfileName.empty()) {
     writeFlag = false;
   }
-  
+
   enum { ImageDimension = 3 };
   typedef   short PixelType;
   typedef   Image<PixelType,ImageDimension>  ImageType;
-  
+
   typedef   int                                         IntPixelType;
   typedef   Image<IntPixelType,ImageDimension>          IntImageType;
   typedef   ImageFileReader< IntImageType >             VolumeIntReaderType;
@@ -129,7 +129,7 @@ int main(int argc, const char* argv[])
 
 
   typedef   unsigned short                                 UshortPixelType;
-  typedef   Image<UshortPixelType,ImageDimension>          UshortImageType;  
+  typedef   Image<UshortPixelType,ImageDimension>          UshortImageType;
   typedef   ImageFileReader< UshortImageType >             VolumeUshortReaderType;
 
   typedef   float                                          FloatPixelType;
@@ -144,7 +144,7 @@ int main(int argc, const char* argv[])
   typedef ImageFileWriter< UshortImageType > VolumeUshortWriterType;
   typedef ImageFileWriter< FloatImageType > VolumeFloatWriterType;
 
-  try 
+  try
     {
       // load image
       if (debug) cout << "Loading file " << inputFileName << endl;
@@ -173,7 +173,7 @@ int main(int argc, const char* argv[])
 	  m_Parser.ReadHeader();
 	  allpos = m_AppHelper.GetImagePositionPatient();
 	  pos2 = allpos[2];
-	  
+	
 	  double slice_thickness = fabs(pos2 - pos1);
 	  if (slice_thickness == 0) {
 	    slice_thickness= 1.0;
@@ -184,7 +184,7 @@ int main(int argc, const char* argv[])
 	  newpixdims[0] = origpixdims[0];
 	  newpixdims[1] = origpixdims[1];
 	  newpixdims[2] = slice_thickness;
-	  
+	
 	  output->SetSpacing(newpixdims);
 	}
 	ImageType::Pointer image = imageReader->GetOutput();
@@ -202,10 +202,10 @@ int main(int argc, const char* argv[])
 	if (writeFlag) {
 	  if (debug) cout << "writing output data" << endl;
 	  VolumeWriterType::Pointer writer = VolumeWriterType::New();
-	  writer->SetFileName(outfileName.c_str()); 
+	  writer->SetFileName(outfileName.c_str());
 	  if(!nocompOn)
 	    writer->UseCompressionOn();
-	  
+	
 	  writer->SetInput(imageReader->GetOutput());
 	  writer->Write();
 	}
@@ -243,7 +243,7 @@ int main(int argc, const char* argv[])
 	  m_Parser.ReadHeader();
 	  allpos = m_AppHelper.GetImagePositionPatient();
 	  pos2 = allpos[2];
-	  
+	
 	  double slice_thickness = fabs(pos2 - pos1);
 	  if (debug) cout << "adjusting spacing to " << slice_thickness << endl;
 	  const itk::Vector<double,3> origpixdims = output->GetSpacing();
@@ -251,7 +251,7 @@ int main(int argc, const char* argv[])
 	  newpixdims[0] = origpixdims[0];
 	  newpixdims[1] = origpixdims[1];
 	  newpixdims[2] = slice_thickness;
-	  
+	
 	  output->SetSpacing(newpixdims);
 	}
 	ImageType::Pointer image = output;
@@ -268,10 +268,10 @@ int main(int argc, const char* argv[])
 	if (writeFlag) {
 	  if (debug) cout << "writing output data" << endl;
 	  VolumeWriterType::Pointer writer = VolumeWriterType::New();
-	  writer->SetFileName(outfileName.c_str()); 
+	  writer->SetFileName(outfileName.c_str());
 	  if(!nocompOn)
 	    writer->UseCompressionOn();
-	  
+	
 	  writer->SetInput(output);
 	  writer->Write();
 	}
@@ -279,7 +279,7 @@ int main(int argc, const char* argv[])
 	VolumeDoubleReaderType::Pointer imageReader = VolumeDoubleReaderType::New();
 	imageReader->SetFileName(inputFileName.c_str()) ;
 	imageReader->Update() ;
-	DoubleImageType::Pointer inputImage = imageReader->GetOutput(); 
+	DoubleImageType::Pointer inputImage = imageReader->GetOutput();
 	MinMaxDoubleCalcType::Pointer minmaxCalc = MinMaxDoubleCalcType::New();
 	minmaxCalc->SetImage(inputImage);
 	minmaxCalc->Compute();
@@ -296,7 +296,7 @@ int main(int argc, const char* argv[])
 	
 	//RescaleDoubleFilterType::Pointer scaleFilter  = RescaleDoubleFilterType::New();
 	//scaleFilter->SetInput(imageReader->GetOutput());
-   
+
 	//scaleFilter->SetOutputMinimum(minmaxCalc->GetMinimum() * doubleConvFactor);
 	//scaleFilter->SetOutputMaximum(minmaxCalc->GetMaximum() * doubleConvFactor);
 	
@@ -317,10 +317,10 @@ int main(int argc, const char* argv[])
 	if (writeFlag) {
 	  if (debug) cout << "writing output data" << endl;
 	  VolumeWriterType::Pointer writer = VolumeWriterType::New();
-	  writer->SetFileName(outfileName.c_str()); 
+	  writer->SetFileName(outfileName.c_str());
 	  if(!nocompOn)
 	    writer->UseCompressionOn();
-	  
+	
 	  writer->SetInput(castFilter->GetOutput());
 	  writer->Write();
 	}
@@ -356,7 +356,7 @@ int main(int argc, const char* argv[])
 	if (writeFlag) {
 	  if (debug) cout << "writing output data" << endl;
 	  VolumeWriterType::Pointer writer = VolumeWriterType::New();
-	  writer->SetFileName(outfileName.c_str()); 
+	  writer->SetFileName(outfileName.c_str());
 	  if(!nocompOn)
 	    writer->UseCompressionOn();
 	  writer->SetInput(castFilter->GetOutput());
@@ -385,20 +385,20 @@ int main(int argc, const char* argv[])
 	  reader->SetFileName(inputFileName.c_str()) ;
 	  reader->Update() ;
 	  ImageType::Pointer image = ImageType::New();
-	  image = reader->GetOutput();	 
+	  image = reader->GetOutput();	
 	  if(debug) disp_image_info<ImageType::Pointer>(reader->GetOutput());
 	  if (writeFlag) {
 	    VolumeWriterType::Pointer writer = VolumeWriterType::New();
 	    if (debug) cout << "writing output data " << outfileName << endl;
 	    if(!nocompOn)
 	      writer->UseCompressionOn();
-	    writer->SetFileName(outfileName.c_str()); 	  
+	    writer->SetFileName(outfileName.c_str()); 	
 	    writer->SetInput(reader->GetOutput());
 	    writer->Write();
 	  }
 	  // UNSIGNED SHORT
 	} else if( ! input_component_string.compare("unsigned_short") ) {
-	  
+	
 	  VolumeUshortReaderType::Pointer reader = VolumeUshortReaderType::New();
 	  reader->SetFileName(inputFileName.c_str()) ;
 	  reader->Update() ;
@@ -410,7 +410,7 @@ int main(int argc, const char* argv[])
 	    if (debug) cout << "writing output data " << outfileName << endl;
 	    if(!nocompOn)
 	      writer->UseCompressionOn();
-	    writer->SetFileName(outfileName.c_str()); 	  
+	    writer->SetFileName(outfileName.c_str()); 	
 	    writer->SetInput(reader->GetOutput());
 	    writer->Write();
 	  }
@@ -428,9 +428,9 @@ int main(int argc, const char* argv[])
 	    if (debug) cout << "writing output data " << outfileName << endl;
 	    if(!nocompOn)
 	      writer->UseCompressionOn();
-	    writer->SetFileName(outfileName.c_str()); 	  
+	    writer->SetFileName(outfileName.c_str()); 	
 	    writer->SetInput(reader->GetOutput());
-	    writer->Write();	      
+	    writer->Write();	
 	  }
 	  // DOUBLE
 	} else if( ! input_component_string.compare("double") ) {
@@ -446,14 +446,14 @@ int main(int argc, const char* argv[])
 	    if (debug) cout << "writing output data " << outfileName << endl;
 	    if(!nocompOn)
 	      writer->UseCompressionOn();
-	    writer->SetFileName(outfileName.c_str()); 	    
+	    writer->SetFileName(outfileName.c_str()); 	
 	    writer->SetInput(reader->GetOutput());
 	    writer->Write();
 	  }
 	  //DEFAULT (short)
-	} else { 
+	} else {
 
-	  VolumeReaderType::Pointer reader = VolumeReaderType::New();	    
+	  VolumeReaderType::Pointer reader = VolumeReaderType::New();	
 	  reader->SetFileName(inputFileName.c_str()) ;
 	  reader->Update() ;
 	  ImageType::Pointer image = ImageType::New();
@@ -464,12 +464,12 @@ int main(int argc, const char* argv[])
 	    if (debug) cout << "writing output data " << outfileName << endl;
 	    if(!nocompOn)
 	      writer->UseCompressionOn();
-	    writer->SetFileName(outfileName.c_str()); 	    
+	    writer->SetFileName(outfileName.c_str()); 	
 	    writer->SetInput(reader->GetOutput());
 	    writer->Write();
 	  }
-	} 
-      
+	}
+
       }
     }
   catch( itk::ExceptionObject & e )
@@ -486,8 +486,8 @@ int main(int argc, const char* argv[])
     {
       std::cerr << "unknown exception caught in main" << std::endl;
     }
-  
-  
+
+
   return 0;
-  
+
 }

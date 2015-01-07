@@ -1,5 +1,5 @@
 #include "ImageRotation.h"
-  
+
 ImageRotation::ImageRotation()
 {
 	m_progressbar = 0;
@@ -143,15 +143,15 @@ int ImageRotation::Bicubic_Interpol(unsigned short* m_image, int newx, int newy,
    int imageval;
 
    sum = 0;
- 
-   /* Find pixel value */ 
-   index = ((newx + newy*xsize));   
+
+   /* Find pixel value */
+   index = ((newx + newy*xsize));
 
    for (m = -1; m <=2; m++) {
        for (n = -1; n <= 2; n++) {
 	 if ((newx+m >= 1) && (newx+m < xsize-1)) {
-              if ((newy+n >=1) && (newy+n < ysize-1)) {  
-		/* Find surrounding pixels values */ 
+              if ((newy+n >=1) && (newy+n < ysize-1)) {
+		/* Find surrounding pixels values */
 			imageval = m_image[index + (m + xsize*n)];
               } else {
 		 imageval = 0;
@@ -163,8 +163,8 @@ int ImageRotation::Bicubic_Interpol(unsigned short* m_image, int newx, int newy,
          cubsum = CubicFunc(f, (float)(-a+m))*CubicFunc(f, (float)(-b+n));
          /* Add it to do a complete weighted average */
          sum = sum + imageval*cubsum;
-      
-       } 
+
+       }
    }
 
    return((int) sum);
@@ -182,13 +182,13 @@ float ImageRotation::CubicBSpline(float x) {
    float result;
 
    result=0;
- 
+
    if (x < 0) {
-      y = -x; 
+      y = -x;
    } else {
       y = x;
    }
-   
+
    y2=y*y;
    y3=y2*y;
 
@@ -208,10 +208,10 @@ float ImageRotation::CubicInterpolation(float x) {
      sine between -2 .. 2  */
 
    float a, y, y2, y3, result;
-  
+
    a=0.1;  /* arbitrary value */
    result=0;
- 
+
    if (x < 0) {
       y = -x;
    } else {
@@ -228,7 +228,7 @@ float ImageRotation::CubicInterpolation(float x) {
         result=(a*y3 - 5*a*y2 + 8*a*y - 4*a);
      }
    }
-   
+
    return(result);
 }
 
@@ -248,14 +248,14 @@ float ImageRotation::SquareFunction(float x) {
 
 float ImageRotation::TriangleFunction(float x) {
 
-  /* Returns the triangle function 
-     between -1.0 .. 1.0            */ 
+  /* Returns the triangle function
+     between -1.0 .. 1.0            */
 
    float result;
 
    result = 0;
 
-   if ((x >= -1) && (x <= 0)){ 
+   if ((x >= -1) && (x <= 0)){
       result = x + 1;
    } else {
       if ((x > 0) && (x <= 1)) result = 1 - x;
@@ -277,12 +277,12 @@ float ImageRotation::CubicFunc(int f, float x) {
         case 1: result = CubicInterpolation(x);
                 break;
    }
-   
+
    return(result);
 }
 
 float ImageRotation::BilinearFunc(int f, float x) {
-    
+
   /* Returns the different linear functions */
   /* 0 = Square ; 1 = Triangle              */
 
@@ -294,6 +294,6 @@ float ImageRotation::BilinearFunc(int f, float x) {
         case 1: result = TriangleFunction(x);
                 break;
    }
-   
+
    return(result);
 }

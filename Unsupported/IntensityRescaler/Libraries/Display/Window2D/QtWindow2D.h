@@ -5,14 +5,14 @@
  Language:  C++
  Date:      $Date: 2007/09/20 16:28:22 $
  Version:   $Revision: 1.14 $
- 
+
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
-  
-   This software is distributed WITHOUT ANY WARRANTY; without even 
-   the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+
+   This software is distributed WITHOUT ANY WARRANTY; without even
+   the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
    PURPOSE.  See the above copyright notices for more information.
-   
+
 =========================================================================*/
 #ifndef QtWindow2D_H
 #define QtWindow2D_H
@@ -47,7 +47,7 @@ const char ClickModeTypeName[3][7] =
   {'S', 'e', 'l', 'e', 'c', 't', '\0'},
   {'B', 'o', 'x', '\0', ' ', ' ', ' '}};
 
-  /*! Handling of values outside intensity window range - values above 
+  /*! Handling of values outside intensity window range - values above
   *    and below can be handled separately
   *  IW_MIN = set values outside range to min value
   *  IW_MAX = set values outside range to max value
@@ -76,11 +76,11 @@ const char IWModeTypeName[3][5] =
   /*! Structure clickPoint to store the x,y,z and intensity value of a
   * point in the image
 */
-struct ClickPoint 
+struct ClickPoint
   {
   float x, y, z;
   double value;
-  
+
   ClickPoint(float _x,float _y,float _z,double v)
     : x(_x),y(_y),z(_z),value(v){}
   };
@@ -90,14 +90,14 @@ struct ClickPoint
 * QtGlSliceView : Derived from abstract class SliceView and Fl_Gl_Window
 * See SliceView.h for details...
   **/
-//  
-class QtWindow2D : 
+//
+class QtWindow2D :
   public QGLWidget
 {
   Q_OBJECT
 
 public:
-  
+
   typedef unsigned short                    ImagePixelType;
   typedef unsigned short                    OverlayPixelType;
   typedef itk::Image<ImagePixelType,3>     ImageType;
@@ -174,18 +174,18 @@ public:
   bool        cValidOverlayData;
   float       cOverlayOpacity;
   bool      cShowCrosshair;
-  
+
   OverlayPointer cOverlayData;
   OverlayPointer cOverlayData2;
   void     (* cViewOverlayCallBack)(void);
-  
+
   unsigned char * cWinOverlayData;
-  
+
   typedef itk::ColorTable<float>        ColorTableType;
   typedef ColorTableType::Pointer       ColorTablePointer;
-  
+
   ColorTablePointer      cColorTable;
-  
+
   void initializeGL();
   void resizeGL( int w, int h);
   void paintGL();
@@ -207,35 +207,35 @@ public:
 
 
   virtual const ImagePointer & GetInputImage(void) const;
-  
+
   /*! Specify the 3D image to view as an overlay */
   void SetInputOverlay(OverlayType * newOverlayData);
   void SetInputOverlay2(OverlayType * newOverlayData);
 
   /*! Return a pointer to the overlay data */
   const OverlayPointer & GetInputOverlay(void) const;
-  
+
   /*! Turn on/off the viewing of the overlay */
   void  ViewOverlayData(bool newViewOverlayData);
-  
+
   /*! Status of the overlay - viewed /not viewed */
   bool  ViewOverlayData(void);
-  
+
   /*! Specify the opacity of the overlay */
   void  OverlayOpacity(float newOverlayOpacity);
-  
+
   /*! Get the opacity of the overlay */
   float OverlayOpacity(void);
-  
+
   /*! Called when overlay is toggled or opacity is changed */
   void  ViewOverlayCallBack(void (* newOverlayCallBack)(void));
-  
+
   void SetBlendingMode(int mode);
 
   ColorTableType * GetColorTable(void);
-  
+
   virtual void size(int w, int h);
-  
+
   virtual void update();
 
   /*! Specify the slice to view */
@@ -243,8 +243,8 @@ public:
   /*! What slice is being viewed */
   unsigned int    sliceNum(void);
 
-  void mousePressEvent( QMouseEvent *event ); 
-  
+  void mousePressEvent( QMouseEvent *event );
+
   void mouseMoveEvent( QMouseEvent *event ) ;
 
   void SetManualIntensityOn();
@@ -255,7 +255,7 @@ public:
   void SetCrosshairVisible(bool flag);
 
 public slots:
-  
+
   void ChangeSlice(unsigned int value);
   void SetIntensityMax(int value);
   void SetIntensityMin(int value);
@@ -269,11 +269,11 @@ signals:
   void Position(int, int, int, float);
 
 protected:
-    
+
   void   (* cSliceNumCallBack)(void);
   void    * cSliceNumArg;
   void   (* cSliceNumArgCallBack)(void * sliceNumArg);
-    
+
   bool                     cValidImData;
    bool    cValidImData2;
   bool cValidOverlayData2;
@@ -286,25 +286,25 @@ protected:
     void                    (* cViewImDataCallBack)(void);
     void                     * cViewImDataArg;
     void                    (* cViewImDataArgCallBack)(void *viewImDataArg);
-    
+
     ClickModeType cClickMode;
     float         cClickSelect[3];
     float         cClickSelectV;
     void          (* cClickSelectCallBack)(float x,float y,float z,
                                            float v);
     void           * cClickSelectArg;
-    void          (* cClickSelectArgCallBack)(float x, float y, float z, 
+    void          (* cClickSelectArgCallBack)(float x, float y, float z,
                                               float v, void *clickSelectArg);
-    
+
     float       cBoxMin[3];
     float       cBoxMax[3];
-    void        (* cClickBoxCallBack)(float minX, float minY, float minZ, 
+    void        (* cClickBoxCallBack)(float minX, float minY, float minZ,
                                       float maxX, float maxY, float maxZ);
     void         * cClickBoxArg;
     void        (* cClickBoxArgCallBack)(float minX, float minY, float minZ,
                                          float maxX, float maxY, float maxZ,
                                          void * clickBoxArg);
-    
+
     float       cIWMin;
     float       cIWMax;
   float       cIWMin2;
@@ -314,36 +314,36 @@ protected:
     void        (* cIWCallBack)(void);
     void         * cIWArg;
     void        (* cIWArgCallBack)(void * iwArg);
-    
+
     ImageModeType cImageMode;
-    
+
     bool        cFlipX[3];
     bool        cFlipY[3];
     bool        cFlipZ[3];
     bool        cTranspose[3];
-    
+
     float               cWinZoom;
     unsigned int        cWinOrder[3];
     unsigned int        cWinOrientation;
     void                (* cWinOrientationCallBack)(void);
     void                 * cWinOrientationArg;
-    void                (* cWinOrientationArgCallBack)(void * 
+    void                (* cWinOrientationArgCallBack)(void *
                                                        winOrientationArg);
-    
+
     int         cWinCenter[3];
     void        (* cWinCenterCallBack)(void);
     void        * cWinCenterArg;
     void        (* cWinCenterArgCallBack)(void * winCenterArg);
-    
+
     bool        cViewAxisLabel;
     char        cAxisLabelX[3][80];
     char        cAxisLabelY[3][80];
-    
+
     bool        cViewOverlayData;
     bool        cViewCrosshairs;
     bool        cViewValue;
     bool        cViewDetails;
-    
+
     int   cWinMinX;
     int   cWinMaxX;
   int   cWinMaxZ;
@@ -359,14 +359,14 @@ protected:
    // unsigned char  *cWinImData;
   //  unsigned char  *cWinRotData;
    // unsigned short *cWinZBuffer;
-    
+
     double cDataMax, cDataMin;
-    
+
     /* list of points clicked and maximum no. of points to be stored*/
     std::list< ClickPoint * > cClickedPoints;
     unsigned int maxClickPoints;
     int cX, cY, cW, cH;
-    
+
     void clickSelect(float newX, float newY, float newZ);
     void makeRasterFont(void);
     void printString(char *s);
@@ -396,7 +396,7 @@ private:
   float start_y;
   unsigned int image_x;
   unsigned int image_y;
-  
+
   int m_alpha;
 
   int m_currentbutton;
@@ -440,6 +440,6 @@ private:
   bool m_displayoverlayzero;
 
 };
-  
+
 
 #endif

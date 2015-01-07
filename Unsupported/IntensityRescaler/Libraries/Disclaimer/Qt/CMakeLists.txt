@@ -1,33 +1,33 @@
 
 include(${AUTOSEG_SOURCE_DIR}/CMake/qtSetup.cmake)
 
-INCLUDE_DIRECTORIES(
+include_directories(
      	${CMAKE_CURRENT_SOURCE_DIR}
   	${CMAKE_CURRENT_BINARY_DIR}
 	${QT_INCLUDE_DIR}
      )
 
-LINK_LIBRARIES(
+link_libraries(
  ${QT_QT_LIBRARY}
 )
 
-SET(QtDisclaimer_SRCS 
+set(QtDisclaimer_SRCS
   ../Disclaimer.cxx
   ../Disclaimer.h
   QtDisclaimer.cxx
   QtDisclaimer.h
 )
 
-SET(QtDisclaimer_GUI_SRCS 
+set(QtDisclaimer_GUI_SRCS
    QtDisclaimerGUI.ui
 )
 
-IF(QT_WRAP_UI)
-	QT_WRAP_UI(QtDisclaimer QtDisclaimer_HDRS  QtDisclaimer_SRCS  ${QtDisclaimer_GUI_SRCS} )
-ENDIF(QT_WRAP_UI)
+if(QT_WRAP_UI)
+	qt_wrap_ui(QtDisclaimer QtDisclaimer_HDRS  QtDisclaimer_SRCS  ${QtDisclaimer_GUI_SRCS} )
+endif()
 
-ADD_DEFINITIONS(-DQT_DLL)
-ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
+add_definitions(-DQT_DLL)
+add_definitions(-DQT_THREAD_SUPPORT)
 
 
-ADD_LIBRARY(QtDisclaimer ${QtDisclaimer_SRCS} )
+add_library(QtDisclaimer ${QtDisclaimer_SRCS} )

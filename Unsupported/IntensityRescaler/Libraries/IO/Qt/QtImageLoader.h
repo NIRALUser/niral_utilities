@@ -20,7 +20,7 @@ class QtImageLoader
 	QString GetFilePath();
 
 	QtImageLoader();
-	~QtImageLoader(); 
+	~QtImageLoader();
 
   protected:
 	ImagePointer m_Image;

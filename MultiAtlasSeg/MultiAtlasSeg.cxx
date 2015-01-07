@@ -9,7 +9,7 @@
                 (2) remove all folders under ~DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/
                 (3) run process at ~DMD/Applications/DMDMultiAtlas/data/finalDeformedImage/
                 (4) run batWMajorityVoting1 and batWMajorityVoting2 at NeuroLib/ImageMath/ for weighted majority voting
-                (5) run batEvaluationWeightedMV for evaluating 
+                (5) run batEvaluationWeightedMV for evaluating
                     (v 1.13, 02-17-2012)
              6. Calculate shape energy (circularity) (v 1.13, 03-02-2012)
                 circularity = 4PI * (Area / (Perimeter ^ 2))
@@ -30,7 +30,7 @@
 #define SEMIT 4
 #define CRAN_SART 5
 #define BIC_FEM 2
-#define ADDUCTOR 3 
+#define ADDUCTOR 3
 #define GRACILIS 6
 #define BACKGROUND 0
 #define NUMBER_OF_CASE_USED 3
@@ -83,7 +83,7 @@ void SortStringList(std::string *strList, int size)
         stringarray.push_back(strList[i]);
     }
     std::sort(stringarray.begin(), stringarray.end());
-    
+
     int j = 0;
     for (std::vector<std::string>::iterator it=stringarray.begin(); it!=stringarray.end(); ++it) {
         std::string tmp = *it;
@@ -91,11 +91,11 @@ void SortStringList(std::string *strList, int size)
         j++;
     }
 }
-    
+
 
 inline int ipExistsArgument(char **argv, const char *keystr) {
-  for (int i = 1; argv[i]; i++) 
-    if (strstr(argv[i], keystr) == argv[i]) 
+  for (int i = 1; argv[i]; i++)
+    if (strstr(argv[i], keystr) == argv[i])
         return 1;
   return 0;
 }
@@ -138,8 +138,8 @@ int main( int argc, char * argv[] )
     bool option_E = ipExistsArgument(argv, "-e");
     bool option_N = ipExistsArgument(argv, "-n");
     bool option_N2 = ipExistsArgument(argv, "-N");
-    const     unsigned int   Dimension = 3; 
-    typedef   unsigned short  PixelType; 
+    const     unsigned int   Dimension = 3;
+    typedef   unsigned short  PixelType;
     typedef itk::Image< PixelType, Dimension >   ImageType;
     typedef itk::ImageFileReader< ImageType >  ReaderType;
     typedef itk::ImageFileWriter< ImageType >  WriterType;
@@ -147,7 +147,7 @@ int main( int argc, char * argv[] )
     float p[DATASET_SIZE];  // sensitivity
     float q[DATASET_SIZE];   // specificity
     float alpha = 0, beta = 0, gama = 0;
-    
+
     alpha = 0.5;
     beta = 0.5;
 
@@ -172,7 +172,7 @@ int main( int argc, char * argv[] )
         float A = 0, B = 0, R = 0, f = 0, fT1 = 0, fT0 = 0, f1 = 1, f0 = 1, senThresh = 0.95;
         typedef itk::Image< float, 3 >                         OrientedImageType;
         char filename[1024];
-        int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, usedCase[25] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1, 1, 1}; 
+        int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, usedCase[25] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1, 1, 1};
         int segLabel = atoi(argv[2]), fixCase = atoi(argv[3]), numIteration = 1, numCaseUsed = DATASET_SIZE, numCaseWillUse = DATASET_SIZE;
         bool terminateCriteria = 1;
     //    char *quotationMark = "\"";
@@ -181,7 +181,7 @@ int main( int argc, char * argv[] )
         std::ostringstream strFixCase;
         strFixCase << fixCase;
         // remove performance text file created before
-        if(fixCase < 100) 
+        if(fixCase < 100)
             commandLine = "rm ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/0" + strFixCase.str() + "/performance0" + strFixCase.str() + "_syn_100x50x25_label_AllMuscle_*.txt";
         else
             commandLine = "rm ~/DMD/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/" + strFixCase.str() + "/performance" + strFixCase.str() + "_syn_100x50x25_label_AllMuscle_*.txt";
@@ -198,7 +198,7 @@ int main( int argc, char * argv[] )
             for (int i = 0; i < DATASET_SIZE; i++){
                 if (cases[i] == fixCase)
                     usedCase[i] = 0;
-            }  
+            }
             commandLine = "crlSTAPLE";
             for (int i = 0; i < NUMBER_OF_CASE; i++){
                 std::ostringstream strTargetCase;
@@ -220,7 +220,7 @@ int main( int argc, char * argv[] )
             exit(1);
             if(fixCase < 100)
                 commandLine = "crlIndexOfMaxComponent seg_0" + strFixCase.str() + "_fromAllScans_syn_100x50x25_AllMuscle.nrrd seg_0" + strFixCase.str() + "_fromAllScans_syn_100x50x25_warp_AllMuscle_" + numIter.str() + ".nrrd";
-            else 
+            else
                 commandLine = "crlIndexOfMaxComponent seg_" + strFixCase.str() + "_fromAllScans_syn_100x50x25_AllMuscle.nrrd seg_" + strFixCase.str() + "_fromAllScans_syn_100x50x25_warp_AllMuscle_" + numIter.str() + ".nrrd";
             std::cout << commandLine << std::endl;
             system(commandLine.c_str()); //warp image
@@ -229,11 +229,11 @@ int main( int argc, char * argv[] )
                 sprintf(filename, "/biomed-resimg/NDRC/DuchenneDystrophy/data/canine/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/0%d/performance0%d_syn_100x50x25_label_AllMuscle_%d.txt", fixCase, fixCase, numIteration);
             else
                 sprintf(filename, "/biomed-resimg/NDRC/DuchenneDystrophy/data/canine/Multi_Atlas_Build/Data/NatHist_Atlas/STAPLE/%d/performance%d_syn_100x50x25_label_AllMuscle_%d.txt", fixCase, fixCase, numIteration);
-                
+
             std::cout << filename << std::endl;
             readParameter.open(filename);
             if (readParameter.is_open()) {
-                int j = 0;   
+                int j = 0;
                 while (!readParameter.eof() && j < (NUMBER_OF_CASE - 1)) {
                     char pa[100];
                     float CNum = 0;
@@ -258,7 +258,7 @@ int main( int argc, char * argv[] )
                         sen[j * NUMBER_OF_MUSCLE + k] = CNum;
                         averageSen[j] += sen[j * NUMBER_OF_MUSCLE + k];
                         std::cout << sen[j * NUMBER_OF_MUSCLE + k] <<  " ";
-                    } 
+                    }
                     averageSen[j] /= NUMBER_OF_MUSCLE;
                     std::cout << "  specificity: " << spe[j] << " average sensitivity: " << averageSen[j] << std::endl;
                     j++;
@@ -278,10 +278,10 @@ int main( int argc, char * argv[] )
            // check termination criteria
             if ((numCaseWillUse == numCaseUsed) || (numCaseWillUse < 6))
                 terminateCriteria = 0;
-            std::cout << "terminate criteria:  " << terminateCriteria << std::endl; 
+            std::cout << "terminate criteria:  " << terminateCriteria << std::endl;
             numIteration++; //next iteration
         }
-        std::cout << "STAPLE finished!" << std::endl; 
+        std::cout << "STAPLE finished!" << std::endl;
         exit(1);
     }
 
@@ -290,7 +290,7 @@ int main( int argc, char * argv[] )
         float A = 0, B = 0, R = 0, f = 0, b = 0, fT1 = 0, fT0 = 0, f1 = 1, f0 = 1, senThresh = 0.01;//senThresh = 0.95
         typedef itk::Image< float, 3 >                         OrientedImageType;
         char filename[1024];
-        int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, usedCase[25] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; 
+        int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, usedCase[25] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
         int segLabel = atoi(argv[2]), fixCase = atoi(argv[3]), numIteration = 1, numCaseUsed = DATASET_SIZE, numCaseWillUse = DATASET_SIZE;
         bool terminateCriteria = 1;
      //   char *quotationMark = "\"";
@@ -299,11 +299,11 @@ int main( int argc, char * argv[] )
         std::ostringstream strFixCase;
         strFixCase << fixCase;
 
-        std::vector<ImageType::Pointer> segmentations(DATASET_SIZE); 
-        ImageType::Pointer segmentation = ImageType::New(); 
-        ImageType::Pointer T = ImageType::New(); 
+        std::vector<ImageType::Pointer> segmentations(DATASET_SIZE);
+        ImageType::Pointer segmentation = ImageType::New();
+        ImageType::Pointer T = ImageType::New();
         for (int i = 0; i < DATASET_SIZE; i++)
-            segmentations[i] = ImageType::New(); 
+            segmentations[i] = ImageType::New();
         // create final segmentation based on the Baysian Decision Theory
         // load segmentation 1
         while (R < NUMBER_OF_CASE_USED) {
@@ -333,10 +333,10 @@ int main( int argc, char * argv[] )
                 fixedReaders[i]->SetFileName(filename);
                 fixedReaders[i]->Update();
                 segmentations[i] = fixedReaders[i]->GetOutput();
-                if (p[i] >= senThresh) 
+                if (p[i] >= senThresh)
                     R++;
                 j++;
-                while (cases[j] == fixCase) { 
+                while (cases[j] == fixCase) {
                     j++;
                 }
             }
@@ -345,7 +345,7 @@ int main( int argc, char * argv[] )
         senThresh += 0.05;
         std::cout << "number of scan used: " << R << "  sensitivity: " << senThresh << std::endl;
         getchar();
-        //used for weighted majority voting   
+        //used for weighted majority voting
         if(fixCase < 100)
             sprintf(filename, "/biomed-resimg/NDRC/DuchenneDystrophy/data/canine/Research/NeuroLib/niral_utilities/trunk/ImageMath/WeightedMVOutput_seg_0%d.nrrd", fixCase);
         else
@@ -385,7 +385,7 @@ int main( int argc, char * argv[] )
                         }
                     }
                     A = f1 * fT1;
-                    B = f0 * fT0; 
+                    B = f0 * fT0;
                     if((A + B) > 0){
                         f = A / (A + B) * 1;
                         b = B / (A + B) * 1;
@@ -407,7 +407,7 @@ int main( int argc, char * argv[] )
                 }
             }
         }
-        
+
         #ifdef INDIVIDUAL_MUSCLE
         sprintf(filename, "segmentation0%d_%d.nrrd", fixCase, segLabel);
         #else
@@ -429,7 +429,7 @@ int main( int argc, char * argv[] )
         writer->Update();
     }
 
-    if( option_W ) { 
+    if( option_W ) {
         // weighted majority voting
         fixedReader->SetFileName(argv[2]);
         fixedReader->Update();
@@ -437,7 +437,7 @@ int main( int argc, char * argv[] )
         ImageType::IndexType                 indexInput;
         float averagePerformance = 0;
         int usedSegmentation = DATASET_SIZE;
-        int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, usedCase[25] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; 
+        int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, usedCase[25] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
         float weightParameter[25], sumWeight = 1, sumWeightLastIteration = 0;
         int j = 0, k = 0;
         bool firstIteration = 1;
@@ -456,7 +456,7 @@ int main( int argc, char * argv[] )
             system(commandLine.c_str());
             commandLine = "rm performanceIterativeWMV" + strFixCase.str() + ".txt";
             system(commandLine.c_str());
-            
+
         for (int i = 0; i < DATASET_SIZE; i++){
             float RecFemMove = 0, CraSarMove = 0, AddMove = 0, BicFemMove = 0, GraMove = 0, SemTenMove = 0, BackgroundMove = 0;
             float RecFemInt = 0, CraSarInt = 0, AddInt = 0, BicFemInt = 0, GraInt = 0, SemTenInt = 0, BackgroundInt = 0;
@@ -471,7 +471,7 @@ int main( int argc, char * argv[] )
                 for(indexInput[1] = 0; indexInput[1] < (int)size[1]; indexInput[1]++) {
                     for(indexInput[0] = 0; indexInput[0] < (int)size[0]; indexInput[0]++) {
                         float fixPixel = segmentationReader->GetOutput()->GetPixel(indexInput);
-                        float  movePixel = moveReaders[k]->GetOutput()->GetPixel(indexInput); 
+                        float  movePixel = moveReaders[k]->GetOutput()->GetPixel(indexInput);
                         if (fixPixel == BACKGROUND && movePixel == BACKGROUND)
                             BackgroundInt++;
                         if (fixPixel == BACKGROUND || movePixel == REC_FEM)
@@ -504,7 +504,7 @@ int main( int argc, char * argv[] )
                         }
                         if (movePixel == BIC_FEM)
                             BicFemSum++;
-    
+
                         if (fixPixel == ADDUCTOR && movePixel == ADDUCTOR)
                             AddInt++;
                         if (fixPixel == ADDUCTOR || movePixel == ADDUCTOR)
@@ -515,7 +515,7 @@ int main( int argc, char * argv[] )
                         }
                         if (movePixel == ADDUCTOR)
                             AddSum++;
-    
+
                         if (fixPixel == SEMIT && movePixel == SEMIT )
                             SemTenInt++;
                         if (fixPixel == SEMIT || movePixel == SEMIT)
@@ -526,7 +526,7 @@ int main( int argc, char * argv[] )
                         }
                         if (movePixel == SEMIT)
                             SemTenSum++;
-                    
+
                         if (fixPixel == CRAN_SART && movePixel == CRAN_SART)
                             CraSarInt++;
                         if (fixPixel == CRAN_SART || movePixel == CRAN_SART)
@@ -537,7 +537,7 @@ int main( int argc, char * argv[] )
                         }
                         if (movePixel == CRAN_SART)
                             CraSarSum++;
-     
+
                         if (fixPixel == GRACILIS && movePixel == GRACILIS)
                             GraInt++;
                         if (fixPixel == GRACILIS || movePixel == GRACILIS)
@@ -588,10 +588,10 @@ int main( int argc, char * argv[] )
                 else
                     efile << specificity << " " << RecFemInt / RecFemMove << " " << BicFemInt / BicFemMove << " " <<  AddInt / AddMove << " " << SemTenInt / SemTenMove << " " << CraSarInt / CraSarMove << " " << GraInt / GraMove << "\n";
                 efile.close();
-            }    
+            }
                 filename = "performanceIterativeWMV" + strFixCase.str() + ".txt";
                 std::ofstream efile(filename.c_str() , std::ios::app );
-                if(usedCase[j] == 1) 
+                if(usedCase[j] == 1)
                     efile << specificity << " " << RecFemInt / RecFemMove << " " << BicFemInt / BicFemMove << " " <<  AddInt / AddMove << " " << SemTenInt / SemTenMove << " " << CraSarInt / CraSarMove << " " << GraInt / GraMove << "\n";
                 else
                     efile << 0 << " " << 0 << " " << 0 << " " << 0 << " " << 0 << " " << 0 << " " << 0 << "\n";
@@ -601,10 +601,10 @@ int main( int argc, char * argv[] )
         firstIteration = 0;
         if(usedSegmentation >= 6){
             commandLine = "~/NeuroLib/ImageMath/ImageMath ";
-            if(atoi(argv[argc - 3]) < 100) { 
+            if(atoi(argv[argc - 3]) < 100) {
                 int i = 0;
                 while(usedCase[i] == 0){
-                    i++; 
+                    i++;
                 }
                 std::ostringstream strTargetCase;
                 if(cases[i] < 100){
@@ -660,10 +660,10 @@ int main( int argc, char * argv[] )
                     commandLine = commandLine + strWeight.str();
                 }
             }
-            
+
             if(atoi(argv[argc - 3]) < 100)
                 commandLine = commandLine + " -outfile ~/NeuroLib/ImageMath/WeightedMVOutput_seg_0" + strFixCase.str() + ".nrrd ";
-           
+
             else
                 commandLine = commandLine + " -outfile ~/NeuroLib/ImageMath/WeightedMVOutput_seg_" + strFixCase.str() + ".nrrd ";
             std::cout << commandLine << std::endl;
@@ -672,7 +672,7 @@ int main( int argc, char * argv[] )
             system(commandLine.c_str());
         }
         else{
-        
+
             commandLine = "cp performanceIterativeWMV" + strFixCase.str() + "_old.txt " + "performanceIterativeWMV" + strFixCase.str() + ".txt" ;
             system(commandLine.c_str());
             commandLine = "rm performanceIterativeWMV" + strFixCase.str() + "_old.txt";
@@ -680,22 +680,22 @@ int main( int argc, char * argv[] )
         }
         }
     }
-        
-    if( option_P ) { 
+
+    if( option_P ) {
         fixedReader->SetFileName(  argv[ 2 ] );
         movingReader->SetFileName( argv[ 3 ] );
     }
 
-    if( option_S ) { 
+    if( option_S ) {
         fixedSegReader->SetFileName(  argv[ 2 ] );
         movingSegReader->SetFileName( argv[ 3 ] );
     }
     try {
-        if( option_P ) { 
+        if( option_P ) {
             fixedReader->Update();
             movingReader->Update();
         }
-        if( option_S ) { 
+        if( option_S ) {
            fixedSegReader->Update();
            movingSegReader->Update();
         }
@@ -706,7 +706,7 @@ int main( int argc, char * argv[] )
     std::cerr << excep << std::endl;
     }
 
-    if( option_S ) { 
+    if( option_S ) {
         ImageType::SizeType                  size = fixedSegReader->GetOutput()->GetLargestPossibleRegion().GetSize();
         ImageType::IndexType                 indexInput;
         float RecFemInt = 0, CraSarInt = 0, AddInt = 0, BicFemInt = 0, GraInt = 0, SemTenInt = 0;
@@ -719,7 +719,7 @@ int main( int argc, char * argv[] )
             for(indexInput[1] = 0; indexInput[1] < (int)size[1]; indexInput[1]++) {
                 for(indexInput[0] = 0; indexInput[0] < (int)size[0]; indexInput[0]++) {
                     float fixPixel = fixedSegReader->GetOutput()->GetPixel(indexInput);
-                    float  movePixel = movingSegReader->GetOutput()->GetPixel(indexInput); 
+                    float  movePixel = movingSegReader->GetOutput()->GetPixel(indexInput);
                     if (fixPixel == REC_FEM && movePixel == REC_FEM)
                         RecFemInt++;
                     if (fixPixel == REC_FEM || movePixel == REC_FEM)
@@ -755,7 +755,7 @@ int main( int argc, char * argv[] )
                         SemTenSum++;
                     if (movePixel == SEMIT)
                         SemTenSum++;
-                
+
                     if (fixPixel == CRAN_SART && movePixel == CRAN_SART)
                         CraSarInt++;
                     if (fixPixel == CRAN_SART || movePixel == CRAN_SART)
@@ -764,7 +764,7 @@ int main( int argc, char * argv[] )
                         CraSarSum++;
                     if (movePixel == CRAN_SART)
                         CraSarSum++;
- 
+
                     if (fixPixel == GRACILIS && movePixel == GRACILIS)
                         GraInt++;
                     if (fixPixel == GRACILIS || movePixel == GRACILIS)
@@ -776,38 +776,38 @@ int main( int argc, char * argv[] )
                 }
             }
         }
-        
+
      //   std::ofstream efile( "overlapBayesian.txt" , std::ios::app );
       //  std::ofstream efile( "overlapMajorityVoting.txt" , std::ios::app );
         //std::ofstream efile( "overlapWeightedMV.txt" , std::ios::app );
         std::ofstream efile( "overlapMostSimilar.txt" , std::ios::app );
        // std::ofstream efile( "overlapIterativeStaple.txt" , std::ios::app );
    //     std::ofstream efile( "overlapStaple.txt" , std::ios::app );
-        if(evaluateCase == REC_FEM) 
+        if(evaluateCase == REC_FEM)
             efile <<"\nRec_Fem_dice_overlap: " << RecFemInt/RecFemUni << " " << RecFemInt << " " << RecFemUni << " " << RecFemSum << " dice_overlap: " << 2 * RecFemInt / RecFemSum ;
-        if(evaluateCase == BIC_FEM) 
+        if(evaluateCase == BIC_FEM)
             efile <<"\nBic_Fem_dice_overlap: " << BicFemInt/BicFemUni << " " << BicFemInt << " " << BicFemUni << " " << BicFemSum << " dice_overlap: " << 2 * BicFemInt / BicFemSum ;
-        if(evaluateCase == ADDUCTOR) 
+        if(evaluateCase == ADDUCTOR)
             efile <<"\nAdd_dice_overlap: " << AddInt/AddUni << " " <<  AddInt << " " << AddUni << " " << AddSum << " dice_overlap: " << 2 * AddInt / AddSum;
-        if(evaluateCase == SEMIT) 
+        if(evaluateCase == SEMIT)
             efile <<"\nSemTen_dice_overlap: " << SemTenInt/SemTenUni << " " << SemTenInt << " " << SemTenUni << " " << SemTenSum << " dice_overlap: " << 2 * SemTenInt / SemTenSum;
-        if(evaluateCase == CRAN_SART) 
+        if(evaluateCase == CRAN_SART)
             efile <<"\nCra_Sar_dice_overlap: " << CraSarInt/CraSarUni << " " << CraSarInt << " " << CraSarUni << " " << CraSarSum << " dice_overlap: " << 2 * CraSarInt / CraSarSum ;
-        if(evaluateCase == GRACILIS) 
+        if(evaluateCase == GRACILIS)
             efile <<"\nGra_dice_overlap: " << GraInt/GraUni << " " << GraInt << " " << GraUni << " " << GraSum << " dice_overlap: " << 2 * GraInt / GraSum << "\n\n";
         efile.close();
         averagePerformance = (2 * RecFemInt / RecFemSum + 2 * BicFemInt / BicFemSum + 2 * AddInt / AddSum + 2 * SemTenInt / SemTenSum + 2 * CraSarInt / CraSarSum + 2 * GraInt / GraSum) / 6;
         std::cout << "the sensitivety is " << averagePerformance << std::endl;
     }
- 
-    if( option_E ) { 
+
+    if( option_E ) {
         // compute harmonic energy
       typedef itk::Vector<double,3> DeformationPixelType;
 
         typedef itk::Image< DeformationPixelType, Dimension >         OrientedImageType;
         typedef itk::ImageFileReader<OrientedImageType> OrientedReaderType;
         OrientedReaderType::Pointer orientedreader = OrientedReaderType::New();
-        OrientedImageType::Pointer deformationField; 
+        OrientedImageType::Pointer deformationField;
         OrientedImageType::IndexType index;
         OrientedImageType::SizeType size;
         double HE = 0;
@@ -845,7 +845,7 @@ int main( int argc, char * argv[] )
         return 0;
     }
 
-    if( option_U ) { 
+    if( option_U ) {
         // compute shape energy
         typedef itk::Image< float, Dimension >         OrientedImageType;
         typedef itk::ImageFileReader<OrientedImageType> OrientedReaderType;
@@ -857,8 +857,8 @@ int main( int argc, char * argv[] )
         OrientedReaderType::Pointer orientedreadery = OrientedReaderType::New();
         OrientedReaderType::Pointer orientedreaderz = OrientedReaderType::New();
         OrientedWriterType::Pointer orientedwriter = OrientedWriterType::New();
-        OrientedImageType::Pointer deformationFieldx, deformationFieldy, deformationFieldz; 
-        OrientedImageType::Pointer binaryMask; 
+        OrientedImageType::Pointer deformationFieldx, deformationFieldy, deformationFieldz;
+        OrientedImageType::Pointer binaryMask;
         OrientedImageType::IndexType                   index, indexForSearch;
         OrientedImageType::SizeType                    size;
         float SE = 0, perimeter = 0, area = 0;
@@ -873,7 +873,7 @@ int main( int argc, char * argv[] )
             for(index[0] = 0; index[0] < (int)size[0]; index[0]++) {
                 if (binaryMask->GetPixel(index) != 0) {
                     area++;
-                    if (index[0] != 0 && index[1] != 0 && index[0] != (size[0] - 1) && index[1] != (size[1] - 1)) { 
+                    if (index[0] != 0 && index[1] != 0 && index[0] != (size[0] - 1) && index[1] != (size[1] - 1)) {
                         float a, b, c, d;
                         indexForSearch[0] = index[0] - 1; indexForSearch[1] = index[1]; indexForSearch[2] = index[2];
                         a = binaryMask->GetPixel(indexForSearch);
@@ -887,9 +887,9 @@ int main( int argc, char * argv[] )
                             perimeter++;
                     }
                 }
-            } 
+            }
         }
-        //} 
+        //}
 
         SE = 4 * PI * (area / (perimeter * perimeter));
         std::cout << "shape energy: " << SE << "  " << area << "  " << perimeter << std::endl;
@@ -899,7 +899,7 @@ int main( int argc, char * argv[] )
         return 0;
     }
 
-    if( option_Z ) { 
+    if( option_Z ) {
         float graph[NUMBER_OF_CASE][NUMBER_OF_CASE][2], circularity[NUMBER_OF_CASE]; //include deformation from two directions
         float intensityE, harmonicE, shapeE, tmpHE = 0;
         int startNode = atoi(argv[2]), endNode = atoi(argv[3]), floydRoute[NUMBER_OF_CASE];
@@ -912,7 +912,7 @@ int main( int argc, char * argv[] )
         std::string filename = "templateForSeg_" + strFixCase.str() + ".txt";
         std::string commandLine;
         std::ofstream templatefile(filename.c_str(), std::ios::app );
-        int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, caseUsed[NUMBER_OF_CASE]; 
+        int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, caseUsed[NUMBER_OF_CASE];
         int graphHistogram[120] = {0};
 
 
@@ -920,7 +920,7 @@ int main( int argc, char * argv[] )
             floydRoute[i] = MAX_NODE;
             caseUsed[i] = 0;
         }
-        
+
         int m = 0;
         for (int i = 0; i < NUMBER_OF_CASE; i++){
             sefile >> shapeE;
@@ -940,7 +940,7 @@ int main( int argc, char * argv[] )
                     graph[i][j][0] = alpha * harmonicE;
                     graph[i][j][0] += beta * intensityE;
                     graph[i][j][0] += gama * fabs(circularity[i] - circularity[j]) + ENERGY_CONST;
-                    int tmp = round(graph[i][j][0] * 100); 
+                    int tmp = round(graph[i][j][0] * 100);
                     if((tmp - 1) < 0)
                         graphHistogram[0]++;
                     else if ((tmp - 1) > 120)
@@ -960,7 +960,7 @@ int main( int argc, char * argv[] )
         float *Dijkstra = new float[NUMBER_OF_CASE];
         for (int i = 0; i < NUMBER_OF_CASE; i++)
             Dijkstra[i] = 0;
-        
+
         while (startNode != endNode){
             float minDist = 0;
             int minNode = 0, DijkstraNode = 0;
@@ -1006,7 +1006,7 @@ int main( int argc, char * argv[] )
             changes = 0;
             float tmpCumDistance =  directDistance;
             for (int i = 0; i < NUMBER_OF_CASE; i++){
-                currentDistance = graph[startNode][i][0];  
+                currentDistance = graph[startNode][i][0];
                 if (tmpCumDistance > currentDistance && startNode != i && endNode != i && caseUsed[i] == 0) {
                     tmpCumDistance = currentDistance;
                     floydNode = i;
@@ -1022,14 +1022,14 @@ int main( int argc, char * argv[] )
         while(floydRoute[k + 1] != MAX_NODE){
             std::cout << floydRoute[k] << "  ";
             k++;
-        } 
+        }
         std::cout << "\n";
       //  templatefile << floydRoute[k - 2];
         templatefile << "\n";
         templatefile.close();
     }
 
-    if( option_N ) { 
+    if( option_N ) {
         std::string filename;
         std::ostringstream strFixCase;
         //strFixCase << argv[argc - 1];
@@ -1039,7 +1039,7 @@ int main( int argc, char * argv[] )
         std::ifstream infile2( filename.c_str() );
         float min = 0, max = 0;
         int sizeOfDataset = 0;
-        
+
         while (!infile1.eof()) {
            float tmp;
            infile1 >> tmp;
@@ -1048,8 +1048,8 @@ int main( int argc, char * argv[] )
         infile1.close();
         sizeOfDataset--;
         std::cout << "size of data: " << sizeOfDataset << std::endl;
- 
-        float *weightValue = new float[sizeOfDataset]; 
+
+        float *weightValue = new float[sizeOfDataset];
         sizeOfDataset = 0;
         while (!infile2.eof()) {
            infile2 >> weightValue[sizeOfDataset];
@@ -1058,7 +1058,7 @@ int main( int argc, char * argv[] )
         infile2.close();
         sizeOfDataset--;
 
-        for (int i = 0; i < sizeOfDataset; i++) { 
+        for (int i = 0; i < sizeOfDataset; i++) {
             if (i == 0) {
                 min = weightValue[i];
                 max = min;
@@ -1085,7 +1085,7 @@ int main( int argc, char * argv[] )
         outfile.close();
     }
 
-    if( option_N2 ) { 
+    if( option_N2 ) {
       std::string filename1, filename2;
         std::ostringstream strFixCase;
         float min = 0, max = 0;
@@ -1097,7 +1097,7 @@ int main( int argc, char * argv[] )
         std::ifstream infile2( filename1.c_str() );
         std::ifstream infile3( filename2.c_str() );
         std::ifstream infile4( filename2.c_str() );
-        
+
         while (!infile1.eof()) {
            float tmp;
            infile1 >> tmp;
@@ -1112,8 +1112,8 @@ int main( int argc, char * argv[] )
         infile3.close();
         sizeOfDataset--;
         std::cout << "size of data: " << sizeOfDataset << std::endl;
- 
-        float *weightValue = new float[sizeOfDataset]; 
+
+        float *weightValue = new float[sizeOfDataset];
         sizeOfDataset = 0;
         while (!infile2.eof()) {
            infile2 >> weightValue[sizeOfDataset];
@@ -1128,7 +1128,7 @@ int main( int argc, char * argv[] )
         infile4.close();
         sizeOfDataset--;
 
-        for (int i = 0; i < sizeOfDataset; i++) { 
+        for (int i = 0; i < sizeOfDataset; i++) {
             if (i == 0) {
                 min = weightValue[i];
                 max = min;
@@ -1156,7 +1156,7 @@ int main( int argc, char * argv[] )
         outfile.close();
     }
 
-    if( option_G ) { 
+    if( option_G ) {
         float graph[NUMBER_OF_CASE][NUMBER_OF_CASE][2], circularity[NUMBER_OF_CASE]; //include deformation from two directions
         float intensityE, harmonicE, shapeE, tmpHE = 0, maxDistance = 0, minDistance = 100000;
         int startNode = 0, endNode = 0;
@@ -1164,23 +1164,23 @@ int main( int argc, char * argv[] )
         std::ostringstream strFixCase;
         std::string filename;
 
-        filename = argv[2]; 
+        filename = argv[2];
         std::ifstream iefile( filename.c_str() ); // intensity energy
 
-        filename = argv[3]; 
+        filename = argv[3];
         std::ifstream efile( filename.c_str() ); // harmonic energy
 
         filename = argv[4];
-        
+
         std::string commandLine;
         commandLine = "rm " + filename;
         system(commandLine.c_str());
         std::ofstream templatefile(filename.c_str(), std::ios::app );
         int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107};
-	int caseUsed[NUMBER_OF_CASE]; 
+	int caseUsed[NUMBER_OF_CASE];
         int graphHistogram[120] = {0};
     //    gama = 0;
-       
+
         beta = atof(argv[5]);
         alpha = atof(argv[6]);
         gama = atof(argv[7]);
@@ -1189,7 +1189,7 @@ int main( int argc, char * argv[] )
             floydRoute[i] = MAX_NODE;
             caseUsed[i] = 0;
         }
-        
+
         int m = 0;
        /* for (int i = 0; i < NUMBER_OF_CASE; i++){
             sefile >> shapeE;
@@ -1221,7 +1221,7 @@ int main( int argc, char * argv[] )
                         minDistance = graph[j][i][0];
                     if(graph[j][i][0] > maxDistance)
                         maxDistance = graph[j][i][0];
-                    int tmp = round(graph[j][i][0] * 100); 
+                    int tmp = round(graph[j][i][0] * 100);
                     if((tmp - 1) < 0)
                         graphHistogram[0]++;
                     else if ((tmp - 1) >= 120)
@@ -1247,7 +1247,7 @@ int main( int argc, char * argv[] )
                         minDistance = graph[j][i][0];
                     if(graph[j][i][0] > maxDistance)
                         maxDistance = graph[j][i][0];
-                    int tmp = round(graph[j][i][0] * 100); 
+                    int tmp = round(graph[j][i][0] * 100);
                     if((tmp - 1) < 0)
                         graphHistogram[0]++;
                     else if ((tmp - 1) >= 120)
@@ -1309,11 +1309,11 @@ int main( int argc, char * argv[] )
 
 
         //search shortest route from startNode to endNode using Floyd algorithm
-        //startNode = atoi(argv[5]); 
+        //startNode = atoi(argv[5]);
         //endNode = atoi(argv[6]);
         endNode = NUMBER_OF_ATLAS;
         for (int i = 0; i < NUMBER_OF_ATLAS; i++){
-             startNode = i; 
+             startNode = i;
              int floydNode = startNode, lengthPathFloyd = 0;
              bool changes = 1;
              float directDistance = graph[startNode][endNode][0], currentDistance = graph[startNode][endNode][0], cumDistance = 0;
@@ -1328,9 +1328,9 @@ int main( int argc, char * argv[] )
                  changes = 0;
                  float tmpCumDistance =  directDistance;
                  for (int i = 0; i < NUMBER_OF_CASE; i++){
-                     currentDistance = cumDistance + graph[startNode][i][0] + graph[i][endNode][0];  
+                     currentDistance = cumDistance + graph[startNode][i][0] + graph[i][endNode][0];
                      if (tmpCumDistance > currentDistance && startNode != i && endNode != i && caseUsed[i] == 0) {
-                         changes = 1; 
+                         changes = 1;
                          floydNode = i;
                          tmpCumDistance = currentDistance - graph[i][endNode][0];
                      }
@@ -1351,15 +1351,15 @@ int main( int argc, char * argv[] )
              while(floydRoute[k] != MAX_NODE){
                  std::cout << floydRoute[k] << "  ";
                  k++;
-             } 
+             }
              std::cout << "\n";
              templatefile << floydRoute[k - 2];
              templatefile << "\n";
         }
         templatefile.close();
     }
-   
-    if( option_M ) { 
+
+    if( option_M ) {
         std::cout << "running majority voting" << std::endl;
         std::ostringstream strFixCase;
 
@@ -1376,7 +1376,7 @@ int main( int argc, char * argv[] )
         beta = atof(argv[argc - 5]);
         alpha = atof(argv[argc - 4]);
         gama = atof(argv[argc - 3]);
-      
+
         DIR *dir;
         struct dirent *ent;
         int sizeLabelList = 0;
@@ -1438,7 +1438,7 @@ int main( int argc, char * argv[] )
         int k = 0;
         for (int i = 0; i < NUMBER_OF_ATLAS; i++){
           commandLine += outfolder + labelList[i] + " ";
-        }     
+        }
         commandLine += "-outfile " ;
         commandLine += argv[6] ;
         commandLine += argv[7];
@@ -1446,7 +1446,7 @@ int main( int argc, char * argv[] )
         system(commandLine.c_str());
     }
 
-    if( option_V ) { 
+    if( option_V ) {
         std::cout << "running weighted majority voting" << std::endl;
         //run weighted majority voting
         std::ostringstream strFixCase;
@@ -1470,7 +1470,7 @@ int main( int argc, char * argv[] )
         beta = atof(argv[argc - 5]);
         alpha = atof(argv[argc - 4]);
         gama = atof(argv[argc - 3]);
-      
+
         std::cout << "weights: " << beta << "  " << alpha << "  " << gama << std::endl;
         std::cout << "labelfolder: " << labelfolder << std::endl;
 
@@ -1531,7 +1531,7 @@ int main( int argc, char * argv[] )
         for (int i = 0; i < NUMBER_OF_CASE; i++)
             caseFlag[i] = 0;
 
-       
+
         for (int i = 0; i < NUMBER_OF_CASE; i++){
             int temp;
             templatefile >> temp;
@@ -1547,14 +1547,14 @@ int main( int argc, char * argv[] )
             }
             if (i == (NUMBER_OF_CASE - 1) )
                 onlyOneAtlas--;
-        } 
+        }
         int m = 0;
         float minDistance = 1000000, maxDistance = 0;
         for ( int i = 0; i < (NUMBER_OF_ATLAS * (NUMBER_OF_ATLAS - 1) + NUMBER_OF_ATLAS); i++){
             efile >> harmonicE;
             iefile >> intensityE;
             if( i >= (NUMBER_OF_ATLAS * (NUMBER_OF_ATLAS - 1)) ){
-                weightFactor[m] = alpha * harmonicE + beta * intensityE; 
+                weightFactor[m] = alpha * harmonicE + beta * intensityE;
                 if(weightFactor[m] < minDistance)
                     minDistance = weightFactor[m];
                 if(weightFactor[m] > maxDistance)
@@ -1577,7 +1577,7 @@ int main( int argc, char * argv[] )
             if (cases[i] != 0) {
                 commandLine += labelfolder + labelList[i] + " ";
             }
-        }     
+        }
         commandLine += "-weights ";
         bool firstWeightFlag = 0;
         k = 0;
@@ -1587,7 +1587,7 @@ int main( int argc, char * argv[] )
                 if (firstWeightFlag == 1 && k > 0){
                     commandLine += ",";
                 }
-                if (onlyOneAtlas == 1) 
+                if (onlyOneAtlas == 1)
                     strWFactor << 1;
                 else
                     strWFactor << 1 - weightFactor[k];
@@ -1601,10 +1601,10 @@ int main( int argc, char * argv[] )
         commandLine += argv[7];
         std::cout << commandLine.c_str() << std::endl;
         system(commandLine.c_str());
-        
+
     }
 
-    if( option_P ) { 
+    if( option_P ) {
         typedef itk::MeanSquaresImageToImageMetric< ImageType, ImageType >  MSMMetricType;
         typedef itk::NormalizedCorrelationImageToImageMetric< ImageType, ImageType >  NCCMetricType;
         typedef itk::MutualInformationImageToImageMetric< ImageType, ImageType >  MIMetricType;
@@ -1680,8 +1680,8 @@ int main( int argc, char * argv[] )
         efile << msm << "\n";
         efile.close();
         std::cout << "mean square metric value:            " << msm << std::endl;
-    } 
-     
+    }
+
     return EXIT_SUCCESS;
 }
 

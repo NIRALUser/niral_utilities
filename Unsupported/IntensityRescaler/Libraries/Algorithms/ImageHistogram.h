@@ -7,7 +7,7 @@ class ImageHistogram
 public:
   ImageHistogram();
   ~ImageHistogram();
-  
+
   //void SetInput();
   //void SetPlot();
   //void Update();

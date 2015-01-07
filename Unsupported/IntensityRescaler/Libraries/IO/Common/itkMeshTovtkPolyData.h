@@ -10,11 +10,11 @@
 #include "itkPoint.h"
 
 
-/** 
+/**
   \class itkMeshTovtkPolyData
-  \brief 
+  \brief
     \warning
-  \sa 
+  \sa
   */
 
 class itkMeshTovtkPolyData
@@ -31,8 +31,8 @@ class itkMeshTovtkPolyData
   typedef TriangleMeshType::PointsContainer                 InputPointsContainer;
   typedef InputPointsContainer::Pointer            InputPointsContainerPointer;
   typedef InputPointsContainer::Iterator           InputPointsContainerIterator;
-  typedef TriangleMeshType::CellType                        CellType; 
-  
+  typedef TriangleMeshType::CellType                        CellType;
+
   typedef TriangleMeshType::CellsContainerPointer           CellsContainerPointer;
   typedef TriangleMeshType::CellsContainerIterator          CellsContainerIterator;
   /**
@@ -47,7 +47,7 @@ class itkMeshTovtkPolyData
   vtkPoints  * m_Points;
   vtkPolyData * m_PolyData;
   vtkCellArray * m_Polys;
-  
+
 };
 
 #endif

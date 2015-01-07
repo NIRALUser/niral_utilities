@@ -19,12 +19,12 @@ MN, 09/21/05, marc@bwh.harvard.edu
 
 namespace itk
 {
-  
+
 /** \class MeshToVTKPolyDataFilter
- * \brief Converts VTK ployData into ITK mesh data and plugs a 
- *  vtk data pipeline to an ITK datapipeline.   
+ * \brief Converts VTK ployData into ITK mesh data and plugs a
+ *  vtk data pipeline to an ITK datapipeline.
  *
- * \ingroup   ImageFilters     
+ * \ingroup   ImageFilters
  */
 class ITK_EXPORT MeshToVTKPolyDataFilter : public ProcessObject
 {
@@ -37,7 +37,7 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(MeshToVTKPolyDataFilter, ProcessObject);
 
@@ -61,7 +61,7 @@ public:
     int* m_TypeArray;
   public:
     // typedef the itk cells we are interested in
-    typedef  itk::CellInterface<  MeshType::PixelType, 
+    typedef  itk::CellInterface<  MeshType::PixelType,
                                           MeshType::CellTraits >  CellInterfaceType;
     typedef itk::LineCell<CellInterfaceType>      floatLineCell;
     typedef itk::PolygonCell<CellInterfaceType>      floatPolygonCell;
@@ -71,12 +71,12 @@ public:
 
     /*! Set the vtkCellArray that will be constructed
     */
-    void SetCellArray(vtkCellArray* a) 
+    void SetCellArray(vtkCellArray* a)
     {
       m_Cells = a;
     }
 
-    /*! 
+    /*!
     Set the cell counter pointer
     */
     void SetCellCounter(int* i)
@@ -93,7 +93,7 @@ public:
     }
 
     /*!
-    Visit a line and create the VTK_LINE cell   
+    Visit a line and create the VTK_LINE cell
     */
     void Visit(unsigned long , floatLineCell* t)
     {
@@ -119,11 +119,11 @@ public:
     }
 
     /*!
-    Visit a line and create the VTK_POLYGON cell   
+    Visit a line and create the VTK_POLYGON cell
     */
     void Visit(unsigned long , floatPolygonCell* t)
     {
- 
+
       unsigned long num = t->GetNumberOfVertices();
       if (num > 4) {
 
@@ -153,7 +153,7 @@ public:
     }
 
     /*!
-    Visit a triangle and create the VTK_TRIANGLE cell   
+    Visit a triangle and create the VTK_TRIANGLE cell
     */
     void Visit(unsigned long , floatTriangleCell* t)
     {
@@ -180,8 +180,8 @@ public:
       (*m_LastCell)++;
     }
 
-    /*! 
-    Visit a triangle and create the VTK_QUAD cell 
+    /*!
+    Visit a triangle and create the VTK_QUAD cell
     */
     void Visit(unsigned long , floatQuadrilateralCell* t)
     {
@@ -206,7 +206,7 @@ public:
       m_TypeArray[*m_LastCell] = VTK_QUAD;
       (*m_LastCell)++;
     }
-    
+
     void Visit(unsigned long , floatTetrahedronCell* t)
     {
 
@@ -233,12 +233,12 @@ public:
   };
 
   typedef itk::CellInterfaceVisitorImplementation<MeshType::PixelType, MeshType::CellTraits,
-    itk::QuadrilateralCell< itk::CellInterface<MeshType::PixelType, MeshType::CellTraits > >, 
+    itk::QuadrilateralCell< itk::CellInterface<MeshType::PixelType, MeshType::CellTraits > >,
     VistVTKCellsClass> QuadrilateralVisitor;
 
   typedef itk::CellInterfaceVisitorImplementation<MeshType::PixelType,
     MeshType::CellTraits,
-    itk::TriangleCell<itk::CellInterface<MeshType::PixelType, MeshType::CellTraits > >, 
+    itk::TriangleCell<itk::CellInterface<MeshType::PixelType, MeshType::CellTraits > >,
     VistVTKCellsClass> TriangleVisitor;
 
   /** Get the output in the form of vtkPolyData **/
@@ -252,8 +252,8 @@ public:
   void GenerateData();
 
 protected:
-  MeshToVTKPolyDataFilter(); 
-  virtual ~MeshToVTKPolyDataFilter(); 
+  MeshToVTKPolyDataFilter();
+  virtual ~MeshToVTKPolyDataFilter();
 
 private:
   MeshToVTKPolyDataFilter(const Self&); //purposely not implemented

@@ -31,10 +31,10 @@ private:
       QString balise;
       QString value;
    };
-   
+
    std::vector<balisestruct> m_list;
    neurolib::XMLReader* m_reader;
-   neurolib::XMLWriter* m_writer;   
+   neurolib::XMLWriter* m_writer;
 };
 
 #endif

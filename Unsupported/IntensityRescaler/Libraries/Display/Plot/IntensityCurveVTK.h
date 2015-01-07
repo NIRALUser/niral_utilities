@@ -8,8 +8,8 @@
   Copyright (c) 2003 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #ifndef __IntensityCurveVTK_h_
@@ -25,7 +25,7 @@
  * \class IntensityCurveVTK
  * \brief The spline intensity mapping based on the VTK spline class.
  */
-class ITK_EXPORT IntensityCurveVTK : public IntensityCurveInterface 
+class ITK_EXPORT IntensityCurveVTK : public IntensityCurveInterface
 {
 public:
 

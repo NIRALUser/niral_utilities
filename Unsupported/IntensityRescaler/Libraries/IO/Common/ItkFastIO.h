@@ -25,7 +25,7 @@ class FTIO
   typedef itk::AnalyzeImageIO AnalyzeIOType;
   typedef typename ImageType::Pointer ImagePointer;
 
-  
+
   void SetFilename(const char * name);
   void SetImage2Write(ImagePointer image);
   int Write( void );
@@ -33,7 +33,7 @@ class FTIO
   ImagePointer GetITKImage( void );
 
   FTIO();
-  ~FTIO(); 
+  ~FTIO();
 
   protected:
 

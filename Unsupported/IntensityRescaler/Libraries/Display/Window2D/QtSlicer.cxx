@@ -19,7 +19,7 @@ QtSlicer::QtSlicer( QWidget* parent,  const char* name, bool modal, WFlags fl )
 {
 }
 
-/**  
+/**
  *  Destroys the object and frees any allocated resources
  */
 QtSlicer::~QtSlicer()
@@ -61,7 +61,7 @@ void QtSlicer::SetInputImage(ImageType * newImData)
   this->IntensityMax->setMinValue( static_cast<int>( this->OpenGlWindow->GetIntensityMin() ));
   this->IntensityMax->setMaxValue( static_cast<int>( this->OpenGlWindow->GetIntensityMax() ));
   this->IntensityMax->setValue( static_cast<int>( this->OpenGlWindow->GetIntensityMax() ));
-  
+
   char* tempchar = new char[20];
   sprintf(tempchar,"%.0f",this->OpenGlWindow->GetIntensityMin());
   this->IntensityMinDisplay->setText(tempchar);
@@ -118,11 +118,11 @@ void QtSlicer::LoadImg()
 
 
   ReaderType::Pointer reader = ReaderType::New();
-  
+
   QString s = QFileDialog::getOpenFileName(".","Images (*.*)", 0, "open file dialog","Chose an image filename" );
 
   reader->SetFileName( s.latin1() );
-  
+
   std::cout << "loading image " << s.latin1() << " ... ";
   try
     {
@@ -134,7 +134,7 @@ void QtSlicer::LoadImg()
     std::cerr << e << std::endl;
     return;
     }
- 
+
    SetInputImage( reader->GetOutput() );
 }
 
@@ -143,11 +143,11 @@ void QtSlicer::LoadSeg()
   typedef itk::Image<unsigned short, 3>      OverlayType;
     typedef itk::ImageFileReader<OverlayType>   OverlayReaderType;
    OverlayReaderType::Pointer reader2 = OverlayReaderType::New();
-  
+
  QString s = QFileDialog::getOpenFileName(".","Images (*.*)", 0, "open file dialog","Chose an image filename" );
 
   reader2->SetFileName( s.latin1() );
-  
+
   std::cout << "loading image " << s.latin1() << " ... ";
   try
     {

@@ -1,22 +1,22 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-CMAKE_POLICY(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
+cmake_policy(VERSION 2.8)
 
-PROJECT(ImageStat)
+project(ImageStat)
 
-FIND_PACKAGE(ITK REQUIRED)
-IF (ITK_FOUND)
-   INCLUDE(${ITK_USE_FILE})
-ELSE(ITK_FOUND)
-   MESSAGE(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-ENDIF (ITK_FOUND)
+find_package(ITK REQUIRED)
+if(ITK_FOUND)
+   include(${ITK_USE_FILE})
+else()
+   message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
+endif()
 
-ADD_EXECUTABLE( ImageStat ImageStat.cc)
-TARGET_LINK_LIBRARIES( ImageStat ${ITK_LIBRARIES} )
+add_executable( ImageStat ImageStat.cc)
+target_link_libraries( ImageStat ${ITK_LIBRARIES} )
 
 if( NOT ${ITK_USE_REVIEW_STATISTICS} )
   message(FATAL_ERROR "ITK has been compiled with ITK_USE_REVIEW_STATISTICS
 set to OFF. ImageStat will fail to compile if this option is OFF. Please
 recompile ITK with this option set to ON to compile ImageStat")
-endif( NOT ${ITK_USE_REVIEW_STATISTICS} )
+endif()
 
 install( TARGETS ImageStat RUNTIME DESTINATION bin )

@@ -12,18 +12,18 @@ MeshIO::MeshIO ()
 
 MeshIO::~MeshIO ()
 {
-  if ( this->m_vtkPolyDataReader ) 
+  if ( this->m_vtkPolyDataReader )
     this->m_vtkPolyDataReader->Delete () ;
-  if ( this->m_vtkFSSurfaceReader ) 
+  if ( this->m_vtkFSSurfaceReader )
     this->m_vtkFSSurfaceReader->Delete () ;
   /*if ( this->m_attributes )
     m_attributes->Delete () ;
-  if ( this->m_mesh ) 
+  if ( this->m_mesh )
     m_mesh->Delete () ;
   */
 }
 
-void MeshIO::ProcessFileName ( std::string fileName ) 
+void MeshIO::ProcessFileName ( std::string fileName )
 {
   this->m_fileName = fileName ;
   this->m_fileExtension = "" ;
@@ -52,7 +52,7 @@ bool MeshIO::ReadMesh ()
 {
   if ( this->m_fileExtension.compare ( ".vtk" ) == 0 )
     {
-      if ( this->m_vtkPolyDataReader ) 
+      if ( this->m_vtkPolyDataReader )
 	this->m_vtkPolyDataReader->Delete () ;
       this->m_vtkPolyDataReader = vtkPolyDataReader::New() ;
       this->m_vtkPolyDataReader->SetFileName ( this->m_fileName.c_str() ) ;
@@ -60,7 +60,7 @@ bool MeshIO::ReadMesh ()
       this->m_mesh = this->m_vtkPolyDataReader->GetOutput () ;
       return true ;
     }
-  else if ( this->m_fileExtension.compare ( ".meta" ) == 0 ) 
+  else if ( this->m_fileExtension.compare ( ".meta" ) == 0 )
     {
       typedef itk::DefaultDynamicMeshTraits < double, 3, 3, double, double > MeshTraitsType ;
       typedef itk::Mesh < double, 3, MeshTraitsType > itkMeshType ;
@@ -80,7 +80,7 @@ bool MeshIO::ReadMesh ()
       return true ;
     }
 
-  else if ( ( this->m_fileExtension.compare ( ".white" ) == 0 )  
+  else if ( ( this->m_fileExtension.compare ( ".white" ) == 0 )
 	    || ( this->m_fileExtension.compare ( ".inflated" ) == 0 )
 	    || ( this->m_fileExtension.compare ( ".orig" ) == 0 )
 	    || ( this->m_fileExtension.compare ( ".pial" ) == 0 )
@@ -98,7 +98,7 @@ bool MeshIO::ReadMesh ()
   return false ;
 }
 
-bool MeshIO::ReadAttributes () 
+bool MeshIO::ReadAttributes ()
 {
   if ( this->m_fileExtension.compare ( ".txt" ) == 0 )
     {
@@ -110,9 +110,9 @@ bool MeshIO::ReadAttributes ()
       delete ( attributeReader ) ;
       return true ;
     }
-  else if ( ( this->m_fileExtension.compare ( ".sulc" ) == 0 ) 
-	    || ( this->m_fileExtension.compare ( ".curv" ) == 0 ) 
-	    || ( this->m_fileExtension.compare ( ".area" ) == 0 ) 
+  else if ( ( this->m_fileExtension.compare ( ".sulc" ) == 0 )
+	    || ( this->m_fileExtension.compare ( ".curv" ) == 0 )
+	    || ( this->m_fileExtension.compare ( ".area" ) == 0 )
 	    || ( this->m_fileExtension.compare ( ".thickness" ) == 0 ) )
     {
       // FreeSurfer style scalars
@@ -120,7 +120,7 @@ bool MeshIO::ReadAttributes ()
       vtkFSSurfaceScalarReader *fsScalarReader = vtkFSSurfaceScalarReader::New () ;
       fsScalarReader->SetFileName ( this->m_fileName.c_str() ) ;
       fsScalarReader->SetOutput ( this->m_attributes ) ;
-      fsScalarReader->ReadFSScalars() ; 
+      fsScalarReader->ReadFSScalars() ;
       this->m_attributes = fsScalarReader->GetOutput () ;
       fsScalarReader->Delete () ;
       return true ;
@@ -129,7 +129,7 @@ bool MeshIO::ReadAttributes ()
   return false ;
 }
 
-void MeshIO::WriteAttributes ( vtkFloatArray *attributes, std::string fileName ) 
+void MeshIO::WriteAttributes ( vtkFloatArray *attributes, std::string fileName )
 {
   this->ProcessFileName ( fileName ) ;
 

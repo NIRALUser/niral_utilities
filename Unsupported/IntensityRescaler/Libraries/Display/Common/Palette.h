@@ -14,8 +14,8 @@ public:
     int b;
   };
 
-  enum PaletteType {PALETTE_GRAY, 
-                    PALETTE_RGB, 
+  enum PaletteType {PALETTE_GRAY,
+                    PALETTE_RGB,
                     PALETTE_RB,
                     PALETTE_MATLAB};
 
@@ -111,7 +111,7 @@ public:
             green = 0;
 
 
-      //red 
+      //red
       if ((i>24576) && (i<40960))
         red = 4*(i-24576);
       else
@@ -136,7 +136,7 @@ public:
   }
 
 };
-  
+
 
 #endif
 

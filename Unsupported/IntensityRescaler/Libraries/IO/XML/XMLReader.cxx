@@ -18,9 +18,9 @@ int XMLReader::Open(const char* filename)
    networkfile.open(filename,ifstream::binary);
    if (networkfile == NULL) return -1;
 
-   
+
    return 0;
-} 
+}
 
 QString XMLReader::GetValue()
 {
@@ -34,7 +34,7 @@ QString XMLReader::GetBalise()
    QString line = data;
    int begin_balise_start = line.find("<");
    int begin_balise_end =  line.find(">",begin_balise_start+1);
-   
+
    int end_balise_begin = line.find("<",begin_balise_end+1);
 
    m_balise = line.mid(begin_balise_start+1,begin_balise_end-begin_balise_start-1);

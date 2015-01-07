@@ -10,8 +10,8 @@
  * Update  :   1. Created the class (06-24-10)
  * Copyright (c) Neuro Image Research and Analysis Lab.@UNC All rights reserved.
  *
- * This software is distributed WITHOUT ANY WARRANTY; without even 
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * This software is distributed WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE.
  *
 =========================================================================*/
@@ -40,49 +40,49 @@ const char *muscleName[] = { "MUSCLES", "CRAN_SART", "REC_FEM", "BIC_FEM", "GRAC
 //////////////////////////////////////////////////////////////////////////
 class TextureFeatureCal : public virtual DMDData
 {
-    private:           
+    private:
 //        float meanCran, meanRect, meanSemit, meanAdductor, meanGracilis, meanBic, meanSemimem, meanVaslat, meanVasmed, meanVasint, meanCaud, sdCran, sdRect, sdSemit, sdAdductor, sdGracilis, sdBic, sdSemimem, sdVaslat, sdVasmed, sdVasint, sdCaud, volCran, volRect, volSemit, volAdductor, volGracilis, volBic, volSemimem, volVaslat, volVasmed, volVasint, volCaud ;
         float meanCran, meanRect, meanSemit, meanAdductor, meanGracilis, meanBic, meanSemimem, meanVaslat, meanVasmed, meanVasint, meanCaud, sdCran, sdRect, sdSemit, sdAdductor, sdGracilis, sdBic, sdSemimem, sdVaslat, sdVasmed, sdVasint, sdCaud, skewCran, skewRect, skewSemit, skewAdductor, skewGracilis, skewBic, skewSemimem, skewVaslat, skewVasmed, skewVasint, skewCaud, kortCran, kortRect, kortSemit, kortAdductor, kortGracilis, kortBic, kortSemimem, kortVaslat, kortVasmed, kortVasint, kortCaud, volCran, volRect, volSemit, volAdductor, volGracilis, volBic, volSemimem, volVaslat, volVasmed, volVasint, volCaud, entropyCran, entropyRect, entropySemit, entropyAdductor, entropyGracilis, entropyBic, entropySemimem, entropyVaslat, entropyVasmed, entropyVasint, entropyCaud;
         float muscleVolume[NUMBER_OF_MUSCLE];
         int labelMin, labelMax;
-    public:   
-       // TextureFeatureCal():meanCran(0), meanRect(0), meanSemit(0), meanAdductor(0), meanGracilis(0), meanBic(0), meanSemimem(0), meanVaslat(0), meanVasmed(0), meanVasint(0), meanCaud(0), sdCran(0), sdRect(0), sdSemit(0), sdAdductor(0), sdGracilis(0), sdBic(0), sdSemimem(0), sdVaslat(0), sdVasmed(0), sdVasint(0), sdCaud(0), volCran(0), volRect(0), volSemit(0), volAdductor(0), volGracilis(0), volBic(0), volSemimem(0), volVaslat(0), volVasmed(0), volVasint(0), volCaud(0) {                 
+    public:
+       // TextureFeatureCal():meanCran(0), meanRect(0), meanSemit(0), meanAdductor(0), meanGracilis(0), meanBic(0), meanSemimem(0), meanVaslat(0), meanVasmed(0), meanVasint(0), meanCaud(0), sdCran(0), sdRect(0), sdSemit(0), sdAdductor(0), sdGracilis(0), sdBic(0), sdSemimem(0), sdVaslat(0), sdVasmed(0), sdVasint(0), sdCaud(0), volCran(0), volRect(0), volSemit(0), volAdductor(0), volGracilis(0), volBic(0), volSemimem(0), volVaslat(0), volVasmed(0), volVasint(0), volCaud(0) {
         TextureFeatureCal():meanCran(0), meanRect(0), meanSemit(0), meanAdductor(0), meanGracilis(0), meanBic(0), meanSemimem(0), meanVaslat(0), meanVasmed(0), meanVasint(0), meanCaud(0), sdCran(0), sdRect(0), sdSemit(0), sdAdductor(0), sdGracilis(0), sdBic(0), sdSemimem(0), sdVaslat(0), sdVasmed(0), sdVasint(0), sdCaud(0), skewCran(0), skewRect(0), skewSemit(0), skewAdductor(0), skewGracilis(0), skewBic(0), skewSemimem(0), skewVaslat(0), skewVasmed(0), skewVasint(0), skewCaud(0), kortCran(0), kortRect(0), kortSemit(0), kortAdductor(0), kortGracilis(0), kortBic(0), kortSemimem(0), kortVaslat(0), kortVasmed(0), kortVasint(0), kortCaud(0), volCran(0), volRect(0), volSemit(0), volAdductor(0), volGracilis(0), volBic(0), volSemimem(0), volVaslat(0), volVasmed(0), volVasint(0), volCaud(0), entropyCran(0), entropyRect(0), entropySemit(0), entropyAdductor(0), entropyGracilis(0), entropyBic(0), entropySemimem(0), entropyVaslat(0), entropyVasmed(0), entropyVasint(0), entropyCaud(0), labelMin(0), labelMax(0) {
-                  
+
 	}
         typedef itk::ImageRegionConstIterator< DMDData::OrientedImageType > ConstIteratorType;
         void histogramFeat3DROI( DMDData::OrientedImageType::Pointer mask, DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, float voxelSize, std::string featurefilename, bool, int, int);
         void runlengthFeat( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename);
         void runlengthFeat3D( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType);
         void runlengthFeat2DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType);
-        void runlengthFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType, int, int);        
+        void runlengthFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType, int, int);
         void calRunLengthFeatures(DMDData::FITKType &SRE, DMDData::FITKType &LRE, DMDData::FITKType &GLN, DMDData::FITKType &RLN, DMDData::FITKType &RP, FITKType np, int runlengthmatrix[RUN_LENGTH_LEVEL][RUN_INTENSITY_LEVEL]);
-        void cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType voxelSize, int, int);        
-        void calCooccurrenceFeatures( DMDData::FITKType &EntropyTmp, DMDData::FITKType &EnergyTmp, DMDData::FITKType &ContrastTmp, DMDData::FITKType &HomoGeneityTmp, float  cooccurrencematrix[CO_OCCURRENCE_LEVEL][CO_OCCURRENCE_LEVEL]);  
- 
-}; 
+        void cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType voxelSize, int, int);
+        void calCooccurrenceFeatures( DMDData::FITKType &EntropyTmp, DMDData::FITKType &EnergyTmp, DMDData::FITKType &ContrastTmp, DMDData::FITKType &HomoGeneityTmp, float  cooccurrencematrix[CO_OCCURRENCE_LEVEL][CO_OCCURRENCE_LEVEL]);
+
+};
 //////////////////////////////////////////////////////////////////////////
 void TextureFeatureCal::calRunLengthFeatures(DMDData::FITKType &SRE, DMDData::FITKType &LRE, DMDData::FITKType &GLN, DMDData::FITKType &RLN, DMDData::FITKType &RP, FITKType np, int runlengthmatrix[RUN_LENGTH_LEVEL][RUN_INTENSITY_LEVEL])
 {
     // calculate run length matrix features
-    float nr = 0, pr = 0, pg = 0;  // pr: number of runs with same length but different intensity; pg: number of runs with same intensity but different length; nr: total number of runs. 
+    float nr = 0, pr = 0, pg = 0;  // pr: number of runs with same length but different intensity; pg: number of runs with same intensity but different length; nr: total number of runs.
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrix[j][i];
              nr += runlengthmatrix[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrix[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -104,22 +104,22 @@ void TextureFeatureCal::calRunLengthFeatures(DMDData::FITKType &SRE, DMDData::FI
    /*
     std::string featurefilename = "../data/voi.txt" ;
     std::ofstream efile( featurefilename.c_str() , std::ios::app );
-       
+
     efile << SRE << "  " << LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
 
     efile.close();
 */
 }
 //////////////////////////////////////////////////////////////////////////
-void TextureFeatureCal::calCooccurrenceFeatures( DMDData::FITKType &EntropyTmp, DMDData::FITKType &EnergyTmp, DMDData::FITKType &ContrastTmp, DMDData::FITKType &HomoGeneityTmp, float  cooccurrencematrix[CO_OCCURRENCE_LEVEL][CO_OCCURRENCE_LEVEL])  
+void TextureFeatureCal::calCooccurrenceFeatures( DMDData::FITKType &EntropyTmp, DMDData::FITKType &EnergyTmp, DMDData::FITKType &ContrastTmp, DMDData::FITKType &HomoGeneityTmp, float  cooccurrencematrix[CO_OCCURRENCE_LEVEL][CO_OCCURRENCE_LEVEL])
 {
     // calculate run length matrix features
-    EntropyTmp = 0; 
-    EnergyTmp = 0; 
-    ContrastTmp = 0; 
-    HomoGeneityTmp = 0; 
-    for (int j = 0; j < CO_OCCURRENCE_LEVEL; j++) { 
-        for (int i = 0; i < CO_OCCURRENCE_LEVEL; i++) { 
+    EntropyTmp = 0;
+    EnergyTmp = 0;
+    ContrastTmp = 0;
+    HomoGeneityTmp = 0;
+    for (int j = 0; j < CO_OCCURRENCE_LEVEL; j++) {
+        for (int i = 0; i < CO_OCCURRENCE_LEVEL; i++) {
            if(cooccurrencematrix[j][i]){
                cooccurrencematrix[j][i] /= (CO_OCCURRENCE_LEVEL * CO_OCCURRENCE_LEVEL);
                EntropyTmp += (-cooccurrencematrix[j][i] * log (cooccurrencematrix[j][i]));
@@ -129,7 +129,7 @@ void TextureFeatureCal::calCooccurrenceFeatures( DMDData::FITKType &EntropyTmp, 
                //    std::cout << EnergyTmp << "  " << cooccurrencematrix[j][i] << std::endl;
                 //   getchar();
           //     }
- 
+
                ContrastTmp += ((i - j) * (i - j) * cooccurrencematrix[j][i]);
                HomoGeneityTmp += (cooccurrencematrix[j][i] / (1 + abs(i - j)));
            }
@@ -154,8 +154,8 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
     float SRE = 0, LRE = 0, GLN = 0, RLN = 0, RP = 0;  // SRE = Short Run Emphasis, LRE = Long Run Emphasis, GLN = Gray Level Nonuniform, RLN = Run Length Nonuniform, RP = Run Percentage
     float npRecFem = 0, npSemit = 0, npCranSart = 0, npBicFem = 0, npGracilis = 0, npAdductor = 0, npSemiMem = 0, npVasLat = 0, npVasMed = 0, npVasInt = 0, npCaudSart = 0;
 
-    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) { 
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) {
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
             runlengthmatrixRecFem[j][i] = 0;
             runlengthmatrixSemit[j][i] = 0;
             runlengthmatrixCranSart[j][i] = 0;
@@ -171,7 +171,7 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
     }
 
     ddata.imageInitialize ( data, rescaledData );
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
 
@@ -183,7 +183,7 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
 
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = data->GetLargestPossibleRegion().GetSize();
-    DMDData::OrientedImageType::IndexType  index;    
+    DMDData::OrientedImageType::IndexType  index;
     int startRunRecFem = -1, runLengthRecFem = 0, startRunSemit = -1, runLengthSemit = 0, startRunCranSart = -1, runLengthCranSart = 0, startRunBicFem = -1, runLengthBicFem = 0, startRunGracilis = -1, runLengthGracilis = 0, startRunAdductor = -1, runLengthAdductor = 0, startRunSemiMem = -1, runLengthSemiMem = 0, startRunVasLat = -1, runLengthVasLat = 0, startRunVasMed = -1, runLengthVasMed = 0, startRunVasInt = -1, runLengthVasInt = 0, startRunCaudSart = -1, runLengthCaudSart = 0;
     //x direction
     for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
@@ -202,21 +202,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                                runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                             if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                                startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                             startRunRecFem = -1;
                             runLengthRecFem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunRecFem != -1){
                         if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                            runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                         if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                            startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                         startRunRecFem = -1;
                         runLengthRecFem = 0;
@@ -234,21 +234,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                                runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                                runLengthSemit = RUN_LENGTH_LEVEL - 1;
                             if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                                startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                                startRunSemit = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                             startRunSemit = -1;
                             runLengthSemit = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunSemit != -1){
                         if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                            runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                            runLengthSemit = RUN_LENGTH_LEVEL - 1;
                         if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                            startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                            startRunSemit = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                         startRunSemit = -1;
                         runLengthSemit = 0;
@@ -266,21 +266,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthCranSart > RUN_LENGTH_LEVEL - 1)
-                                runLengthCranSart = RUN_LENGTH_LEVEL - 1; 
+                                runLengthCranSart = RUN_LENGTH_LEVEL - 1;
                             if(startRunCranSart > RUN_INTENSITY_LEVEL - 1)
-                                startRunCranSart = RUN_INTENSITY_LEVEL - 1; 
+                                startRunCranSart = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixCranSart[runLengthCranSart][startRunCranSart]++;
                             startRunCranSart = -1;
                             runLengthCranSart = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunCaudSart != -1){
                         if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                         if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                         startRunCaudSart = -1;
                         runLengthCaudSart = 0;
@@ -298,21 +298,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                                runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                             if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                                startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
                             startRunBicFem = -1;
                             runLengthBicFem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunBicFem != -1){
                         if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                            runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                         if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                            startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
                         startRunBicFem = -1;
                         runLengthBicFem = 0;
@@ -330,21 +330,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                                runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                                runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                             if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                                startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                                startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
                             startRunGracilis = -1;
                             runLengthGracilis = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunGracilis != -1){
                         if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                            runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                            runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                         if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                            startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                            startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
                         startRunGracilis = -1;
                         runLengthGracilis = 0;
@@ -362,21 +362,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                                runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                                runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                             if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                                startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                                startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                             startRunAdductor = -1;
                             runLengthAdductor = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunAdductor != -1){
                         if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                            runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                            runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                         if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                            startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                            startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                         startRunAdductor = -1;
                         runLengthAdductor = 0;
@@ -394,21 +394,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                                runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                             if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                                startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                             startRunSemiMem = -1;
                             runLengthSemiMem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunSemiMem != -1){
                         if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                            runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                         if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                            startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                         startRunSemiMem = -1;
                         runLengthSemiMem = 0;
@@ -426,21 +426,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
                             startRunVasLat = -1;
                             runLengthVasLat = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasLat != -1){
                         if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
                         startRunVasLat = -1;
                         runLengthVasLat = 0;
@@ -458,21 +458,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                             startRunVasMed = -1;
                             runLengthVasMed = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasMed != -1){
                         if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                         startRunVasMed = -1;
                         runLengthVasMed = 0;
@@ -490,21 +490,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                             startRunVasInt = -1;
                             runLengthVasInt = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasInt != -1){
                         if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                         startRunVasInt = -1;
                         runLengthVasInt = 0;
@@ -522,21 +522,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                                runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                                runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                             if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                                startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                                startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                             startRunCaudSart = -1;
                             runLengthCaudSart = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunCaudSart != -1){
                         if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                         if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                         startRunCaudSart = -1;
                         runLengthCaudSart = 0;
@@ -544,7 +544,7 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                 }
             }
         }
-    } 
+    }
     //y direction
     for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
         for(index[0] = 0; index[0] < size[0]; index[0]++) {
@@ -560,21 +560,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                                runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                             if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                                startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                             startRunRecFem = -1;
                             runLengthRecFem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunRecFem != -1){
                         if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                            runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                         if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                            startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                         startRunRecFem = -1;
                         runLengthRecFem = 0;
@@ -591,21 +591,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                                runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                                runLengthSemit = RUN_LENGTH_LEVEL - 1;
                             if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                                startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                                startRunSemit = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                             startRunSemit = -1;
                             runLengthSemit = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunSemit != -1){
                         if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                            runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                            runLengthSemit = RUN_LENGTH_LEVEL - 1;
                         if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                            startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                            startRunSemit = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                         startRunSemit = -1;
                         runLengthSemit = 0;
@@ -622,21 +622,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthCranSart > RUN_LENGTH_LEVEL - 1)
-                                runLengthCranSart = RUN_LENGTH_LEVEL - 1; 
+                                runLengthCranSart = RUN_LENGTH_LEVEL - 1;
                             if(startRunCranSart > RUN_INTENSITY_LEVEL - 1)
-                                startRunCranSart = RUN_INTENSITY_LEVEL - 1; 
+                                startRunCranSart = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixCranSart[runLengthCranSart][startRunCranSart]++;
                             startRunCranSart = -1;
                             runLengthCranSart = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunCaudSart != -1){
                         if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                         if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                         startRunCaudSart = -1;
                         runLengthCaudSart = 0;
@@ -653,21 +653,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                                runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                             if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                                startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
                             startRunBicFem = -1;
                             runLengthBicFem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunBicFem != -1){
                         if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                            runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                         if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                            startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
                         startRunBicFem = -1;
                         runLengthBicFem = 0;
@@ -684,21 +684,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                                runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                                runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                             if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                                startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                                startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
                             startRunGracilis = -1;
                             runLengthGracilis = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunGracilis != -1){
                         if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                            runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                            runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                         if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                            startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                            startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
                         startRunGracilis = -1;
                         runLengthGracilis = 0;
@@ -715,21 +715,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                                runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                                runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                             if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                                startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                                startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                             startRunAdductor = -1;
                             runLengthAdductor = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunAdductor != -1){
                         if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                            runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                            runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                         if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                            startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                            startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                         startRunAdductor = -1;
                         runLengthAdductor = 0;
@@ -746,21 +746,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                                runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                             if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                                startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                             startRunSemiMem = -1;
                             runLengthSemiMem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunSemiMem != -1){
                         if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                            runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                         if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                            startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                         startRunSemiMem = -1;
                         runLengthSemiMem = 0;
@@ -777,21 +777,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
                             startRunVasLat = -1;
                             runLengthVasLat = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasLat != -1){
                         if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
                         startRunVasLat = -1;
                         runLengthVasLat = 0;
@@ -808,21 +808,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                             startRunVasMed = -1;
                             runLengthVasMed = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasMed != -1){
                         if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                         startRunVasMed = -1;
                         runLengthVasMed = 0;
@@ -839,21 +839,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                             startRunVasInt = -1;
                             runLengthVasInt = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasInt != -1){
                         if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                         startRunVasInt = -1;
                         runLengthVasInt = 0;
@@ -870,21 +870,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                                runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                                runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                             if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                                startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                                startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                             startRunCaudSart = -1;
                             runLengthCaudSart = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunCaudSart != -1){
                         if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                         if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                         startRunCaudSart = -1;
                         runLengthCaudSart = 0;
@@ -908,21 +908,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                                runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                             if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                                startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                             startRunRecFem = -1;
                             runLengthRecFem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunRecFem != -1){
                         if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                            runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                         if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                            startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                         startRunRecFem = -1;
                         runLengthRecFem = 0;
@@ -939,21 +939,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                                runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                                runLengthSemit = RUN_LENGTH_LEVEL - 1;
                             if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                                startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                                startRunSemit = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                             startRunSemit = -1;
                             runLengthSemit = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunSemit != -1){
                         if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                            runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                            runLengthSemit = RUN_LENGTH_LEVEL - 1;
                         if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                            startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                            startRunSemit = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                         startRunSemit = -1;
                         runLengthSemit = 0;
@@ -970,21 +970,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthCranSart > RUN_LENGTH_LEVEL - 1)
-                                runLengthCranSart = RUN_LENGTH_LEVEL - 1; 
+                                runLengthCranSart = RUN_LENGTH_LEVEL - 1;
                             if(startRunCranSart > RUN_INTENSITY_LEVEL - 1)
-                                startRunCranSart = RUN_INTENSITY_LEVEL - 1; 
+                                startRunCranSart = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixCranSart[runLengthCranSart][startRunCranSart]++;
                             startRunCranSart = -1;
                             runLengthCranSart = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunCaudSart != -1){
                         if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                         if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                         startRunCaudSart = -1;
                         runLengthCaudSart = 0;
@@ -1001,21 +1001,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                                runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                             if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                                startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
                             startRunBicFem = -1;
                             runLengthBicFem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunBicFem != -1){
                         if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                            runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                         if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                            startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
                         startRunBicFem = -1;
                         runLengthBicFem = 0;
@@ -1032,21 +1032,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                                runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                                runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                             if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                                startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                                startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
                             startRunGracilis = -1;
                             runLengthGracilis = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunGracilis != -1){
                         if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                            runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                            runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                         if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                            startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                            startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
                         startRunGracilis = -1;
                         runLengthGracilis = 0;
@@ -1063,21 +1063,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                                runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                                runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                             if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                                startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                                startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                             startRunAdductor = -1;
                             runLengthAdductor = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunAdductor != -1){
                         if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                            runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                            runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                         if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                            startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                            startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                         startRunAdductor = -1;
                         runLengthAdductor = 0;
@@ -1094,21 +1094,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                                runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                             if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                                startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                             startRunSemiMem = -1;
                             runLengthSemiMem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunSemiMem != -1){
                         if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                            runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                         if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                            startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                         startRunSemiMem = -1;
                         runLengthSemiMem = 0;
@@ -1125,21 +1125,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
                             startRunVasLat = -1;
                             runLengthVasLat = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasLat != -1){
                         if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
                         startRunVasLat = -1;
                         runLengthVasLat = 0;
@@ -1156,21 +1156,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                             startRunVasMed = -1;
                             runLengthVasMed = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasMed != -1){
                         if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                         startRunVasMed = -1;
                         runLengthVasMed = 0;
@@ -1187,21 +1187,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                             startRunVasInt = -1;
                             runLengthVasInt = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasInt != -1){
                         if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                         startRunVasInt = -1;
                         runLengthVasInt = 0;
@@ -1218,21 +1218,21 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
                         }
                         else {
                             if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                                runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                                runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                             if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                                startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                                startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                             startRunCaudSart = -1;
                             runLengthCaudSart = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunCaudSart != -1){
                         if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                         if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                            startRunCaudSart = RUN_INTENSITY_LEVEL -1; 
+                            startRunCaudSart = RUN_INTENSITY_LEVEL -1;
                         runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                         startRunCaudSart = -1;
                         runLengthCaudSart = 0;
@@ -1243,28 +1243,28 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
     }
     // calculate run length matrix features
     std::ofstream efile( featurefilename.c_str() , std::ios::app );
-    float nr = 0, pr = 0, pg = 0; 
+    float nr = 0, pr = 0, pg = 0;
     // RefFem
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixRecFem[j][i];
              nr += runlengthmatrixRecFem[j][i];
  //            std::cout <<  runlengthmatrixRecFem[j][i] << "  " ;
         }
  //       std::cout << "\n";
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
 //    getchar();
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixRecFem[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1285,22 +1285,22 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
     efile << "RecFem  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // Semit
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixSemit[j][i];
              nr += runlengthmatrixSemit[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixSemit[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1321,22 +1321,22 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
     efile << "Semit  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // CranSart
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixCranSart[j][i];
              nr += runlengthmatrixCranSart[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixCranSart[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1357,22 +1357,22 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
     efile << "CranSart  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // BicFem
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixBicFem[j][i];
              nr += runlengthmatrixBicFem[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixBicFem[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1393,22 +1393,22 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
     efile << "BicFem  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // Gracilis
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixGracilis[j][i];
              nr += runlengthmatrixGracilis[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixGracilis[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1429,22 +1429,22 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
     efile << "Gracilis  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // Adductor
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixAdductor[j][i];
              nr += runlengthmatrixAdductor[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixAdductor[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1465,22 +1465,22 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
     efile << "Adductor  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // SemiMem
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixSemiMem[j][i];
              nr += runlengthmatrixSemiMem[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixSemiMem[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1501,22 +1501,22 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
     efile << "SemiMem  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // VasLat
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixVasLat[j][i];
              nr += runlengthmatrixVasLat[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixVasLat[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1537,22 +1537,22 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
     efile << "VasLat  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // VasMed
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixVasMed[j][i];
              nr += runlengthmatrixVasMed[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixVasMed[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1573,22 +1573,22 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
     efile << "VasMed  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // VasInt
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixVasInt[j][i];
              nr += runlengthmatrixVasInt[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixVasInt[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1609,22 +1609,22 @@ void TextureFeatureCal::runlengthFeat( DMDData::OrientedImageType::Pointer erode
     efile << "VasInt  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // CaudSart
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixCaudSart[j][i];
              nr += runlengthmatrixCaudSart[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixCaudSart[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1658,8 +1658,8 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
     float npRecFem = 0, npSemit = 0, npCranSart = 0, npBicFem = 0, npGracilis = 0, npAdductor = 0, npSemiMem = 0, npVasLat = 0, npVasMed = 0, npVasInt = 0, npCaudSart = 0;
     double imageVolume = 0;
 
-    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) { 
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) {
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
             runlengthmatrixRecFem[j][i] = 0;
             runlengthmatrixSemit[j][i] = 0;
             runlengthmatrixCranSart[j][i] = 0;
@@ -1687,7 +1687,7 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
     ddata.imageInitialize ( data, rescaledData_VAS_INT );
     ddata.imageInitialize ( data, rescaledData_CAUD_SART );
 
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
 
@@ -1698,7 +1698,7 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
         int hisTmp = constDataIterator.Get();
         if (hisTmp >= HISTOGRAM_LIMIT)
             hisTmp = HISTOGRAM_LIMIT - 1;
-        histogram[hisTmp]++; 
+        histogram[hisTmp]++;
         if(hisTmp > 0)
             imageVolume++;
         if (constDataIterator.Get() < intensityMin)
@@ -1752,7 +1752,7 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
     }
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = data->GetLargestPossibleRegion().GetSize();
-    DMDData::OrientedImageType::IndexType  index;    
+    DMDData::OrientedImageType::IndexType  index;
     int upperBound_REC_FEM = 0, lowerBound_REC_FEM = HISTOGRAM_LIMIT, upperBound_SEMIT = 0, lowerBound_SEMIT = HISTOGRAM_LIMIT, upperBound_CRAN_SART = 0, lowerBound_CRAN_SART = HISTOGRAM_LIMIT, upperBound_BIC_FEM = 0, lowerBound_BIC_FEM = HISTOGRAM_LIMIT, upperBound_GRACILIS = 0, lowerBound_GRACILIS = HISTOGRAM_LIMIT, upperBound_ADDUCTOR = 0, lowerBound_ADDUCTOR = HISTOGRAM_LIMIT, upperBound_SEMI_MEM = 0, lowerBound_SEMI_MEM = HISTOGRAM_LIMIT, upperBound_VAS_LAT = 0, lowerBound_VAS_LAT = HISTOGRAM_LIMIT, upperBound_VAS_MED = 0, lowerBound_VAS_MED = HISTOGRAM_LIMIT, upperBound_VAS_INT = 0, lowerBound_VAS_INT = HISTOGRAM_LIMIT, upperBound_CAUD_SART = 0, lowerBound_CAUD_SART = HISTOGRAM_LIMIT;
     int startRunRecFem = -1, runLengthRecFem = 0, startRunSemit = -1, runLengthSemit = 0, startRunCranSart = -1, runLengthCranSart = 0, startRunBicFem = -1, runLengthBicFem = 0, startRunGracilis = -1, runLengthGracilis = 0, startRunAdductor = -1, runLengthAdductor = 0, startRunSemiMem = -1, runLengthSemiMem = 0, startRunVasLat = -1, runLengthVasLat = 0, startRunVasMed = -1, runLengthVasMed = 0, startRunVasInt = -1, runLengthVasInt = 0, startRunCaudSart = -1, runLengthCaudSart = 0;
     // establish rescaled image for each muscle
@@ -1888,7 +1888,7 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
         }
     }
     std::cout << "upper bound: " << upperBound_REC_FEM << "  lower bound: " << lowerBound_REC_FEM << std::endl;
-    // establish run length matrix 
+    // establish run length matrix
     for (int i = lowerBound_REC_FEM; i <= upperBound_REC_FEM; i++) {
         int objCount = 0;
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
@@ -1904,13 +1904,13 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
             }
         }
         objCount = connectedComponentLabeling (rescaledData_REC_FEM);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_REC_FEM->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -1953,13 +1953,13 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
             }
         }
         objCount = connectedComponentLabeling (rescaledData_SEMIT);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_SEMIT->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -1995,13 +1995,13 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
             }
         }
         objCount = connectedComponentLabeling (rescaledData_BIC_FEM);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_BIC_FEM->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2037,13 +2037,13 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
             }
         }
         objCount = connectedComponentLabeling (rescaledData_CRAN_SART);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_CRAN_SART->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2079,13 +2079,13 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
             }
         }
         objCount = connectedComponentLabeling (rescaledData_GRACILIS);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_GRACILIS->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2121,13 +2121,13 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
             }
         }
         objCount = connectedComponentLabeling (rescaledData_ADDUCTOR);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_ADDUCTOR->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2163,13 +2163,13 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
             }
         }
         objCount = connectedComponentLabeling (rescaledData_SEMI_MEM);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_SEMI_MEM->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2205,13 +2205,13 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
             }
         }
         objCount = connectedComponentLabeling (rescaledData_VAS_LAT);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_VAS_LAT->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2247,13 +2247,13 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
             }
         }
         objCount = connectedComponentLabeling (rescaledData_VAS_MED);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_VAS_MED->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2289,13 +2289,13 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
             }
         }
         objCount = connectedComponentLabeling (rescaledData_VAS_INT);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_VAS_INT->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2331,13 +2331,13 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
             }
         }
         objCount = connectedComponentLabeling (rescaledData_CAUD_SART);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_CAUD_SART->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2371,9 +2371,9 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
                     startRunRecFem = rescaledData_REC_FEM->GetPixel(index);
                     npRecFem += runLengthRecFem;
                     if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                        runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                        runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                     if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                        startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                        startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                 }
                 if ( erodemask->GetPixel(index) == SEMIT && rescaledData_SEMIT->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
@@ -2382,9 +2382,9 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
                     startRunSemit = rescaledData_SEMIT->GetPixel(index);
                     npSemit += runLengthSemit;
                     if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                        runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                        runLengthSemit = RUN_LENGTH_LEVEL - 1;
                     if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                        startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                        startRunSemit = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                 }
                 if ( erodemask->GetPixel(index) == CRAN_SART && rescaledData_CRAN_SART->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
@@ -2393,11 +2393,11 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
                     startRunCranSart = rescaledData_CRAN_SART->GetPixel(index);
                     npCranSart += runLengthCranSart;
                     if(runLengthCranSart > RUN_LENGTH_LEVEL - 1)
-                        runLengthCranSart = RUN_LENGTH_LEVEL - 1; 
+                        runLengthCranSart = RUN_LENGTH_LEVEL - 1;
                     if(startRunCranSart > RUN_INTENSITY_LEVEL - 1)
-                        startRunCranSart = RUN_INTENSITY_LEVEL - 1; 
+                        startRunCranSart = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixCranSart[runLengthCranSart][startRunCranSart]++;
- 
+
                 }
                 if ( erodemask->GetPixel(index) == BIC_FEM && rescaledData_BIC_FEM->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
                     //runLengthBicFem = ddata.connectedComponentRegionGrowing (rescaledData_BIC_FEM->GetPixel(index),rescaledData_BIC_FEM->GetPixel(index), rescaledData_BIC_FEM, index);
@@ -2408,9 +2408,9 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
                     startRunBicFem = rescaledData_BIC_FEM->GetPixel(index);
                     npBicFem += runLengthBicFem;
                     if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                        runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                        runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                     if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                        startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                        startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
 
                 }
@@ -2420,9 +2420,9 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
                     startRunGracilis = rescaledData_GRACILIS->GetPixel(index);
                     npGracilis += runLengthGracilis;
                     if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                        runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                        runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                     if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                        startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                        startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
 
                 }
@@ -2432,9 +2432,9 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
                     startRunAdductor = rescaledData_ADDUCTOR->GetPixel(index);
                     npAdductor += runLengthAdductor;
                     if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                        runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                        runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                     if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                        startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                        startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                 }
                 if ( erodemask->GetPixel(index) == SEMI_MEM && rescaledData_SEMI_MEM->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
@@ -2443,9 +2443,9 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
                     startRunSemiMem = rescaledData_SEMI_MEM->GetPixel(index);
                     npSemiMem += runLengthSemiMem;
                     if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                        runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                        runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                     if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                        startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                        startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                 }
                 if ( erodemask->GetPixel(index) == VAS_LAT && rescaledData_VAS_LAT->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
@@ -2454,9 +2454,9 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
                     startRunVasLat = rescaledData_VAS_LAT->GetPixel(index);
                     npVasLat += runLengthVasLat;
                     if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                        runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                        runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                     if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                        startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                        startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
 
                 }
@@ -2466,9 +2466,9 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
                     startRunVasMed = rescaledData_VAS_MED->GetPixel(index);
                     npVasMed += runLengthVasMed;
                     if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                        runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                        runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                     if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                        startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                        startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                 }
                 if ( erodemask->GetPixel(index) == VAS_INT && rescaledData_VAS_INT->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
@@ -2477,9 +2477,9 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
                     startRunVasInt = rescaledData_VAS_INT->GetPixel(index);
                     npVasInt += runLengthVasInt;
                     if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                        runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                        runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                     if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                        startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                        startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                 }
                 if ( erodemask->GetPixel(index) == CAUD_SART && rescaledData_CAUD_SART->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
@@ -2488,39 +2488,39 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
                     startRunCaudSart = rescaledData_CAUD_SART->GetPixel(index);
                     npCaudSart += runLengthCaudSart;
                     if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                        runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                        runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                     if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                        startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                        startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                 }
             }
         }
-    } 
+    }
 */
     // calculate run length matrix features
     std::ofstream efile( featurefilename.c_str() , std::ios::app );
-    float nr = 0, pr = 0, pg = 0; 
+    float nr = 0, pr = 0, pg = 0;
     // RefFem
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixRecFem[j][i];
              nr += runlengthmatrixRecFem[j][i];
  //            std::cout <<  runlengthmatrixRecFem[j][i] << "  " ;
         }
  //       std::cout << "\n";
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
 //    getchar();
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixRecFem[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2541,22 +2541,22 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
     efile << "RecFem  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // Semit
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixSemit[j][i];
              nr += runlengthmatrixSemit[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixSemit[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2577,22 +2577,22 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
     efile << "Semit  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // CranSart
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixCranSart[j][i];
              nr += runlengthmatrixCranSart[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixCranSart[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2613,22 +2613,22 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
     efile << "CranSart  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // BicFem
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixBicFem[j][i];
              nr += runlengthmatrixBicFem[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixBicFem[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2649,22 +2649,22 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
     efile << "BicFem  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // Gracilis
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixGracilis[j][i];
              nr += runlengthmatrixGracilis[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixGracilis[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2685,22 +2685,22 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
     efile << "Gracilis  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // Adductor
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixAdductor[j][i];
              nr += runlengthmatrixAdductor[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixAdductor[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2721,22 +2721,22 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
     efile << "Adductor  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // SemiMem
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixSemiMem[j][i];
              nr += runlengthmatrixSemiMem[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixSemiMem[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2757,22 +2757,22 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
     efile << "SemiMem  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // VasLat
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixVasLat[j][i];
              nr += runlengthmatrixVasLat[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixVasLat[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2793,22 +2793,22 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
     efile << "VasLat  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // VasMed
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixVasMed[j][i];
              nr += runlengthmatrixVasMed[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixVasMed[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2829,22 +2829,22 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
     efile << "VasMed  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // VasInt
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixVasInt[j][i];
              nr += runlengthmatrixVasInt[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixVasInt[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2865,22 +2865,22 @@ void TextureFeatureCal::runlengthFeat3D( DMDData::OrientedImageType::Pointer ero
     efile << "VasInt  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // CaudSart
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixCaudSart[j][i];
              nr += runlengthmatrixCaudSart[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixCaudSart[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2916,8 +2916,8 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
     double imageVolume = 0;
     DMDData::OrientedImageType::SpacingType    spacing = data->GetSpacing() ;
 
-    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) { 
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) {
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
             runlengthmatrix[REC_FEM][j][i] = 0;
             runlengthmatrix[SEMIT][j][i] = 0;
             runlengthmatrix[CRAN_SART][j][i] = 0;
@@ -2932,7 +2932,7 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
         }
     }
     ddata.imageInitialize ( data, rescaledData );
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
     // identify minum and maxmum intensity of the image
@@ -2942,7 +2942,7 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
         int hisTmp = constDataIterator.Get();
         if (hisTmp >= HISTOGRAM_LIMIT)
             hisTmp = HISTOGRAM_LIMIT - 1;
-        histogram[hisTmp]++; 
+        histogram[hisTmp]++;
         if(hisTmp > 0)
             imageVolume++;
         if (constDataIterator.Get() < intensityMin)
@@ -2985,7 +2985,7 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
     }
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = data->GetLargestPossibleRegion().GetSize();
-    DMDData::OrientedImageType::IndexType  index;    
+    DMDData::OrientedImageType::IndexType  index;
     int upperBound[NUMBER_MUSCLE + 1] = {0}, lowerBound[NUMBER_MUSCLE + 1] = {0};
     // establish rescaled image for each muscle
     for ( int p = CRAN_SART ; p <= CAUD_SART; p++ ) {
@@ -3021,18 +3021,18 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
         if( lowerBound[p] == 0 && upperBound[p] == 0)
             continue;
         nroi = 0;
-        SRE = LRE = GLN = RLN = RP = 0;  
+        SRE = LRE = GLN = RLN = RP = 0;
         std::ofstream efile( featurefilename.c_str() , std::ios::app );
         for (int m = 0; m < size[2]; m += RUN_LENGTH_LEVEL) {
             for (int n = 0; n < size[1]; n += RUN_LENGTH_LEVEL) {
                 for (int r = 0; r < size[0]; r += RUN_LENGTH_LEVEL) {
-                    float SRETmp = 0, LRETmp = 0, GLNTmp = 0, RLNTmp = 0, RPTmp = 0;  
+                    float SRETmp = 0, LRETmp = 0, GLNTmp = 0, RLNTmp = 0, RPTmp = 0;
                     np = 0;
                   //  for (int i = lowerBound[p]; i <= upperBound[p]; i++) {
                     int objCount = 0;
                     bool inMuscleFlag = 0;
                     roi->FillBuffer(itk::NumericTraits<DMDData::OrientedImageType::PixelType>::Zero);
-                    inMuscleFlag = 0; 
+                    inMuscleFlag = 0;
                     for(index[2] = m , roiIndex[2] = 0; index[2] < m + RUN_LENGTH_LEVEL; index[2]++, roiIndex[2]++) {
                         for(index[1] = n, roiIndex[1] = 0; index[1] < n + RUN_LENGTH_LEVEL; index[1]++, roiIndex[1]++) {
                             for(index[0] = r, roiIndex[0] = 0; index[0] < r + RUN_LENGTH_LEVEL; index[0]++, roiIndex[0]++) {
@@ -3047,7 +3047,7 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
                                 }
                             }
                         }
-                    }  
+                    }
                     if(inMuscleFlag == 1) {
                         int startRun = -1, runLength = 0;
                         // x direction
@@ -3065,21 +3065,21 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
                                             }
                                             else {
                                                 if(runLength > RUN_LENGTH_LEVEL - 1)
-                                                    runLength = RUN_LENGTH_LEVEL - 1; 
+                                                    runLength = RUN_LENGTH_LEVEL - 1;
                                                 if(startRun > RUN_INTENSITY_LEVEL - 1)
-                                                    startRun = RUN_INTENSITY_LEVEL - 1; 
+                                                    startRun = RUN_INTENSITY_LEVEL - 1;
                                                 runlengthmatrix[p][runLength][startRun]++;
                                                 startRun = -1;
                                                 runLength = 0;
                                             }
-                                        } 
+                                        }
                                     }
                                     else {
                                         if (startRun != -1){
                                             if(runLength > RUN_LENGTH_LEVEL - 1)
-                                                runLength = RUN_LENGTH_LEVEL - 1; 
+                                                runLength = RUN_LENGTH_LEVEL - 1;
                                             if(startRun > RUN_INTENSITY_LEVEL - 1)
-                                                startRun = RUN_INTENSITY_LEVEL - 1; 
+                                                startRun = RUN_INTENSITY_LEVEL - 1;
                                             runlengthmatrix[p][runLength][startRun]++;
                                             startRun = -1;
                                             runLength = 0;
@@ -3105,21 +3105,21 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
                                             }
                                             else {
                                                  if(runLength > RUN_LENGTH_LEVEL - 1)
-                                                     runLength = RUN_LENGTH_LEVEL - 1; 
+                                                     runLength = RUN_LENGTH_LEVEL - 1;
                                                  if(startRun > RUN_INTENSITY_LEVEL - 1)
-                                                     startRun = RUN_INTENSITY_LEVEL - 1; 
+                                                     startRun = RUN_INTENSITY_LEVEL - 1;
                                                  runlengthmatrix[p][runLength][startRun]++;
                                                  startRun = -1;
                                                  runLength = 0;
                                             }
-                                        } 
+                                        }
                                     }
                                     else {
                                         if (startRun != -1){
                                             if(runLength > RUN_LENGTH_LEVEL - 1)
-                                                runLength = RUN_LENGTH_LEVEL - 1; 
+                                                runLength = RUN_LENGTH_LEVEL - 1;
                                             if(startRun > RUN_INTENSITY_LEVEL - 1)
-                                                startRun = RUN_INTENSITY_LEVEL - 1; 
+                                                startRun = RUN_INTENSITY_LEVEL - 1;
                                             runlengthmatrix[p][runLength][startRun]++;
                                             startRun = -1;
                                             runLength = 0;
@@ -3129,7 +3129,7 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
                             }
                         }
                         // z direction
-                        startRun = -1; 
+                        startRun = -1;
                         runLength = 0;
                         for(index[1] = n, roiIndex[1] = 0; index[1] < n + RUN_LENGTH_LEVEL; index[1]++, roiIndex[1]++) {
                             for(index[0] = r, roiIndex[0] = 0; index[0] < r + RUN_LENGTH_LEVEL; index[0]++, roiIndex[0]++) {
@@ -3145,21 +3145,21 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
                                             }
                                             else {
                                                  if(runLength > RUN_LENGTH_LEVEL - 1)
-                                                     runLength = RUN_LENGTH_LEVEL - 1; 
+                                                     runLength = RUN_LENGTH_LEVEL - 1;
                                                  if(startRun > RUN_INTENSITY_LEVEL - 1)
-                                                     startRun = RUN_INTENSITY_LEVEL - 1; 
+                                                     startRun = RUN_INTENSITY_LEVEL - 1;
                                                  runlengthmatrix[p][runLength][startRun]++;
                                                  startRun = -1;
                                                  runLength = 0;
                                             }
-                                        } 
+                                        }
                                     }
                                     else {
                                         if (startRun != -1){
                                             if(runLength > RUN_LENGTH_LEVEL - 1)
-                                                runLength = RUN_LENGTH_LEVEL - 1; 
+                                                runLength = RUN_LENGTH_LEVEL - 1;
                                             if(startRun > RUN_INTENSITY_LEVEL - 1)
-                                                startRun = RUN_INTENSITY_LEVEL - 1; 
+                                                startRun = RUN_INTENSITY_LEVEL - 1;
                                             runlengthmatrix[p][runLength][startRun]++;
                                             startRun = -1;
                                             runLength = 0;
@@ -3170,9 +3170,9 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
                         }
                     }
                     //}
-                    np = np * 3 ; 
-                    if(np != 0) {                    
-                        //calRunLengthFeatures( SRETmp, LRETmp, GLNTmp, RLNTmp, RPTmp, np, runlengthmatrix[p] );                  
+                    np = np * 3 ;
+                    if(np != 0) {
+                        //calRunLengthFeatures( SRETmp, LRETmp, GLNTmp, RLNTmp, RPTmp, np, runlengthmatrix[p] );
                         nroi++;
                         SRE += SRETmp;
                         LRE += LRETmp;
@@ -3188,11 +3188,11 @@ void TextureFeatureCal::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer 
                 }
             }
         }
-        SRE = SRE / nroi; 
-        LRE = LRE / nroi; 
-        GLN = GLN / nroi; 
-        RLN = RLN / nroi; 
-        RP = RP / nroi; 
+        SRE = SRE / nroi;
+        LRE = LRE / nroi;
+        GLN = GLN / nroi;
+        RLN = RLN / nroi;
+        RP = RP / nroi;
         efile << muscleName[p] << "  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
         efile.close();
         std::cout << muscleName[p] << " finished" << std::endl;
@@ -3220,8 +3220,8 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
     //getchar();
 
 
-    for (int j = 0; j < CO_OCCURRENCE_LEVEL; j++) { 
-        for (int i = 0 ; i < CO_OCCURRENCE_LEVEL ; i++) { 
+    for (int j = 0; j < CO_OCCURRENCE_LEVEL; j++) {
+        for (int i = 0 ; i < CO_OCCURRENCE_LEVEL ; i++) {
             cooccurrencematrix[REC_FEM][j][i] = 0;
             cooccurrencematrix[SEMIT][j][i] = 0;
             cooccurrencematrix[CRAN_SART][j][i] = 0;
@@ -3236,7 +3236,7 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
         }
     }
     ddata.imageInitialize ( data, rescaledData );
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
 
@@ -3261,7 +3261,7 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
         int hisTmp = constDataIterator.Get();
         if (hisTmp >= HISTOGRAM_LIMIT)
             hisTmp = HISTOGRAM_LIMIT - 1;
-        histogram[hisTmp]++; 
+        histogram[hisTmp]++;
         if(hisTmp > 0)
             imageVolume++;
         if (constDataIterator.Get() < intensityMin)
@@ -3309,7 +3309,7 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
 
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = rescaledData->GetLargestPossibleRegion().GetSize();
-    DMDData::OrientedImageType::IndexType  index;    
+    DMDData::OrientedImageType::IndexType  index;
     int upperBound[NUMBER_MUSCLE + 1] = {0}, lowerBound[NUMBER_MUSCLE + 1] = {0};
     // establish rescaled image for each muscle
     for ( int p = CRAN_SART ; p <= CAUD_SART; p++ ) {
@@ -3347,12 +3347,12 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
         if( lowerBound[p] == 0 && upperBound[p] == 0)
             continue;
         nroi = 0;
-        Entropy = Energy = Contrast = HomoGeneity = 0;  
+        Entropy = Energy = Contrast = HomoGeneity = 0;
       //  std::ofstream efile( featurefilename.c_str() , std::ios::app );
         for (int m = 0; m < size[2]; m += round(intervalZ * 0.5)) {
             for (int n = 0; n < size[1]; n += round(intervalY * 0.5)) {
                 for (int r = 0; r < size[0]; r += round(intervalX * 0.5)) {
-                    float EntropyTmp = 0, EnergyTmp = 0, ContrastTmp = 0, HomoGeneityTmp = 0;  
+                    float EntropyTmp = 0, EnergyTmp = 0, ContrastTmp = 0, HomoGeneityTmp = 0;
                     np = 0;
                     bool haveMuscleFlag = 0;
                     for (int i = lowerBound[p]; i <= upperBound[p]; i++) {
@@ -3373,12 +3373,12 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
                                             if(erodemask->GetPixel(index) == p)
                                                 haveMuscleFlag = 1;
                                         }
-                                        else  
+                                        else
                                             roi->SetPixel(roiIndex, BACKGROUND);
                                     }
                                 }
                             }
-                        }  
+                        }
                         if(haveMuscleFlag == 0 && inMuscleFlag == 0)
                             break;
                         if(haveMuscleFlag == 1 && inMuscleFlag == 0)
@@ -3387,9 +3387,9 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
                             for(index[2] = m , roiIndex[2] = 0; index[2] < m + intervalZ; index[2]++, roiIndex[2]++) {
                                 for(index[1] = n, roiIndex[1] = 0; index[1] < n + intervalY; index[1]++, roiIndex[1]++) {
                                     for(index[0] = r, roiIndex[0] = 0; index[0] < r + intervalX; index[0]++, roiIndex[0]++) {
-                                        int vali = 0, valj = 0; 
+                                        int vali = 0, valj = 0;
                                         // x direction
-                                        if ( (roiIndex[0] + 2) < intervalX ) { 
+                                        if ( (roiIndex[0] + 2) < intervalX ) {
                                             vali = roi->GetPixel(roiIndex);
                                             roiIndex[0] += 2;
                                             valj = roi->GetPixel(roiIndex);
@@ -3400,7 +3400,7 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
                                             }
                                         }
                                         // y direction
-                                        if ( (roiIndex[1] + 2) < intervalY ) { 
+                                        if ( (roiIndex[1] + 2) < intervalY ) {
                                             vali = roi->GetPixel(roiIndex);
                                             roiIndex[1] += 2;
                                             valj = roi->GetPixel(roiIndex);
@@ -3411,7 +3411,7 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
                                             }
                                         }
                                         // z direction
-                                        if ( (roiIndex[2] + 2) < intervalZ ) { 
+                                        if ( (roiIndex[2] + 2) < intervalZ ) {
                                             vali = roi->GetPixel(roiIndex);
                                             roiIndex[2] += 2;
                                             valj = roi->GetPixel(roiIndex);
@@ -3427,7 +3427,7 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
                         }
                     }
                     if(haveMuscleFlag) {
-                        calCooccurrenceFeatures( EntropyTmp, EnergyTmp, ContrastTmp, HomoGeneityTmp, cooccurrencematrix[p]);  
+                        calCooccurrenceFeatures( EntropyTmp, EnergyTmp, ContrastTmp, HomoGeneityTmp, cooccurrencematrix[p]);
                         nroi++;
                         Entropy += EntropyTmp;
                         Energy += EnergyTmp;
@@ -3454,15 +3454,15 @@ void TextureFeatureCal::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Point
             }
         }
    //     std::cout << "size of " << muscleName[p] << ": " << nroi << std::endl;
-        if(nroi) { 
-            Entropy  /=  nroi; 
-            Energy /= nroi; 
-            Contrast /= nroi; 
-            HomoGeneity /= nroi; 
+        if(nroi) {
+            Entropy  /=  nroi;
+            Energy /= nroi;
+            Contrast /= nroi;
+            HomoGeneity /= nroi;
         }
        // efile << muscleName[p] << "  " << Entropy << "  " <<  Energy << "  " << Contrast << "  " << HomoGeneity << "\n";
       //  efile.close();
-        EntropyData[p] = Entropy; EnergyData[p] = Energy; ContrastData[p] = Contrast; HomoGeneityData[p] = HomoGeneity;  
+        EntropyData[p] = Entropy; EnergyData[p] = Energy; ContrastData[p] = Contrast; HomoGeneityData[p] = HomoGeneity;
     //    std::cout << muscleName[p] << " finished" << std::endl;
     }
 
@@ -3506,8 +3506,8 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
     DMDData::OrientedImageType::SpacingType    spacing = data->GetSpacing() ;
     float intervalX = round(ROI_SIZE / spacing[0]), intervalY = round(ROI_SIZE / spacing[1]), intervalZ = round(ROI_SIZE / spacing[2]);
 
-    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) { 
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) {
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
             runlengthmatrix[REC_FEM][j][i] = 0;
             runlengthmatrix[SEMIT][j][i] = 0;
             runlengthmatrix[CRAN_SART][j][i] = 0;
@@ -3522,7 +3522,7 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
         }
     }
     ddata.imageInitialize ( data, rescaledData );
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
 
@@ -3547,7 +3547,7 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
         int hisTmp = constDataIterator.Get();
         if (hisTmp >= HISTOGRAM_LIMIT)
             hisTmp = HISTOGRAM_LIMIT - 1;
-        histogram[hisTmp]++; 
+        histogram[hisTmp]++;
         if(hisTmp > 0)
             imageVolume++;
         if (constDataIterator.Get() < intensityMin)
@@ -3595,7 +3595,7 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
 
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = rescaledData->GetLargestPossibleRegion().GetSize();
-    DMDData::OrientedImageType::IndexType  index;    
+    DMDData::OrientedImageType::IndexType  index;
     int upperBound[NUMBER_MUSCLE + 1] = {0}, lowerBound[NUMBER_MUSCLE + 1] = {0};
     // establish rescaled image for each muscle
     for ( int p = CRAN_SART ; p <= CAUD_SART; p++ ) {
@@ -3633,12 +3633,12 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
         if( lowerBound[p] == 0 && upperBound[p] == 0)
             continue;
         nroi = 0;
-        SRE = LRE = GLN = RLN = RP = 0;  
+        SRE = LRE = GLN = RLN = RP = 0;
        // std::ofstream efile( featurefilename.c_str() , std::ios::app );
         for (int m = 0; m < size[2]; m += round(intervalZ * 0.5)) {
             for (int n = 0; n < size[1]; n += round(intervalY * 0.5)) {
                 for (int r = 0; r < size[0]; r += round(intervalX * 0.5)) {
-                    float SRETmp = 0, LRETmp = 0, GLNTmp = 0, RLNTmp = 0, RPTmp = 0;  
+                    float SRETmp = 0, LRETmp = 0, GLNTmp = 0, RLNTmp = 0, RPTmp = 0;
                     np = 0;
                     bool haveMuscleFlag = 0;
                     for (int i = lowerBound[p]; i <= upperBound[p]; i++) {
@@ -3659,25 +3659,25 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
                                             if(erodemask->GetPixel(index) == p)
                                                 haveMuscleFlag = 1;
                                         }
-                                        else  
+                                        else
                                             roi->SetPixel(roiIndex, BACKGROUND);
                                     }
                                 }
                             }
-                        }  
+                        }
                         if(haveMuscleFlag == 0 && inMuscleFlag == 0)
                             break;
                         if(haveMuscleFlag == 1 && inMuscleFlag == 0)
                             continue;
                         if(inMuscleFlag == 1) {
                             objCount = connectedComponentLabeling (roi);
-                            int objVolume[SIZE_LABELING_BIN] = {0}; 
+                            int objVolume[SIZE_LABELING_BIN] = {0};
                             for(roiIndex[2] = 0 ; roiIndex[2] < intervalZ; roiIndex[2]++) {
                                 for(roiIndex[1] = 0; roiIndex[1] < intervalY; roiIndex[1]++) {
                                     for(roiIndex[0] = 0; roiIndex[0] < intervalX; roiIndex[0]++) {
                                         int k = roi->GetPixel(roiIndex);
                                         if(k){
-                                            objVolume[k]++; 
+                                            objVolume[k]++;
                                         }
                                     }
                                 }
@@ -3702,7 +3702,7 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
                         }
                     }
                     if(haveMuscleFlag) {
-                        calRunLengthFeatures( SRETmp, LRETmp, GLNTmp, RLNTmp, RPTmp, np, runlengthmatrix[p]);  
+                        calRunLengthFeatures( SRETmp, LRETmp, GLNTmp, RLNTmp, RPTmp, np, runlengthmatrix[p]);
                         nroi++;
                         SRE += SRETmp;
                         LRE += LRETmp;
@@ -3730,14 +3730,14 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
             }
         }
     //    std::cout << "size of " << muscleName[p] << ": " << nroi << std::endl;
-        if(nroi) { 
-            SRE = SRE / nroi; 
-            LRE = LRE / nroi; 
-            GLN = GLN / nroi; 
-            RLN = RLN / nroi; 
-            RP = RP / nroi; 
+        if(nroi) {
+            SRE = SRE / nroi;
+            LRE = LRE / nroi;
+            GLN = GLN / nroi;
+            RLN = RLN / nroi;
+            RP = RP / nroi;
         }
-        SREData[p] = SRE; LREData[p] = LRE; GLNData[p] = GLN; RLNData[p] = RLN; RPData[p] = RP; 
+        SREData[p] = SRE; LREData[p] = LRE; GLNData[p] = GLN; RLNData[p] = RLN; RPData[p] = RP;
     //    efile << muscleName[p] << "  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
      //   efile.close();
   //      std::cout << muscleName[p] << " finished" << std::endl;
@@ -3791,8 +3791,8 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
   //  std::cout << spacing[0] << "  " << spacing[1] << "  " << spacing[2] << std::endl;
   //  getchar();
 
-    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) { 
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) {
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
             runlengthmatrix[REC_FEM][j][i] = 0;
             runlengthmatrix[SEMIT][j][i] = 0;
             runlengthmatrix[CRAN_SART][j][i] = 0;
@@ -3807,7 +3807,7 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
         }
     }
     ddata.imageInitialize ( data, rescaledData );
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
     // identify minum and maxmum intensity of the image
@@ -3817,7 +3817,7 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
         int hisTmp = constDataIterator.Get();
         if (hisTmp >= HISTOGRAM_LIMIT)
             hisTmp = HISTOGRAM_LIMIT - 1;
-        histogram[hisTmp]++; 
+        histogram[hisTmp]++;
         if(hisTmp > 0)
             imageVolume++;
         if (constDataIterator.Get() < intensityMin)
@@ -3861,7 +3861,7 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
     std::cout << "rescale finished! " << std::endl;
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = data->GetLargestPossibleRegion().GetSize();
-    DMDData::OrientedImageType::IndexType  index;    
+    DMDData::OrientedImageType::IndexType  index;
     int upperBound[NUMBER_MUSCLE + 1] = {0}, lowerBound[NUMBER_MUSCLE + 1] = {0};
     // establish rescaled image for each muscle
     for ( int p = CRAN_SART ; p <= CAUD_SART; p++ ) {
@@ -3875,7 +3875,7 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
                         if(rescaledData->GetPixel(index) > upperBound[p]){
                             upperBound[p] = rescaledData->GetPixel(index);
                         }
-                        
+
                     }
                 }
             }
@@ -3898,12 +3898,12 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
         if( lowerBound[p] == 0 && upperBound[p] == 0)
             continue;
         nroi = 0;
-        SRE = LRE = GLN = RLN = RP = 0;  
+        SRE = LRE = GLN = RLN = RP = 0;
         std::ofstream efile( featurefilename.c_str() , std::ios::app );
         for (int m = 0; m < size[2]; m += round(intervalZ * 0.5)) {
             for (int n = 0; n < size[1]; n += round(intervalY * 0.5)) {
                 for (int r = 0; r < size[0]; r += round(intervalX * 0.5)) {
-                    float SRETmp = 0, LRETmp = 0, GLNTmp = 0, RLNTmp = 0, RPTmp = 0;  
+                    float SRETmp = 0, LRETmp = 0, GLNTmp = 0, RLNTmp = 0, RPTmp = 0;
                     np = 0;
                     bool haveMuscleFlag = 0;
                     for (int i = lowerBound[p]; i <= upperBound[p]; i++) {
@@ -3927,22 +3927,22 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
                                     }
                                 }
                             }
-                        }  
+                        }
                   //      std::cout << "flags: " << i << "-  " << haveMuscleFlag << "  " << inMuscleFlag << std::endl;
                         if(haveMuscleFlag == 0 && inMuscleFlag == 0)
                             break;
                         if(haveMuscleFlag == 1 && inMuscleFlag == 0)
                             continue;
-                        
+
                         if(inMuscleFlag == 1) {
                             objCount = connectedComponentLabeling (roi);
-                            int objVolume[SIZE_LABELING_BIN] = {0}; 
+                            int objVolume[SIZE_LABELING_BIN] = {0};
                             for(roiIndex[2] = 0 ; roiIndex[2] < intervalZ; roiIndex[2]++) {
                                 for(roiIndex[1] = 0; roiIndex[1] < intervalY; roiIndex[1]++) {
                                     for(roiIndex[0] = 0; roiIndex[0] < intervalX; roiIndex[0]++) {
                                         int k = roi->GetPixel(roiIndex);
                                         if(k){
-                                            objVolume[k]++; 
+                                            objVolume[k]++;
                                         }
                                     }
                                 }
@@ -3969,10 +3969,10 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
                         }
                     }
                     if(haveMuscleFlag) {
-                   // np = np * voxelSize; 
-                   // if(np != 0) {                    
+                   // np = np * voxelSize;
+                   // if(np != 0) {
          //               std::cout << "number of pixel: " << np << std::endl;
-                        calRunLengthFeatures( SRETmp, LRETmp, GLNTmp, RLNTmp, RPTmp, np, runlengthmatrix[p], caseID );  
+                        calRunLengthFeatures( SRETmp, LRETmp, GLNTmp, RLNTmp, RPTmp, np, runlengthmatrix[p], caseID );
                         nroi++;
                         SRE += SRETmp;
                         LRE += LRETmp;
@@ -4003,11 +4003,11 @@ void TextureFeatureCal::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer 
                 }
             }
         }
-        SRE = SRE / nroi; 
-        LRE = LRE / nroi; 
-        GLN = GLN / nroi; 
-        RLN = RLN / nroi; 
-        RP = RP / nroi; 
+        SRE = SRE / nroi;
+        LRE = LRE / nroi;
+        GLN = GLN / nroi;
+        RLN = RLN / nroi;
+        RP = RP / nroi;
         efile << muscleName[p] << "  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
         efile.close();
         std::cout << muscleName[p] << " finished" << std::endl;
@@ -4027,8 +4027,8 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
     float histogramSemit[HISTOGRAM_BIN_SIZE] = {0}, histogramRect[HISTOGRAM_BIN_SIZE] = {0},histogramCran[HISTOGRAM_BIN_SIZE] = {0}, histogramAdductor[HISTOGRAM_BIN_SIZE] = {0}, histogramGracilis[HISTOGRAM_BIN_SIZE] = {0}, histogramBic[HISTOGRAM_BIN_SIZE] = {0}, histogramSemimem[HISTOGRAM_BIN_SIZE] = {0}, histogramVaslat[HISTOGRAM_BIN_SIZE] = {0}, histogramVasmed[HISTOGRAM_BIN_SIZE] = {0}, histogramVasint[HISTOGRAM_BIN_SIZE] = {0}, histogramCaud[HISTOGRAM_BIN_SIZE] = {0} ;
     std::ofstream efile( featurefilename.c_str() , std::ios::app );
     DMDData::OrientedImageType::Pointer rescaledData = DMDData::OrientedImageType::New();
-    ConstIteratorType constMaskIterator( mask, mask->GetRequestedRegion() ) ;  
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constMaskIterator( mask, mask->GetRequestedRegion() ) ;
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     ddata.imageInitialize ( data, rescaledData );
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
@@ -4055,14 +4055,14 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
         int hisTmp = constDataIterator.Get();
         if (hisTmp >= HISTOGRAM_LIMIT)
             hisTmp = HISTOGRAM_LIMIT - 1;
-        histogram[hisTmp]++; 
+        histogram[hisTmp]++;
         if(hisTmp > 0)
             imageVolume++;
         if (constDataIterator.Get() < intensityMin)
             intensityMin = constDataIterator.Get();
         if (constDataIterator.Get() > intensityMax)
             intensityMax = constDataIterator.Get();
-    } 
+    }
 
     // identify 5% minum and maxmum intensity of the image
     float cumImageVolume = 0;
@@ -4104,69 +4104,69 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
     for ( constMaskIterator.GoToBegin(),ReScaledDataIterator.GoToBegin(); !constMaskIterator.IsAtEnd(); ++constMaskIterator, ++ReScaledDataIterator ) {
         if ( constMaskIterator.Get() == SEMIT ) {
             if (ReScaledDataIterator.Get() > 0) {
-                volSemitNonErod++;                       
+                volSemitNonErod++;
             }
         }
         if ( constMaskIterator.Get() == REC_FEM ) {
             if (ReScaledDataIterator.Get() > 0) {
-                volRectNonErod++;                       
+                volRectNonErod++;
             }
         }
         if ( constMaskIterator.Get() == CRAN_SART ) {
             if (ReScaledDataIterator.Get() > 0) {
-                volCranNonErod++;                       
+                volCranNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == ADDUCTOR ) {
             if (ReScaledDataIterator.Get() > 0) {
-                volAdductorNonErod++;                       
+                volAdductorNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == GRACILIS ) {
             if (ReScaledDataIterator.Get() > 0) {
-                volGracilisNonErod++;                       
+                volGracilisNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == BIC_FEM ) {
             if (ReScaledDataIterator.Get() > 0) {
-                volBicNonErod++;                       
+                volBicNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == SEMI_MEM ) {
             if (ReScaledDataIterator.Get() > 0) {
-                volSemimemNonErod++;                       
+                volSemimemNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == VAS_LAT ) {
             if (ReScaledDataIterator.Get() > 0) {
-                volVaslatNonErod++;                       
+                volVaslatNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == VAS_MED ) {
             if (ReScaledDataIterator.Get() > 0) {
-                volVasmedNonErod++;                       
+                volVasmedNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == VAS_INT ) {
             if (ReScaledDataIterator.Get() > 0) {
-                volVasintNonErod++;                       
+                volVasintNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == CAUD_SART ) {
         //    if (ReScaledDataIterator.Get() > 0) {
-                volCaudNonErod++;                       
+                volCaudNonErod++;
          //   }
         }   	       	
     }
-    // calculate the mean and volume of muscles using eroded muscle mask 
+    // calculate the mean and volume of muscles using eroded muscle mask
     // if the T2 fit only covers the mid section, only caluculate the biomarkers in covered part
     int tmp = 0;
     for ( constErodeMaskIterator.GoToBegin(),ReScaledDataIterator.GoToBegin(); !constErodeMaskIterator.IsAtEnd(); ++constErodeMaskIterator, ++ReScaledDataIterator ) {
         if ( constErodeMaskIterator.Get() == SEMIT ) {
             if (ReScaledDataIterator.Get() > 0) {
                 tmp = ReScaledDataIterator.Get();
-	        meanSemit += ReScaledDataIterator.Get();          
-                volSemitReal++;                       
+	        meanSemit += ReScaledDataIterator.Get();
+                volSemitReal++;
                 if((tmp) < 0)
                     histogramSemit[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4174,13 +4174,13 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
                 else
                     histogramSemit[tmp]++;
             }
-            volSemit++;                       
+            volSemit++;
         }
         if ( constErodeMaskIterator.Get() == REC_FEM ) {
             if (ReScaledDataIterator.Get() > 0) {
                 tmp = ReScaledDataIterator.Get();
-	        meanRect += ReScaledDataIterator.Get();          
-                volRectReal++;                       
+	        meanRect += ReScaledDataIterator.Get();
+                volRectReal++;
                 if((tmp) < 0)
                     histogramRect[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4189,13 +4189,13 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
                     histogramRect[tmp]++;
 
             }
-            volRect++;                       
+            volRect++;
         }
         if ( constErodeMaskIterator.Get() == CRAN_SART ) {
             if (ReScaledDataIterator.Get() > 0) {
                 tmp = ReScaledDataIterator.Get();
-	        meanCran += ReScaledDataIterator.Get();          
-                volCranReal++;                       
+	        meanCran += ReScaledDataIterator.Get();
+                volCranReal++;
                 if((tmp) < 0)
                     histogramCran[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4203,13 +4203,13 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
                 else
                     histogramCran[tmp]++;
             }
-            volCran++;                       
+            volCran++;
         }   	       	
         if ( constErodeMaskIterator.Get() == ADDUCTOR ) {
             if (ReScaledDataIterator.Get() > 0) {
                 tmp = ReScaledDataIterator.Get();
-	        meanAdductor += ReScaledDataIterator.Get();          
-                volAdductorReal++;                       
+	        meanAdductor += ReScaledDataIterator.Get();
+                volAdductorReal++;
                 if((tmp) < 0)
                     histogramAdductor[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4217,13 +4217,13 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
                 else
                     histogramAdductor[tmp]++;
             }
-            volAdductor++;                       
+            volAdductor++;
         }   	       	
         if ( constErodeMaskIterator.Get() == GRACILIS ) {
             if (ReScaledDataIterator.Get() > 0) {
                 tmp = ReScaledDataIterator.Get();
-	        meanGracilis += ReScaledDataIterator.Get();          
-                volGracilisReal++;                       
+	        meanGracilis += ReScaledDataIterator.Get();
+                volGracilisReal++;
                 if((tmp) < 0)
                     histogramGracilis[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4231,13 +4231,13 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
                 else
                     histogramGracilis[tmp]++;
             }
-            volGracilis++;                       
+            volGracilis++;
         }   	       	
         if ( constErodeMaskIterator.Get() == BIC_FEM ) {
             if (ReScaledDataIterator.Get() > 0) {
                 tmp = ReScaledDataIterator.Get();
-	        meanBic += ReScaledDataIterator.Get();          
-                volBicReal++;                       
+	        meanBic += ReScaledDataIterator.Get();
+                volBicReal++;
                 if((tmp) < 0)
                     histogramBic[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4245,13 +4245,13 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
                 else
                     histogramBic[tmp]++;
             }
-            volBic++;                       
+            volBic++;
         }   	       	
         if ( constErodeMaskIterator.Get() == SEMI_MEM ) {
             if (ReScaledDataIterator.Get() > 0) {
                 tmp = ReScaledDataIterator.Get();
-	        meanSemimem += ReScaledDataIterator.Get();          
-                volSemimemReal++;                       
+	        meanSemimem += ReScaledDataIterator.Get();
+                volSemimemReal++;
                 if((tmp) < 0)
                     histogramSemimem[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4259,13 +4259,13 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
                 else
                     histogramSemimem[tmp]++;
             }
-            volSemimem++;                       
+            volSemimem++;
         }   	       	
         if ( constErodeMaskIterator.Get() == VAS_LAT ) {
             if (ReScaledDataIterator.Get() > 0) {
                 tmp = ReScaledDataIterator.Get();
-	        meanVaslat += ReScaledDataIterator.Get();          
-                volVaslatReal++;                       
+	        meanVaslat += ReScaledDataIterator.Get();
+                volVaslatReal++;
                 if((tmp) < 0)
                     histogramVaslat[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4273,13 +4273,13 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
                 else
                     histogramVaslat[tmp]++;
             }
-            volVaslat++;                       
+            volVaslat++;
         }   	       	
         if ( constErodeMaskIterator.Get() == VAS_MED ) {
             if (ReScaledDataIterator.Get() > 0) {
                 tmp = ReScaledDataIterator.Get();
-	        meanVasmed += ReScaledDataIterator.Get();          
-                volVasmedReal++;                       
+	        meanVasmed += ReScaledDataIterator.Get();
+                volVasmedReal++;
                 if((tmp) < 0)
                     histogramVasmed[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4287,13 +4287,13 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
                 else
                     histogramVasmed[tmp]++;
             }
-            volVasmed++;                       
+            volVasmed++;
         }   	       	
         if ( constErodeMaskIterator.Get() == VAS_INT ) {
             if (ReScaledDataIterator.Get() > 0) {
                 tmp = ReScaledDataIterator.Get();
-	        meanVasint += ReScaledDataIterator.Get();          
-                volVasintReal++;                       
+	        meanVasint += ReScaledDataIterator.Get();
+                volVasintReal++;
                 if((tmp) < 0)
                     histogramVasint[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4301,13 +4301,13 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
                 else
                     histogramVasint[tmp]++;
             }
-            volVasint++;                       
+            volVasint++;
         }   	       	
         if ( constErodeMaskIterator.Get() == CAUD_SART ) {
             if (ReScaledDataIterator.Get() > 0) {
                 tmp = ReScaledDataIterator.Get();
-	        meanCaud += ReScaledDataIterator.Get();          
-                volCaudReal++;                       
+	        meanCaud += ReScaledDataIterator.Get();
+                volCaudReal++;
                 if((tmp) < 0)
                     histogramCaud[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4315,7 +4315,7 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
                 else
                     histogramCaud[tmp]++;
             }
-            volCaud++;                       
+            volCaud++;
         }   	       	
     }
     //calculate histogram entropy
@@ -4394,57 +4394,57 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
     for ( constErodeMaskIterator.GoToBegin(),ReScaledDataIterator.GoToBegin(); !constErodeMaskIterator.IsAtEnd(); ++constErodeMaskIterator, ++ReScaledDataIterator ) {
         if ( constErodeMaskIterator.Get() == SEMIT ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        sdSemit += (ReScaledDataIterator.Get() - meanSemit) * (ReScaledDataIterator.Get() - meanSemit);          
+	        sdSemit += (ReScaledDataIterator.Get() - meanSemit) * (ReScaledDataIterator.Get() - meanSemit);
             }
         }
         if ( constErodeMaskIterator.Get() == REC_FEM ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        sdRect += (ReScaledDataIterator.Get() - meanRect) * (ReScaledDataIterator.Get() - meanRect);          
+	        sdRect += (ReScaledDataIterator.Get() - meanRect) * (ReScaledDataIterator.Get() - meanRect);
             }
         }
         if ( constErodeMaskIterator.Get() == CRAN_SART ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        sdCran += (ReScaledDataIterator.Get() - meanCran) * (ReScaledDataIterator.Get() - meanCran);          
+	        sdCran += (ReScaledDataIterator.Get() - meanCran) * (ReScaledDataIterator.Get() - meanCran);
             }
         }
         if ( constErodeMaskIterator.Get() == ADDUCTOR ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        sdAdductor += (ReScaledDataIterator.Get() - meanAdductor) * (ReScaledDataIterator.Get() - meanAdductor);          
+	        sdAdductor += (ReScaledDataIterator.Get() - meanAdductor) * (ReScaledDataIterator.Get() - meanAdductor);
             }
         }
         if ( constErodeMaskIterator.Get() == GRACILIS ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        sdGracilis += (ReScaledDataIterator.Get() - meanGracilis) * (ReScaledDataIterator.Get() - meanGracilis);          
+	        sdGracilis += (ReScaledDataIterator.Get() - meanGracilis) * (ReScaledDataIterator.Get() - meanGracilis);
             }
         }
         if ( constErodeMaskIterator.Get() == BIC_FEM ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        sdBic += (ReScaledDataIterator.Get() - meanBic) * (ReScaledDataIterator.Get() - meanBic);          
+	        sdBic += (ReScaledDataIterator.Get() - meanBic) * (ReScaledDataIterator.Get() - meanBic);
             }
         }
         if ( constErodeMaskIterator.Get() == SEMI_MEM ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        sdSemimem += (ReScaledDataIterator.Get() - meanSemimem) * (ReScaledDataIterator.Get() - meanSemimem);          
+	        sdSemimem += (ReScaledDataIterator.Get() - meanSemimem) * (ReScaledDataIterator.Get() - meanSemimem);
             }
         }
         if ( constErodeMaskIterator.Get() == VAS_LAT ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        sdVaslat += (ReScaledDataIterator.Get() - meanVaslat) * (ReScaledDataIterator.Get() - meanVaslat);          
+	        sdVaslat += (ReScaledDataIterator.Get() - meanVaslat) * (ReScaledDataIterator.Get() - meanVaslat);
             }
         }
         if ( constErodeMaskIterator.Get() == VAS_MED ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        sdVasmed += (ReScaledDataIterator.Get() - meanVasmed) * (ReScaledDataIterator.Get() - meanVasmed);          
+	        sdVasmed += (ReScaledDataIterator.Get() - meanVasmed) * (ReScaledDataIterator.Get() - meanVasmed);
             }
         }
         if ( constErodeMaskIterator.Get() == VAS_INT ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        sdVasint += (ReScaledDataIterator.Get() - meanVasint) * (ReScaledDataIterator.Get() - meanVasint);          
+	        sdVasint += (ReScaledDataIterator.Get() - meanVasint) * (ReScaledDataIterator.Get() - meanVasint);
             }
         }
         if ( constErodeMaskIterator.Get() == CAUD_SART ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        sdCaud += (ReScaledDataIterator.Get() - meanCaud) * (ReScaledDataIterator.Get() - meanCaud);          
+	        sdCaud += (ReScaledDataIterator.Get() - meanCaud) * (ReScaledDataIterator.Get() - meanCaud);
             }
         }
     }
@@ -4463,167 +4463,167 @@ void TextureFeatureCal::histogramFeat3DROI( DMDData::OrientedImageType::Pointer 
     for ( constErodeMaskIterator.GoToBegin(),ReScaledDataIterator.GoToBegin(); !constErodeMaskIterator.IsAtEnd(); ++constErodeMaskIterator, ++ReScaledDataIterator ) {
         if ( constErodeMaskIterator.Get() == SEMIT ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        skewSemit += pow(ReScaledDataIterator.Get() - meanSemit, 3);          
-	        kortSemit += pow(ReScaledDataIterator.Get() - meanSemit, 4);          
+	        skewSemit += pow(ReScaledDataIterator.Get() - meanSemit, 3);
+	        kortSemit += pow(ReScaledDataIterator.Get() - meanSemit, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == REC_FEM ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        skewRect += pow(ReScaledDataIterator.Get() - meanRect, 3);          
-	        kortRect += pow(ReScaledDataIterator.Get() - meanRect, 4);          
+	        skewRect += pow(ReScaledDataIterator.Get() - meanRect, 3);
+	        kortRect += pow(ReScaledDataIterator.Get() - meanRect, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == CRAN_SART ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        skewCran += pow(ReScaledDataIterator.Get() - meanCran, 3);          
-	        kortCran += pow(ReScaledDataIterator.Get() - meanCran, 4);          
+	        skewCran += pow(ReScaledDataIterator.Get() - meanCran, 3);
+	        kortCran += pow(ReScaledDataIterator.Get() - meanCran, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == ADDUCTOR ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        skewAdductor += pow(ReScaledDataIterator.Get() - meanAdductor, 3);          
-	        kortAdductor += pow(ReScaledDataIterator.Get() - meanAdductor, 4);          
+	        skewAdductor += pow(ReScaledDataIterator.Get() - meanAdductor, 3);
+	        kortAdductor += pow(ReScaledDataIterator.Get() - meanAdductor, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == GRACILIS ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        skewGracilis += pow(ReScaledDataIterator.Get() - meanGracilis, 3);          
-	        kortGracilis += pow(ReScaledDataIterator.Get() - meanGracilis, 4);          
+	        skewGracilis += pow(ReScaledDataIterator.Get() - meanGracilis, 3);
+	        kortGracilis += pow(ReScaledDataIterator.Get() - meanGracilis, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == BIC_FEM ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        skewBic += pow(ReScaledDataIterator.Get() - meanBic, 3);          
-	        kortBic += pow(ReScaledDataIterator.Get() - meanBic, 4);          
+	        skewBic += pow(ReScaledDataIterator.Get() - meanBic, 3);
+	        kortBic += pow(ReScaledDataIterator.Get() - meanBic, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == SEMI_MEM ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        skewSemimem += pow(ReScaledDataIterator.Get() - meanSemimem, 3);          
-	        kortSemimem += pow(ReScaledDataIterator.Get() - meanSemimem, 4);          
+	        skewSemimem += pow(ReScaledDataIterator.Get() - meanSemimem, 3);
+	        kortSemimem += pow(ReScaledDataIterator.Get() - meanSemimem, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == VAS_LAT ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        skewVaslat += pow(ReScaledDataIterator.Get() - meanVaslat, 3);          
-	        kortVaslat += pow(ReScaledDataIterator.Get() - meanVaslat, 4);          
+	        skewVaslat += pow(ReScaledDataIterator.Get() - meanVaslat, 3);
+	        kortVaslat += pow(ReScaledDataIterator.Get() - meanVaslat, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == VAS_MED ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        skewVasmed += pow(ReScaledDataIterator.Get() - meanVasmed, 3);          
-	        kortVasmed += pow(ReScaledDataIterator.Get() - meanVasmed, 4);          
+	        skewVasmed += pow(ReScaledDataIterator.Get() - meanVasmed, 3);
+	        kortVasmed += pow(ReScaledDataIterator.Get() - meanVasmed, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == VAS_INT ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        skewVasint += pow(ReScaledDataIterator.Get() - meanVasint, 3);          
-	        kortVasint += pow(ReScaledDataIterator.Get() - meanVasint, 4);          
+	        skewVasint += pow(ReScaledDataIterator.Get() - meanVasint, 3);
+	        kortVasint += pow(ReScaledDataIterator.Get() - meanVasint, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == CAUD_SART ) {
             if (ReScaledDataIterator.Get() > 0) {
-	        skewCaud += pow(ReScaledDataIterator.Get() - meanCaud, 3);          
-	        kortCaud += pow(ReScaledDataIterator.Get() - meanCaud, 4);          
+	        skewCaud += pow(ReScaledDataIterator.Get() - meanCaud, 3);
+	        kortCaud += pow(ReScaledDataIterator.Get() - meanCaud, 4);
             }
         }
     }
     if(sdSemit)
         skewSemit = skewSemit / (pow(sdSemit, 3) * (volSemitReal - 1));
-    else 
+    else
         skewSemit = 0;
     if(sdSemit)
         kortSemit = kortSemit / (pow(sdSemit, 4) * (volSemitReal - 1)) - 3;
-    else 
+    else
         kortSemit = 0;
     if(sdRect)
         skewRect = skewRect / (pow(sdRect, 3) * (volRectReal - 1));
-    else 
+    else
         skewRect = 0;
     if(sdRect)
         kortRect = kortRect / (pow(sdRect, 4) * (volRectReal - 1)) - 3;
-    else 
+    else
         kortRect = 0;
 
     if(sdCran)
         skewCran = skewCran / (pow(sdCran, 3) * (volCranReal - 1));
-    else 
+    else
         skewCran = 0;
     if(sdCran)
         kortCran = kortCran / (pow(sdCran, 4) * (volCranReal - 1)) - 3;
-    else 
+    else
         kortCran = 0;
 
     if(sdAdductor)
         skewAdductor = skewAdductor / (pow(sdAdductor, 3) * (volAdductorReal - 1));
-    else 
+    else
         skewAdductor = 0;
     if(sdAdductor)
         kortAdductor = kortAdductor / (pow(sdAdductor, 4) * (volAdductorReal - 1)) - 3;
-    else 
+    else
         kortAdductor = 0;
 
     if(sdGracilis)
         skewGracilis = skewGracilis / (pow(sdGracilis, 3) * (volGracilisReal - 1));
-    else 
+    else
         skewGracilis = 0;
     if(sdGracilis)
         kortGracilis = kortGracilis / (pow(sdGracilis, 4) * (volGracilisReal - 1)) - 3;
-    else 
+    else
         kortGracilis = 0;
 
     if(sdBic)
         skewBic = skewBic / (pow(sdBic, 3) * (volBicReal - 1));
-    else 
+    else
         skewBic = 0;
     if(sdBic)
         kortBic = kortBic / (pow(sdBic, 4) * (volBicReal - 1)) - 3;
-    else 
+    else
         kortBic = 0;
 
     if(sdSemimem)
         skewSemimem = skewSemimem / (pow(sdSemimem, 3) * (volSemimemReal - 1));
-    else 
+    else
         skewSemimem = 0;
     if(sdSemimem)
         kortSemimem = kortSemimem / (pow(sdSemimem, 4) * (volSemimemReal - 1)) - 3;
-    else 
+    else
         kortSemimem = 0;
 
     if(sdVaslat)
         skewVaslat = skewVaslat / (pow(sdVaslat, 3) * (volVaslatReal - 1));
-    else 
+    else
         skewVaslat = 0;
     if(sdVaslat)
         kortVaslat = kortVaslat / (pow(sdVaslat, 4) * (volVaslatReal - 1)) - 3;
-    else 
+    else
         kortVaslat = 0;
 
     if(sdVasmed)
         skewVasmed = skewVasmed / (pow(sdVasmed, 3) * (volVasmedReal - 1));
-    else 
+    else
         skewVasmed = 0;
     if(sdVasmed)
         kortVasmed = kortVasmed / (pow(sdVasmed, 4) * (volVasmedReal - 1)) - 3;
-    else 
+    else
         kortVasmed = 0;
 
     if(sdVasint)
         skewVasint = skewVasint / (pow(sdVasint, 3) * (volVasintReal - 1));
-    else 
+    else
         skewVasint = 0;
     if(sdVasint)
         kortVasint = kortVasint / (pow(sdVasint, 4) * (volVasintReal - 1)) - 3;
-    else 
+    else
         kortVasint = 0;
 
     if(sdCaud)
         skewCaud = skewCaud / (pow(sdCaud, 3) * (volCaudReal - 1));
-    else 
+    else
         skewCaud = 0;
     if(sdCaud)
         kortCaud = kortCaud / (pow(sdCaud, 4) * (volCaudReal - 1)) - 3;
-    else 
+    else
         kortCaud = 0;
 
         if(volOutputMark){

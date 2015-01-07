@@ -7,8 +7,8 @@
  * Update  :   1. Created the data class (06-04-10)
  * Copyright (c) Nero Image Research and Analysis Lab.@UNC All rights reserved.
  *
- * This software is distributed WITHOUT ANY WARRANTY; without even 
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * This software is distributed WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE.
  *
 =========================================================================*/
@@ -33,9 +33,9 @@
 //using namespace std;
 
 #ifndef DMDCURVEFIT    // prevent for redefine
-#define DMDCURVEFIT    
-extern "C" { 
-#include "f2c.h" 
+#define DMDCURVEFIT
+extern "C" {
+#include "f2c.h"
 void sgels_(char *trans, integer *m, integer *n, integer *nrhs, real *a, integer *lda, real *b, integer *ldb, real *work, integer *lwork, integer *info);
 }
 
@@ -54,12 +54,12 @@ class DMDCurveFit
         void get_xy_max_min ( void );
         void reporterror( char erstr[] );
         long double ldpow( long double n, unsigned p );
- 
-        double data_array[2][MAXPAIRS]; 
+
+        double data_array[2][MAXPAIRS];
 
     public:
         DMDCurveFit( ) {
-            
+
         }
 
         double polycurvefit( double data[2][MAXPAIRS] );
@@ -136,19 +136,19 @@ int DMDCurveFit::polynomfit( void )
     for( j = 1; j <= data_pairs; j++ ) {
         for( i = 1; i <= order; i++ ) {
             B[i] = B[i] + data_array[1][j] * yscale * ldpow( data_array[0][j] * xscale, i );
-            if( B[i] == LDBL_MAX ) 
+            if( B[i] == LDBL_MAX )
                 return false;
             for( k = 1; k <= order; k++ ) {
                 a[i][k] = a[i][k] + ldpow( data_array[0][j] * xscale, (i + k) );
-                if( a[i][k] == LDBL_MAX ) 
+                if( a[i][k] == LDBL_MAX )
                     return false;
             }
             S[i] = S[i] + ldpow( data_array[0][j] * xscale, i );
-            if( S[i] == LDBL_MAX ) 
+            if( S[i] == LDBL_MAX )
                 return false;
         }
         Y1 = Y1 + data_array[1][j] * yscale;
-        if( Y1 == LDBL_MAX ) 
+        if( Y1 == LDBL_MAX )
             return false;
     }
     /*-----------------------------------------------------------------*/
@@ -195,11 +195,11 @@ polfit1:        for( i = k; i <= order; i++ )
     /*-----------------------------------------------------------------*/
     polycoefs[order] = B[order];
     for( k = 1; k <= order - 1; k++ ) {
-        i = order - k; 
+        i = order - k;
         S1 = 0;
         for( j = 1; j <= order; j++ ) {
             S1 = S1 + a[i][j] * polycoefs[j];
-            if( S1 == LDBL_MAX ) 
+            if( S1 == LDBL_MAX )
                 return false;
         }
         polycoefs[i] = B[i] - S1;
@@ -208,7 +208,7 @@ polfit1:        for( i = k; i <= order; i++ )
     S1 = 0;
     for( i = 1; i <= order; i++ ) {
         S1 = S1 + polycoefs[i] * S[i] / (long double)data_pairs;
-        if( S1 == LDBL_MAX ) 
+        if( S1 == LDBL_MAX )
             return false;
     }
     polycoefs[0] = (Y1 / (long double)data_pairs - S1);
@@ -216,7 +216,7 @@ polfit1:        for( i = k; i <= order; i++ )
     /* zero all coeficient values smaller than +/- .000001 (avoids -0)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
     for( i = 0; i <= order; i++ )
-        if ( fabsl( polycoefs[i] * 1000000 ) < 1 ) 
+        if ( fabsl( polycoefs[i] * 1000000 ) < 1 )
             polycoefs[i] = 0;
 
     /* rescale parameters
@@ -263,7 +263,7 @@ void DMDCurveFit::datasort( void )
             }
         }
         last = last - 1;
-        if( swapflag == 0 ) 
+        if( swapflag == 0 )
             outer = data_pairs;
     }
 }
@@ -303,7 +303,7 @@ float DMDCurveFit::poly_correlcoef( void )
     SY = sqrtl( SAA / data_pairs );
     SYCALC = sqrtl( SBB / data_pairs );
     SYYCALC = SAB / data_pairs;
-    
+
     return (float) ( SYYCALC / ( SY * SYCALC ) );
 
 }
@@ -316,13 +316,13 @@ void DMDCurveFit::get_xy_max_min( void )
     ymin = data_array[1][1]; ymax = data_array[1][1];
 
     for( i = 1; i <= data_pairs; i++ ) {
-        if( data_array[0][i] < xmin ) 
+        if( data_array[0][i] < xmin )
             xmin = data_array[0][i];
-        if( data_array[0][i] > xmax ) 
+        if( data_array[0][i] > xmax )
             xmax = data_array[0][i];
-        if( data_array[1][i] < ymin ) 
+        if( data_array[1][i] < ymin )
             ymin = data_array[1][i];
-        if( data_array[1][i] > ymax ) 
+        if( data_array[1][i] > ymax )
             ymax = data_array[1][i];
     }
 }
@@ -437,7 +437,7 @@ double DMDCurveFit::lslcurvefit( double data[2][MAXPAIRS] )
     integer lwork;
     real *mWork;
     integer info = 0;
-  
+
     lwork=-1;
     mWork=(float *)malloc(1*sizeof(float));
     sgels_(&trans, &m, &n, &nrhs, mA, &m, v, &m, mWork, &lwork, &info);

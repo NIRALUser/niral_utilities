@@ -10,8 +10,8 @@
  * Update  :   1. Created the class (06-24-10)
  * Copyright (c) Neuro Image Research and Analysis Lab.@UNC All rights reserved.
  *
- * This software is distributed WITHOUT ANY WARRANTY; without even 
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * This software is distributed WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE.
  *
 =========================================================================*/
@@ -40,48 +40,48 @@ char *muscleName[] = { "MUSCLES", "CRAN_SART", "REC_FEM", "BIC_FEM", "GRACILIS",
 //////////////////////////////////////////////////////////////////////////
 class DMDMuscleFeature : public virtual DMDData
 {
-    private:           
+    private:
 //        float meanCran, meanRect, meanSemit, meanAdductor, meanGracilis, meanBic, meanSemimem, meanVaslat, meanVasmed, meanVasint, meanCaud, sdCran, sdRect, sdSemit, sdAdductor, sdGracilis, sdBic, sdSemimem, sdVaslat, sdVasmed, sdVasint, sdCaud, volCran, volRect, volSemit, volAdductor, volGracilis, volBic, volSemimem, volVaslat, volVasmed, volVasint, volCaud ;
         float meanCran, meanRect, meanSemit, meanAdductor, meanGracilis, meanBic, meanSemimem, meanVaslat, meanVasmed, meanVasint, meanCaud, sdCran, sdRect, sdSemit, sdAdductor, sdGracilis, sdBic, sdSemimem, sdVaslat, sdVasmed, sdVasint, sdCaud, skewCran, skewRect, skewSemit, skewAdductor, skewGracilis, skewBic, skewSemimem, skewVaslat, skewVasmed, skewVasint, skewCaud, kortCran, kortRect, kortSemit, kortAdductor, kortGracilis, kortBic, kortSemimem, kortVaslat, kortVasmed, kortVasint, kortCaud, volCran, volRect, volSemit, volAdductor, volGracilis, volBic, volSemimem, volVaslat, volVasmed, volVasint, volCaud, entropyCran, entropyRect, entropySemit, entropyAdductor, entropyGracilis, entropyBic, entropySemimem, entropyVaslat, entropyVasmed, entropyVasint, entropyCaud;
         float muscleVolume[NUMBER_OF_MUSCLE];
-    public:   
-       // DMDMuscleFeature():meanCran(0), meanRect(0), meanSemit(0), meanAdductor(0), meanGracilis(0), meanBic(0), meanSemimem(0), meanVaslat(0), meanVasmed(0), meanVasint(0), meanCaud(0), sdCran(0), sdRect(0), sdSemit(0), sdAdductor(0), sdGracilis(0), sdBic(0), sdSemimem(0), sdVaslat(0), sdVasmed(0), sdVasint(0), sdCaud(0), volCran(0), volRect(0), volSemit(0), volAdductor(0), volGracilis(0), volBic(0), volSemimem(0), volVaslat(0), volVasmed(0), volVasint(0), volCaud(0) {                 
+    public:
+       // DMDMuscleFeature():meanCran(0), meanRect(0), meanSemit(0), meanAdductor(0), meanGracilis(0), meanBic(0), meanSemimem(0), meanVaslat(0), meanVasmed(0), meanVasint(0), meanCaud(0), sdCran(0), sdRect(0), sdSemit(0), sdAdductor(0), sdGracilis(0), sdBic(0), sdSemimem(0), sdVaslat(0), sdVasmed(0), sdVasint(0), sdCaud(0), volCran(0), volRect(0), volSemit(0), volAdductor(0), volGracilis(0), volBic(0), volSemimem(0), volVaslat(0), volVasmed(0), volVasint(0), volCaud(0) {
         DMDMuscleFeature():meanCran(0), meanRect(0), meanSemit(0), meanAdductor(0), meanGracilis(0), meanBic(0), meanSemimem(0), meanVaslat(0), meanVasmed(0), meanVasint(0), meanCaud(0), sdCran(0), sdRect(0), sdSemit(0), sdAdductor(0), sdGracilis(0), sdBic(0), sdSemimem(0), sdVaslat(0), sdVasmed(0), sdVasint(0), sdCaud(0), skewCran(0), skewRect(0), skewSemit(0), skewAdductor(0), skewGracilis(0), skewBic(0), skewSemimem(0), skewVaslat(0), skewVasmed(0), skewVasint(0), skewCaud(0), kortCran(0), kortRect(0), kortSemit(0), kortAdductor(0), kortGracilis(0), kortBic(0), kortSemimem(0), kortVaslat(0), kortVasmed(0), kortVasint(0), kortCaud(0), volCran(0), volRect(0), volSemit(0), volAdductor(0), volGracilis(0), volBic(0), volSemimem(0), volVaslat(0), volVasmed(0), volVasint(0), volCaud(0), entropyCran(0), entropyRect(0), entropySemit(0), entropyAdductor(0), entropyGracilis(0), entropyBic(0), entropySemimem(0), entropyVaslat(0), entropyVasmed(0), entropyVasint(0), entropyCaud(0) {
-                  
+
 	}
         typedef itk::ImageRegionConstIterator< DMDData::OrientedImageType > ConstIteratorType;
         void features( DMDData::OrientedImageType::Pointer mask, DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, float voxelSize, std::string featurefilename, bool );
         void runlengthFeat( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename);
         void runlengthFeat3D( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType);
         void runlengthFeat2DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType);
-        void runlengthFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType, StrITKType);        
+        void runlengthFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType, StrITKType);
         void calRunLengthFeatures(DMDData::FITKType &SRE, DMDData::FITKType &LRE, DMDData::FITKType &GLN, DMDData::FITKType &RLN, DMDData::FITKType &RP, FITKType np, int runlengthmatrix[RUN_LENGTH_LEVEL][RUN_INTENSITY_LEVEL], StrITKType);
-        void cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType, StrITKType);        
-        void calCooccurrenceFeatures( DMDData::FITKType &EntropyTmp, DMDData::FITKType &EnergyTmp, DMDData::FITKType &ContrastTmp, DMDData::FITKType &HomoGeneityTmp, float  cooccurrencematrix[CO_OCCURRENCE_LEVEL][CO_OCCURRENCE_LEVEL], std::string);  
- 
-}; 
+        void cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointer erodemask, DMDData::OrientedImageType::Pointer data, std::string featurefilename, FITKType, StrITKType);
+        void calCooccurrenceFeatures( DMDData::FITKType &EntropyTmp, DMDData::FITKType &EnergyTmp, DMDData::FITKType &ContrastTmp, DMDData::FITKType &HomoGeneityTmp, float  cooccurrencematrix[CO_OCCURRENCE_LEVEL][CO_OCCURRENCE_LEVEL], std::string);
+
+};
 //////////////////////////////////////////////////////////////////////////
 void DMDMuscleFeature::calRunLengthFeatures(DMDData::FITKType &SRE, DMDData::FITKType &LRE, DMDData::FITKType &GLN, DMDData::FITKType &RLN, DMDData::FITKType &RP, FITKType np, int runlengthmatrix[RUN_LENGTH_LEVEL][RUN_INTENSITY_LEVEL], StrITKType caseID)
 {
     // calculate run length matrix features
-    float nr = 0, pr = 0, pg = 0;  // pr: number of runs with same length but different intensity; pg: number of runs with same intensity but different length; nr: total number of runs. 
+    float nr = 0, pr = 0, pg = 0;  // pr: number of runs with same length but different intensity; pg: number of runs with same intensity but different length; nr: total number of runs.
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrix[j][i];
              nr += runlengthmatrix[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrix[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -102,21 +102,21 @@ void DMDMuscleFeature::calRunLengthFeatures(DMDData::FITKType &SRE, DMDData::FIT
    // std::cout << "number of run: " << nr << std::endl;
     std::string featurefilename = "../data/voi" + caseID + ".txt" ;
     std::ofstream efile( featurefilename.c_str() , std::ios::app );
-       
+
     efile << SRE << "  " << LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
 
     efile.close();
 }
 //////////////////////////////////////////////////////////////////////////
-void DMDMuscleFeature::calCooccurrenceFeatures( DMDData::FITKType &EntropyTmp, DMDData::FITKType &EnergyTmp, DMDData::FITKType &ContrastTmp, DMDData::FITKType &HomoGeneityTmp, float  cooccurrencematrix[CO_OCCURRENCE_LEVEL][CO_OCCURRENCE_LEVEL], std::string caseID )  
+void DMDMuscleFeature::calCooccurrenceFeatures( DMDData::FITKType &EntropyTmp, DMDData::FITKType &EnergyTmp, DMDData::FITKType &ContrastTmp, DMDData::FITKType &HomoGeneityTmp, float  cooccurrencematrix[CO_OCCURRENCE_LEVEL][CO_OCCURRENCE_LEVEL], std::string caseID )
 {
     // calculate run length matrix features
-    EntropyTmp = 0; 
-    EnergyTmp = 0; 
-    ContrastTmp = 0; 
-    HomoGeneityTmp = 0; 
-    for (int j = 0; j < CO_OCCURRENCE_LEVEL; j++) { 
-        for (int i = 0; i < CO_OCCURRENCE_LEVEL; i++) { 
+    EntropyTmp = 0;
+    EnergyTmp = 0;
+    ContrastTmp = 0;
+    HomoGeneityTmp = 0;
+    for (int j = 0; j < CO_OCCURRENCE_LEVEL; j++) {
+        for (int i = 0; i < CO_OCCURRENCE_LEVEL; i++) {
            if(cooccurrencematrix[j][i]){
                cooccurrencematrix[j][i] /= (CO_OCCURRENCE_LEVEL * CO_OCCURRENCE_LEVEL);
                EntropyTmp += (-cooccurrencematrix[j][i] * log (cooccurrencematrix[j][i]));
@@ -126,7 +126,7 @@ void DMDMuscleFeature::calCooccurrenceFeatures( DMDData::FITKType &EntropyTmp, D
                //    std::cout << EnergyTmp << "  " << cooccurrencematrix[j][i] << std::endl;
                 //   getchar();
           //     }
- 
+
                ContrastTmp += ((i - j) * (i - j) * cooccurrencematrix[j][i]);
                HomoGeneityTmp += (cooccurrencematrix[j][i] / (1 + abs(i - j)));
            }
@@ -149,8 +149,8 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
     float SRE = 0, LRE = 0, GLN = 0, RLN = 0, RP = 0;  // SRE = Short Run Emphasis, LRE = Long Run Emphasis, GLN = Gray Level Nonuniform, RLN = Run Length Nonuniform, RP = Run Percentage
     float npRecFem = 0, npSemit = 0, npCranSart = 0, npBicFem = 0, npGracilis = 0, npAdductor = 0, npSemiMem = 0, npVasLat = 0, npVasMed = 0, npVasInt = 0, npCaudSart = 0;
 
-    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) { 
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) {
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
             runlengthmatrixRecFem[j][i] = 0;
             runlengthmatrixSemit[j][i] = 0;
             runlengthmatrixCranSart[j][i] = 0;
@@ -166,7 +166,7 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
     }
 
     ddata.imageInitialize ( data, rescaledData );
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
 
@@ -178,7 +178,7 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
 
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = data->GetLargestPossibleRegion().GetSize();
-    DMDData::OrientedImageType::IndexType  index;    
+    DMDData::OrientedImageType::IndexType  index;
     int startRunRecFem = -1, runLengthRecFem = 0, startRunSemit = -1, runLengthSemit = 0, startRunCranSart = -1, runLengthCranSart = 0, startRunBicFem = -1, runLengthBicFem = 0, startRunGracilis = -1, runLengthGracilis = 0, startRunAdductor = -1, runLengthAdductor = 0, startRunSemiMem = -1, runLengthSemiMem = 0, startRunVasLat = -1, runLengthVasLat = 0, startRunVasMed = -1, runLengthVasMed = 0, startRunVasInt = -1, runLengthVasInt = 0, startRunCaudSart = -1, runLengthCaudSart = 0;
     //x direction
     for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
@@ -197,21 +197,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                                runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                             if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                                startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                             startRunRecFem = -1;
                             runLengthRecFem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunRecFem != -1){
                         if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                            runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                         if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                            startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                         startRunRecFem = -1;
                         runLengthRecFem = 0;
@@ -229,21 +229,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                                runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                                runLengthSemit = RUN_LENGTH_LEVEL - 1;
                             if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                                startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                                startRunSemit = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                             startRunSemit = -1;
                             runLengthSemit = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunSemit != -1){
                         if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                            runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                            runLengthSemit = RUN_LENGTH_LEVEL - 1;
                         if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                            startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                            startRunSemit = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                         startRunSemit = -1;
                         runLengthSemit = 0;
@@ -261,21 +261,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthCranSart > RUN_LENGTH_LEVEL - 1)
-                                runLengthCranSart = RUN_LENGTH_LEVEL - 1; 
+                                runLengthCranSart = RUN_LENGTH_LEVEL - 1;
                             if(startRunCranSart > RUN_INTENSITY_LEVEL - 1)
-                                startRunCranSart = RUN_INTENSITY_LEVEL - 1; 
+                                startRunCranSart = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixCranSart[runLengthCranSart][startRunCranSart]++;
                             startRunCranSart = -1;
                             runLengthCranSart = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunCaudSart != -1){
                         if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                         if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                         startRunCaudSart = -1;
                         runLengthCaudSart = 0;
@@ -293,21 +293,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                                runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                             if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                                startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
                             startRunBicFem = -1;
                             runLengthBicFem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunBicFem != -1){
                         if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                            runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                         if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                            startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
                         startRunBicFem = -1;
                         runLengthBicFem = 0;
@@ -325,21 +325,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                                runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                                runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                             if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                                startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                                startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
                             startRunGracilis = -1;
                             runLengthGracilis = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunGracilis != -1){
                         if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                            runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                            runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                         if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                            startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                            startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
                         startRunGracilis = -1;
                         runLengthGracilis = 0;
@@ -357,21 +357,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                                runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                                runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                             if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                                startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                                startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                             startRunAdductor = -1;
                             runLengthAdductor = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunAdductor != -1){
                         if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                            runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                            runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                         if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                            startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                            startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                         startRunAdductor = -1;
                         runLengthAdductor = 0;
@@ -389,21 +389,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                                runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                             if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                                startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                             startRunSemiMem = -1;
                             runLengthSemiMem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunSemiMem != -1){
                         if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                            runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                         if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                            startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                         startRunSemiMem = -1;
                         runLengthSemiMem = 0;
@@ -421,21 +421,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
                             startRunVasLat = -1;
                             runLengthVasLat = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasLat != -1){
                         if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
                         startRunVasLat = -1;
                         runLengthVasLat = 0;
@@ -453,21 +453,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                             startRunVasMed = -1;
                             runLengthVasMed = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasMed != -1){
                         if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                         startRunVasMed = -1;
                         runLengthVasMed = 0;
@@ -485,21 +485,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                             startRunVasInt = -1;
                             runLengthVasInt = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasInt != -1){
                         if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                         startRunVasInt = -1;
                         runLengthVasInt = 0;
@@ -517,21 +517,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                                runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                                runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                             if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                                startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                                startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                             startRunCaudSart = -1;
                             runLengthCaudSart = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunCaudSart != -1){
                         if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                         if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                         startRunCaudSart = -1;
                         runLengthCaudSart = 0;
@@ -539,7 +539,7 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                 }
             }
         }
-    } 
+    }
     //y direction
     for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
         for(index[0] = 0; index[0] < size[0]; index[0]++) {
@@ -555,21 +555,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                                runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                             if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                                startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                             startRunRecFem = -1;
                             runLengthRecFem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunRecFem != -1){
                         if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                            runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                         if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                            startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                         startRunRecFem = -1;
                         runLengthRecFem = 0;
@@ -586,21 +586,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                                runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                                runLengthSemit = RUN_LENGTH_LEVEL - 1;
                             if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                                startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                                startRunSemit = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                             startRunSemit = -1;
                             runLengthSemit = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunSemit != -1){
                         if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                            runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                            runLengthSemit = RUN_LENGTH_LEVEL - 1;
                         if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                            startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                            startRunSemit = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                         startRunSemit = -1;
                         runLengthSemit = 0;
@@ -617,21 +617,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthCranSart > RUN_LENGTH_LEVEL - 1)
-                                runLengthCranSart = RUN_LENGTH_LEVEL - 1; 
+                                runLengthCranSart = RUN_LENGTH_LEVEL - 1;
                             if(startRunCranSart > RUN_INTENSITY_LEVEL - 1)
-                                startRunCranSart = RUN_INTENSITY_LEVEL - 1; 
+                                startRunCranSart = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixCranSart[runLengthCranSart][startRunCranSart]++;
                             startRunCranSart = -1;
                             runLengthCranSart = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunCaudSart != -1){
                         if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                         if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                         startRunCaudSart = -1;
                         runLengthCaudSart = 0;
@@ -648,21 +648,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                                runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                             if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                                startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
                             startRunBicFem = -1;
                             runLengthBicFem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunBicFem != -1){
                         if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                            runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                         if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                            startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
                         startRunBicFem = -1;
                         runLengthBicFem = 0;
@@ -679,21 +679,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                                runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                                runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                             if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                                startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                                startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
                             startRunGracilis = -1;
                             runLengthGracilis = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunGracilis != -1){
                         if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                            runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                            runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                         if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                            startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                            startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
                         startRunGracilis = -1;
                         runLengthGracilis = 0;
@@ -710,21 +710,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                                runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                                runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                             if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                                startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                                startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                             startRunAdductor = -1;
                             runLengthAdductor = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunAdductor != -1){
                         if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                            runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                            runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                         if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                            startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                            startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                         startRunAdductor = -1;
                         runLengthAdductor = 0;
@@ -741,21 +741,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                                runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                             if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                                startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                             startRunSemiMem = -1;
                             runLengthSemiMem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunSemiMem != -1){
                         if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                            runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                         if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                            startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                         startRunSemiMem = -1;
                         runLengthSemiMem = 0;
@@ -772,21 +772,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
                             startRunVasLat = -1;
                             runLengthVasLat = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasLat != -1){
                         if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
                         startRunVasLat = -1;
                         runLengthVasLat = 0;
@@ -803,21 +803,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                             startRunVasMed = -1;
                             runLengthVasMed = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasMed != -1){
                         if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                         startRunVasMed = -1;
                         runLengthVasMed = 0;
@@ -834,21 +834,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                             startRunVasInt = -1;
                             runLengthVasInt = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasInt != -1){
                         if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                         startRunVasInt = -1;
                         runLengthVasInt = 0;
@@ -865,21 +865,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                                runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                                runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                             if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                                startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                                startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                             startRunCaudSart = -1;
                             runLengthCaudSart = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunCaudSart != -1){
                         if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                         if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                         startRunCaudSart = -1;
                         runLengthCaudSart = 0;
@@ -903,21 +903,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                                runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                             if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                                startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                             startRunRecFem = -1;
                             runLengthRecFem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunRecFem != -1){
                         if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                            runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                         if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                            startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                         startRunRecFem = -1;
                         runLengthRecFem = 0;
@@ -934,21 +934,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                                runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                                runLengthSemit = RUN_LENGTH_LEVEL - 1;
                             if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                                startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                                startRunSemit = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                             startRunSemit = -1;
                             runLengthSemit = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunSemit != -1){
                         if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                            runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                            runLengthSemit = RUN_LENGTH_LEVEL - 1;
                         if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                            startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                            startRunSemit = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                         startRunSemit = -1;
                         runLengthSemit = 0;
@@ -965,21 +965,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthCranSart > RUN_LENGTH_LEVEL - 1)
-                                runLengthCranSart = RUN_LENGTH_LEVEL - 1; 
+                                runLengthCranSart = RUN_LENGTH_LEVEL - 1;
                             if(startRunCranSart > RUN_INTENSITY_LEVEL - 1)
-                                startRunCranSart = RUN_INTENSITY_LEVEL - 1; 
+                                startRunCranSart = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixCranSart[runLengthCranSart][startRunCranSart]++;
                             startRunCranSart = -1;
                             runLengthCranSart = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunCaudSart != -1){
                         if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                         if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                            startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                         startRunCaudSart = -1;
                         runLengthCaudSart = 0;
@@ -996,21 +996,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                                runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                             if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                                startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
                             startRunBicFem = -1;
                             runLengthBicFem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunBicFem != -1){
                         if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                            runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                         if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                            startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
                         startRunBicFem = -1;
                         runLengthBicFem = 0;
@@ -1027,21 +1027,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                                runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                                runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                             if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                                startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                                startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
                             startRunGracilis = -1;
                             runLengthGracilis = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunGracilis != -1){
                         if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                            runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                            runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                         if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                            startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                            startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
                         startRunGracilis = -1;
                         runLengthGracilis = 0;
@@ -1058,21 +1058,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                                runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                                runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                             if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                                startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                                startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                             startRunAdductor = -1;
                             runLengthAdductor = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunAdductor != -1){
                         if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                            runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                            runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                         if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                            startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                            startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                         startRunAdductor = -1;
                         runLengthAdductor = 0;
@@ -1089,21 +1089,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                                runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                                runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                             if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                                startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                                startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                             startRunSemiMem = -1;
                             runLengthSemiMem = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunSemiMem != -1){
                         if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                            runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                            runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                         if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                            startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                            startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                         startRunSemiMem = -1;
                         runLengthSemiMem = 0;
@@ -1120,21 +1120,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
                             startRunVasLat = -1;
                             runLengthVasLat = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasLat != -1){
                         if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
                         startRunVasLat = -1;
                         runLengthVasLat = 0;
@@ -1151,21 +1151,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                             startRunVasMed = -1;
                             runLengthVasMed = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasMed != -1){
                         if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                         startRunVasMed = -1;
                         runLengthVasMed = 0;
@@ -1182,21 +1182,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                                runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                                runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                             if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                                startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                                startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                             startRunVasInt = -1;
                             runLengthVasInt = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunVasInt != -1){
                         if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                            runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                            runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                         if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                            startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                            startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                         runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                         startRunVasInt = -1;
                         runLengthVasInt = 0;
@@ -1213,21 +1213,21 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
                         }
                         else {
                             if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                                runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                                runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                             if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                                startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                                startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                             runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                             startRunCaudSart = -1;
                             runLengthCaudSart = 0;
                         }
-                    } 
+                    }
                 }
                 else {
                     if (startRunCaudSart != -1){
                         if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                            runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                         if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                            startRunCaudSart = RUN_INTENSITY_LEVEL -1; 
+                            startRunCaudSart = RUN_INTENSITY_LEVEL -1;
                         runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                         startRunCaudSart = -1;
                         runLengthCaudSart = 0;
@@ -1238,28 +1238,28 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
     }
     // calculate run length matrix features
     std::ofstream efile( featurefilename.c_str() , std::ios::app );
-    float nr = 0, pr = 0, pg = 0; 
+    float nr = 0, pr = 0, pg = 0;
     // RefFem
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixRecFem[j][i];
              nr += runlengthmatrixRecFem[j][i];
  //            std::cout <<  runlengthmatrixRecFem[j][i] << "  " ;
         }
  //       std::cout << "\n";
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
 //    getchar();
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixRecFem[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1280,22 +1280,22 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
     efile << "RecFem  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // Semit
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixSemit[j][i];
              nr += runlengthmatrixSemit[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixSemit[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1316,22 +1316,22 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
     efile << "Semit  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // CranSart
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixCranSart[j][i];
              nr += runlengthmatrixCranSart[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixCranSart[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1352,22 +1352,22 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
     efile << "CranSart  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // BicFem
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixBicFem[j][i];
              nr += runlengthmatrixBicFem[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixBicFem[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1388,22 +1388,22 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
     efile << "BicFem  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // Gracilis
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixGracilis[j][i];
              nr += runlengthmatrixGracilis[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixGracilis[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1424,22 +1424,22 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
     efile << "Gracilis  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // Adductor
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixAdductor[j][i];
              nr += runlengthmatrixAdductor[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixAdductor[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1460,22 +1460,22 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
     efile << "Adductor  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // SemiMem
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixSemiMem[j][i];
              nr += runlengthmatrixSemiMem[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixSemiMem[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1496,22 +1496,22 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
     efile << "SemiMem  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // VasLat
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixVasLat[j][i];
              nr += runlengthmatrixVasLat[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixVasLat[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1532,22 +1532,22 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
     efile << "VasLat  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // VasMed
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixVasMed[j][i];
              nr += runlengthmatrixVasMed[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixVasMed[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1568,22 +1568,22 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
     efile << "VasMed  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // VasInt
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixVasInt[j][i];
              nr += runlengthmatrixVasInt[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixVasInt[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1604,22 +1604,22 @@ void DMDMuscleFeature::runlengthFeat( DMDData::OrientedImageType::Pointer erodem
     efile << "VasInt  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // CaudSart
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixCaudSart[j][i];
              nr += runlengthmatrixCaudSart[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixCaudSart[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -1653,8 +1653,8 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
     float npRecFem = 0, npSemit = 0, npCranSart = 0, npBicFem = 0, npGracilis = 0, npAdductor = 0, npSemiMem = 0, npVasLat = 0, npVasMed = 0, npVasInt = 0, npCaudSart = 0;
     double imageVolume = 0;
 
-    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) { 
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) {
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
             runlengthmatrixRecFem[j][i] = 0;
             runlengthmatrixSemit[j][i] = 0;
             runlengthmatrixCranSart[j][i] = 0;
@@ -1682,7 +1682,7 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
     ddata.imageInitialize ( data, rescaledData_VAS_INT );
     ddata.imageInitialize ( data, rescaledData_CAUD_SART );
 
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
 
@@ -1693,7 +1693,7 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
         int hisTmp = constDataIterator.Get();
         if (hisTmp >= HISTOGRAM_LIMIT)
             hisTmp = HISTOGRAM_LIMIT - 1;
-        histogram[hisTmp]++; 
+        histogram[hisTmp]++;
         if(hisTmp > 0)
             imageVolume++;
         if (constDataIterator.Get() < intensityMin)
@@ -1744,7 +1744,7 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
     std::cout << "rescale finished! " << std::endl;
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = data->GetLargestPossibleRegion().GetSize();
-    DMDData::OrientedImageType::IndexType  index;    
+    DMDData::OrientedImageType::IndexType  index;
     int upperBound_REC_FEM = 0, lowerBound_REC_FEM = HISTOGRAM_LIMIT, upperBound_SEMIT = 0, lowerBound_SEMIT = HISTOGRAM_LIMIT, upperBound_CRAN_SART = 0, lowerBound_CRAN_SART = HISTOGRAM_LIMIT, upperBound_BIC_FEM = 0, lowerBound_BIC_FEM = HISTOGRAM_LIMIT, upperBound_GRACILIS = 0, lowerBound_GRACILIS = HISTOGRAM_LIMIT, upperBound_ADDUCTOR = 0, lowerBound_ADDUCTOR = HISTOGRAM_LIMIT, upperBound_SEMI_MEM = 0, lowerBound_SEMI_MEM = HISTOGRAM_LIMIT, upperBound_VAS_LAT = 0, lowerBound_VAS_LAT = HISTOGRAM_LIMIT, upperBound_VAS_MED = 0, lowerBound_VAS_MED = HISTOGRAM_LIMIT, upperBound_VAS_INT = 0, lowerBound_VAS_INT = HISTOGRAM_LIMIT, upperBound_CAUD_SART = 0, lowerBound_CAUD_SART = HISTOGRAM_LIMIT;
     int startRunRecFem = -1, runLengthRecFem = 0, startRunSemit = -1, runLengthSemit = 0, startRunCranSart = -1, runLengthCranSart = 0, startRunBicFem = -1, runLengthBicFem = 0, startRunGracilis = -1, runLengthGracilis = 0, startRunAdductor = -1, runLengthAdductor = 0, startRunSemiMem = -1, runLengthSemiMem = 0, startRunVasLat = -1, runLengthVasLat = 0, startRunVasMed = -1, runLengthVasMed = 0, startRunVasInt = -1, runLengthVasInt = 0, startRunCaudSart = -1, runLengthCaudSart = 0;
     // establish rescaled image for each muscle
@@ -1880,7 +1880,7 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
         }
     }
     std::cout << "upper bound: " << upperBound_REC_FEM << "  lower bound: " << lowerBound_REC_FEM << std::endl;
-    // establish run length matrix 
+    // establish run length matrix
     for (int i = lowerBound_REC_FEM; i <= upperBound_REC_FEM; i++) {
         int objCount = 0;
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
@@ -1896,13 +1896,13 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
             }
         }
         objCount = connectedComponentLabeling (rescaledData_REC_FEM);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_REC_FEM->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -1945,13 +1945,13 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
             }
         }
         objCount = connectedComponentLabeling (rescaledData_SEMIT);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_SEMIT->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -1987,13 +1987,13 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
             }
         }
         objCount = connectedComponentLabeling (rescaledData_BIC_FEM);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_BIC_FEM->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2029,13 +2029,13 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
             }
         }
         objCount = connectedComponentLabeling (rescaledData_CRAN_SART);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_CRAN_SART->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2071,13 +2071,13 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
             }
         }
         objCount = connectedComponentLabeling (rescaledData_GRACILIS);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_GRACILIS->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2113,13 +2113,13 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
             }
         }
         objCount = connectedComponentLabeling (rescaledData_ADDUCTOR);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_ADDUCTOR->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2155,13 +2155,13 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
             }
         }
         objCount = connectedComponentLabeling (rescaledData_SEMI_MEM);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_SEMI_MEM->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2197,13 +2197,13 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
             }
         }
         objCount = connectedComponentLabeling (rescaledData_VAS_LAT);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_VAS_LAT->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2239,13 +2239,13 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
             }
         }
         objCount = connectedComponentLabeling (rescaledData_VAS_MED);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_VAS_MED->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2281,13 +2281,13 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
             }
         }
         objCount = connectedComponentLabeling (rescaledData_VAS_INT);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_VAS_INT->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2323,13 +2323,13 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
             }
         }
         objCount = connectedComponentLabeling (rescaledData_CAUD_SART);
-        int objVolume[SIZE_LABELING_BIN] = {0}; 
+        int objVolume[SIZE_LABELING_BIN] = {0};
         for(index[2] = 0 ; index[2] < size[2]; index[2]++) {
             for(index[1] = 0; index[1] < size[1]; index[1]++) {
                 for(index[0] = 0; index[0] < size[0]; index[0]++) {
                     int k = rescaledData_CAUD_SART->GetPixel(index);
                     if(k){
-                        objVolume[k]++; 
+                        objVolume[k]++;
                     }
                 }
             }
@@ -2363,9 +2363,9 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
                     startRunRecFem = rescaledData_REC_FEM->GetPixel(index);
                     npRecFem += runLengthRecFem;
                     if(runLengthRecFem > RUN_LENGTH_LEVEL - 1)
-                        runLengthRecFem = RUN_LENGTH_LEVEL - 1; 
+                        runLengthRecFem = RUN_LENGTH_LEVEL - 1;
                     if(startRunRecFem > RUN_INTENSITY_LEVEL - 1)
-                        startRunRecFem = RUN_INTENSITY_LEVEL - 1; 
+                        startRunRecFem = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixRecFem[runLengthRecFem][startRunRecFem]++;
                 }
                 if ( erodemask->GetPixel(index) == SEMIT && rescaledData_SEMIT->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
@@ -2374,9 +2374,9 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
                     startRunSemit = rescaledData_SEMIT->GetPixel(index);
                     npSemit += runLengthSemit;
                     if(runLengthSemit > RUN_LENGTH_LEVEL - 1)
-                        runLengthSemit = RUN_LENGTH_LEVEL - 1; 
+                        runLengthSemit = RUN_LENGTH_LEVEL - 1;
                     if(startRunSemit > RUN_INTENSITY_LEVEL - 1)
-                        startRunSemit = RUN_INTENSITY_LEVEL - 1; 
+                        startRunSemit = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixSemit[runLengthSemit][startRunSemit]++;
                 }
                 if ( erodemask->GetPixel(index) == CRAN_SART && rescaledData_CRAN_SART->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
@@ -2385,11 +2385,11 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
                     startRunCranSart = rescaledData_CRAN_SART->GetPixel(index);
                     npCranSart += runLengthCranSart;
                     if(runLengthCranSart > RUN_LENGTH_LEVEL - 1)
-                        runLengthCranSart = RUN_LENGTH_LEVEL - 1; 
+                        runLengthCranSart = RUN_LENGTH_LEVEL - 1;
                     if(startRunCranSart > RUN_INTENSITY_LEVEL - 1)
-                        startRunCranSart = RUN_INTENSITY_LEVEL - 1; 
+                        startRunCranSart = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixCranSart[runLengthCranSart][startRunCranSart]++;
- 
+
                 }
                 if ( erodemask->GetPixel(index) == BIC_FEM && rescaledData_BIC_FEM->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
                     //runLengthBicFem = ddata.connectedComponentRegionGrowing (rescaledData_BIC_FEM->GetPixel(index),rescaledData_BIC_FEM->GetPixel(index), rescaledData_BIC_FEM, index);
@@ -2400,9 +2400,9 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
                     startRunBicFem = rescaledData_BIC_FEM->GetPixel(index);
                     npBicFem += runLengthBicFem;
                     if(runLengthBicFem > RUN_LENGTH_LEVEL - 1)
-                        runLengthBicFem = RUN_LENGTH_LEVEL - 1; 
+                        runLengthBicFem = RUN_LENGTH_LEVEL - 1;
                     if(startRunBicFem > RUN_INTENSITY_LEVEL - 1)
-                        startRunBicFem = RUN_INTENSITY_LEVEL - 1; 
+                        startRunBicFem = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixBicFem[runLengthBicFem][startRunBicFem]++;
 
                 }
@@ -2412,9 +2412,9 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
                     startRunGracilis = rescaledData_GRACILIS->GetPixel(index);
                     npGracilis += runLengthGracilis;
                     if(runLengthGracilis > RUN_LENGTH_LEVEL - 1)
-                        runLengthGracilis = RUN_LENGTH_LEVEL - 1; 
+                        runLengthGracilis = RUN_LENGTH_LEVEL - 1;
                     if(startRunGracilis > RUN_INTENSITY_LEVEL - 1)
-                        startRunGracilis = RUN_INTENSITY_LEVEL - 1; 
+                        startRunGracilis = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixGracilis[runLengthGracilis][startRunGracilis]++;
 
                 }
@@ -2424,9 +2424,9 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
                     startRunAdductor = rescaledData_ADDUCTOR->GetPixel(index);
                     npAdductor += runLengthAdductor;
                     if(runLengthAdductor > RUN_LENGTH_LEVEL - 1)
-                        runLengthAdductor = RUN_LENGTH_LEVEL - 1; 
+                        runLengthAdductor = RUN_LENGTH_LEVEL - 1;
                     if(startRunAdductor > RUN_INTENSITY_LEVEL - 1)
-                        startRunAdductor = RUN_INTENSITY_LEVEL - 1; 
+                        startRunAdductor = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixAdductor[runLengthAdductor][startRunAdductor]++;
                 }
                 if ( erodemask->GetPixel(index) == SEMI_MEM && rescaledData_SEMI_MEM->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
@@ -2435,9 +2435,9 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
                     startRunSemiMem = rescaledData_SEMI_MEM->GetPixel(index);
                     npSemiMem += runLengthSemiMem;
                     if(runLengthSemiMem > RUN_LENGTH_LEVEL - 1)
-                        runLengthSemiMem = RUN_LENGTH_LEVEL - 1; 
+                        runLengthSemiMem = RUN_LENGTH_LEVEL - 1;
                     if(startRunSemiMem > RUN_INTENSITY_LEVEL - 1)
-                        startRunSemiMem = RUN_INTENSITY_LEVEL - 1; 
+                        startRunSemiMem = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixSemiMem[runLengthSemiMem][startRunSemiMem]++;
                 }
                 if ( erodemask->GetPixel(index) == VAS_LAT && rescaledData_VAS_LAT->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
@@ -2446,9 +2446,9 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
                     startRunVasLat = rescaledData_VAS_LAT->GetPixel(index);
                     npVasLat += runLengthVasLat;
                     if(runLengthVasLat > RUN_LENGTH_LEVEL - 1)
-                        runLengthVasLat = RUN_LENGTH_LEVEL - 1; 
+                        runLengthVasLat = RUN_LENGTH_LEVEL - 1;
                     if(startRunVasLat > RUN_INTENSITY_LEVEL - 1)
-                        startRunVasLat = RUN_INTENSITY_LEVEL - 1; 
+                        startRunVasLat = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixVasLat[runLengthVasLat][startRunVasLat]++;
 
                 }
@@ -2458,9 +2458,9 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
                     startRunVasMed = rescaledData_VAS_MED->GetPixel(index);
                     npVasMed += runLengthVasMed;
                     if(runLengthVasMed > RUN_LENGTH_LEVEL - 1)
-                        runLengthVasMed = RUN_LENGTH_LEVEL - 1; 
+                        runLengthVasMed = RUN_LENGTH_LEVEL - 1;
                     if(startRunVasMed > RUN_INTENSITY_LEVEL - 1)
-                        startRunVasMed = RUN_INTENSITY_LEVEL - 1; 
+                        startRunVasMed = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixVasMed[runLengthVasMed][startRunVasMed]++;
                 }
                 if ( erodemask->GetPixel(index) == VAS_INT && rescaledData_VAS_INT->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
@@ -2469,9 +2469,9 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
                     startRunVasInt = rescaledData_VAS_INT->GetPixel(index);
                     npVasInt += runLengthVasInt;
                     if(runLengthVasInt > RUN_LENGTH_LEVEL - 1)
-                        runLengthVasInt = RUN_LENGTH_LEVEL - 1; 
+                        runLengthVasInt = RUN_LENGTH_LEVEL - 1;
                     if(startRunVasInt > RUN_INTENSITY_LEVEL - 1)
-                        startRunVasInt = RUN_INTENSITY_LEVEL - 1; 
+                        startRunVasInt = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixVasInt[runLengthVasInt][startRunVasInt]++;
                 }
                 if ( erodemask->GetPixel(index) == CAUD_SART && rescaledData_CAUD_SART->GetPixel(index) != SEARCHED_PIXEL_VALUE ) {
@@ -2480,39 +2480,39 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
                     startRunCaudSart = rescaledData_CAUD_SART->GetPixel(index);
                     npCaudSart += runLengthCaudSart;
                     if(runLengthCaudSart > RUN_LENGTH_LEVEL - 1)
-                        runLengthCaudSart = RUN_LENGTH_LEVEL - 1; 
+                        runLengthCaudSart = RUN_LENGTH_LEVEL - 1;
                     if(startRunCaudSart > RUN_INTENSITY_LEVEL - 1)
-                        startRunCaudSart = RUN_INTENSITY_LEVEL - 1; 
+                        startRunCaudSart = RUN_INTENSITY_LEVEL - 1;
                     runlengthmatrixCaudSart[runLengthCaudSart][startRunCaudSart]++;
                 }
             }
         }
-    } 
+    }
 */
     // calculate run length matrix features
     std::ofstream efile( featurefilename.c_str() , std::ios::app );
-    float nr = 0, pr = 0, pg = 0; 
+    float nr = 0, pr = 0, pg = 0;
     // RefFem
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixRecFem[j][i];
              nr += runlengthmatrixRecFem[j][i];
  //            std::cout <<  runlengthmatrixRecFem[j][i] << "  " ;
         }
  //       std::cout << "\n";
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
 //    getchar();
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixRecFem[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2533,22 +2533,22 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
     efile << "RecFem  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // Semit
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixSemit[j][i];
              nr += runlengthmatrixSemit[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixSemit[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2569,22 +2569,22 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
     efile << "Semit  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // CranSart
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixCranSart[j][i];
              nr += runlengthmatrixCranSart[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixCranSart[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2605,22 +2605,22 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
     efile << "CranSart  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // BicFem
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixBicFem[j][i];
              nr += runlengthmatrixBicFem[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixBicFem[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2641,22 +2641,22 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
     efile << "BicFem  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // Gracilis
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixGracilis[j][i];
              nr += runlengthmatrixGracilis[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixGracilis[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2677,22 +2677,22 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
     efile << "Gracilis  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // Adductor
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixAdductor[j][i];
              nr += runlengthmatrixAdductor[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixAdductor[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2713,22 +2713,22 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
     efile << "Adductor  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // SemiMem
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixSemiMem[j][i];
              nr += runlengthmatrixSemiMem[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixSemiMem[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2749,22 +2749,22 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
     efile << "SemiMem  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // VasLat
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixVasLat[j][i];
              nr += runlengthmatrixVasLat[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixVasLat[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2785,22 +2785,22 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
     efile << "VasLat  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // VasMed
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixVasMed[j][i];
              nr += runlengthmatrixVasMed[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixVasMed[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2821,22 +2821,22 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
     efile << "VasMed  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // VasInt
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixVasInt[j][i];
              nr += runlengthmatrixVasInt[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixVasInt[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2857,22 +2857,22 @@ void DMDMuscleFeature::runlengthFeat3D( DMDData::OrientedImageType::Pointer erod
     efile << "VasInt  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
     // CaudSart
     nr = 0;
-    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) { 
+    for (int j = 1; j < RUN_LENGTH_LEVEL; j++) {
         pr = 0;
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
              pr += runlengthmatrixCaudSart[j][i];
              nr += runlengthmatrixCaudSart[j][i];
         }
-        SRE += pr / (j * j);    
+        SRE += pr / (j * j);
         LRE += pr * j * j;
         RLN += pr * pr;
     }
-    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) { 
+    for (int j = 0; j < RUN_INTENSITY_LEVEL; j++) {
         pg = 0;
-        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) { 
+        for (int i = 1; i < RUN_LENGTH_LEVEL; i++) {
              pg += runlengthmatrixCaudSart[i][j];
         }
-        GLN += pg * pg;    
+        GLN += pg * pg;
     }
     if(nr != 0){
         SRE = SRE / nr;
@@ -2908,8 +2908,8 @@ void DMDMuscleFeature::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer e
     double imageVolume = 0;
     DMDData::OrientedImageType::SpacingType    spacing = data->GetSpacing() ;
 
-    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) { 
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) {
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
             runlengthmatrix[REC_FEM][j][i] = 0;
             runlengthmatrix[SEMIT][j][i] = 0;
             runlengthmatrix[CRAN_SART][j][i] = 0;
@@ -2924,7 +2924,7 @@ void DMDMuscleFeature::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer e
         }
     }
     ddata.imageInitialize ( data, rescaledData );
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
     // identify minum and maxmum intensity of the image
@@ -2934,7 +2934,7 @@ void DMDMuscleFeature::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer e
         int hisTmp = constDataIterator.Get();
         if (hisTmp >= HISTOGRAM_LIMIT)
             hisTmp = HISTOGRAM_LIMIT - 1;
-        histogram[hisTmp]++; 
+        histogram[hisTmp]++;
         if(hisTmp > 0)
             imageVolume++;
         if (constDataIterator.Get() < intensityMin)
@@ -2978,7 +2978,7 @@ void DMDMuscleFeature::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer e
     std::cout << "rescale finished! " << std::endl;
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = data->GetLargestPossibleRegion().GetSize();
-    DMDData::OrientedImageType::IndexType  index;    
+    DMDData::OrientedImageType::IndexType  index;
     int upperBound[NUMBER_MUSCLE + 1] = {0}, lowerBound[NUMBER_MUSCLE + 1] = {0};
     // establish rescaled image for each muscle
     for ( int p = CRAN_SART ; p <= CAUD_SART; p++ ) {
@@ -3014,18 +3014,18 @@ void DMDMuscleFeature::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer e
         if( lowerBound[p] == 0 && upperBound[p] == 0)
             continue;
         nroi = 0;
-        SRE = LRE = GLN = RLN = RP = 0;  
+        SRE = LRE = GLN = RLN = RP = 0;
         std::ofstream efile( featurefilename.c_str() , std::ios::app );
         for (int m = 0; m < size[2]; m += RUN_LENGTH_LEVEL) {
             for (int n = 0; n < size[1]; n += RUN_LENGTH_LEVEL) {
                 for (int r = 0; r < size[0]; r += RUN_LENGTH_LEVEL) {
-                    float SRETmp = 0, LRETmp = 0, GLNTmp = 0, RLNTmp = 0, RPTmp = 0;  
+                    float SRETmp = 0, LRETmp = 0, GLNTmp = 0, RLNTmp = 0, RPTmp = 0;
                     np = 0;
                   //  for (int i = lowerBound[p]; i <= upperBound[p]; i++) {
                     int objCount = 0;
                     bool inMuscleFlag = 0;
                     roi->FillBuffer(itk::NumericTraits<DMDData::OrientedImageType::PixelType>::Zero);
-                    inMuscleFlag = 0; 
+                    inMuscleFlag = 0;
                     for(index[2] = m , roiIndex[2] = 0; index[2] < m + RUN_LENGTH_LEVEL; index[2]++, roiIndex[2]++) {
                         for(index[1] = n, roiIndex[1] = 0; index[1] < n + RUN_LENGTH_LEVEL; index[1]++, roiIndex[1]++) {
                             for(index[0] = r, roiIndex[0] = 0; index[0] < r + RUN_LENGTH_LEVEL; index[0]++, roiIndex[0]++) {
@@ -3040,7 +3040,7 @@ void DMDMuscleFeature::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer e
                                 }
                             }
                         }
-                    }  
+                    }
                     if(inMuscleFlag == 1) {
                         int startRun = -1, runLength = 0;
                         // x direction
@@ -3058,21 +3058,21 @@ void DMDMuscleFeature::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer e
                                             }
                                             else {
                                                 if(runLength > RUN_LENGTH_LEVEL - 1)
-                                                    runLength = RUN_LENGTH_LEVEL - 1; 
+                                                    runLength = RUN_LENGTH_LEVEL - 1;
                                                 if(startRun > RUN_INTENSITY_LEVEL - 1)
-                                                    startRun = RUN_INTENSITY_LEVEL - 1; 
+                                                    startRun = RUN_INTENSITY_LEVEL - 1;
                                                 runlengthmatrix[p][runLength][startRun]++;
                                                 startRun = -1;
                                                 runLength = 0;
                                             }
-                                        } 
+                                        }
                                     }
                                     else {
                                         if (startRun != -1){
                                             if(runLength > RUN_LENGTH_LEVEL - 1)
-                                                runLength = RUN_LENGTH_LEVEL - 1; 
+                                                runLength = RUN_LENGTH_LEVEL - 1;
                                             if(startRun > RUN_INTENSITY_LEVEL - 1)
-                                                startRun = RUN_INTENSITY_LEVEL - 1; 
+                                                startRun = RUN_INTENSITY_LEVEL - 1;
                                             runlengthmatrix[p][runLength][startRun]++;
                                             startRun = -1;
                                             runLength = 0;
@@ -3098,21 +3098,21 @@ void DMDMuscleFeature::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer e
                                             }
                                             else {
                                                  if(runLength > RUN_LENGTH_LEVEL - 1)
-                                                     runLength = RUN_LENGTH_LEVEL - 1; 
+                                                     runLength = RUN_LENGTH_LEVEL - 1;
                                                  if(startRun > RUN_INTENSITY_LEVEL - 1)
-                                                     startRun = RUN_INTENSITY_LEVEL - 1; 
+                                                     startRun = RUN_INTENSITY_LEVEL - 1;
                                                  runlengthmatrix[p][runLength][startRun]++;
                                                  startRun = -1;
                                                  runLength = 0;
                                             }
-                                        } 
+                                        }
                                     }
                                     else {
                                         if (startRun != -1){
                                             if(runLength > RUN_LENGTH_LEVEL - 1)
-                                                runLength = RUN_LENGTH_LEVEL - 1; 
+                                                runLength = RUN_LENGTH_LEVEL - 1;
                                             if(startRun > RUN_INTENSITY_LEVEL - 1)
-                                                startRun = RUN_INTENSITY_LEVEL - 1; 
+                                                startRun = RUN_INTENSITY_LEVEL - 1;
                                             runlengthmatrix[p][runLength][startRun]++;
                                             startRun = -1;
                                             runLength = 0;
@@ -3122,7 +3122,7 @@ void DMDMuscleFeature::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer e
                             }
                         }
                         // z direction
-                        startRun = -1; 
+                        startRun = -1;
                         runLength = 0;
                         for(index[1] = n, roiIndex[1] = 0; index[1] < n + RUN_LENGTH_LEVEL; index[1]++, roiIndex[1]++) {
                             for(index[0] = r, roiIndex[0] = 0; index[0] < r + RUN_LENGTH_LEVEL; index[0]++, roiIndex[0]++) {
@@ -3138,21 +3138,21 @@ void DMDMuscleFeature::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer e
                                             }
                                             else {
                                                  if(runLength > RUN_LENGTH_LEVEL - 1)
-                                                     runLength = RUN_LENGTH_LEVEL - 1; 
+                                                     runLength = RUN_LENGTH_LEVEL - 1;
                                                  if(startRun > RUN_INTENSITY_LEVEL - 1)
-                                                     startRun = RUN_INTENSITY_LEVEL - 1; 
+                                                     startRun = RUN_INTENSITY_LEVEL - 1;
                                                  runlengthmatrix[p][runLength][startRun]++;
                                                  startRun = -1;
                                                  runLength = 0;
                                             }
-                                        } 
+                                        }
                                     }
                                     else {
                                         if (startRun != -1){
                                             if(runLength > RUN_LENGTH_LEVEL - 1)
-                                                runLength = RUN_LENGTH_LEVEL - 1; 
+                                                runLength = RUN_LENGTH_LEVEL - 1;
                                             if(startRun > RUN_INTENSITY_LEVEL - 1)
-                                                startRun = RUN_INTENSITY_LEVEL - 1; 
+                                                startRun = RUN_INTENSITY_LEVEL - 1;
                                             runlengthmatrix[p][runLength][startRun]++;
                                             startRun = -1;
                                             runLength = 0;
@@ -3163,9 +3163,9 @@ void DMDMuscleFeature::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer e
                         }
                     }
                     //}
-                    np = np * 3 ; 
-                    if(np != 0) {                    
-                        //calRunLengthFeatures( SRETmp, LRETmp, GLNTmp, RLNTmp, RPTmp, np, runlengthmatrix[p] );                  
+                    np = np * 3 ;
+                    if(np != 0) {
+                        //calRunLengthFeatures( SRETmp, LRETmp, GLNTmp, RLNTmp, RPTmp, np, runlengthmatrix[p] );
                         nroi++;
                         SRE += SRETmp;
                         LRE += LRETmp;
@@ -3181,11 +3181,11 @@ void DMDMuscleFeature::runlengthFeat2DROI( DMDData::OrientedImageType::Pointer e
                 }
             }
         }
-        SRE = SRE / nroi; 
-        LRE = LRE / nroi; 
-        GLN = GLN / nroi; 
-        RLN = RLN / nroi; 
-        RP = RP / nroi; 
+        SRE = SRE / nroi;
+        LRE = LRE / nroi;
+        GLN = GLN / nroi;
+        RLN = RLN / nroi;
+        RP = RP / nroi;
         efile << muscleName[p] << "  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
         efile.close();
         std::cout << muscleName[p] << " finished" << std::endl;
@@ -3212,8 +3212,8 @@ void DMDMuscleFeature::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointe
     //getchar();
 
 
-    for (int j = 0; j < CO_OCCURRENCE_LEVEL; j++) { 
-        for (int i = 0 ; i < CO_OCCURRENCE_LEVEL ; i++) { 
+    for (int j = 0; j < CO_OCCURRENCE_LEVEL; j++) {
+        for (int i = 0 ; i < CO_OCCURRENCE_LEVEL ; i++) {
             cooccurrencematrix[REC_FEM][j][i] = 0;
             cooccurrencematrix[SEMIT][j][i] = 0;
             cooccurrencematrix[CRAN_SART][j][i] = 0;
@@ -3228,7 +3228,7 @@ void DMDMuscleFeature::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointe
         }
     }
     ddata.imageInitialize ( data, rescaledData );
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
     // identify minum and maxmum intensity of the image
@@ -3238,7 +3238,7 @@ void DMDMuscleFeature::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointe
         int hisTmp = constDataIterator.Get();
         if (hisTmp >= HISTOGRAM_LIMIT)
             hisTmp = HISTOGRAM_LIMIT - 1;
-        histogram[hisTmp]++; 
+        histogram[hisTmp]++;
         if(hisTmp > 0)
             imageVolume++;
         if (constDataIterator.Get() < intensityMin)
@@ -3283,7 +3283,7 @@ void DMDMuscleFeature::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointe
 
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = rescaledData->GetLargestPossibleRegion().GetSize();
-    DMDData::OrientedImageType::IndexType  index;    
+    DMDData::OrientedImageType::IndexType  index;
     int upperBound[NUMBER_MUSCLE + 1] = {0}, lowerBound[NUMBER_MUSCLE + 1] = {0};
     // establish rescaled image for each muscle
     for ( int p = CRAN_SART ; p <= CAUD_SART; p++ ) {
@@ -3321,12 +3321,12 @@ void DMDMuscleFeature::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointe
         if( lowerBound[p] == 0 && upperBound[p] == 0)
             continue;
         nroi = 0;
-        Entropy = Energy = Contrast = HomoGeneity = 0;  
+        Entropy = Energy = Contrast = HomoGeneity = 0;
       //  std::ofstream efile( featurefilename.c_str() , std::ios::app );
         for (int m = 0; m < size[2]; m += round(intervalZ * 0.5)) {
             for (int n = 0; n < size[1]; n += round(intervalY * 0.5)) {
                 for (int r = 0; r < size[0]; r += round(intervalX * 0.5)) {
-                    float EntropyTmp = 0, EnergyTmp = 0, ContrastTmp = 0, HomoGeneityTmp = 0;  
+                    float EntropyTmp = 0, EnergyTmp = 0, ContrastTmp = 0, HomoGeneityTmp = 0;
                     np = 0;
                     bool haveMuscleFlag = 0;
                     for (int i = lowerBound[p]; i <= upperBound[p]; i++) {
@@ -3347,12 +3347,12 @@ void DMDMuscleFeature::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointe
                                             if(erodemask->GetPixel(index) == p)
                                                 haveMuscleFlag = 1;
                                         }
-                                        else  
+                                        else
                                             roi->SetPixel(roiIndex, BACKGROUND);
                                     }
                                 }
                             }
-                        }  
+                        }
                         if(haveMuscleFlag == 0 && inMuscleFlag == 0)
                             break;
                         if(haveMuscleFlag == 1 && inMuscleFlag == 0)
@@ -3361,9 +3361,9 @@ void DMDMuscleFeature::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointe
                             for(index[2] = m , roiIndex[2] = 0; index[2] < m + intervalZ; index[2]++, roiIndex[2]++) {
                                 for(index[1] = n, roiIndex[1] = 0; index[1] < n + intervalY; index[1]++, roiIndex[1]++) {
                                     for(index[0] = r, roiIndex[0] = 0; index[0] < r + intervalX; index[0]++, roiIndex[0]++) {
-                                        int vali = 0, valj = 0; 
+                                        int vali = 0, valj = 0;
                                         // x direction
-                                        if ( (roiIndex[0] + 2) < intervalX ) { 
+                                        if ( (roiIndex[0] + 2) < intervalX ) {
                                             vali = roi->GetPixel(roiIndex);
                                             roiIndex[0] += 2;
                                             valj = roi->GetPixel(roiIndex);
@@ -3374,7 +3374,7 @@ void DMDMuscleFeature::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointe
                                             }
                                         }
                                         // y direction
-                                        if ( (roiIndex[1] + 2) < intervalY ) { 
+                                        if ( (roiIndex[1] + 2) < intervalY ) {
                                             vali = roi->GetPixel(roiIndex);
                                             roiIndex[1] += 2;
                                             valj = roi->GetPixel(roiIndex);
@@ -3385,7 +3385,7 @@ void DMDMuscleFeature::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointe
                                             }
                                         }
                                         // z direction
-                                        if ( (roiIndex[2] + 2) < intervalZ ) { 
+                                        if ( (roiIndex[2] + 2) < intervalZ ) {
                                             vali = roi->GetPixel(roiIndex);
                                             roiIndex[2] += 2;
                                             valj = roi->GetPixel(roiIndex);
@@ -3401,7 +3401,7 @@ void DMDMuscleFeature::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointe
                         }
                     }
                     if(haveMuscleFlag) {
-                        calCooccurrenceFeatures( EntropyTmp, EnergyTmp, ContrastTmp, HomoGeneityTmp, cooccurrencematrix[p], caseID );  
+                        calCooccurrenceFeatures( EntropyTmp, EnergyTmp, ContrastTmp, HomoGeneityTmp, cooccurrencematrix[p], caseID );
                         nroi++;
                         //std::cout << "mark1" << SRETmp << "  " << LRETmp << "  " << GLNTmp << "  " << RLNTmp << "  " << RPTmp << std::endl;
                         Entropy += EntropyTmp;
@@ -3428,15 +3428,15 @@ void DMDMuscleFeature::cooccurrenceFeat3DROI( DMDData::OrientedImageType::Pointe
             }
         }
         std::cout << "size of " << muscleName[p] << ": " << nroi << std::endl;
-        if(nroi) { 
-            Entropy  /=  nroi; 
-            Energy /= nroi; 
-            Contrast /= nroi; 
-            HomoGeneity /= nroi; 
+        if(nroi) {
+            Entropy  /=  nroi;
+            Energy /= nroi;
+            Contrast /= nroi;
+            HomoGeneity /= nroi;
         }
        // efile << muscleName[p] << "  " << Entropy << "  " <<  Energy << "  " << Contrast << "  " << HomoGeneity << "\n";
       //  efile.close();
-        EntropyData[p] = Entropy; EnergyData[p] = Energy; ContrastData[p] = Contrast; HomoGeneityData[p] = HomoGeneity;  
+        EntropyData[p] = Entropy; EnergyData[p] = Energy; ContrastData[p] = Contrast; HomoGeneityData[p] = HomoGeneity;
         std::cout << muscleName[p] << " finished" << std::endl;
     }
 
@@ -3484,8 +3484,8 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
     //getchar();
 
 
-    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) { 
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) {
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
             runlengthmatrix[REC_FEM][j][i] = 0;
             runlengthmatrix[SEMIT][j][i] = 0;
             runlengthmatrix[CRAN_SART][j][i] = 0;
@@ -3500,7 +3500,7 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
         }
     }
     ddata.imageInitialize ( data, rescaledData );
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
     // identify minum and maxmum intensity of the image
@@ -3510,7 +3510,7 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
         int hisTmp = constDataIterator.Get();
         if (hisTmp >= HISTOGRAM_LIMIT)
             hisTmp = HISTOGRAM_LIMIT - 1;
-        histogram[hisTmp]++; 
+        histogram[hisTmp]++;
         if(hisTmp > 0)
             imageVolume++;
         if (constDataIterator.Get() < intensityMin)
@@ -3555,7 +3555,7 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
 
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = rescaledData->GetLargestPossibleRegion().GetSize();
-    DMDData::OrientedImageType::IndexType  index;    
+    DMDData::OrientedImageType::IndexType  index;
     int upperBound[NUMBER_MUSCLE + 1] = {0}, lowerBound[NUMBER_MUSCLE + 1] = {0};
     // establish rescaled image for each muscle
     for ( int p = CRAN_SART ; p <= CAUD_SART; p++ ) {
@@ -3593,12 +3593,12 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
         if( lowerBound[p] == 0 && upperBound[p] == 0)
             continue;
         nroi = 0;
-        SRE = LRE = GLN = RLN = RP = 0;  
+        SRE = LRE = GLN = RLN = RP = 0;
        // std::ofstream efile( featurefilename.c_str() , std::ios::app );
         for (int m = 0; m < size[2]; m += round(intervalZ * 0.5)) {
             for (int n = 0; n < size[1]; n += round(intervalY * 0.5)) {
                 for (int r = 0; r < size[0]; r += round(intervalX * 0.5)) {
-                    float SRETmp = 0, LRETmp = 0, GLNTmp = 0, RLNTmp = 0, RPTmp = 0;  
+                    float SRETmp = 0, LRETmp = 0, GLNTmp = 0, RLNTmp = 0, RPTmp = 0;
                     np = 0;
                     bool haveMuscleFlag = 0;
                     for (int i = lowerBound[p]; i <= upperBound[p]; i++) {
@@ -3619,25 +3619,25 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
                                             if(erodemask->GetPixel(index) == p)
                                                 haveMuscleFlag = 1;
                                         }
-                                        else  
+                                        else
                                             roi->SetPixel(roiIndex, BACKGROUND);
                                     }
                                 }
                             }
-                        }  
+                        }
                         if(haveMuscleFlag == 0 && inMuscleFlag == 0)
                             break;
                         if(haveMuscleFlag == 1 && inMuscleFlag == 0)
                             continue;
                         if(inMuscleFlag == 1) {
                             objCount = connectedComponentLabeling (roi);
-                            int objVolume[SIZE_LABELING_BIN] = {0}; 
+                            int objVolume[SIZE_LABELING_BIN] = {0};
                             for(roiIndex[2] = 0 ; roiIndex[2] < intervalZ; roiIndex[2]++) {
                                 for(roiIndex[1] = 0; roiIndex[1] < intervalY; roiIndex[1]++) {
                                     for(roiIndex[0] = 0; roiIndex[0] < intervalX; roiIndex[0]++) {
                                         int k = roi->GetPixel(roiIndex);
                                         if(k){
-                                            objVolume[k]++; 
+                                            objVolume[k]++;
                                         }
                                     }
                                 }
@@ -3662,7 +3662,7 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
                         }
                     }
                     if(haveMuscleFlag) {
-                        calRunLengthFeatures( SRETmp, LRETmp, GLNTmp, RLNTmp, RPTmp, np, runlengthmatrix[p], caseID );  
+                        calRunLengthFeatures( SRETmp, LRETmp, GLNTmp, RLNTmp, RPTmp, np, runlengthmatrix[p], caseID );
                         nroi++;
                         //std::cout << "mark1" << SRETmp << "  " << LRETmp << "  " << GLNTmp << "  " << RLNTmp << "  " << RPTmp << std::endl;
                         SRE += SRETmp;
@@ -3689,14 +3689,14 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
             }
         }
         std::cout << "size of " << muscleName[p] << ": " << nroi << std::endl;
-        if(nroi) { 
-            SRE = SRE / nroi; 
-            LRE = LRE / nroi; 
-            GLN = GLN / nroi; 
-            RLN = RLN / nroi; 
-            RP = RP / nroi; 
+        if(nroi) {
+            SRE = SRE / nroi;
+            LRE = LRE / nroi;
+            GLN = GLN / nroi;
+            RLN = RLN / nroi;
+            RP = RP / nroi;
         }
-        SREData[p] = SRE; LREData[p] = LRE; GLNData[p] = GLN; RLNData[p] = RLN; RPData[p] = RP; 
+        SREData[p] = SRE; LREData[p] = LRE; GLNData[p] = GLN; RLNData[p] = RLN; RPData[p] = RP;
     //    efile << muscleName[p] << "  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
      //   efile.close();
         std::cout << muscleName[p] << " finished" << std::endl;
@@ -3749,8 +3749,8 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
   //  std::cout << spacing[0] << "  " << spacing[1] << "  " << spacing[2] << std::endl;
   //  getchar();
 
-    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) { 
-        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) { 
+    for (int j = 0; j < RUN_LENGTH_LEVEL; j++) {
+        for (int i = 0; i < RUN_INTENSITY_LEVEL; i++) {
             runlengthmatrix[REC_FEM][j][i] = 0;
             runlengthmatrix[SEMIT][j][i] = 0;
             runlengthmatrix[CRAN_SART][j][i] = 0;
@@ -3765,7 +3765,7 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
         }
     }
     ddata.imageInitialize ( data, rescaledData );
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
     IteratorType ReScaledDataIterator( rescaledData, rescaledData->GetRequestedRegion() ) ;
     // identify minum and maxmum intensity of the image
@@ -3775,7 +3775,7 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
         int hisTmp = constDataIterator.Get();
         if (hisTmp >= HISTOGRAM_LIMIT)
             hisTmp = HISTOGRAM_LIMIT - 1;
-        histogram[hisTmp]++; 
+        histogram[hisTmp]++;
         if(hisTmp > 0)
             imageVolume++;
         if (constDataIterator.Get() < intensityMin)
@@ -3819,7 +3819,7 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
     std::cout << "rescale finished! " << std::endl;
     //establish run length matrix
     DMDData::OrientedImageType::SizeType   size = data->GetLargestPossibleRegion().GetSize();
-    DMDData::OrientedImageType::IndexType  index;    
+    DMDData::OrientedImageType::IndexType  index;
     int upperBound[NUMBER_MUSCLE + 1] = {0}, lowerBound[NUMBER_MUSCLE + 1] = {0};
     // establish rescaled image for each muscle
     for ( int p = CRAN_SART ; p <= CAUD_SART; p++ ) {
@@ -3833,7 +3833,7 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
                         if(rescaledData->GetPixel(index) > upperBound[p]){
                             upperBound[p] = rescaledData->GetPixel(index);
                         }
-                        
+
                     }
                 }
             }
@@ -3856,12 +3856,12 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
         if( lowerBound[p] == 0 && upperBound[p] == 0)
             continue;
         nroi = 0;
-        SRE = LRE = GLN = RLN = RP = 0;  
+        SRE = LRE = GLN = RLN = RP = 0;
         std::ofstream efile( featurefilename.c_str() , std::ios::app );
         for (int m = 0; m < size[2]; m += round(intervalZ * 0.5)) {
             for (int n = 0; n < size[1]; n += round(intervalY * 0.5)) {
                 for (int r = 0; r < size[0]; r += round(intervalX * 0.5)) {
-                    float SRETmp = 0, LRETmp = 0, GLNTmp = 0, RLNTmp = 0, RPTmp = 0;  
+                    float SRETmp = 0, LRETmp = 0, GLNTmp = 0, RLNTmp = 0, RPTmp = 0;
                     np = 0;
                     bool haveMuscleFlag = 0;
                     for (int i = lowerBound[p]; i <= upperBound[p]; i++) {
@@ -3885,22 +3885,22 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
                                     }
                                 }
                             }
-                        }  
+                        }
                   //      std::cout << "flags: " << i << "-  " << haveMuscleFlag << "  " << inMuscleFlag << std::endl;
                         if(haveMuscleFlag == 0 && inMuscleFlag == 0)
                             break;
                         if(haveMuscleFlag == 1 && inMuscleFlag == 0)
                             continue;
-                        
+
                         if(inMuscleFlag == 1) {
                             objCount = connectedComponentLabeling (roi);
-                            int objVolume[SIZE_LABELING_BIN] = {0}; 
+                            int objVolume[SIZE_LABELING_BIN] = {0};
                             for(roiIndex[2] = 0 ; roiIndex[2] < intervalZ; roiIndex[2]++) {
                                 for(roiIndex[1] = 0; roiIndex[1] < intervalY; roiIndex[1]++) {
                                     for(roiIndex[0] = 0; roiIndex[0] < intervalX; roiIndex[0]++) {
                                         int k = roi->GetPixel(roiIndex);
                                         if(k){
-                                            objVolume[k]++; 
+                                            objVolume[k]++;
                                         }
                                     }
                                 }
@@ -3927,10 +3927,10 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
                         }
                     }
                     if(haveMuscleFlag) {
-                   // np = np * voxelSize; 
-                   // if(np != 0) {                    
+                   // np = np * voxelSize;
+                   // if(np != 0) {
          //               std::cout << "number of pixel: " << np << std::endl;
-                        calRunLengthFeatures( SRETmp, LRETmp, GLNTmp, RLNTmp, RPTmp, np, runlengthmatrix[p], caseID );  
+                        calRunLengthFeatures( SRETmp, LRETmp, GLNTmp, RLNTmp, RPTmp, np, runlengthmatrix[p], caseID );
                         nroi++;
                         SRE += SRETmp;
                         LRE += LRETmp;
@@ -3961,11 +3961,11 @@ void DMDMuscleFeature::runlengthFeat3DROI( DMDData::OrientedImageType::Pointer e
                 }
             }
         }
-        SRE = SRE / nroi; 
-        LRE = LRE / nroi; 
-        GLN = GLN / nroi; 
-        RLN = RLN / nroi; 
-        RP = RP / nroi; 
+        SRE = SRE / nroi;
+        LRE = LRE / nroi;
+        GLN = GLN / nroi;
+        RLN = RLN / nroi;
+        RP = RP / nroi;
         efile << muscleName[p] << "  " << SRE << "  " <<  LRE << "  " << GLN << "  " << RLN << "  " << RP << "\n";
         efile.close();
         std::cout << muscleName[p] << " finished" << std::endl;
@@ -3981,79 +3981,79 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
     float quanlitySemit = 0, quanlityRect = 0, quanlityCran = 0, quanlityAdductor = 0, quanlityGracilis = 0, quanlityBic = 0, quanlitySemimem = 0, quanlityVaslat = 0, quanlityVasmed = 0, quanlityVasint = 0, quanlityCaud = 0;
     float histogramSemit[HISTOGRAM_BIN_SIZE] = {0}, histogramRect[HISTOGRAM_BIN_SIZE] = {0},histogramCran[HISTOGRAM_BIN_SIZE] = {0}, histogramAdductor[HISTOGRAM_BIN_SIZE] = {0}, histogramGracilis[HISTOGRAM_BIN_SIZE] = {0}, histogramBic[HISTOGRAM_BIN_SIZE] = {0}, histogramSemimem[HISTOGRAM_BIN_SIZE] = {0}, histogramVaslat[HISTOGRAM_BIN_SIZE] = {0}, histogramVasmed[HISTOGRAM_BIN_SIZE] = {0}, histogramVasint[HISTOGRAM_BIN_SIZE] = {0}, histogramCaud[HISTOGRAM_BIN_SIZE] = {0} ;
     std::ofstream efile( featurefilename.c_str() , std::ios::app );
-    ConstIteratorType constMaskIterator( mask, mask->GetRequestedRegion() ) ;  
-    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;  
+    ConstIteratorType constMaskIterator( mask, mask->GetRequestedRegion() ) ;
+    ConstIteratorType constErodeMaskIterator( erodemask, erodemask->GetRequestedRegion() ) ;
     ConstIteratorType constDataIterator( data, data->GetRequestedRegion() ) ;
-    
+
     volSemit = volRect = volCran = volAdductor = volGracilis = volBic = volSemimem = volVaslat = volVasmed = volVasint = volCaud = 0;
 
     // calculate the mean and volume of muscles using eroded muscle mask
     for ( constMaskIterator.GoToBegin(),constDataIterator.GoToBegin(); !constMaskIterator.IsAtEnd(); ++constMaskIterator, ++constDataIterator ) {
         if ( constMaskIterator.Get() == SEMIT ) {
             if (constDataIterator.Get() > 0) {
-                volSemitNonErod++;                       
+                volSemitNonErod++;
             }
         }
         if ( constMaskIterator.Get() == REC_FEM ) {
             if (constDataIterator.Get() > 0) {
-                volRectNonErod++;                       
+                volRectNonErod++;
             }
         }
         if ( constMaskIterator.Get() == CRAN_SART ) {
             if (constDataIterator.Get() > 0) {
-                volCranNonErod++;                       
+                volCranNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == ADDUCTOR ) {
             if (constDataIterator.Get() > 0) {
-                volAdductorNonErod++;                       
+                volAdductorNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == GRACILIS ) {
             if (constDataIterator.Get() > 0) {
-                volGracilisNonErod++;                       
+                volGracilisNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == BIC_FEM ) {
             if (constDataIterator.Get() > 0) {
-                volBicNonErod++;                       
+                volBicNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == SEMI_MEM ) {
             if (constDataIterator.Get() > 0) {
-                volSemimemNonErod++;                       
+                volSemimemNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == VAS_LAT ) {
             if (constDataIterator.Get() > 0) {
-                volVaslatNonErod++;                       
+                volVaslatNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == VAS_MED ) {
             if (constDataIterator.Get() > 0) {
-                volVasmedNonErod++;                       
+                volVasmedNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == VAS_INT ) {
             if (constDataIterator.Get() > 0) {
-                volVasintNonErod++;                       
+                volVasintNonErod++;
             }
         }   	       	
         if ( constMaskIterator.Get() == CAUD_SART ) {
         //    if (constDataIterator.Get() > 0) {
-                volCaudNonErod++;                       
+                volCaudNonErod++;
          //   }
         }   	       	
     }
-    // calculate the mean and volume of muscles using eroded muscle mask 
+    // calculate the mean and volume of muscles using eroded muscle mask
     // if the T2 fit only covers the mid section, only caluculate the biomarkers in covered part
     int tmp = 0;
     for ( constErodeMaskIterator.GoToBegin(),constDataIterator.GoToBegin(); !constErodeMaskIterator.IsAtEnd(); ++constErodeMaskIterator, ++constDataIterator ) {
         if ( constErodeMaskIterator.Get() == SEMIT ) {
             if (constDataIterator.Get() > 0) {
                 tmp = constDataIterator.Get();
-	        meanSemit += constDataIterator.Get();          
-                volSemitReal++;                       
+	        meanSemit += constDataIterator.Get();
+                volSemitReal++;
                 if((tmp) < 0)
                     histogramSemit[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4061,13 +4061,13 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
                 else
                     histogramSemit[tmp]++;
             }
-            volSemit++;                       
+            volSemit++;
         }
         if ( constErodeMaskIterator.Get() == REC_FEM ) {
             if (constDataIterator.Get() > 0) {
                 tmp = constDataIterator.Get();
-	        meanRect += constDataIterator.Get();          
-                volRectReal++;                       
+	        meanRect += constDataIterator.Get();
+                volRectReal++;
                 if((tmp) < 0)
                     histogramRect[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4076,13 +4076,13 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
                     histogramRect[tmp]++;
 
             }
-            volRect++;                       
+            volRect++;
         }
         if ( constErodeMaskIterator.Get() == CRAN_SART ) {
             if (constDataIterator.Get() > 0) {
                 tmp = constDataIterator.Get();
-	        meanCran += constDataIterator.Get();          
-                volCranReal++;                       
+	        meanCran += constDataIterator.Get();
+                volCranReal++;
                 if((tmp) < 0)
                     histogramCran[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4090,13 +4090,13 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
                 else
                     histogramCran[tmp]++;
             }
-            volCran++;                       
+            volCran++;
         }   	       	
         if ( constErodeMaskIterator.Get() == ADDUCTOR ) {
             if (constDataIterator.Get() > 0) {
                 tmp = constDataIterator.Get();
-	        meanAdductor += constDataIterator.Get();          
-                volAdductorReal++;                       
+	        meanAdductor += constDataIterator.Get();
+                volAdductorReal++;
                 if((tmp) < 0)
                     histogramAdductor[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4104,13 +4104,13 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
                 else
                     histogramAdductor[tmp]++;
             }
-            volAdductor++;                       
+            volAdductor++;
         }   	       	
         if ( constErodeMaskIterator.Get() == GRACILIS ) {
             if (constDataIterator.Get() > 0) {
                 tmp = constDataIterator.Get();
-	        meanGracilis += constDataIterator.Get();          
-                volGracilisReal++;                       
+	        meanGracilis += constDataIterator.Get();
+                volGracilisReal++;
                 if((tmp) < 0)
                     histogramGracilis[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4118,13 +4118,13 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
                 else
                     histogramGracilis[tmp]++;
             }
-            volGracilis++;                       
+            volGracilis++;
         }   	       	
         if ( constErodeMaskIterator.Get() == BIC_FEM ) {
             if (constDataIterator.Get() > 0) {
                 tmp = constDataIterator.Get();
-	        meanBic += constDataIterator.Get();          
-                volBicReal++;                       
+	        meanBic += constDataIterator.Get();
+                volBicReal++;
                 if((tmp) < 0)
                     histogramBic[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4132,13 +4132,13 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
                 else
                     histogramBic[tmp]++;
             }
-            volBic++;                       
+            volBic++;
         }   	       	
         if ( constErodeMaskIterator.Get() == SEMI_MEM ) {
             if (constDataIterator.Get() > 0) {
                 tmp = constDataIterator.Get();
-	        meanSemimem += constDataIterator.Get();          
-                volSemimemReal++;                       
+	        meanSemimem += constDataIterator.Get();
+                volSemimemReal++;
                 if((tmp) < 0)
                     histogramSemimem[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4146,13 +4146,13 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
                 else
                     histogramSemimem[tmp]++;
             }
-            volSemimem++;                       
+            volSemimem++;
         }   	       	
         if ( constErodeMaskIterator.Get() == VAS_LAT ) {
             if (constDataIterator.Get() > 0) {
                 tmp = constDataIterator.Get();
-	        meanVaslat += constDataIterator.Get();          
-                volVaslatReal++;                       
+	        meanVaslat += constDataIterator.Get();
+                volVaslatReal++;
                 if((tmp) < 0)
                     histogramVaslat[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4160,13 +4160,13 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
                 else
                     histogramVaslat[tmp]++;
             }
-            volVaslat++;                       
+            volVaslat++;
         }   	       	
         if ( constErodeMaskIterator.Get() == VAS_MED ) {
             if (constDataIterator.Get() > 0) {
                 tmp = constDataIterator.Get();
-	        meanVasmed += constDataIterator.Get();          
-                volVasmedReal++;                       
+	        meanVasmed += constDataIterator.Get();
+                volVasmedReal++;
                 if((tmp) < 0)
                     histogramVasmed[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4174,13 +4174,13 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
                 else
                     histogramVasmed[tmp]++;
             }
-            volVasmed++;                       
+            volVasmed++;
         }   	       	
         if ( constErodeMaskIterator.Get() == VAS_INT ) {
             if (constDataIterator.Get() > 0) {
                 tmp = constDataIterator.Get();
-	        meanVasint += constDataIterator.Get();          
-                volVasintReal++;                       
+	        meanVasint += constDataIterator.Get();
+                volVasintReal++;
                 if((tmp) < 0)
                     histogramVasint[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4188,13 +4188,13 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
                 else
                     histogramVasint[tmp]++;
             }
-            volVasint++;                       
+            volVasint++;
         }   	       	
         if ( constErodeMaskIterator.Get() == CAUD_SART ) {
             if (constDataIterator.Get() > 0) {
                 tmp = constDataIterator.Get();
-	        meanCaud += constDataIterator.Get();          
-                volCaudReal++;                       
+	        meanCaud += constDataIterator.Get();
+                volCaudReal++;
                 if((tmp) < 0)
                     histogramCaud[0]++;
                 else if (tmp >= HISTOGRAM_BIN_SIZE)
@@ -4202,7 +4202,7 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
                 else
                     histogramCaud[tmp]++;
             }
-            volCaud++;                       
+            volCaud++;
         }   	       	
     }
     //calculate histogram entropy
@@ -4291,57 +4291,57 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
     for ( constErodeMaskIterator.GoToBegin(),constDataIterator.GoToBegin(); !constErodeMaskIterator.IsAtEnd(); ++constErodeMaskIterator, ++constDataIterator ) {
         if ( constErodeMaskIterator.Get() == SEMIT ) {
             if (constDataIterator.Get() > 0) {
-	        sdSemit += (constDataIterator.Get() - meanSemit) * (constDataIterator.Get() - meanSemit);          
+	        sdSemit += (constDataIterator.Get() - meanSemit) * (constDataIterator.Get() - meanSemit);
             }
         }
         if ( constErodeMaskIterator.Get() == REC_FEM ) {
             if (constDataIterator.Get() > 0) {
-	        sdRect += (constDataIterator.Get() - meanRect) * (constDataIterator.Get() - meanRect);          
+	        sdRect += (constDataIterator.Get() - meanRect) * (constDataIterator.Get() - meanRect);
             }
         }
         if ( constErodeMaskIterator.Get() == CRAN_SART ) {
             if (constDataIterator.Get() > 0) {
-	        sdCran += (constDataIterator.Get() - meanCran) * (constDataIterator.Get() - meanCran);          
+	        sdCran += (constDataIterator.Get() - meanCran) * (constDataIterator.Get() - meanCran);
             }
         }
         if ( constErodeMaskIterator.Get() == ADDUCTOR ) {
             if (constDataIterator.Get() > 0) {
-	        sdAdductor += (constDataIterator.Get() - meanAdductor) * (constDataIterator.Get() - meanAdductor);          
+	        sdAdductor += (constDataIterator.Get() - meanAdductor) * (constDataIterator.Get() - meanAdductor);
             }
         }
         if ( constErodeMaskIterator.Get() == GRACILIS ) {
             if (constDataIterator.Get() > 0) {
-	        sdGracilis += (constDataIterator.Get() - meanGracilis) * (constDataIterator.Get() - meanGracilis);          
+	        sdGracilis += (constDataIterator.Get() - meanGracilis) * (constDataIterator.Get() - meanGracilis);
             }
         }
         if ( constErodeMaskIterator.Get() == BIC_FEM ) {
             if (constDataIterator.Get() > 0) {
-	        sdBic += (constDataIterator.Get() - meanBic) * (constDataIterator.Get() - meanBic);          
+	        sdBic += (constDataIterator.Get() - meanBic) * (constDataIterator.Get() - meanBic);
             }
         }
         if ( constErodeMaskIterator.Get() == SEMI_MEM ) {
             if (constDataIterator.Get() > 0) {
-	        sdSemimem += (constDataIterator.Get() - meanSemimem) * (constDataIterator.Get() - meanSemimem);          
+	        sdSemimem += (constDataIterator.Get() - meanSemimem) * (constDataIterator.Get() - meanSemimem);
             }
         }
         if ( constErodeMaskIterator.Get() == VAS_LAT ) {
             if (constDataIterator.Get() > 0) {
-	        sdVaslat += (constDataIterator.Get() - meanVaslat) * (constDataIterator.Get() - meanVaslat);          
+	        sdVaslat += (constDataIterator.Get() - meanVaslat) * (constDataIterator.Get() - meanVaslat);
             }
         }
         if ( constErodeMaskIterator.Get() == VAS_MED ) {
             if (constDataIterator.Get() > 0) {
-	        sdVasmed += (constDataIterator.Get() - meanVasmed) * (constDataIterator.Get() - meanVasmed);          
+	        sdVasmed += (constDataIterator.Get() - meanVasmed) * (constDataIterator.Get() - meanVasmed);
             }
         }
         if ( constErodeMaskIterator.Get() == VAS_INT ) {
             if (constDataIterator.Get() > 0) {
-	        sdVasint += (constDataIterator.Get() - meanVasint) * (constDataIterator.Get() - meanVasint);          
+	        sdVasint += (constDataIterator.Get() - meanVasint) * (constDataIterator.Get() - meanVasint);
             }
         }
         if ( constErodeMaskIterator.Get() == CAUD_SART ) {
             if (constDataIterator.Get() > 0) {
-	        sdCaud += (constDataIterator.Get() - meanCaud) * (constDataIterator.Get() - meanCaud);          
+	        sdCaud += (constDataIterator.Get() - meanCaud) * (constDataIterator.Get() - meanCaud);
             }
         }
     }
@@ -4360,167 +4360,167 @@ void DMDMuscleFeature::features( DMDData::OrientedImageType::Pointer mask, DMDDa
     for ( constErodeMaskIterator.GoToBegin(),constDataIterator.GoToBegin(); !constErodeMaskIterator.IsAtEnd(); ++constErodeMaskIterator, ++constDataIterator ) {
         if ( constErodeMaskIterator.Get() == SEMIT ) {
             if (constDataIterator.Get() > 0) {
-	        skewSemit += pow(constDataIterator.Get() - meanSemit, 3);          
-	        kortSemit += pow(constDataIterator.Get() - meanSemit, 4);          
+	        skewSemit += pow(constDataIterator.Get() - meanSemit, 3);
+	        kortSemit += pow(constDataIterator.Get() - meanSemit, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == REC_FEM ) {
             if (constDataIterator.Get() > 0) {
-	        skewRect += pow(constDataIterator.Get() - meanRect, 3);          
-	        kortRect += pow(constDataIterator.Get() - meanRect, 4);          
+	        skewRect += pow(constDataIterator.Get() - meanRect, 3);
+	        kortRect += pow(constDataIterator.Get() - meanRect, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == CRAN_SART ) {
             if (constDataIterator.Get() > 0) {
-	        skewCran += pow(constDataIterator.Get() - meanCran, 3);          
-	        kortCran += pow(constDataIterator.Get() - meanCran, 4);          
+	        skewCran += pow(constDataIterator.Get() - meanCran, 3);
+	        kortCran += pow(constDataIterator.Get() - meanCran, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == ADDUCTOR ) {
             if (constDataIterator.Get() > 0) {
-	        skewAdductor += pow(constDataIterator.Get() - meanAdductor, 3);          
-	        kortAdductor += pow(constDataIterator.Get() - meanAdductor, 4);          
+	        skewAdductor += pow(constDataIterator.Get() - meanAdductor, 3);
+	        kortAdductor += pow(constDataIterator.Get() - meanAdductor, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == GRACILIS ) {
             if (constDataIterator.Get() > 0) {
-	        skewGracilis += pow(constDataIterator.Get() - meanGracilis, 3);          
-	        kortGracilis += pow(constDataIterator.Get() - meanGracilis, 4);          
+	        skewGracilis += pow(constDataIterator.Get() - meanGracilis, 3);
+	        kortGracilis += pow(constDataIterator.Get() - meanGracilis, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == BIC_FEM ) {
             if (constDataIterator.Get() > 0) {
-	        skewBic += pow(constDataIterator.Get() - meanBic, 3);          
-	        kortBic += pow(constDataIterator.Get() - meanBic, 4);          
+	        skewBic += pow(constDataIterator.Get() - meanBic, 3);
+	        kortBic += pow(constDataIterator.Get() - meanBic, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == SEMI_MEM ) {
             if (constDataIterator.Get() > 0) {
-	        skewSemimem += pow(constDataIterator.Get() - meanSemimem, 3);          
-	        kortSemimem += pow(constDataIterator.Get() - meanSemimem, 4);          
+	        skewSemimem += pow(constDataIterator.Get() - meanSemimem, 3);
+	        kortSemimem += pow(constDataIterator.Get() - meanSemimem, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == VAS_LAT ) {
             if (constDataIterator.Get() > 0) {
-	        skewVaslat += pow(constDataIterator.Get() - meanVaslat, 3);          
-	        kortVaslat += pow(constDataIterator.Get() - meanVaslat, 4);          
+	        skewVaslat += pow(constDataIterator.Get() - meanVaslat, 3);
+	        kortVaslat += pow(constDataIterator.Get() - meanVaslat, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == VAS_MED ) {
             if (constDataIterator.Get() > 0) {
-	        skewVasmed += pow(constDataIterator.Get() - meanVasmed, 3);          
-	        kortVasmed += pow(constDataIterator.Get() - meanVasmed, 4);          
+	        skewVasmed += pow(constDataIterator.Get() - meanVasmed, 3);
+	        kortVasmed += pow(constDataIterator.Get() - meanVasmed, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == VAS_INT ) {
             if (constDataIterator.Get() > 0) {
-	        skewVasint += pow(constDataIterator.Get() - meanVasint, 3);          
-	        kortVasint += pow(constDataIterator.Get() - meanVasint, 4);          
+	        skewVasint += pow(constDataIterator.Get() - meanVasint, 3);
+	        kortVasint += pow(constDataIterator.Get() - meanVasint, 4);
             }
         }
         if ( constErodeMaskIterator.Get() == CAUD_SART ) {
             if (constDataIterator.Get() > 0) {
-	        skewCaud += pow(constDataIterator.Get() - meanCaud, 3);          
-	        kortCaud += pow(constDataIterator.Get() - meanCaud, 4);          
+	        skewCaud += pow(constDataIterator.Get() - meanCaud, 3);
+	        kortCaud += pow(constDataIterator.Get() - meanCaud, 4);
             }
         }
     }
     if(sdSemit)
         skewSemit = skewSemit / (pow(sdSemit, 3) * (volSemitReal - 1));
-    else 
+    else
         skewSemit = 0;
     if(sdSemit)
         kortSemit = kortSemit / (pow(sdSemit, 4) * (volSemitReal - 1)) - 3;
-    else 
+    else
         kortSemit = 0;
     if(sdRect)
         skewRect = skewRect / (pow(sdRect, 3) * (volRectReal - 1));
-    else 
+    else
         skewRect = 0;
     if(sdRect)
         kortRect = kortRect / (pow(sdRect, 4) * (volRectReal - 1)) - 3;
-    else 
+    else
         kortRect = 0;
 
     if(sdCran)
         skewCran = skewCran / (pow(sdCran, 3) * (volCranReal - 1));
-    else 
+    else
         skewCran = 0;
     if(sdCran)
         kortCran = kortCran / (pow(sdCran, 4) * (volCranReal - 1)) - 3;
-    else 
+    else
         kortCran = 0;
 
     if(sdAdductor)
         skewAdductor = skewAdductor / (pow(sdAdductor, 3) * (volAdductorReal - 1));
-    else 
+    else
         skewAdductor = 0;
     if(sdAdductor)
         kortAdductor = kortAdductor / (pow(sdAdductor, 4) * (volAdductorReal - 1)) - 3;
-    else 
+    else
         kortAdductor = 0;
 
     if(sdGracilis)
         skewGracilis = skewGracilis / (pow(sdGracilis, 3) * (volGracilisReal - 1));
-    else 
+    else
         skewGracilis = 0;
     if(sdGracilis)
         kortGracilis = kortGracilis / (pow(sdGracilis, 4) * (volGracilisReal - 1)) - 3;
-    else 
+    else
         kortGracilis = 0;
 
     if(sdBic)
         skewBic = skewBic / (pow(sdBic, 3) * (volBicReal - 1));
-    else 
+    else
         skewBic = 0;
     if(sdBic)
         kortBic = kortBic / (pow(sdBic, 4) * (volBicReal - 1)) - 3;
-    else 
+    else
         kortBic = 0;
 
     if(sdSemimem)
         skewSemimem = skewSemimem / (pow(sdSemimem, 3) * (volSemimemReal - 1));
-    else 
+    else
         skewSemimem = 0;
     if(sdSemimem)
         kortSemimem = kortSemimem / (pow(sdSemimem, 4) * (volSemimemReal - 1)) - 3;
-    else 
+    else
         kortSemimem = 0;
 
     if(sdVaslat)
         skewVaslat = skewVaslat / (pow(sdVaslat, 3) * (volVaslatReal - 1));
-    else 
+    else
         skewVaslat = 0;
     if(sdVaslat)
         kortVaslat = kortVaslat / (pow(sdVaslat, 4) * (volVaslatReal - 1)) - 3;
-    else 
+    else
         kortVaslat = 0;
 
     if(sdVasmed)
         skewVasmed = skewVasmed / (pow(sdVasmed, 3) * (volVasmedReal - 1));
-    else 
+    else
         skewVasmed = 0;
     if(sdVasmed)
         kortVasmed = kortVasmed / (pow(sdVasmed, 4) * (volVasmedReal - 1)) - 3;
-    else 
+    else
         kortVasmed = 0;
 
     if(sdVasint)
         skewVasint = skewVasint / (pow(sdVasint, 3) * (volVasintReal - 1));
-    else 
+    else
         skewVasint = 0;
     if(sdVasint)
         kortVasint = kortVasint / (pow(sdVasint, 4) * (volVasintReal - 1)) - 3;
-    else 
+    else
         kortVasint = 0;
 
     if(sdCaud)
         skewCaud = skewCaud / (pow(sdCaud, 3) * (volCaudReal - 1));
-    else 
+    else
         skewCaud = 0;
     if(sdCaud)
         kortCaud = kortCaud / (pow(sdCaud, 4) * (volCaudReal - 1)) - 3;
-    else 
+    else
         kortCaud = 0;
 /*
     if(volOutputMark){

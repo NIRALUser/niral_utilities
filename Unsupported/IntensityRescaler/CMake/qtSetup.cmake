@@ -15,17 +15,17 @@
 # QT_QTMAIN_LIBRARY, where to find the qtmain library. This is only required by Qt3 on Windows.
 
 
-FIND_PATH(QT_INCLUDE_DIR qt.h
+find_path(QT_INCLUDE_DIR qt.h
   $ENV{QTDIR}/include
   /usr/local/qt/include
   /usr/local/include
   /usr/include/qt3
   /usr/include/qt
-  /usr/include 
+  /usr/include
   C:/Progra~1/qt/include
   )
 
-FIND_LIBRARY(QT_QT_LIBRARY 
+find_library(QT_QT_LIBRARY
   NAMES qt qt-mt qt-mt230nc
   PATHS
   $ENV{QTDIR}/lib
@@ -36,78 +36,78 @@ FIND_LIBRARY(QT_QT_LIBRARY
   C:/Progra~1/qt/lib
   )
 
-FIND_PROGRAM(QT_MOC_EXECUTABLE moc
+find_program(QT_MOC_EXECUTABLE moc
   $ENV{QTDIR}/bin C:/Progra~1/qt/bin
   )
 
-FIND_PROGRAM(QT_UIC_EXECUTABLE uic
+find_program(QT_UIC_EXECUTABLE uic
   $ENV{QTDIR}/bin C:/Progra~1/qt/bin
   )
 
 
-IF (WIN32)
-  FIND_LIBRARY(QT_QTMAIN_LIBRARY qtmain
+if(WIN32)
+  find_library(QT_QTMAIN_LIBRARY qtmain
     $ENV{QTDIR}/lib C:/Progra~1/qt/lib
     DOC "This Library is only needed by and included with Qt3 on MSWindows. It should be NOTFOUND, undefined or IGNORE otherwise."
     )
-ENDIF (WIN32)
+endif()
 
 
-IF (QT_MOC_EXECUTABLE)
-  SET ( QT_WRAP_CPP "YES")
-ENDIF (QT_MOC_EXECUTABLE)
+if(QT_MOC_EXECUTABLE)
+  set( QT_WRAP_CPP "YES")
+endif()
 
-IF (QT_UIC_EXECUTABLE)
-  SET ( QT_WRAP_UI "YES")
-ENDIF (QT_UIC_EXECUTABLE)
+if(QT_UIC_EXECUTABLE)
+  set( QT_WRAP_UI "YES")
+endif()
 
 
-IF(QT_INCLUDE_DIR)
-  IF(QT_QT_LIBRARY)
-    SET( QT_LIBRARIES ${QT_LIBRARIES} ${QT_QT_LIBRARY} )
-    SET( QT_FOUND "YES" )
-    SET( QT_DEFINITIONS "")
+if(QT_INCLUDE_DIR)
+  if(QT_QT_LIBRARY)
+    set( QT_LIBRARIES ${QT_LIBRARIES} ${QT_QT_LIBRARY} )
+    set( QT_FOUND "YES" )
+    set( QT_DEFINITIONS "")
 
-    IF (WIN32)
-      IF (QT_QTMAIN_LIBRARY)
+    if(WIN32)
+      if(QT_QTMAIN_LIBRARY)
         # for version 3
-        SET (QT_DEFINITIONS -DQT_DLL)
-        SET (QT_DEFINITIONS "-DQT_DLL -DQT_THREAD_SUPPORT -DNO_DEBUG")
-        SET (QT_LIBRARIES imm32.lib  ${QT_QT_LIBRARY} ${QT_QTMAIN_LIBRARY} )
-        SET (QT_LIBRARIES ${QT_LIBRARIES} winmm wsock32)
-      ELSE (QT_QTMAIN_LIBRARY)
+        set(QT_DEFINITIONS -DQT_DLL)
+        set(QT_DEFINITIONS "-DQT_DLL -DQT_THREAD_SUPPORT -DNO_DEBUG")
+        set(QT_LIBRARIES imm32.lib  ${QT_QT_LIBRARY} ${QT_QTMAIN_LIBRARY} )
+        set(QT_LIBRARIES ${QT_LIBRARIES} winmm wsock32)
+      else()
         # for version 2
-        SET (QT_LIBRARIES imm32.lib ws2_32.lib  ${QT_QT_LIBRARY} )
-      ENDIF (QT_QTMAIN_LIBRARY)
-    ELSE (WIN32)
-      SET (QT_LIBRARIES ${QT_QT_LIBRARY} )
-    ENDIF (WIN32)
+        set(QT_LIBRARIES imm32.lib ws2_32.lib  ${QT_QT_LIBRARY} )
+      endif()
+    else()
+      set(QT_LIBRARIES ${QT_QT_LIBRARY} )
+    endif()
 
     # Backwards compatibility for CMake1.4 and 1.2
-    SET (QT_MOC_EXE ${QT_MOC_EXECUTABLE} )
-    SET (QT_UIC_EXE ${QT_UIC_EXECUTABLE} )
+    set(QT_MOC_EXE ${QT_MOC_EXECUTABLE} )
+    set(QT_UIC_EXE ${QT_UIC_EXECUTABLE} )
 
-    IF(UNIX)
-      INCLUDE( ${CMAKE_ROOT}/Modules/FindX11.cmake )
-      IF (X11_FOUND)
-        SET (QT_LIBRARIES ${QT_LIBRARIES} ${X11_LIBRARIES})
-      ENDIF (X11_FOUND)
-      IF (CMAKE_DL_LIBS)
-        SET (QT_LIBRARIES ${QT_LIBRARIES} ${CMAKE_DL_LIBS})
-      ENDIF (CMAKE_DL_LIBS)
-    ENDIF(UNIX)
-    IF(QT_QT_LIBRARY MATCHES "qt-mt")
-      INCLUDE( ${CMAKE_ROOT}/Modules/FindThreads.cmake )
-      SET(QT_LIBRARIES ${QT_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
-    ENDIF(QT_QT_LIBRARY MATCHES "qt-mt")
+    if(UNIX)
+      include( ${CMAKE_ROOT}/Modules/FindX11.cmake )
+      if(X11_FOUND)
+        set(QT_LIBRARIES ${QT_LIBRARIES} ${X11_LIBRARIES})
+      endif()
+      if(CMAKE_DL_LIBS)
+        set(QT_LIBRARIES ${QT_LIBRARIES} ${CMAKE_DL_LIBS})
+      endif()
+    endif()
+    if(QT_QT_LIBRARY MATCHES "qt-mt")
+      include( ${CMAKE_ROOT}/Modules/FindThreads.cmake )
+      set(QT_LIBRARIES ${QT_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+    endif()
 
-  ENDIF(QT_QT_LIBRARY)
-ELSE(QT_INCLUDE_DIR)
-   MESSAGE(FATAL_ERROR "QT library not found!\n" "Please go to http://www.ia.unc.edu/dev/tutorials/InstallLib")
-ENDIF(QT_INCLUDE_DIR)
+  endif()
+else()
+   message(FATAL_ERROR "QT library not found!\n" "Please go to http://www.ia.unc.edu/dev/tutorials/InstallLib")
+endif()
 
 
-MARK_AS_ADVANCED(
+mark_as_advanced(
   QT_INCLUDE_DIR
   QT_QT_LIBRARY
   QT_QTMAIN_LIBRARY

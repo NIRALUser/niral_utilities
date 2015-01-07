@@ -1,6 +1,6 @@
 #ifndef IntensityRescalerCommandLine_h
 #define IntensityRescalerCommandLine_h
-  
+
 #include <qstring.h>
 #include <vector>
 #include <stdlib.h>

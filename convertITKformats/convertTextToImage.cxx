@@ -8,7 +8,7 @@
 #include <itkImageIOBase.h>
 #include <itkVector.h>
 #include <itkImageRegionIterator.h>
-#include <itkImageFileReader.h> 
+#include <itkImageFileReader.h>
 #include <itkImageSeriesReader.h>
 #include <itkImageFileWriter.h>
 #include <itkCastImageFilter.h>
@@ -42,25 +42,25 @@ int main(int argc, const char* argv[])
     }
   string inputFileName(argv[1]); // input image
   string outfileName(argv[2]);
-  
+
   const int numDimParam = 2;
   int dimParam[numDimParam];
   int dimOn = ipExistsArgument(argv,"-dim");
-  if (dimOn)  {  
+  if (dimOn)  {
     char *tmp_str    = ipGetStringArgument(argv, "-dim", NULL);
     int numDim       = ipExtractIntTokens(dimParam, tmp_str, numDimParam);
-    if (numDim != numDimParam) {              
+    if (numDim != numDimParam) {
       cerr << argv[0] << ": -dim needs "<< numDimParam << " parameters.\n";
       exit(-1);
     }
     free(tmp_str);
-  } 
+  }
   int pixdimParam[numDimParam];
   int pixdimOn = ipExistsArgument(argv,"-pixsize");
-  if (pixdimOn)  {  
+  if (pixdimOn)  {
     char *tmp_str    = ipGetStringArgument(argv, "-pixsize", NULL);
     int numDim       = ipExtractIntTokens(pixdimParam, tmp_str, numDimParam);
-    if (numDim != numDimParam) {              
+    if (numDim != numDimParam) {
       cerr << argv[0] << ": -pixSize needs "<< numDimParam << " parameters.\n";
       exit(-1);
     }
@@ -69,23 +69,23 @@ int main(int argc, const char* argv[])
     pixdimParam[0] = 1;
     pixdimParam[1] = 1;
   }
-  
+
   int debug = ipExistsArgument(argv,"-v");
 
   bool writeFlag = true;
   if (outfileName.empty()) {
     writeFlag = false;
   }
-  
+
   enum { ImageDimension = 2 };
   typedef   float PixelType;
   typedef   Image<PixelType,ImageDimension>  ImageType;
-  
+
   typedef ImageFileReader< ImageType > VolumeReaderType;
   typedef ImageFileWriter< ImageType > VolumeWriterType;
   typedef ImageRegionIterator< ImageType > IteratorType;
 
-  try 
+  try
     {
 
       ImageType::Pointer image = ImageType::New();
@@ -109,7 +109,7 @@ int main(int argc, const char* argv[])
 
       while (!input.eof())
 	{
-	  PixelType value; 
+	  PixelType value;
 	  input>>value;
 	  iterImage.Set(value);
 	  ++iterImage;
@@ -120,10 +120,10 @@ int main(int argc, const char* argv[])
 	VolumeWriterType::Pointer writer = VolumeWriterType::New();
 	if (debug) cout << "writing output data " << outfileName << endl;
 	writer->UseCompressionOn();
-	writer->SetFileName(outfileName.c_str()); 	  
+	writer->SetFileName(outfileName.c_str()); 	
 	writer->SetInput(image);
 	writer->Write();
-      }  
+      }
 
     }
   catch( itk::ExceptionObject & e )
@@ -140,8 +140,8 @@ int main(int argc, const char* argv[])
     {
       std::cerr << "unknown exception caught in main" << std::endl;
     }
-  
-  
+
+
   return 0;
-  
+
 }

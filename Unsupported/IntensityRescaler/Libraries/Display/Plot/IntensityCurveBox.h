@@ -8,8 +8,8 @@
   Copyright (c) 2003 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #ifndef __IntensityCurveBox_h_
@@ -17,7 +17,7 @@
 
 //#include <FL/Fl_Gl_Window.H>
 
-#include <qgl.h> 
+#include <qgl.h>
 #include "Vector3D.h"
 //#include <IRISTypes.h>
 #include "IntensityCurveInterface.h"
@@ -31,11 +31,11 @@
  */
 class threedwindow;
 
-class IntensityCurveBox : public QGLWidget 
+class IntensityCurveBox : public QGLWidget
 {
 	  Q_OBJECT
 public:
-  IntensityCurveBox( QWidget *parent=0, const char *name=0,threedwindow* threeparent=0); 
+  IntensityCurveBox( QWidget *parent=0, const char *name=0,threedwindow* threeparent=0);
 
   /**
    * Handle displaying the curve
@@ -72,14 +72,14 @@ private:
   /**
    * Check if a control point is close to another point (i.e. mouse position)
    */
-  int GetControlPointInVincinity(float x, float y, int pixelRadius); 
+  int GetControlPointInVincinity(float x, float y, int pixelRadius);
 
   /**
    * The intensity mapping curve
    */
   IntensityCurveInterface *m_Curve;
     int m_MovingControlPoint;
-  /** 
+  /**
    * Parent object
    */
 //  IntensityCurveUILogic *m_Parent;

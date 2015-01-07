@@ -11,7 +11,7 @@
 #include <fstream>
 
 #include <itkImage.h>
-#include <itkImageFileReader.h> 
+#include <itkImageFileReader.h>
 #include <itkImageFileWriter.h>
 #include <itkMetaImageIO.h>
 
@@ -25,7 +25,7 @@ int main(int argc, const char* argv[])
 {
 
 
-  if (argc <= 1 || ipExistsArgument(argv,"-h ") || ipExistsArgument(argv,"-help") || 
+  if (argc <= 1 || ipExistsArgument(argv,"-h ") || ipExistsArgument(argv,"-help") ||
       ipExistsArgument(argv,"-usage"))
   {
     std::cout << "usage: " << argv[0] << std::endl
@@ -36,8 +36,8 @@ int main(int argc, const char* argv[])
   }
   // argument processing
   std::string fileName(argv[1]);
-  
-  bool debug =  ipExistsArgument(argv,"-v"); 
+
+  bool debug =  ipExistsArgument(argv,"-v");
   bool axisid = ipExistsArgument(argv,"-a");
   std::string outfileName(ipGetStringArgument(argv, "-o", ""));
 
@@ -46,11 +46,11 @@ int main(int argc, const char* argv[])
   if(axisid)
     splitaxis = ipGetIntArgument(argv,"-a",0);
 
-  if (outfileName.empty()) 
+  if (outfileName.empty())
   {
     outfileName = "output.nrrd";
     std::cout << "no outputname specified using " << outfileName << std::endl;
-  } 
+  }
 
   // Definitions
   const int inputDimension = 4;
@@ -65,7 +65,7 @@ int main(int argc, const char* argv[])
   typedef ImageFileWriter< outputImageType > VolumeWriterType;
 
   typedef ExtractImageFilter<inputImageType, outputImageType> ExtractFilterType;
-  
+
   //Read the input file
   VolumeReaderType::Pointer imageReader = VolumeReaderType::New();
   if (debug) std::cout << "Loading file " << std::endl;
@@ -80,7 +80,7 @@ int main(int argc, const char* argv[])
       exit(0) ;
     }
 
-  inputImageType::Pointer image4d = inputImageType::New();  
+  inputImageType::Pointer image4d = inputImageType::New();
   image4d = imageReader->GetOutput();
   if(debug) std::cout << image4d << std::endl;
 

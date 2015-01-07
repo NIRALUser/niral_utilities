@@ -1,5 +1,5 @@
 /*=========================================================================
-  
+
   Program:   Disclaimer
   Module:    $RCSfile: Disclaimer.cxx,v $
   Language:  C++
@@ -10,8 +10,8 @@
   Copyright (c) 2004 NeuroImaging Lab @ UNC. All rights reserved.
   See NeuroLibCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -47,9 +47,9 @@ void Disclaimer::Show()
   Update();
   std::cout << m_title.c_str() << std::endl;
   std::cout << std::endl;
-  std::cout <<  m_author.c_str() << std::endl; 
+  std::cout <<  m_author.c_str() << std::endl;
   std::cout << std::endl;
-  std::cout <<  m_disclaimer.c_str() << std::endl; 
+  std::cout <<  m_disclaimer.c_str() << std::endl;
 }
 
 void Disclaimer::Update()
@@ -124,7 +124,7 @@ void Disclaimer::Update()
  m_disclaimer += m_application;
  m_disclaimer += " software for such purposes.\n\n";
  m_disclaimer += "The ";
- m_disclaimer +=  m_application; 
+ m_disclaimer +=  m_application;
  m_disclaimer += " copyright holders and contributors and all affiliated organizations shall not be liable\n";
  m_disclaimer += "for any damages arising out of the use of ";
  m_disclaimer += m_application;

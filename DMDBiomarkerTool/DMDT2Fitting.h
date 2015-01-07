@@ -10,8 +10,8 @@
  * Update  :   1. Created the t2 fitting class (06-07-10)
  * Copyright (c) Neuro Image Research and Analysis Lab.@UNC All rights reserved.
  *
- * This software is distributed WITHOUT ANY WARRANTY; without even 
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * This software is distributed WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE.
  *
 =========================================================================*/
@@ -22,15 +22,15 @@
 
 class DMDT2Fitting : public virtual DMDData
 {
-    private:       
-    public:   
-        DMDT2Fitting() {                 
-                  
+    private:
+    public:
+        DMDT2Fitting() {
+
 	}	
 	typedef itk::RecursiveGaussianImageFilter< DMDData::OrientedImageType, DMDData::OrientedImageType >  FilterType;	
 	void smooth( DMDData::OrientedSeriesReaderType::Pointer reader, DMDData::OrientedWriterType::Pointer & writer );
- 
-}; 
+
+};
 //////////////////////////////////////////////////////////////////////////
 void DMDT2Fitting::smooth( DMDData::OrientedSeriesReaderType::Pointer reader, DMDData::OrientedWriterType::Pointer & writer )
 {
@@ -39,7 +39,7 @@ void DMDT2Fitting::smooth( DMDData::OrientedSeriesReaderType::Pointer reader, DM
     FilterType::Pointer                 filterX = FilterType::New();
     FilterType::Pointer                 filterY = FilterType::New();
     FilterType::Pointer                 filterZ = FilterType::New();
-    
+
     filterX->SetDirection( 0 );   // 0 --> X direction
     filterY->SetDirection( 1 );   // 1 --> Y direction
     filterZ->SetDirection( 2 );   // 1 --> Z direction

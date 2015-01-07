@@ -1,5 +1,5 @@
 #include "ImageCombinaison.h"
-  
+
 ImageCombinaison::ImageCombinaison()
 {
 }

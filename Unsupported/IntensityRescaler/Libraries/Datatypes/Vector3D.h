@@ -7,21 +7,21 @@
 //
 // This struct is meant to be a fast 3D vector class.
 // It is intended for use with build in types (int, float, etc.)
-// 
+//
 // Optimization is important for this struct
 // - almost everything is inlined
-// - readability and maintainability tradeoffs have been made 
+// - readability and maintainability tradeoffs have been made
 //   for speed gains
 //
 // bcd 2003
 //
 
 template <class T>
-class Vector3D 
+class Vector3D
 {
 public:
   //
-  // IMPORTANT: DO NOT change the order of x, y, and z.  
+  // IMPORTANT: DO NOT change the order of x, y, and z.
   // DO NOT add other data members between x, y, and z.
   // Array style access depends on these being adjacent
   // in memory.  This is guarenteed for standards compliant
@@ -31,7 +31,7 @@ public:
   T x, y, z;
   // IMPORTANT DO NOT TOUCH THE ABOVE LINE //
 
-  // 
+  //
   // constructors
   //
 
@@ -79,7 +79,7 @@ public:
 
   //
   // manipulation methods
-  // 
+  //
   void set(const T& x, const T& y, const T& z);
   void scale(const T& sx, const T& sy, const T& sz);
   void translate(const T& tx, const T& ty, const T& tz);
@@ -114,7 +114,7 @@ public:
 //
 // comparison operators
 //
-template <class T> 
+template <class T>
 bool operator<(const Vector3D<T>& lhs, const Vector3D<T>& rhs);
 template <class T>
 bool operator==(const Vector3D<T>& lhs, const Vector3D<T>& rhs);
