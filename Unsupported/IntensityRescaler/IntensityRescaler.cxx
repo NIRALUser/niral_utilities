@@ -1,12 +1,14 @@
+#ifdef QT_GUI
 #include "ImageManager.h"
 #include "QtImageLoader.h"
 #include "IntensityRescalerGUIControls.h"
-#include "IntensityRescalerCommandLine.h"
-#include <iostream>
-#include <qstring.h>
 #include <qfiledialog.h>
 #include <qapplication.h>
 #include <qplatinumstyle.h>
+#include <qstring.h>
+#endif
+#include "IntensityRescalerCommandLine.h"
+#include <iostream>
 
 int main( int argc, char* argv[] )
 {
@@ -18,6 +20,7 @@ int main( int argc, char* argv[] )
 
   if (argc < 2)
   {
+    #ifdef QT_GUI
     QApplication myApp( argc, argv );
 
     IntensityRescalerGUIControls m_GUI( 0, 0, TRUE );
@@ -30,6 +33,9 @@ int main( int argc, char* argv[] )
 
     m_GUI.show();
     myApp.exec();
+    #else
+    std::cerr<<"Application was built without GUI support"<<std::endl;
+    #endif
     return 0;
   }
   else

@@ -1,21 +1,5 @@
 
 
-find_package(ITK REQUIRED)
-if(ITK_FOUND)
-   include(${ITK_USE_FILE})
-else()
-   message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-endif()
-
-find_package(VTK REQUIRED)
-if(VTK_FOUND)
-  include(${VTK_USE_FILE})
-else()
-  message(FATAL_ERROR, "VTK not found. Please set VTK_DIR.")
-endif()
-
-include(${NIRAL_UTILITIES_SOURCE_DIR}/CMake/qtSetup.cmake)
-
 include_directories(
     	${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Datatypes
      	${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Algorithms
@@ -29,6 +13,7 @@ include_directories(
 link_libraries(
  ${ITK_LIBRARIES}
  ${QT_QT_LIBRARY}
+ ${QT_LIBRARIES}
 )
 
 

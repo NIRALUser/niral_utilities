@@ -1,3 +1,6 @@
+//Added by qt3to4:
+#include <Q3Frame>
+#include <QLabel>
 <!DOCTYPE UI><UI>
 <class>IntensityRescalerGUI</class>
 <widget>
@@ -44,7 +47,7 @@
                     <number>6</number>
                 </property>
                 <widget row="3"  column="0" >
-                    <class>QGroupBox</class>
+                    <class>Q3GroupBox</class>
                     <property stdset="1">
                         <name>name</name>
                         <cstring>Controls</cstring>
@@ -128,7 +131,7 @@
                         </property>
                         <property stdset="1">
                             <name>orientation</name>
-                            <enum>Horizontal</enum>
+                            <enum>Qt::Horizontal</enum>
                         </property>
                     </widget>
                     <widget>
@@ -152,7 +155,7 @@
                         </property>
                         <property stdset="1">
                             <name>orientation</name>
-                            <enum>Horizontal</enum>
+                            <enum>Qt::Horizontal</enum>
                         </property>
                     </widget>
                     <widget>
@@ -176,7 +179,7 @@
                         </property>
                         <property stdset="1">
                             <name>alignment</name>
-                            <set>AlignVCenter|AlignRight</set>
+                            <set>Qt::AlignVCenter|Qt::AlignRight</set>
                         </property>
                         <property>
                             <name>hAlign</name>
@@ -203,7 +206,7 @@
                         </property>
                         <property stdset="1">
                             <name>alignment</name>
-                            <set>AlignVCenter|AlignRight</set>
+                            <set>Qt::AlignVCenter|Qt::AlignRight</set>
                         </property>
                         <property>
                             <name>hAlign</name>
@@ -270,7 +273,7 @@
                         </property>
                         <property stdset="1">
                             <name>alignment</name>
-                            <set>AlignVCenter|AlignRight</set>
+                            <set>Qt::AlignVCenter|Qt::AlignRight</set>
                         </property>
                         <property>
                             <name>hAlign</name>
@@ -297,7 +300,7 @@
                         </property>
                         <property stdset="1">
                             <name>alignment</name>
-                            <set>AlignVCenter|AlignRight</set>
+                            <set>Qt::AlignVCenter|Qt::AlignRight</set>
                         </property>
                         <property>
                             <name>hAlign</name>
@@ -345,7 +348,7 @@
                     </widget>
                 </widget>
                 <widget row="1"  column="0" >
-                    <class>QGroupBox</class>
+                    <class>Q3GroupBox</class>
                     <property stdset="1">
                         <name>name</name>
                         <cstring>GroupBox5</cstring>
@@ -362,7 +365,7 @@
                         <string>2. Select labels</string>
                     </property>
                     <widget>
-                        <class>QListView</class>
+                        <class>Q3ListView</class>
                         <column>
                             <property>
                                 <name>text</name>
@@ -400,7 +403,7 @@
                     </widget>
                 </widget>
                 <widget row="5"  column="0" >
-                    <class>QFrame</class>
+                    <class>Q3Frame</class>
                     <property stdset="1">
                         <name>name</name>
                         <cstring>Frame3</cstring>
@@ -481,7 +484,7 @@ Matthieu Jomier (c) 2005-2006
                         </property>
                         <property stdset="1">
                             <name>textFormat</name>
-                            <enum>AutoText</enum>
+                            <enum>Qt::AutoText</enum>
                         </property>
                         <property stdset="1">
                             <name>scaledContents</name>
@@ -489,7 +492,7 @@ Matthieu Jomier (c) 2005-2006
                         </property>
                         <property stdset="1">
                             <name>alignment</name>
-                            <set>AlignVCenter|AlignLeft</set>
+                            <set>Qt::AlignVCenter|Qt::AlignLeft</set>
                         </property>
                         <property>
                             <name>hAlign</name>
@@ -503,7 +506,7 @@ Matthieu Jomier (c) 2005-2006
                     </property>
                     <property>
                         <name>orientation</name>
-                        <enum>Vertical</enum>
+                        <enum>Qt::Vertical</enum>
                     </property>
                     <property>
                         <name>sizeType</name>
@@ -518,7 +521,7 @@ Matthieu Jomier (c) 2005-2006
                     </property>
                 </spacer>
                 <widget row="2"  column="0" >
-                    <class>QGroupBox</class>
+                    <class>Q3GroupBox</class>
                     <property stdset="1">
                         <name>name</name>
                         <cstring>GroupBox6</cstring>
@@ -648,7 +651,7 @@ Matthieu Jomier (c) 2005-2006
                     </widget>
                 </widget>
                 <widget row="0"  column="0" >
-                    <class>QGroupBox</class>
+                    <class>Q3GroupBox</class>
                     <property stdset="1">
                         <name>name</name>
                         <cstring>GroupBox4</cstring>
@@ -853,7 +856,7 @@ Matthieu Jomier (c) 2005-2006
                         </property>
                         <property stdset="1">
                             <name>alignment</name>
-                            <set>AlignCenter</set>
+                            <set>Qt::AlignCenter</set>
                         </property>
                         <property>
                             <name>hAlign</name>
@@ -880,7 +883,7 @@ Matthieu Jomier (c) 2005-2006
                         </property>
                         <property stdset="1">
                             <name>alignment</name>
-                            <set>AlignCenter</set>
+                            <set>Qt::AlignCenter</set>
                         </property>
                         <property>
                             <name>hAlign</name>
@@ -1024,7 +1027,7 @@ Matthieu Jomier (c) 2005-2006
                     </property>
                     <property stdset="1">
                         <name>orientation</name>
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property>
                         <name>hAlign</name>
@@ -1049,7 +1052,7 @@ Matthieu Jomier (c) 2005-2006
                     </property>
                     <property stdset="1">
                         <name>alignment</name>
-                        <set>AlignVCenter|AlignRight</set>
+                        <set>Qt::AlignVCenter|Qt::AlignRight</set>
                     </property>
                     <property>
                         <name>hAlign</name>
@@ -1098,7 +1101,7 @@ Matthieu Jomier (c) 2005-2006
                     </property>
                     <property stdset="1">
                         <name>orientation</name>
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property>
                         <name>hAlign</name>
@@ -1119,7 +1122,7 @@ Matthieu Jomier (c) 2005-2006
                     </property>
                     <property stdset="1">
                         <name>orientation</name>
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property>
                         <name>hAlign</name>
@@ -1144,7 +1147,7 @@ Matthieu Jomier (c) 2005-2006
                     </property>
                     <property stdset="1">
                         <name>alignment</name>
-                        <set>AlignVCenter|AlignRight</set>
+                        <set>Qt::AlignVCenter|Qt::AlignRight</set>
                     </property>
                     <property>
                         <name>hAlign</name>
@@ -1204,7 +1207,7 @@ Matthieu Jomier (c) 2005-2006
                     </property>
                     <property stdset="1">
                         <name>alignment</name>
-                        <set>AlignVCenter|AlignRight</set>
+                        <set>Qt::AlignVCenter|Qt::AlignRight</set>
                     </property>
                     <property>
                         <name>hAlign</name>

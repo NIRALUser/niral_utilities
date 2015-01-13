@@ -81,13 +81,13 @@ void ImageRotation::Update()
 
 
 	itk::Index<3> ind;
-
+  #ifdef QT_GUI
 	if (m_progressbar)
 	{
 		m_progressbar->setProgress(0);
 		m_progressbar->setTotalSteps(m_size[m_k]);
 	}
-
+  #endif
 	for (unsigned int m_slice=0;m_slice<m_size[m_k];m_slice++)
 	{
 		ind[m_k] = m_slice;
@@ -121,7 +121,9 @@ void ImageRotation::Update()
 				}
 		}
 		}
+    #ifdef QT_GUI
 		if (m_progressbar)	m_progressbar->setProgress(m_slice);
+    #endif
 	}
 	delete [] cWinImData;
 }

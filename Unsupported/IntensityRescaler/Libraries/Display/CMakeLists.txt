@@ -1,25 +1,5 @@
-# NeuroLib_USE_QT()
-# NeuroLib_USE_ITK()
-# NeuroLib_USE_VTK()
-# NeuroLib_USE_GLUT()
 
-find_package(ITK REQUIRED)
-if(ITK_FOUND)
-   include(${ITK_USE_FILE})
-else()
-   message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-endif()
-
-find_package(VTK REQUIRED)
-if(VTK_FOUND)
-  include(${VTK_USE_FILE})
-else()
-  message(FATAL_ERROR, "VTK not found. Please set VTK_DIR.")
-endif()
-
-include(${NIRAL_UTILITIES_SOURCE_DIR}/CMake/qtSetup.cmake)
-include(${NIRAL_UTILITIES_SOURCE_DIR}/CMake/glutSetup.cmake)
-
+if( COMPILE_IntensityRescaler_GUI )
 include_directories(
     	${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Datatypes
      	${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Display/Common
@@ -34,6 +14,7 @@ link_libraries(
  ITKCommon
  ITKBasicFilters
  ${QT_QT_LIBRARY}
+ ${QT_LIBRARIES}
  ${GLUT_LIBRARIES}
 )
 
@@ -68,3 +49,22 @@ set(Display_SRCS
 
 add_library(Display ${Display_SRCS} )
 
+else()
+
+include_directories(
+    	${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Datatypes
+     	${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Display/Common
+     	${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Display/Plot
+     )
+link_libraries(
+   ${VTK_LIBRARIES}
+vtkFiltering
+)
+
+set(Display_SRCS
+  Plot/IntensityCurveVTK.cxx
+)
+
+add_library(Display ${Display_SRCS} )
+
+endif()

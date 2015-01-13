@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <QLabel>
 <!DOCTYPE UI><UI>
 <class>Batch</class>
 <widget>
@@ -44,7 +46,7 @@
         </property>
         <property>
             <name>orientation</name>
-            <enum>Horizontal</enum>
+            <enum>Qt::Horizontal</enum>
         </property>
         <property>
             <name>frameShape</name>
@@ -92,7 +94,7 @@
         </property>
         <property>
             <name>orientation</name>
-            <enum>Horizontal</enum>
+            <enum>Qt::Horizontal</enum>
         </property>
     </widget>
     <widget>
@@ -208,7 +210,7 @@
         </property>
     </widget>
     <widget>
-        <class>QListView</class>
+        <class>Q3ListView</class>
         <column>
             <property>
                 <name>text</name>
@@ -272,7 +274,7 @@
         </property>
         <property>
             <name>orientation</name>
-            <enum>Horizontal</enum>
+            <enum>Qt::Horizontal</enum>
         </property>
     </widget>
     <widget>
@@ -316,7 +318,7 @@
         </property>
         <property>
             <name>orientation</name>
-            <enum>Horizontal</enum>
+            <enum>Qt::Horizontal</enum>
         </property>
     </widget>
     <widget>
@@ -420,7 +422,7 @@
         </property>
         <property>
             <name>orientation</name>
-            <enum>Horizontal</enum>
+            <enum>Qt::Horizontal</enum>
         </property>
     </widget>
     <widget>

@@ -22,7 +22,9 @@ mark_as_advanced(COMPILE_DISPLAY)
 # subdirs(Display/Window2D)
 
 #subdirs(Datatypes)
-subdirs(IO)
+if( COMPILE_IntensityRescaler_GUI )
+  subdirs(IO)
+endif()
 subdirs(Algorithms)
 subdirs(Display)
 

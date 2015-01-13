@@ -113,6 +113,10 @@ if(COMPILE_DMDBIOMARKERTOOL)
   subdirs(DMDBiomarkerTool)
 endif()
 
+option(COMPILE_Unsupported "Compile Unsupported Tools." OFF)
+if(COMPILE_Unsupported)
+  subdirs(Unsupported)
+endif()
 
 
 
