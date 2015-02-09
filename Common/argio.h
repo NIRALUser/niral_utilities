@@ -18,6 +18,34 @@
 #include <ctype.h>
 
 
+//Copied from itkMacro.h (7a870297f818f32a22fe720b30577cc58ce91634)
+#ifndef itkMacro_h
+#if __cplusplus >= 201103L
+// In c++11 the override keyword allows you to explicity define that a function
+// is intended to override the base-class version.  This makes the code more
+// managable and fixes a set of common hard-to-find bugs.
+#define ITK_OVERRIDE override
+// In c++11 there is an explicit nullptr type that introduces a new keyword to
+// serve as a distinguished null pointer constant: nullptr. It is of type
+// nullptr_t, which is implicitly convertible and comparable to any pointer type
+// or pointer-to-member type. It is not implicitly convertible or comparable to
+// integral types, except for bool.
+#define ITK_NULLPTR  nullptr
+// In C++11 the throw-list specification has been deprecated,
+// replaces with the noexcept specifier. Using this function
+// specification adds the run-time check that the method does not
+// throw, if it does throw then std::terminate will be called.
+// Use cautiously.
+#define ITK_NOEXCEPT noexcept
+#else
+#define ITK_OVERRIDE
+#define ITK_NULLPTR  NULL
+#define ITK_NOEXCEPT throw()
+#endif
+#endif
+
+
+
 
 const int ipMAXTOKLEN = 255 ; // max. length of a token
 
