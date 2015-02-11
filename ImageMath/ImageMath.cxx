@@ -81,6 +81,7 @@ using namespace std;
 #include <itkMetaDataObject.h>
 #include <itkDanielssonDistanceMapImageFilter.h>
 #include <itkOtsuThresholdImageFilter.h>
+#include <itkOtsuMultipleThresholdsImageFilter.h>
 #include <itkMaskedImageToHistogramFilter.h>
 #include <itkImageToHistogramFilter.h>
 #include <itkShiftScaleImageFilter.h>
@@ -123,6 +124,7 @@ typedef CastImageFilter< ImageType, BinaryImageType > castBinaryFilterType;
 typedef CastImageFilter< ImageType,  ShortImageType > castShortFilterType;
 
 typedef itk::OtsuThresholdImageFilter< ImageType, ImageType > OtsuFilterType;
+typedef itk::OtsuMultipleThresholdsImageFilter< ImageType, ImageType > OtsuMultipleThresholdsFilterType;
 typedef ThresholdImageFilter< ImageType > maskThreshFilterType;
 typedef BinaryThresholdImageFilter< ImageType , ImageType > threshFilterType;
 typedef BinaryThresholdImageFilter< ShortImageType , ImageType > ShortthreshFilterType;
@@ -289,7 +291,7 @@ ImagePointer RunCleanComponent(ImagePointer image, int cleanLabel, float cleanPe
   catch (ExceptionObject & err) {
     cerr << "ExceptionObject caught!" << endl;
     cerr << err << endl;
-    exit(EXIT_FAILURE);	
+    exit(EXIT_FAILURE);
   }
 
   // 2. get the connected components of the label
@@ -302,7 +304,7 @@ ImagePointer RunCleanComponent(ImagePointer image, int cleanLabel, float cleanPe
   catch (ExceptionObject & err) {
     cerr << "ExceptionObject caught!" << endl;
     cerr << err << endl;
-    exit(EXIT_FAILURE);	
+    exit(EXIT_FAILURE);
   }
 
   //3. Sort the components according to their size
@@ -365,13 +367,13 @@ ImagePointer RunCleanComponent(ImagePointer image, int cleanLabel, float cleanPe
       PixelType compVal =  iterComp.Get();
 
       if (compLabel == compVal) {
-	// get votes from neighbors
-	LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset1)]++;
-	LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset2)]++;
-	LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset3)]++;
-	LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset4)]++;
-	LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset5)]++;
-	LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset6)]++; 	  		
+    // get votes from neighbors
+    LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset1)]++;
+    LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset2)]++;
+    LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset3)]++;
+    LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset4)]++;
+    LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset5)]++;
+    LabelVotes[(ShortPixelType)NeighborhoodIterator.GetPixel(offset6)]++;
       }
 
       ++iterComp;
@@ -386,11 +388,11 @@ ImagePointer RunCleanComponent(ImagePointer image, int cleanLabel, float cleanPe
     // now get the label with the max vote
     for (int Label = 0; Label <= MaxLabel; Label++)
       {
-	if (LabelVotes[Label] > MaxVoteValue)
-	  {
-	    MaxVoteValue = LabelVotes[Label];
-	    MaxVoteLabel = Label;
-	  }
+    if (LabelVotes[Label] > MaxVoteValue)
+      {
+        MaxVoteValue = LabelVotes[Label];
+        MaxVoteLabel = Label;
+      }
       }
 
     delete[] LabelVotes;
@@ -402,7 +404,7 @@ ImagePointer RunCleanComponent(ImagePointer image, int cleanLabel, float cleanPe
       PixelType compVal =  iterComp.Get();
 
       if (compLabel == compVal) {
-	iterLabel.Set(MaxVoteLabel);
+    iterLabel.Set(MaxVoteLabel);
       }
 
       ++iterComp;
@@ -434,6 +436,8 @@ int main(const int argc, const char **argv)
     cout << "       labels in infile2 overwrite only the background label in infile1" << endl;
     cout << "-extractLabel label    extract the mentioned label from the file" << endl;
     cout << "-otsu                  apply a standard 2 class otsu threshold" << endl;
+    cout << "-otsuMultipleThresholds        apply an n class otsu threshold. Parameters can be set with -otsuPara nbThresholds,labelOffset,nbHistogramBins" << endl;
+    cout << "-otsuPara nbThresholds,labelOffset,nbHistogramBins    optional parameters for otsuMultipleThresholds" <<endl;
     cout << "-threshold min,max     threshold: everything I < min , I > max is set to 0, otherwise 1" << endl;
     cout << "-threshMask min,max    mask threshold: everything I < min , I > max is set to 0, otherwise is left as is" << endl;
     cout << "-mask infile2          use infile2 as a binary mask (intensities > 0 ) and combine with inputfile  " << endl ;
@@ -529,8 +533,8 @@ int main(const int argc, const char **argv)
     // read in the names of the ems files
     else{
       for(int i = 0 ; i < 2 ; i++){
-	if(debug) cout << "reading file name " << correlFiles_tmp[ i ] << endl ;
-	correlFiles.push_back(correlFiles_tmp[i]) ; }
+    if(debug) cout << "reading file name " << correlFiles_tmp[ i ] << endl ;
+    correlFiles.push_back(correlFiles_tmp[i]) ; }
     }
   }
 
@@ -573,6 +577,8 @@ int main(const int argc, const char **argv)
   char *divFile    = ipGetStringArgument(argv, "-div", NULL);
 
   bool OtsuOn   = ipExistsArgument(argv, "-otsu");
+
+  bool OtsuMultipleThresholdsOn = ipExistsArgument(argv, "-otsuMultipleThresholds");
   bool thresholdOn    = ipExistsArgument(argv, "-threshold");
   char * tmp_str      = ipGetStringArgument(argv, "-threshold", NULL);
   PixelType tmin = 0;
@@ -587,6 +593,25 @@ int main(const int argc, const char **argv)
       tmin = (PixelType) textend[0];
       tmax = (PixelType) textend[1];
     }
+  }
+
+  tmp_str      = ipGetStringArgument(argv, "-otsuPara", NULL);
+  int otsuPara[3];
+  int nbThresholds, labelOffset, nbHistogramBins;
+  if (tmp_str) {
+    int num = ipExtractIntTokens(otsuPara, tmp_str, 3);
+    if (3 != num) {
+      cerr << "otsuPara needx 3 comma separated entries: nbThresholds,labelOffset,nbHistogramBins" << endl;
+      return EXIT_FAILURE ;
+    } else {
+      nbThresholds = otsuPara[0];
+      labelOffset = otsuPara[1];
+      nbHistogramBins = otsuPara[2];
+    }
+  } else {
+      nbThresholds = 2;
+      labelOffset = 0;
+      nbHistogramBins = 128;
   }
 
   bool threshMaskOn    = ipExistsArgument(argv, "-threshMask");
@@ -704,8 +729,8 @@ int main(const int argc, const char **argv)
     // read in the names of the ems files
     else{
       for(int i = 0 ; i < EMScount ; i++){
-	if(debug) cout<<"reading file name "<<probFiles[i]<<endl;
-	EMSFiles.push_back(probFiles[i]);}
+    if(debug) cout<<"reading file name "<<probFiles[i]<<endl;
+    EMSFiles.push_back(probFiles[i]);}
     }
   }
 delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for windows compilation
@@ -715,10 +740,10 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     {
       NbFiles = ipGetStringMultipArgument(argv, "-Normalize", files, MaxNumFiles);
       for(unsigned int i = 0 ; i < NbFiles ; i++)
-	{
-	  if(debug) cout<<"reading file name "<<files[i]<<endl;
-	  NormalizeFiles.push_back(files[i]);
-	}
+    {
+      if(debug) cout<<"reading file name "<<files[i]<<endl;
+      NormalizeFiles.push_back(files[i]);
+    }
     }
   double NormValue = ipGetDoubleArgument(argv,"-NormValue",255);
 
@@ -866,8 +891,8 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 
 
   if (smoothOn && !gaussianOn && !curveEvolOn
-		&& !grayOpenOn && !grayCloseOn && !grayDilateOn && !grayErodeOn && !grayFillHoleOn
-		&& !meanFilterOn && !anisoDiffOn) {
+        && !grayOpenOn && !grayCloseOn && !grayDilateOn && !grayErodeOn && !grayFillHoleOn
+        && !meanFilterOn && !anisoDiffOn) {
     curveEvolOn = true;
   };
   double smoothSize = ipGetDoubleArgument(argv,"-size",-1);
@@ -923,7 +948,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     {
       NbFiles = ipGetStringMultipArgument(argv, "-avg", files, MaxNumFiles);
       for(unsigned int i = 0 ; i < NbFiles ; i++)
-	InputFiles.push_back(files[i]);
+    InputFiles.push_back(files[i]);
     }
 
   bool MajorityVotingOn = ipExistsArgument(argv, "-majorityVoting");
@@ -931,7 +956,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     {
       NbFiles = ipGetStringMultipArgument(argv, "-majorityVoting", files, MaxNumFiles);
       for(unsigned int i = 0 ; i < NbFiles ; i++)
-	InputFiles.push_back(files[i]);
+    InputFiles.push_back(files[i]);
     }
 
   bool WeightedMajorityVotingOn = ipExistsArgument(argv, "-weightedMajorityVoting");
@@ -945,7 +970,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
           return EXIT_FAILURE ;
       }
       for(unsigned int i = 0 ; i < NbFiles ; i++)
-	InputFiles.push_back(files[i]);
+    InputFiles.push_back(files[i]);
     }
 
   bool DanDistanceMapOn = ipExistsArgument(argv, "-danDistanceMap");
@@ -959,7 +984,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
   {
       NbFiles = ipGetStringMultipArgument(argv, "-std", files, MaxNumFiles);
       for(unsigned int i = 0 ; i < NbFiles ; i++)
-	InputFiles.push_back(files[i]);
+    InputFiles.push_back(files[i]);
   }
   bool flip   = ipExistsArgument(argv, "-flip");
   tmp_str      = ipGetStringArgument(argv, "-flip", NULL);
@@ -1080,7 +1105,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputBaseImage = diffusionReader->GetOutput() ;
     diffusionImage = true ;
@@ -1099,7 +1124,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage = imageReader->GetOutput();
     inputBaseImage = inputImage ;
@@ -1123,7 +1148,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage2 = imageReader->GetOutput();
 
@@ -1156,11 +1181,11 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 
       // relabel labels in image2
       if (debug) {
-	std::cout << " Relabeling map : " << std::endl;
+    std::cout << " Relabeling map : " << std::endl;
         pos = labelSet.begin();
         int intpos = 1;
         while (pos != labelSet.end()){
-	  std::cout << *pos << " ---> " << max + intpos << std::endl;
+      std::cout << *pos << " ---> " << max + intpos << std::endl;
           intpos++;
           pos++;
         }
@@ -1258,7 +1283,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage = threshFilter->GetOutput();
 
@@ -1280,13 +1305,53 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     int threshold = otsuFilter->GetThreshold();
     if (debug) cout << "Otsu threshold " << threshold << endl;
     inputImage = otsuFilter->GetOutput();
 
-  }  else if (thresholdOn) {
+  }
+  //Added by Jean-Yves Yang
+  //Apply an n classes Otsu thresholding
+  else if(OtsuMultipleThresholdsOn) {
+      outFileName.erase();
+      outFileName.append(base_string);
+      outFileName.append("_OtsuMultipleThresholds");
+
+      if (debug) cout << "OtsuMultipleThresholds thresholding ..." << endl;
+
+      OtsuMultipleThresholdsFilterType::Pointer otsuMultipleThresholdsFilter = OtsuMultipleThresholdsFilterType::New();
+      otsuMultipleThresholdsFilter->SetInput(inputImage);
+      otsuMultipleThresholdsFilter->SetNumberOfHistogramBins(nbHistogramBins);
+      otsuMultipleThresholdsFilter->SetNumberOfThresholds(nbThresholds);
+      otsuMultipleThresholdsFilter->SetLabelOffset( labelOffset );
+      try {
+        otsuMultipleThresholdsFilter->Update();
+      }
+      catch (ExceptionObject & err) {
+        cerr << "ExceptionObject caught!" << endl;
+        cerr << err << endl;
+        return EXIT_FAILURE;
+      }
+     typedef itk::OtsuMultipleThresholdsImageFilter< ImageType, ImageType > FilterType;
+     FilterType::Pointer filter = FilterType::New();
+     FilterType::ThresholdVectorType thresholds = filter->GetThresholds();
+     if (debug)  {
+         cout << "Otsu thresholds " << endl;
+         for( size_t i = 0; i < thresholds.size(); i++ )
+         {
+             std:: cout << thresholds[i] << std::endl;
+         }
+     }
+     /*typedef itk::RescaleIntensityImageFilter< ImageType, ImageType > RescaleType;
+     RescaleType::Pointer rescaler = RescaleType::New();
+     rescaler->SetInput( otsuMultipleThresholdsFilter->GetOutput() );
+     rescaler->SetOutputMinimum( 0 );
+     rescaler->SetOutputMaximum( 255 );*/
+     inputImage = otsuMultipleThresholdsFilter->GetOutput();
+  }
+  else if (thresholdOn) {
     outFileName.erase();
     outFileName.append(base_string);
     outFileName.append("_thresh");
@@ -1304,7 +1369,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage = threshFilter->GetOutput();
   }  else if (threshMaskOn) {
@@ -1323,7 +1388,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage = threshFilter->GetOutput();
   } else if (maskOn) {
@@ -1423,7 +1488,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage2 = imageReader->GetOutput();
     if (debug) cout << "adding images  " << endl;
@@ -1439,7 +1504,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage = addFilter->GetOutput();
 
@@ -1458,7 +1523,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage2 = imageReader->GetOutput();
     if (debug) cout << "subing images  " << endl;
@@ -1474,7 +1539,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage = subFilter->GetOutput();
 
@@ -1493,7 +1558,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage2 = imageReader->GetOutput();
     if (debug) cout << "muling images  " << endl;
@@ -1509,7 +1574,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage = mulFilter->GetOutput();
 
@@ -1528,7 +1593,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage2 = imageReader->GetOutput();
     if (debug) cout << "diving images  " << endl;
@@ -1544,7 +1609,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage = divFilter->GetOutput();
 
@@ -1563,7 +1628,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage2 = imageReader->GetOutput();
     if (debug) cout << "matching images  " << endl;
@@ -1580,7 +1645,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage = matchHistogramFilter->GetOutput();
 
@@ -1636,7 +1701,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
 
     //Sort the labels according to their size, each labeled object has a different value
@@ -1654,21 +1719,21 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       inputImage = relabelFilter->GetOutput();
     else
       {
-	threshFilterType::Pointer threshFilter = threshFilterType::New();
-	threshFilter->SetInput(relabelFilter->GetOutput());
-	threshFilter->SetLowerThreshold(0.1);
-	threshFilter->SetUpperThreshold(Lbl);
-	threshFilter->SetOutsideValue(0);
-	threshFilter->SetInsideValue(1);
-	try {
-	  threshFilter->Update();
-	}
-	catch (ExceptionObject & err) {
-	  cerr << "ExceptionObject caught!" << endl;
-	  cerr << err << endl;
-	  return EXIT_FAILURE;
-	}
-	inputImage = threshFilter->GetOutput();
+    threshFilterType::Pointer threshFilter = threshFilterType::New();
+    threshFilter->SetInput(relabelFilter->GetOutput());
+    threshFilter->SetLowerThreshold(0.1);
+    threshFilter->SetUpperThreshold(Lbl);
+    threshFilter->SetOutsideValue(0);
+    threshFilter->SetInsideValue(1);
+    try {
+      threshFilter->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;
+    }
+    inputImage = threshFilter->GetOutput();
       }
   } else if (cleanCompOn) {
     outFileName.erase();
@@ -1698,7 +1763,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
 
     inputImage = dilateFilter->GetOutput();
@@ -1759,7 +1824,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
 
     inputImage = erodeFilter->GetOutput();
@@ -1781,9 +1846,9 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     dim[2] = imageRegion.GetSize(2);
     if (debug) cout << "size of the original image " << dim[0] << "," << dim[1] << "," << dim[2]<< endl;
     if (debug) cout << "cropping (x,y,z,w,h,d) " << extractRegion.GetIndex(0) << ","
-		    << extractRegion.GetIndex(1) << "," << extractRegion.GetIndex(2) << ","
-		    << extractRegion.GetSize(0) << "," << extractRegion.GetSize(1) << ","
-		    << extractRegion.GetSize(2) <<  endl;
+            << extractRegion.GetIndex(1) << "," << extractRegion.GetIndex(2) << ","
+            << extractRegion.GetSize(0) << "," << extractRegion.GetSize(1) << ","
+            << extractRegion.GetSize(2) <<  endl;
     if( diffusionImage )
     {
       typedef ExtractImageFilter< DiffusionImageType , DiffusionImageType > DiffusionCropFilterType ;
@@ -1798,7 +1863,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       {
         cerr << "ExceptionObject caught!" << endl;
         cerr << err << endl;
-        return EXIT_FAILURE;	
+        return EXIT_FAILURE;
       }
       cropFilter->GetOutput()->SetMetaDataDictionary( inputBaseImage->GetMetaDataDictionary() ) ;
       inputBaseImage = cropFilter->GetOutput() ;
@@ -1817,7 +1882,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       {
         cerr << "ExceptionObject caught!" << endl;
         cerr << err << endl;
-        return EXIT_FAILURE;	
+        return EXIT_FAILURE;
       }
       inputImage = cropFilter->GetOutput();
     }
@@ -1835,12 +1900,12 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       smoothFilter->SetNumberOfIterations(numIter);
       smoothFilter->SetTimeStep(smoothSize);
       try {
-	smoothFilter->Update();
+    smoothFilter->Update();
       }
       catch (ExceptionObject & err) {
-	cerr << "ExceptionObject caught!" << endl;
-	cerr << err << endl;
-	return EXIT_FAILURE;	
+    cerr << "ExceptionObject caught!" << endl;
+    cerr << err << endl;
+    return EXIT_FAILURE;
       }
       inputImage = smoothFilter->GetOutput();
     } else if (gaussianOn) {
@@ -1848,66 +1913,66 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 
       if (smoothSize == -1) smoothSize = 1.0;
       if (smoothSizes[0] != -1) {
-	smoothFilter->SetVariance(smoothSizes);
-	cout << "smoothing  (Gaussian): size " << smoothSizes[0] <<"," << smoothSizes[1] <<","
-	     << smoothSizes[2] <<", iterations " << numIter << endl;
+    smoothFilter->SetVariance(smoothSizes);
+    cout << "smoothing  (Gaussian): size " << smoothSizes[0] <<"," << smoothSizes[1] <<","
+         << smoothSizes[2] <<", iterations " << numIter << endl;
       } else {
-	smoothFilter->SetVariance(smoothSize);
-	cout << "smoothing  (Gaussian): size " << smoothSize << ", iterations " << numIter << endl;
+    smoothFilter->SetVariance(smoothSize);
+    cout << "smoothing  (Gaussian): size " << smoothSize << ", iterations " << numIter << endl;
       }
       for (unsigned int i=0; i < numIter; i++) {
-	smoothFilter->SetInput(inputImage);
-	try {
-	  smoothFilter->Update();
-	}
-	catch (ExceptionObject & err) {
-	  cerr << "ExceptionObject caught!" << endl;
-	  cerr << err << endl;
-	  return EXIT_FAILURE;	
-	}
-	inputImage = smoothFilter->GetOutput();
+    smoothFilter->SetInput(inputImage);
+    try {
+      smoothFilter->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;
+    }
+    inputImage = smoothFilter->GetOutput();
       }
-	} else if (grayDilateOn) {
+    } else if (grayDilateOn) {
       if (smoothSize == -1) smoothSize = 1.0;
       cout << "smoothing  (grayDilate): size " << smoothSize << ", iterations " << numIter << endl;
       StructuringElementType structuringElement;
       dilategrayFilterType::Pointer dilateFilter = dilategrayFilterType::New();
 
       for (unsigned int i=0; i < numIter; i++) {
-		dilateFilter->SetInput(inputImage);
-		structuringElement.SetRadius( (int) smoothSize );
-		structuringElement.CreateStructuringElement( );
-		dilateFilter->SetKernel( structuringElement );
-		try {
-		  dilateFilter->Update();
-		}
-		catch (ExceptionObject & err) {
-		  cerr << "ExceptionObject caught!" << endl;
-		  cerr << err << endl;
-		  return EXIT_FAILURE;	
-		}
-		inputImage = dilateFilter->GetOutput();
+        dilateFilter->SetInput(inputImage);
+        structuringElement.SetRadius( (int) smoothSize );
+        structuringElement.CreateStructuringElement( );
+        dilateFilter->SetKernel( structuringElement );
+        try {
+          dilateFilter->Update();
+        }
+        catch (ExceptionObject & err) {
+          cerr << "ExceptionObject caught!" << endl;
+          cerr << err << endl;
+          return EXIT_FAILURE;
+        }
+        inputImage = dilateFilter->GetOutput();
       }
-	} else if (grayErodeOn) {
+    } else if (grayErodeOn) {
       if (smoothSize == -1) smoothSize = 1.0;
       cout << "smoothing  (grayErode): size " << smoothSize << ", iterations " << numIter << endl;
       StructuringElementType structuringElement;
       erodegrayFilterType::Pointer erodeFilter = erodegrayFilterType::New();
 
       for (unsigned int i=0; i < numIter; i++) {
-		erodeFilter->SetInput(inputImage);
-		structuringElement.SetRadius( (int) smoothSize );
-		structuringElement.CreateStructuringElement( );
-		erodeFilter->SetKernel( structuringElement );
-		try {
-		  erodeFilter->Update();
-		}
-		catch (ExceptionObject & err) {
-		  cerr << "ExceptionObject caught!" << endl;
-		  cerr << err << endl;
-		  return EXIT_FAILURE;	
-		}
-		inputImage = erodeFilter->GetOutput();
+        erodeFilter->SetInput(inputImage);
+        structuringElement.SetRadius( (int) smoothSize );
+        structuringElement.CreateStructuringElement( );
+        erodeFilter->SetKernel( structuringElement );
+        try {
+          erodeFilter->Update();
+        }
+        catch (ExceptionObject & err) {
+          cerr << "ExceptionObject caught!" << endl;
+          cerr << err << endl;
+          return EXIT_FAILURE;
+        }
+        inputImage = erodeFilter->GetOutput();
       }
     } else if (grayCloseOn) {
       if (smoothSize == -1) smoothSize = 1.0;
@@ -1917,21 +1982,21 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       erodegrayFilterType::Pointer erodeFilter = erodegrayFilterType::New();
 
       for (unsigned int i=0; i < numIter; i++) {
-	dilateFilter->SetInput(inputImage);
-	erodeFilter->SetInput(dilateFilter->GetOutput());
-	structuringElement.SetRadius( (int) smoothSize );
-	structuringElement.CreateStructuringElement( );
-	dilateFilter->SetKernel( structuringElement );
-	erodeFilter->SetKernel( structuringElement );
-	try {
-	  erodeFilter->Update();
-	}
-	catch (ExceptionObject & err) {
-	  cerr << "ExceptionObject caught!" << endl;
-	  cerr << err << endl;
-	  return EXIT_FAILURE;	
-	}
-	inputImage = erodeFilter->GetOutput();
+    dilateFilter->SetInput(inputImage);
+    erodeFilter->SetInput(dilateFilter->GetOutput());
+    structuringElement.SetRadius( (int) smoothSize );
+    structuringElement.CreateStructuringElement( );
+    dilateFilter->SetKernel( structuringElement );
+    erodeFilter->SetKernel( structuringElement );
+    try {
+      erodeFilter->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;
+    }
+    inputImage = erodeFilter->GetOutput();
       }
     } else if (grayOpenOn) {
       if (smoothSize == -1) smoothSize = 1.0;
@@ -1941,37 +2006,37 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       erodegrayFilterType::Pointer erodeFilter = erodegrayFilterType::New();
 
       for (unsigned int i=0; i < numIter; i++) {
-	erodeFilter->SetInput(inputImage);
-	dilateFilter->SetInput(erodeFilter->GetOutput());
-	structuringElement.SetRadius( (int) smoothSize);
-	dilateFilter->SetKernel( structuringElement );
-	erodeFilter->SetKernel( structuringElement );
-	try {
-	  dilateFilter->Update();
-	}
-	catch (ExceptionObject & err) {
-	  cerr << "ExceptionObject caught!" << endl;
-	  cerr << err << endl;
-	  return EXIT_FAILURE;	
-	}
-	inputImage = dilateFilter->GetOutput();
+    erodeFilter->SetInput(inputImage);
+    dilateFilter->SetInput(erodeFilter->GetOutput());
+    structuringElement.SetRadius( (int) smoothSize);
+    dilateFilter->SetKernel( structuringElement );
+    erodeFilter->SetKernel( structuringElement );
+    try {
+      dilateFilter->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;
+    }
+    inputImage = dilateFilter->GetOutput();
       }
-	} else if (grayFillHoleOn) {
+    } else if (grayFillHoleOn) {
       if (smoothSize == -1) smoothSize = 1.0;
       cout << "smoothing  (grayFillHole): size " << smoothSize << ", iterations " << numIter << endl;
 
-	  fillholegrayFilterType::Pointer fillholeFilter = fillholegrayFilterType::New();
+      fillholegrayFilterType::Pointer fillholeFilter = fillholegrayFilterType::New();
       for (unsigned int i=0; i < numIter; i++) {
-		fillholeFilter->SetInput(inputImage);
-		try {
-		  fillholeFilter->Update();
-		}
-		catch (ExceptionObject & err) {
-		  cerr << "ExceptionObject caught!" << endl;
-		  cerr << err << endl;
-		  return EXIT_FAILURE;	
-		}
-		inputImage = fillholeFilter->GetOutput();
+        fillholeFilter->SetInput(inputImage);
+        try {
+          fillholeFilter->Update();
+        }
+        catch (ExceptionObject & err) {
+          cerr << "ExceptionObject caught!" << endl;
+          cerr << err << endl;
+          return EXIT_FAILURE;
+        }
+        inputImage = fillholeFilter->GetOutput();
       }
     } else if (meanFilterOn) {
       if (smoothSize == -1) smoothSize = 1.0;
@@ -1979,19 +2044,19 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       meanFilterType::Pointer smoothFilter = meanFilterType::New();
 
       for (unsigned int i=0; i < numIter; i++) {
-	smoothFilter->SetInput(inputImage);
-	ImageType::SizeType size;
-	size[0] = size[1] = size[2] = (int) smoothSize;
-	smoothFilter->SetRadius( size );
-	try {
-	  smoothFilter->Update();
-	}
-	catch (ExceptionObject & err) {
-	  cerr << "ExceptionObject caught!" << endl;
-	  cerr << err << endl;
-	  return EXIT_FAILURE;	
-	}
-	inputImage = smoothFilter->GetOutput();
+    smoothFilter->SetInput(inputImage);
+    ImageType::SizeType size;
+    size[0] = size[1] = size[2] = (int) smoothSize;
+    smoothFilter->SetRadius( size );
+    try {
+      smoothFilter->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;
+    }
+    inputImage = smoothFilter->GetOutput();
       }
     } else if (anisoDiffOn) {
       if (smoothSize == -1) smoothSize = 0.05;
@@ -2003,12 +2068,12 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       smoothFilter->SetConductanceParameter(0.75);
       smoothFilter->SetTimeStep(smoothSize);
       try {
-	smoothFilter->Update();
+    smoothFilter->Update();
       }
       catch (ExceptionObject & err) {
-	cerr << "ExceptionObject caught!" << endl;
-	cerr << err << endl;
-	return EXIT_FAILURE;	
+    cerr << "ExceptionObject caught!" << endl;
+    cerr << err << endl;
+    return EXIT_FAILURE;
       }
       inputImage = smoothFilter->GetOutput();
     }
@@ -2018,18 +2083,18 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     ImagePointer restImage;
     {
       for (int i=0; i<EMScount; i++){
-	if (debug) cout << "Loading image " << EMSFiles[i]  << endl;
-	VolumeReaderType::Pointer imageReader = VolumeReaderType::New();
-	imageReader->SetFileName(EMSFiles[i].c_str()) ;
-	try {
-	  imageReader->Update();
-	}
-	catch (ExceptionObject & err) {
-	  cerr << "ExceptionObject caught!" << endl;
-	  cerr << err << endl;
-	  return EXIT_FAILURE;	
-	}
-	EMSImages.push_back(imageReader->GetOutput());
+    if (debug) cout << "Loading image " << EMSFiles[i]  << endl;
+    VolumeReaderType::Pointer imageReader = VolumeReaderType::New();
+    imageReader->SetFileName(EMSFiles[i].c_str()) ;
+    try {
+      imageReader->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;
+    }
+    EMSImages.push_back(imageReader->GetOutput());
       }
     }
 
@@ -2040,31 +2105,31 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       addFilter->SetInput1(EMSImages[0]);
       addFilter->SetInput2(EMSImages[1]);
       try {
-	addFilter->Update();
+    addFilter->Update();
       }
       catch (ExceptionObject & err) {
-	cerr << "ExceptionObject caught!" << endl;
-	cerr << err << endl;
-	return EXIT_FAILURE;	
+    cerr << "ExceptionObject caught!" << endl;
+    cerr << err << endl;
+    return EXIT_FAILURE;
       }
       if(debug) cout << "adding first two images done " << endl;
       inputImage = addFilter->GetOutput();
       restImage = addFilter->GetOutput();
 
       for (int i = 2; i < EMScount; i++){
-	addFilterType::Pointer add2Filter = addFilterType::New();
-	add2Filter->SetInput1(inputImage);
-	add2Filter->SetInput2(EMSImages[i]);
-	try {
-	  add2Filter->Update();
-	}
-	catch (ExceptionObject & err) {
-	  cerr << "ExceptionObject caught!" << endl;
-	  cerr << err << endl;
-	  return EXIT_FAILURE;	
-	}
-	inputImage = add2Filter->GetOutput();
-	if(debug) cout << "adding on the "<<i<<"th image "<< EMSFiles[i]<<" done " << endl;
+    addFilterType::Pointer add2Filter = addFilterType::New();
+    add2Filter->SetInput1(inputImage);
+    add2Filter->SetInput2(EMSImages[i]);
+    try {
+      add2Filter->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;
+    }
+    inputImage = add2Filter->GetOutput();
+    if(debug) cout << "adding on the "<<i<<"th image "<< EMSFiles[i]<<" done " << endl;
       }
     }
     else{
@@ -2084,17 +2149,17 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     while ( !normIter.IsAtEnd() )  {
       PixelType normVal =  normIter.Get();
       if (normVal < 255) {
-	restIter.Set(255 - normVal);
-	for (int i = 0; i < EMScount; i++){
-	  ++EMSIters[i];
-	}
+    restIter.Set(255 - normVal);
+    for (int i = 0; i < EMScount; i++){
+      ++EMSIters[i];
+    }
       }else{
-	double factor = 255/normVal;
-	for (int i = 0; i < EMScount; i++){
-	  restIter.Set(0); //used to be 1, why? ?????????????
-	  EMSIters[i].Set(EMSIters[i].Get() * factor);
-	  ++EMSIters[i];
-	}
+    double factor = 255/normVal;
+    for (int i = 0; i < EMScount; i++){
+      restIter.Set(0); //used to be 1, why? ?????????????
+      EMSIters[i].Set(EMSIters[i].Get() * factor);
+      ++EMSIters[i];
+    }
       }
       ++restIter;
       ++normIter;
@@ -2112,12 +2177,12 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       castShortFilterType::Pointer castFilter = castShortFilterType::New();
       castFilter->SetInput(EMSImages[i]);
       try {
-	castFilter->Update();
+    castFilter->Update();
       }
       catch (ExceptionObject & err) {
-	cerr << "ExceptionObject caught!" << endl;
-	cerr << err << endl;
-	return EXIT_FAILURE;	
+    cerr << "ExceptionObject caught!" << endl;
+    cerr << err << endl;
+    return EXIT_FAILURE;
       }
       ShortVolumeWriterType::Pointer writer = ShortVolumeWriterType::New();
       if(!nocompOn) writer->UseCompressionOn();
@@ -2136,12 +2201,12 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       castShortFilterType::Pointer castFilter = castShortFilterType::New();
       castFilter->SetInput(restImage);
       try {
-	castFilter->Update();
+    castFilter->Update();
       }
       catch (ExceptionObject & err) {
-	cerr << "ExceptionObject caught!" << endl;
-	cerr << err << endl;
-	return EXIT_FAILURE;	
+    cerr << "ExceptionObject caught!" << endl;
+    cerr << err << endl;
+    return EXIT_FAILURE;
       }
       ShortVolumeWriterType::Pointer writer = ShortVolumeWriterType::New();
       if(!nocompOn) writer->UseCompressionOn();
@@ -2160,7 +2225,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage = imageReader->GetOutput();
 
@@ -2170,12 +2235,12 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       imageReader = VolumeReaderType::New();
       imageReader->SetFileName(NormalizeFiles[i].c_str()) ;
       try {
-	imageReader->Update();
+    imageReader->Update();
       }
       catch (ExceptionObject & err) {
-	cerr << "ExceptionObject caught!" << endl;
-	cerr << err << endl;
-	return EXIT_FAILURE;	
+    cerr << "ExceptionObject caught!" << endl;
+    cerr << err << endl;
+    return EXIT_FAILURE;
       }
       NormalizeImages.push_back(imageReader->GetOutput());
     }
@@ -2188,30 +2253,30 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       addFilter->SetInput1(NormalizeImages[0]);
       addFilter->SetInput2(NormalizeImages[1]);
       try {
-	addFilter->Update();
+    addFilter->Update();
       }
       catch (ExceptionObject & err) {
-	cerr << "ExceptionObject caught!" << endl;
-	cerr << err << endl;
-	return EXIT_FAILURE;	
+    cerr << "ExceptionObject caught!" << endl;
+    cerr << err << endl;
+    return EXIT_FAILURE;
       }
       if(debug) cout << "adding first two images done " << endl;
       addImage = addFilter->GetOutput();
 
       for (unsigned int i = 2; i < NbFiles; i++){
-	addFilterType::Pointer add2Filter = addFilterType::New();
-	add2Filter->SetInput1(addImage);
-	add2Filter->SetInput2(NormalizeImages[i]);
-	try {
-	  add2Filter->Update();
-	}
-	catch (ExceptionObject & err) {
-	  cerr << "ExceptionObject caught!" << endl;
-	  cerr << err << endl;
-	  return EXIT_FAILURE;	
-	}
-	addImage = add2Filter->GetOutput();
-	if(debug) cout << "adding on the "<<i<<"th image "<< NormalizeFiles[i]<<" done " << endl;
+    addFilterType::Pointer add2Filter = addFilterType::New();
+    add2Filter->SetInput1(addImage);
+    add2Filter->SetInput2(NormalizeImages[i]);
+    try {
+      add2Filter->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;
+    }
+    addImage = add2Filter->GetOutput();
+    if(debug) cout << "adding on the "<<i<<"th image "<< NormalizeFiles[i]<<" done " << endl;
       }
     }
     else{
@@ -2231,14 +2296,14 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     while ( !inputIter.IsAtEnd() )  {
       PixelType inputVal = inputIter.Get();
       if (inputVal != 0)
-	{
-	  PixelType addVal = addIter.Get();
-	  double factor = NormValue/addVal;
-	  for (unsigned int i = 0; i < NbFiles; i++)
-	    NormalizeIters[i].Set(NormalizeIters[i].Get() * factor);
-	}
+    {
+      PixelType addVal = addIter.Get();
+      double factor = NormValue/addVal;
       for (unsigned int i = 0; i < NbFiles; i++)
-	++NormalizeIters[i];
+        NormalizeIters[i].Set(NormalizeIters[i].Get() * factor);
+    }
+      for (unsigned int i = 0; i < NbFiles; i++)
+    ++NormalizeIters[i];
       ++addIter;
       ++inputIter;
     }
@@ -2255,12 +2320,12 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       castShortFilterType::Pointer castFilter = castShortFilterType::New();
       castFilter->SetInput(NormalizeImages[i]);
       try {
-	castFilter->Update();
+    castFilter->Update();
       }
       catch (ExceptionObject & err) {
-	cerr << "ExceptionObject caught!" << endl;
-	cerr << err << endl;
-	return EXIT_FAILURE;	
+    cerr << "ExceptionObject caught!" << endl;
+    cerr << err << endl;
+    return EXIT_FAILURE;
       }
       ShortVolumeWriterType::Pointer writer = ShortVolumeWriterType::New();
       if(!nocompOn) writer->UseCompressionOn();
@@ -2318,7 +2383,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage = MaximumFilter->GetOutput();
 
@@ -2341,7 +2406,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     catch (ExceptionObject & err) {
       cerr << "ExceptionObject caught!" << endl;
       cerr << err << endl;
-      return EXIT_FAILURE;	
+      return EXIT_FAILURE;
     }
     inputImage = MinimumFilter->GetOutput();
 
@@ -2377,9 +2442,9 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       PixelType value =  iterImage1.Get();
       outval = 0;
       if (value == 0) {
-	outval = 0;
+    outval = 0;
       } else {
-	outval = pow(static_cast<float>(value),static_cast<float>(pwrval));
+    outval = pow(static_cast<float>(value),static_cast<float>(pwrval));
       }
       iterImage2.Set(outval);
       ++iterImage2;
@@ -2399,32 +2464,32 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     addFilterType::Pointer addFilter = addFilterType::New();
     for (unsigned int FileNumber = 0; FileNumber < NbFiles; FileNumber++)
       {
-	// Reading image
-	ImageReader->SetFileName(InputFiles[FileNumber].c_str());
-	
-	// Adding image
-	addFilter->SetInput1(inputImage);
-	addFilter->SetInput2(ImageReader->GetOutput());
+    // Reading image
+    ImageReader->SetFileName(InputFiles[FileNumber].c_str());
+
+    // Adding image
+    addFilter->SetInput1(inputImage);
+    addFilter->SetInput2(ImageReader->GetOutput());
   addFilter->SetCoordinateTolerance( locationTolerance ) ;
   addFilter->SetDirectionTolerance( locationTolerance ) ;
-	try
-	  {
-	    addFilter->Update();
-	  }
-	catch (ExceptionObject & err)
-	  {
-	    cerr << "ExceptionObject caught!" << endl;
-	    cerr << err << endl;
-	    return EXIT_FAILURE;
-	  }
-	inputImage = addFilter->GetOutput();
+    try
+      {
+        addFilter->Update();
+      }
+    catch (ExceptionObject & err)
+      {
+        cerr << "ExceptionObject caught!" << endl;
+        cerr << err << endl;
+        return EXIT_FAILURE;
+      }
+    inputImage = addFilter->GetOutput();
       }
     IteratorType iterImage1 (inputImage, inputImage->GetBufferedRegion());
     while ( !iterImage1.IsAtEnd() )
       {
-	PixelType NewValue = iterImage1.Get() / (NbFiles+1);
-	iterImage1.Set(NewValue);
-	++iterImage1;
+    PixelType NewValue = iterImage1.Get() / (NbFiles+1);
+    iterImage1.Set(NewValue);
+    ++iterImage1;
       }
 
   } else if(StdOn) {
@@ -2456,10 +2521,10 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 
      for (unsigned int FileNumber = 0; FileNumber < NbFiles; FileNumber++)
      {
-	// Reading image
+    // Reading image
         ImageReader->SetFileName(InputFiles[FileNumber].c_str());
-	
-	// Adding image
+
+    // Adding image
         addFilter->SetInput1(inputImage);
         addFilter->SetInput2(ImageReader->GetOutput());
         addFilter->SetCoordinateTolerance( locationTolerance ) ;
@@ -2476,7 +2541,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
         }
         inputImage = addFilter->GetOutput();
 
-	// sum of square computation
+    // sum of square computation
         squareFilter = squareFilterType::New();
         squareFilter->SetInput(ImageReader->GetOutput());
         try
@@ -2489,7 +2554,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
            cerr << err << endl;
            return EXIT_FAILURE;
         }
-	
+
         addFilterSquare->SetInput1(squareSumImage);
         addFilterSquare->SetInput2(squareFilter->GetOutput());
         addFilterSquare->SetCoordinateTolerance( locationTolerance ) ;
@@ -2573,20 +2638,20 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     vector<ImagePointer> vLabelImages;
     for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
       {
-	VolumeReaderType::Pointer LabelImageReader = VolumeReaderType::New();
-	if (debug) cout << "Loading file " << InputFiles[LabelFileNumber] << endl;
-	LabelImageReader->SetFileName(InputFiles[LabelFileNumber].c_str());
-	try
-	  {
-	    LabelImageReader->Update();
-	  }
-	catch (ExceptionObject & err)
-	  {
-	    cerr<<"ExceptionObject caught!"<<endl;
-	    cerr<<err<<endl;
-	    return EXIT_FAILURE;	
-	  }
-	vLabelImages.push_back(LabelImageReader->GetOutput());
+    VolumeReaderType::Pointer LabelImageReader = VolumeReaderType::New();
+    if (debug) cout << "Loading file " << InputFiles[LabelFileNumber] << endl;
+    LabelImageReader->SetFileName(InputFiles[LabelFileNumber].c_str());
+    try
+      {
+        LabelImageReader->Update();
+      }
+    catch (ExceptionObject & err)
+      {
+        cerr<<"ExceptionObject caught!"<<endl;
+        cerr<<err<<endl;
+        return EXIT_FAILURE;
+      }
+    vLabelImages.push_back(LabelImageReader->GetOutput());
       }
     typedef itk::ImageDuplicator< ImageType > DuplicatorType;
     DuplicatorType::Pointer duplicator = DuplicatorType::New();
@@ -2605,9 +2670,9 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     OutputIterator.GoToBegin();
     for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
       {
-	ConstIteratorType ConstLabelIterator(vLabelImages[LabelFileNumber],inputImage->GetRequestedRegion());
-	vConstLabelIterator.push_back(ConstLabelIterator);
-	vConstLabelIterator[LabelFileNumber].GoToBegin();	
+    ConstIteratorType ConstLabelIterator(vLabelImages[LabelFileNumber],inputImage->GetRequestedRegion());
+    vConstLabelIterator.push_back(ConstLabelIterator);
+    vConstLabelIterator[LabelFileNumber].GoToBegin();
       }
 
     //  Compute the maximum value of intensity of the first parcellation image
@@ -2621,39 +2686,39 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     //  Filling output image
     while (!ConstInputIterator.IsAtEnd())
       {
-	PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
-	PixelType *LabelArray;
-	LabelArray = new PixelType[MaxLabel];
+    PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
+    PixelType *LabelArray;
+    LabelArray = new PixelType[MaxLabel];
 
-	for (int Label = 0; Label < MaxLabel; Label++)
-	  LabelArray[Label] = 0;
+    for (int Label = 0; Label < MaxLabel; Label++)
+      LabelArray[Label] = 0;
 
-	for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
+    for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
           {
-	    LabelArray[(ShortPixelType)vConstLabelIterator[LabelFileNumber].Get()]++;
+        LabelArray[(ShortPixelType)vConstLabelIterator[LabelFileNumber].Get()]++;
           }
-	for (int Label = 0; Label < MaxLabel; Label++)
-	  {
-	    if (LabelArray[Label] > MaxVoxelValue)
-	      {
-		MaxVoxelValue = LabelArray[Label];
-		MaxLabelValue = Label;
-	      }
-	  }
-	
+    for (int Label = 0; Label < MaxLabel; Label++)
+      {
+        if (LabelArray[Label] > MaxVoxelValue)
+          {
+        MaxVoxelValue = LabelArray[Label];
+        MaxLabelValue = Label;
+          }
+      }
+
         if(MaxLabelValue >= 0.5)
-	    OutputIterator.Set(MaxLabelValue);
+        OutputIterator.Set(MaxLabelValue);
         else
-	    OutputIterator.Set(0);
+        OutputIterator.Set(0);
 
           OutputIterator.Set(MaxLabelValue);
 
-	delete[] LabelArray;
-	
-	++ConstInputIterator;
-	++OutputIterator;
-	for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
-	  ++vConstLabelIterator[LabelFileNumber];
+    delete[] LabelArray;
+
+    ++ConstInputIterator;
+    ++OutputIterator;
+    for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
+      ++vConstLabelIterator[LabelFileNumber];
       }
 
     //  Relabeling: considering neighborhood
@@ -2668,33 +2733,33 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     NeighborhoodIteratorType::OffsetType offset6 = {{0,0,1}};
 
     for (OutputIterator.GoToBegin(), NeighborhoodOutputIterator.GoToBegin(); !OutputIterator.IsAtEnd(); ++OutputIterator, ++NeighborhoodOutputIterator)
-	{
-	  PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
-	  PixelType *LabelArray;
-	  LabelArray = new PixelType[MaxLabel];
-	  for (int Label = 0; Label < MaxLabel; Label++)
-	    LabelArray[Label] = 0;
-	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset1)]++;
-	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset2)]++;
-	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset3)]++;
-	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset4)]++;
-	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset5)]++;
-	  LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset6)]++; 	
+    {
+      PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
+      PixelType *LabelArray;
+      LabelArray = new PixelType[MaxLabel];
+      for (int Label = 0; Label < MaxLabel; Label++)
+        LabelArray[Label] = 0;
+      LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset1)]++;
+      LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset2)]++;
+      LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset3)]++;
+      LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset4)]++;
+      LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset5)]++;
+      LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset6)]++;
 
-	  for (int Label = 0; Label < MaxLabel; Label++)
-	    {
-	      if (LabelArray[Label] > MaxVoxelValue)
-		{
-		  MaxVoxelValue = LabelArray[Label];
-		  MaxLabelValue = Label;
-		}
-	    }
+      for (int Label = 0; Label < MaxLabel; Label++)
+        {
+          if (LabelArray[Label] > MaxVoxelValue)
+        {
+          MaxVoxelValue = LabelArray[Label];
+          MaxLabelValue = Label;
+        }
+        }
 
-	  if ( (MaxVoxelValue >= 4) && (MaxLabelValue != 0) && (OutputIterator.Get() != MaxLabelValue) )
-	    OutputIterator.Set(MaxLabelValue);
+      if ( (MaxVoxelValue >= 4) && (MaxLabelValue != 0) && (OutputIterator.Get() != MaxLabelValue) )
+        OutputIterator.Set(MaxLabelValue);
 
-	  delete[] LabelArray;
-	}
+      delete[] LabelArray;
+    }
 
     inputImage = MajVotingImage;
   } else if(WeightedMajorityVotingOn) {
@@ -2709,20 +2774,20 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     vector<ImagePointer> vLabelImages;
     for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
       {
-	VolumeReaderType::Pointer LabelImageReader = VolumeReaderType::New();
-	if (debug) cout << "Loading file " << InputFiles[LabelFileNumber] << endl;
-	LabelImageReader->SetFileName(InputFiles[LabelFileNumber].c_str());
-	try
-	  {
-	    LabelImageReader->Update();
-	  }
-	catch (ExceptionObject & err)
-	  {
-	    cerr<<"ExceptionObject caught!"<<endl;
-	    cerr<<err<<endl;
-	    return EXIT_FAILURE;	
-	  }
-	vLabelImages.push_back(LabelImageReader->GetOutput());
+    VolumeReaderType::Pointer LabelImageReader = VolumeReaderType::New();
+    if (debug) cout << "Loading file " << InputFiles[LabelFileNumber] << endl;
+    LabelImageReader->SetFileName(InputFiles[LabelFileNumber].c_str());
+    try
+      {
+        LabelImageReader->Update();
+      }
+    catch (ExceptionObject & err)
+      {
+        cerr<<"ExceptionObject caught!"<<endl;
+        cerr<<err<<endl;
+        return EXIT_FAILURE;
+      }
+    vLabelImages.push_back(LabelImageReader->GetOutput());
 
       }
 
@@ -2743,9 +2808,9 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     OutputIterator.GoToBegin();
     for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
       {
-	ConstIteratorType ConstLabelIterator(vLabelImages[LabelFileNumber],inputImage->GetRequestedRegion());
-	vConstLabelIterator.push_back(ConstLabelIterator);
-	vConstLabelIterator[LabelFileNumber].GoToBegin();	
+    ConstIteratorType ConstLabelIterator(vLabelImages[LabelFileNumber],inputImage->GetRequestedRegion());
+    vConstLabelIterator.push_back(ConstLabelIterator);
+    vConstLabelIterator[LabelFileNumber].GoToBegin();
       }
 
     //  Compute the maximum value of intensity of the first parcellation image
@@ -2759,37 +2824,37 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     //  Filling output image
     while (!ConstInputIterator.IsAtEnd())
       {
-	PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
-	PixelType *LabelArray;
-	LabelArray = new PixelType[MaxLabel];
+    PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
+    PixelType *LabelArray;
+    LabelArray = new PixelType[MaxLabel];
 
-	for (int Label = 0; Label < MaxLabel; Label++)
-	  LabelArray[Label] = 0;
+    for (int Label = 0; Label < MaxLabel; Label++)
+      LabelArray[Label] = 0;
 
-	for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
+    for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
           {
-	  LabelArray[(ShortPixelType)vConstLabelIterator[LabelFileNumber].Get()] += wparameters[LabelFileNumber];
+      LabelArray[(ShortPixelType)vConstLabelIterator[LabelFileNumber].Get()] += wparameters[LabelFileNumber];
           }
-	
-	for (int Label = 0; Label < MaxLabel; Label++)
-	  {
-	    if (LabelArray[Label] > MaxVoxelValue)
-	      {
-		MaxVoxelValue = LabelArray[Label];
-		MaxLabelValue = Label;
-	      }
-	  }
-	
+
+    for (int Label = 0; Label < MaxLabel; Label++)
+      {
+        if (LabelArray[Label] > MaxVoxelValue)
+          {
+        MaxVoxelValue = LabelArray[Label];
+        MaxLabelValue = Label;
+          }
+      }
+
         if(MaxLabelValue >= 0.5)
-	    OutputIterator.Set(MaxLabelValue);
+        OutputIterator.Set(MaxLabelValue);
         else
-	    OutputIterator.Set(0);
-	delete[] LabelArray;	
-	
-	++ConstInputIterator;
-	++OutputIterator;
-	for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
-	  ++vConstLabelIterator[LabelFileNumber];
+        OutputIterator.Set(0);
+    delete[] LabelArray;
+
+    ++ConstInputIterator;
+    ++OutputIterator;
+    for (unsigned int LabelFileNumber = 0; LabelFileNumber < NbFiles; LabelFileNumber++)
+      ++vConstLabelIterator[LabelFileNumber];
       }
 
     //  Relabeling: considering neighborhood
@@ -2804,33 +2869,33 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       NeighborhoodIteratorType::OffsetType offset6 = {{0,0,1}};
 
         for (OutputIterator.GoToBegin(), NeighborhoodOutputIterator.GoToBegin(); !OutputIterator.IsAtEnd(); ++OutputIterator, ++NeighborhoodOutputIterator){
-	    PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
-	    PixelType *LabelArray;
-	    LabelArray = new PixelType[MaxLabel];
-	    for (int Label = 0; Label < MaxLabel; Label++)
-	        LabelArray[Label] = 0;
-	    LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset1)]++;
-	    LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset2)]++;
-	    LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset3)]++;
-	    LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset4)]++;
-	    LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset5)]++;
-	    LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset6)]++; 	
+        PixelType MaxVoxelValue = 0, MaxLabelValue = 0;
+        PixelType *LabelArray;
+        LabelArray = new PixelType[MaxLabel];
+        for (int Label = 0; Label < MaxLabel; Label++)
+            LabelArray[Label] = 0;
+        LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset1)]++;
+        LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset2)]++;
+        LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset3)]++;
+        LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset4)]++;
+        LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset5)]++;
+        LabelArray[(ShortPixelType)NeighborhoodOutputIterator.GetPixel(offset6)]++;
 
-	    for (int Label = 0; Label < MaxLabel; Label++){
-	        if (LabelArray[Label] > MaxVoxelValue){
-		    MaxVoxelValue = LabelArray[Label];
-		    MaxLabelValue = Label;
+        for (int Label = 0; Label < MaxLabel; Label++){
+            if (LabelArray[Label] > MaxVoxelValue){
+            MaxVoxelValue = LabelArray[Label];
+            MaxLabelValue = Label;
                 }
-	    }
+        }
 
             if ( (MaxVoxelValue >= 4) && (MaxLabelValue != 0) && (OutputIterator.Get() != MaxLabelValue) )
       //      if ( (MaxLabelValue != 0) && (OutputIterator.Get() != MaxLabelValue) )
-	        OutputIterator.Set(MaxLabelValue);
+            OutputIterator.Set(MaxLabelValue);
            // else
-	    //    OutputIterator.Set(MaxLabelValue);
+        //    OutputIterator.Set(MaxLabelValue);
 
-	    delete[] LabelArray;
-	}
+        delete[] LabelArray;
+    }
         inputImage = MajVotingImage;
     }
 
@@ -3017,7 +3082,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     histoFilter->SetHistogramSize( size );
     try
       {
-	histoFilter->Update();
+    histoFilter->Update();
       }
     catch (ExceptionObject & err)
       {
@@ -3040,12 +3105,12 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     total = 0;
     while( histogramIterator  != histogram->End() )
       {
-	mv =  histogramIterator.GetMeasurementVector();
-	f = histogramIterator.GetFrequency();
-	
-	//if (debug) std::cout << mv  << "," << f <<  std::endl;
-	total = total + f;
-	++histogramIterator ;
+    mv =  histogramIterator.GetMeasurementVector();
+    f = histogramIterator.GetFrequency();
+
+    //if (debug) std::cout << mv  << "," << f <<  std::endl;
+    total = total + f;
+    ++histogramIterator ;
       }
     if (debug) std::cout << "Total " << histogram->GetTotalFrequency () << ", using only " << 100.0 * total / histogram->GetTotalFrequency () << "% due to background & mask removal" << std::endl;
 
@@ -3063,18 +3128,18 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 
     while( histogramIterator  != histogram->End() )
       {
-	mv =  histogramIterator.GetMeasurementVector();
-	f = histogramIterator.GetFrequency();
-	cur_total = cur_total + f;
-	double percentile = 100.0 * cur_total / total;
-	if ( (lowPercMV == MaxMV) && (percentile > lowPerc) ) {
-	  lowPercMV = mv;
-	}
-	if ( (highPercMV == MaxMV) && (percentile > highPerc) ) {
-	  highPercMV = mv;
-	}
-	
-	++histogramIterator ;
+    mv =  histogramIterator.GetMeasurementVector();
+    f = histogramIterator.GetFrequency();
+    cur_total = cur_total + f;
+    double percentile = 100.0 * cur_total / total;
+    if ( (lowPercMV == MaxMV) && (percentile > lowPerc) ) {
+      lowPercMV = mv;
+    }
+    if ( (highPercMV == MaxMV) && (percentile > highPerc) ) {
+      highPercMV = mv;
+    }
+
+    ++histogramIterator ;
       }
 
     if (debug) std::cout << "Image lowPerc " << lowPercMV[0] << ", highPerc " << highPercMV[0] << std::endl;
@@ -3083,15 +3148,15 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     double shift = highPercInt/scale - highPercMV[0];
 
     if (debug) std::cout << "shift: " << shift << ", scale " << scale << " - "
-			 <<  scale * (shift + lowPercMV[0]) << ", "
-			 <<  scale * (shift + highPercMV[0]) << std::endl;
+             <<  scale * (shift + lowPercMV[0]) << ", "
+             <<  scale * (shift + highPercMV[0]) << std::endl;
     ShiftScaleFilterType::Pointer shiftScaleFilter = ShiftScaleFilterType::New();
     shiftScaleFilter->SetInput(inputImage);
     shiftScaleFilter->SetShift(shift);
     shiftScaleFilter->SetScale(scale);
     try
       {
-	shiftScaleFilter->Update();
+    shiftScaleFilter->Update();
       }
     catch (ExceptionObject & err)
       {
@@ -3180,82 +3245,82 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       DiffusionImageType::Pointer outputDiffusionImage ;
       outputDiffusionImage = dynamic_cast< DiffusionImageType* >( inputBaseImage.GetPointer() ) ;
       if( !outputDiffusionImage )
-	{
-	  std::cerr << "Error saving output diffusion image" << std::endl ;
-	  return EXIT_FAILURE ;
-	}
+    {
+      std::cerr << "Error saving output diffusion image" << std::endl ;
+      return EXIT_FAILURE ;
+    }
       DiffusionImageWriter::Pointer writer = DiffusionImageWriter::New() ;
       if( !nocompOn )
-	{
-	  writer->UseCompressionOn() ;
-	}
+    {
+      writer->UseCompressionOn() ;
+    }
       writer->SetFileName( outFileName.c_str() );
       writer->SetInput( outputDiffusionImage ) ;
       try
-	{
-	  writer->Write() ;
-	}
+    {
+      writer->Write() ;
+    }
       catch( ExceptionObject & err )
-	{
-	  cerr << "ExceptionObject caught!" << endl ;
-	  cerr << err << endl ;
-	  return EXIT_FAILURE ;
-	}
+    {
+      cerr << "ExceptionObject caught!" << endl ;
+      cerr << err << endl ;
+      return EXIT_FAILURE ;
+    }
 
     }
   else
     {
       if (writeByte){
-	castBinaryFilterType::Pointer castFilter = castBinaryFilterType::New();
-	castFilter->SetInput(inputImage);
-	try {
-	  castFilter->Update();
-	}
-	catch (ExceptionObject & err) {
-	  cerr << "ExceptionObject caught!" << endl;
-	  cerr << err << endl;
-	  return EXIT_FAILURE;	
-	}
-	
-	BinaryVolumeWriterType::Pointer writer = BinaryVolumeWriterType::New();
-	if(!nocompOn)
-	  {
-	    writer->UseCompressionOn();
-	  }
-	writer->SetFileName(outFileName.c_str());
-	writer->SetInput(castFilter->GetOutput());
-	writer->Write();
+    castBinaryFilterType::Pointer castFilter = castBinaryFilterType::New();
+    castFilter->SetInput(inputImage);
+    try {
+      castFilter->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;
+    }
+
+    BinaryVolumeWriterType::Pointer writer = BinaryVolumeWriterType::New();
+    if(!nocompOn)
+      {
+        writer->UseCompressionOn();
+      }
+    writer->SetFileName(outFileName.c_str());
+    writer->SetInput(castFilter->GetOutput());
+    writer->Write();
       } else if (writeFloat) {
-	VolumeWriterType::Pointer writer = VolumeWriterType::New();
-	if(!nocompOn)
-	  {
-	    writer->UseCompressionOn();
-	  }
-	writer->SetFileName(outFileName.c_str());
-	writer->SetInput(inputImage);
-	writer->Write();
+    VolumeWriterType::Pointer writer = VolumeWriterType::New();
+    if(!nocompOn)
+      {
+        writer->UseCompressionOn();
+      }
+    writer->SetFileName(outFileName.c_str());
+    writer->SetInput(inputImage);
+    writer->Write();
       } else {
-	castShortFilterType::Pointer castFilter = castShortFilterType::New();
-	castFilter->SetInput(inputImage);
-	try
-	  {
-	    castFilter->Update();
-	  }
-	catch (ExceptionObject & err)
-	  {
-	    cerr << "ExceptionObject caught!" << endl;
-	    cerr << err << endl;
-	    return EXIT_FAILURE;	
-	  }
-	
-	ShortVolumeWriterType::Pointer writer = ShortVolumeWriterType::New();
-	writer->SetFileName(outFileName.c_str());
-	if(!nocompOn)
-	  {
-	    writer->UseCompressionOn();
-	  }
-	writer->SetInput(castFilter->GetOutput());
-	writer->Write();
+    castShortFilterType::Pointer castFilter = castShortFilterType::New();
+    castFilter->SetInput(inputImage);
+    try
+      {
+        castFilter->Update();
+      }
+    catch (ExceptionObject & err)
+      {
+        cerr << "ExceptionObject caught!" << endl;
+        cerr << err << endl;
+        return EXIT_FAILURE;
+      }
+
+    ShortVolumeWriterType::Pointer writer = ShortVolumeWriterType::New();
+    writer->SetFileName(outFileName.c_str());
+    if(!nocompOn)
+      {
+        writer->UseCompressionOn();
+      }
+    writer->SetInput(castFilter->GetOutput());
+    writer->Write();
       }
     }
   return EXIT_SUCCESS;
