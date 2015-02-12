@@ -7,6 +7,25 @@
  *
  */
 
+
+/****** Needed to build test ******/
+#ifdef _WIN32
+#define Module_EXPORT __declspec(dllexport)
+#else
+#define Module_EXPORT
+#endif
+
+#if defined(main) && !defined(REGISTER_TEST)
+// If main defined as a preprocessor symbol, redefine it to the expected entry point.
+#undef main
+#define main ModuleEntryPoint
+
+extern "C" {
+  Module_EXPORT int ModuleEntryPoint(const int, const char**);
+}
+#endif
+/****** Needed to build test ******/
+
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #pragma warning ( disable : 4503 )
@@ -90,8 +109,8 @@ using namespace std;
 #include "argio.h"
 #include "ImageMath.h"
 
-#define IMAGEMATH_VERSION "1.3"
-#define IMAGEMATH_DATE "November 2014"
+#define IMAGEMATH_VERSION "1.31"
+#define IMAGEMATH_DATE "January 2015"
 #define DEFAULT_SAMP 2
 // number of samples by default
 
