@@ -9,7 +9,6 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_MODULE_PATH}
   )
 
-include(CTest)
 
 if(CMAKE_COMPILER_2005)
   add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
@@ -22,6 +21,7 @@ endif()
 
 set(ITK_IO_MODULES_USED
 # IO Components
+ITKCommon
 ITKIOImageBase
 ITKIOGDCM
 ITKIOGIPL
@@ -42,6 +42,10 @@ ITKIOTransformHDF5
 )
 
 include_directories( Common )
+
+option( BUILD_TESTING   "Build the testing tree" ON )
+include(CTest)
+include(ExternalData)
 
 option(COMPILE_CORREVAL "Compile CorrespondenceEvaluator." OFF)
 if(COMPILE_CORREVAL)
@@ -117,6 +121,5 @@ option(COMPILE_Unsupported "Compile Unsupported Tools." OFF)
 if(COMPILE_Unsupported)
   subdirs(Unsupported)
 endif()
-
 
 
