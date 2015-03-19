@@ -10,11 +10,12 @@ else()
    message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
 endif()
 
-if( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
-  message( FATAL_ERROR "CorrespondenceEvaluator needs ITKv3 to compile" )
+list( FIND ITK_MODULES_ENABLED ITKReview position)
+if( "${position}" EQUAL "-1" )
+  message( FATAL_ERROR "MultiAtlasSeg needs ITKv4 compiled with ITKReview enabled" )
 endif()
 
 add_executable(MultiAtlasSeg MultiAtlasSeg.cxx)
 target_link_libraries(MultiAtlasSeg ${ITK_LIBRARIES})
 
-#install( TARGETS MultiAtlasSeg RUNTIME DESTINATION bin )
+install( TARGETS MultiAtlasSeg RUNTIME DESTINATION bin )
