@@ -10,6 +10,10 @@ else()
   message(FATAL_ERROR "ITK not found. Please set ITK_DIR.")
 endif()
 
+if( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
+  message( FATAL_ERROR "TransformDeformationField needs ITKv3 to compile" )
+endif()
+
 find_package(F2C REQUIRED)
 if(F2C_FOUND)
   include(${F2C_USE_FILE})

@@ -26,52 +26,14 @@ find_package(ITK COMPONENTS
 include(${ITK_USE_FILE})
 
 find_package(VTK COMPONENTS
+  vtkCommonComputationalGeometry
   vtkCommonCore
+  vtkCommonDataModel
   vtkFiltersSources
   vtkIOLegacy
   vtkIOXML
   vtkInteractionWidgets
   vtkViewsInfovis
-  vtkChartsCore
-  vtkCommonColor
-  vtkCommonComputationalGeometry
-  vtkCommonDataModel
-  vtkCommonExecutionModel
-  vtkCommonMath
-  vtkCommonMisc
-  vtkCommonSystem
-  vtkCommonTransforms
-  vtkFiltersCore
-  vtkFiltersExtraction
-  vtkFiltersGeneral
-  vtkFiltersHybrid
-  vtkFiltersImaging
-  vtkFiltersModeling
-  vtkFiltersStatistics
-  vtkIOCore
-  vtkIOGeometry
-  vtkIOImage
-  vtkIOXMLParser
-  vtkImagingColor
-  vtkImagingCore
-  vtkImagingFourier
-  vtkImagingGeneral
-  vtkImagingHybrid
-  vtkImagingSources
-  vtkInfovisCore
-  vtkInfovisLayout
-  vtkInteractionStyle
-  vtkRenderingAnnotation
-  vtkRenderingContext2D
-  vtkRenderingCore
-  vtkRenderingFreeType
-  vtkRenderingLabel
-  vtkRenderingVolume
-  vtkViewsCore
-  vtkalglib
-  vtkfreetype
-  vtkftgl
-  vtkzlib
 )
 include(${VTK_USE_FILE})
 
