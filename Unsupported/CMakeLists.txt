@@ -4,11 +4,6 @@ if(COMPILE_IntensityRescaler)
   subdirs(IntensityRescaler)
 endif()
 
-option(COMPILE_CONVERTITKFORMATS "Compile convertITKformats." OFF)
-if(COMPILE_CONVERTITKFORMATS)
-  subdirs(convertITKformats)
-endif()
-
 option(COMPILE_TRANSFORMDEFORMATIONFIELD "Compile TransformDeformationField." OFF)
 if(COMPILE_TRANSFORMDEFORMATIONFIELD)
   subdirs(TransformDeformationField)

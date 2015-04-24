@@ -62,6 +62,11 @@ if(COMPILE_CROPTOOLS)
   subdirs(CropTools)
 endif()
 
+option(COMPILE_CONVERTITKFORMATS "Compile convertITKformats." OFF)
+if(COMPILE_CONVERTITKFORMATS)
+  subdirs(convertITKformats)
+endif()
+
 option(COMPILE_DWI_NIFTINRRDCONVERSION "Compile DWI_NiftiNrrdConversion." ON)
 if(COMPILE_DWI_NIFTINRRDCONVERSION)
   subdirs(DWI_NiftiNrrdConversion)

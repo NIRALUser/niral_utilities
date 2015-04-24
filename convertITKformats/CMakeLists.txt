@@ -5,7 +5,7 @@ cmake_policy(VERSION 2.8)
 
 find_package(ITK COMPONENTS
   ITKCommon
-  ITKDeprecated
+#  ITKDeprecated
   ITKIOImageBase
   ITKImageFilterBase
   ITKImageIntensity
@@ -19,7 +19,9 @@ endif()
 
 if( ${ITK_VERSION_MAJOR} VERSION_GREATER 3)
   if( NOT ITKV3_COMPATIBILITY )
-    message(FATAL_ERROR "convertITKformats: ITK needs to be compiled with ITKV3_COMPATIBILITY set to ON")
+    message(WARNING "convertITKformats: To support DICOM, ITK needs to be compiled with ITKV3_COMPATIBILITY set to ON")
+  else()
+    ADD_DEFINITIONS(-DDICOM_SUPPORT="True")
   endif()
 endif()
 

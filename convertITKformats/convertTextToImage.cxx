@@ -9,15 +9,10 @@
 #include <itkVector.h>
 #include <itkImageRegionIterator.h>
 #include <itkImageFileReader.h>
-#include <itkImageSeriesReader.h>
 #include <itkImageFileWriter.h>
 #include <itkCastImageFilter.h>
-#include <itkDICOMSeriesFileNames.h>
 #include <itkRescaleIntensityImageFilter.h>
 #include <itkMinimumMaximumImageCalculator.h>
-
-#include <DICOMAppHelper.h>
-#include <DICOMParser.h>
 
 #include "argio.h"
 
