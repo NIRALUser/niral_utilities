@@ -103,3 +103,6 @@ target_link_libraries(IntensityRescaler
   ${VTK_LIBRARIES}
   vtkFiltering
  )
+
+install( TARGETS IntensityRescaler RUNTIME DESTINATION bin )
+
