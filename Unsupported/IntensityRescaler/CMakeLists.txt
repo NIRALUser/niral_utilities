@@ -3,6 +3,27 @@ project(IntensityRescaler)
 cmake_minimum_required(VERSION 2.8)
 cmake_policy(VERSION 2.8)
 
+#snippet taken from: http://www.guyrutenberg.com/2014/01/05/enabling-c11-c0x-in-cmake/
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+if(COMPILER_SUPPORTS_CXX11)
+  set( EXTRA_FLAG "-std=c++11" )
+elseif(COMPILER_SUPPORTS_CXX0X)
+  set( EXTRA_FLAG "-std=c++0x" )
+else()
+  message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+endif()
+if( EXTRA_FLAG )
+  set( CMAKE_CXX_FLAGS_LIST ${CMAKE_CXX_FLAGS} )
+  separate_arguments(CMAKE_CXX_FLAGS_LIST)
+  get_property( helpstring CACHE CMAKE_CXX_FLAGS PROPERTY HELPSTRING )
+  list(FIND CMAKE_CXX_FLAGS_LIST ${EXTRA_FLAG} found_flag )
+  if( found_flag LESS 0 )
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_FLAG}" CACHE STRING "${helpstring}" FORCE )
+  endif()
+endif()
+
 find_package(ITK REQUIRED)
 if(ITK_FOUND)
    include(${ITK_USE_FILE})
@@ -17,29 +38,29 @@ else()
   message(FATAL_ERROR "VTK not found. Please set VTK_DIR.")
 endif()
 
-#include(CMake/qtSetup.cmake)
-find_package( Qt REQUIRED )
-#Find_Package( QT )
-include(${QT_USE_FILE})
-
-option(COMPILE_IntensityRescaler_GUI "Qt IntensityRescaler GUI support." OFF)
 
 include_directories(
-  ${QT_INCLUDE_DIR}
-  ${GLUT_INCLUDE_DIR}
-  Libraries/Display/Plot
   Libraries/Datatypes
-  Libraries/IO/Qt
   Libraries/IO/Common
   Libraries/Algorithms
   Libraries/Display/Common
-  Libraries/Display/Window2D
+  Libraries/Display/Plot
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
   )
 
-if( COMPILE_IntensityRescaler_GUI )
+option(COMPILE_IntensityRescaler_GUI "Qt IntensityRescaler GUI support." OFF)
 
+if( COMPILE_IntensityRescaler_GUI )
+  find_package( Qt REQUIRED )
+  include(${QT_USE_FILE})
+
+  include_directories(
+    ${QT_INCLUDE_DIR}
+    ${GLUT_INCLUDE_DIR}
+    Libraries/IO/Qt
+    Libraries/Display/Window2D
+  )
   if(WIN32)
     #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /subsystem:windows")
   endif()
@@ -78,6 +99,11 @@ if( COMPILE_IntensityRescaler_GUI )
       ${OPENGL_LIBRARY}
       ${GLUT_LIBRARIES}
      )
+  set( QT_LIBRARIES_LIST
+  ${QT_QT_LIBRARY}
+  ${QT_LIBRARIES}
+  ${QT_QTMAIN_LIBRARY}
+  )
 else()
   add_definitions( -DQT_NO_GUI )
 endif()
@@ -96,9 +122,7 @@ target_link_libraries(IntensityRescaler
   Algorithms
   Display
   ${ITK_LIBRARIES}
-  ${QT_QT_LIBRARY}
-  ${QT_LIBRARIES}
-  ${QT_QTMAIN_LIBRARY}
+  ${QT_LIBRARIES_LIST}
   ${OPEN_GL_LIBRARIES}
   ${VTK_LIBRARIES}
   vtkFiltering

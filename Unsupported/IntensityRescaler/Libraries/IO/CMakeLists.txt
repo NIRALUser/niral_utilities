@@ -23,5 +23,17 @@ set(IO_SRCS
   XML/XMLIniIO.cxx
 )
 
+if( COMPILE_IntensityRescaler_GUI )
+  include_directories(
+  	${QT_INCLUDE_DIR}
+    )
+  link_libraries(
+   ${QT_QT_LIBRARY}
+   ${QT_LIBRARIES}
+  )
+  add_definitions(-DQT_DLL)
+  add_definitions(-DQT_THREAD_SUPPORT)
+endif()
+
 add_library(IO ${IO_SRCS} )
 

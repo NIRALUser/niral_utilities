@@ -1,11 +1,13 @@
 #include "IntensityRescalerCommandLine.h"
 
+#ifdef QT_GUI
 #define QT_ALTERNATE_QTSMANIP
-
 #include <qtextstream.h>
-#include <iostream>
 #include <qfile.h>
+#endif
+
 #include <fstream>
+#include <iostream>
 #include "ImageIntensityNormalizer.h"
 
 IntensityRescalerCommandLine::IntensityRescalerCommandLine()
@@ -27,20 +29,32 @@ IntensityRescalerCommandLine::~IntensityRescalerCommandLine()
 {
 }
 
-
+#ifdef QT_GUI
 void IntensityRescalerCommandLine::Create(QString filename)
 {
   if (QFile(filename).exists())
   {
     std::cerr << "Error: File already exists!" << std::endl;
   }
+#else
+void IntensityRescalerCommandLine::Create(std::string filename)
+{
+  std::ifstream f(filename.c_str());
+  if (f.good())
+  {
+    f.close() ;
+    std::cerr << "Error: File already exists!" << std::endl;
+    return ;
+  }
+#endif
   else
   {
      std::ofstream m_file;
      #ifdef QT_GUI
      m_file.open(filename.latin1(),std::ofstream::binary);
      #else
-     m_file.open(filename.toStdString().c_str(),std::ofstream::binary);
+     f.close() ;
+     m_file.open(filename.c_str(),std::ofstream::binary);
      #endif
      m_file << "# Example script for Intensity Rescaler" << std::endl;
      m_file << std::endl;
@@ -91,60 +105,76 @@ void IntensityRescalerCommandLine::Create(QString filename)
 
      m_file << "# Intensity rescaler script end" << std::endl;
      m_file << std::endl;
+     m_file.close() ;
   }
 }
 
+#ifdef QT_GUI
 void IntensityRescalerCommandLine::Load(QString filename)
 {
   QFile f(filename);
-  #ifdef QT_GUI
   if ( f.open(IO_ReadOnly) )
-  #else
-  if ( f.open(QIODevice::ReadOnly) )
-  #endif
   {
     QTextStream t( &f );
     QString s;
-    #ifdef QT_GUI
     while (!t.eof())
-    #else
-    while (!t.atEnd() )
-    #endif
     {
       s = t.readLine();
-      #ifdef QT_GUI
       s = s.stripWhiteSpace();
-      #else
-      s = s.trimmed();
-      #endif
       if (!s.startsWith("#") && (s.length()>2))
       {
-        #ifdef QT_GUI
         QString m_name = s.mid(0,s.find("="));
-        #else
-        QString m_name = s.mid(0,s.indexOf("="));
-        #endif
-        #ifdef QT_GUI
         m_name = m_name.stripWhiteSpace();
-        #else
-        m_name = m_name.trimmed();
-        #endif
-        #ifdef QT_GUI
         QString m_value = s.mid(s.find("=")+1);
-        #else
-        QString m_value = s.mid(s.indexOf("=")+1);
-        #endif
-        #ifdef QT_GUI
         m_value = m_value.stripWhiteSpace();
-        #else
-        m_value = m_value.trimmed();
-        #endif
         AddOption(m_name,m_value);
       }
     }
     f.close();
   }
 }
+#else
+// http://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
+// trim from start
+static inline std::string &ltrim(std::string &s) {
+        s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+        return s;
+}
+
+// trim from end
+static inline std::string &rtrim(std::string &s) {
+        s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+        return s;
+}
+
+// trim from both ends
+static inline std::string &trim(std::string &s) {
+        return ltrim(rtrim(s));
+}
+
+void IntensityRescalerCommandLine::Load(std::string filename)
+{
+  std::ifstream f(filename.c_str());
+  if ( f.good() )
+  {
+    std::string s;
+    while (!f.eof())
+    {
+      getline(f,s);
+      s = trim(s);
+      if ( (s.size()>2) &&  !s[0] == '#' )
+      {
+        std::string m_name = s.substr(0,s.find("="));
+        m_name = trim(m_name);
+        std::string m_value = s.substr(s.find("=")+1);
+        m_value = trim(m_value);
+        AddOption(m_name,m_value);
+      }
+    }
+  }
+    f.close();
+}
+#endif
 
 
 #ifdef QT_GUI
@@ -163,19 +193,23 @@ void IntensityRescalerCommandLine::AddOption(QString name,QString value)
   if (name.lower() == "outputdir")  m_outputdir=value;
 }
 #else
-void IntensityRescalerCommandLine::AddOption(QString name,QString value)
+void IntensityRescalerCommandLine::AddOption(std::string name,std::string value)
 {
-  if (name.toLower() == "target")     m_target=value;
-  if (name.toLower() == "targetems")  m_targetems=value;
-  if (name.toLower() == "source")     m_source.push_back(value);
-  if (name.toLower() == "sourceems")  m_sourceems.push_back(value);
-  if (name.toLower() == "label")      m_label.push_back(value.toInt());
-  if (name.toLower() == "targetwindowing")  {if (value.toLower()=="off") m_targetwindowing=false;};
-  if (name.toLower() == "sourcewindowing")  {if (value.toLower()=="off") m_sourcewindowing=false;};
-  if (name.toLower() == "classmatching")  {if (value.toLower()=="off") m_classmatching=false;};
-  if (name.toLower() == "sigma")  m_sigma=value.toFloat();
-  if (name.toLower() == "outputsuffix")  m_outputsuffix=value;
-  if (name.toLower() == "outputdir")  m_outputdir=value;
+  std::string nameLower ;
+  std::transform( name.begin(), name.end(), nameLower.begin(), ::tolower) ;
+  std::string valueLower ;
+  std::transform( value.begin(), value.end(), valueLower.begin() , ::tolower ) ;
+  if (nameLower == "target")     m_target=value;
+  if (nameLower == "targetems")  m_targetems=value;
+  if (nameLower == "source")     m_source.push_back(value);
+  if (nameLower == "sourceems")  m_sourceems.push_back(value);
+  if (nameLower == "label")      m_label.push_back(std::stoi(value));
+  if (nameLower == "targetwindowing")  {if (valueLower=="off") m_targetwindowing=false;};
+  if (nameLower == "sourcewindowing")  {if (valueLower=="off") m_sourcewindowing=false;};
+  if (nameLower == "classmatching")  {if (valueLower=="off") m_classmatching=false;};
+  if (nameLower == "sigma")  m_sigma=std::stof(value);
+  if (nameLower == "outputsuffix")  m_outputsuffix=value;
+  if (nameLower == "outputdir")  m_outputdir=value;
 }
 #endif
 
@@ -189,8 +223,8 @@ void IntensityRescalerCommandLine::DisplayOptions()
   std::cout << "Target Image: " << m_target.latin1() << std::endl;
   std::cout << "Target Segmentation: " << m_targetems.latin1() << std::endl;
   #else
-  std::cout << "Target Image: " << m_target.toStdString() << std::endl;
-  std::cout << "Target Segmentation: " << m_targetems.toStdString() << std::endl;
+  std::cout << "Target Image: " << m_target << std::endl;
+  std::cout << "Target Segmentation: " << m_targetems << std::endl;
   #endif
   if (m_source.size() != m_sourceems.size())
   {
@@ -205,8 +239,8 @@ void IntensityRescalerCommandLine::DisplayOptions()
     std::cout << "\t#" << i+1 << " - Source Image : " << m_source[i].latin1() << std::endl;
     std::cout << "\t#" << i+1 << " - Source Segmentation: " << m_sourceems[i].latin1() << std::endl;
     #else
-    std::cout << "\t#" << i+1 << " - Source Image : " << m_source[i].toStdString() << std::endl;
-    std::cout << "\t#" << i+1 << " - Source Segmentation: " << m_sourceems[i].toStdString() << std::endl;
+    std::cout << "\t#" << i+1 << " - Source Image : " << m_source[i] << std::endl;
+    std::cout << "\t#" << i+1 << " - Source Segmentation: " << m_sourceems[i] << std::endl;
     #endif
   }
 
@@ -236,8 +270,8 @@ void IntensityRescalerCommandLine::DisplayOptions()
   std::cout << "Output suffix: " << m_outputsuffix.latin1() << std::endl;
   std::cout << "Output directory: " << m_outputdir.latin1() << std::endl;
   #else
-  std::cout << "Output suffix: " << m_outputsuffix.toStdString() << std::endl;
-  std::cout << "Output directory: " << m_outputdir.toStdString() << std::endl;
+  std::cout << "Output suffix: " << m_outputsuffix << std::endl;
+  std::cout << "Output directory: " << m_outputdir << std::endl;
   #endif
   std::cout << "--------------------------------------" << std::endl;
 }
@@ -256,13 +290,13 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
     return;
   }
 
-  if (m_target.length() == 0)
+  if (m_target.size() == 0)
   {
     std::cerr << "Error: No target image!" << std::endl;
     return;
   }
 
-  if (m_targetems.length() == 0)
+  if (m_targetems.size() == 0)
   {
     std::cerr << "Error: No target segmentation!" << std::endl;
     return;
@@ -291,28 +325,28 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
   #ifdef QT_GUI
   m_targetimg = m_rescaler.ReadImage(m_target);
   #else
-  m_targetimg = m_rescaler.ReadImage(m_target.toStdString().c_str());
+  m_targetimg = m_rescaler.ReadImage(m_target.c_str());
   #endif
-  if (m_target == 0)
+  if (m_target.size() == 0)
   {
     #ifdef QT_GUI
     std::cerr << "Error: Target image " << m_target.latin1() << " could not be read!" << std::endl;
     #else
-    std::cerr << "Error: Target image " << m_target.toStdString() << " could not be read!" << std::endl;
+    std::cerr << "Error: Target image " << m_target << " could not be read!" << std::endl;
     #endif
     return;
   }
   #ifdef QT_GUI
   m_targetsegimg = m_rescaler.ReadImage(m_targetems);
   #else
-  m_targetsegimg = m_rescaler.ReadImage(m_targetems.toStdString().c_str());
+  m_targetsegimg = m_rescaler.ReadImage(m_targetems.c_str());
   #endif
   if (m_targetsegimg.IsNull())
   {
     #ifdef QT_GUI
     std::cerr << "Error: Target segmentation " << m_targetems.latin1() << " could not be read!" << std::endl;
     #else
-    std::cerr << "Error: Target segmentation " << m_targetems.toStdString() << " could not be read!" << std::endl;
+    std::cerr << "Error: Target segmentation " << m_targetems << " could not be read!" << std::endl;
     #endif
     return;
   }
@@ -338,33 +372,34 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
 
     if (m_outputdir.length() != 0)
       m_targetfilename = m_outputdir + "/" + m_targetfilename.mid(m_targetfilename.findRev("/")+1);
+    QString m_classfilename = m_targetfilename + m_outputsuffix + "-class.txt";
     #else
-    QString m_extension = m_target.mid(m_target.lastIndexOf("."));
-    QString m_targetfilename = m_target.mid(0,m_target.lastIndexOf("."));
+    std::string m_extension = m_target.substr(m_target.find_last_of("."));
+    std::string m_targetfilename = m_target.substr(0,m_target.find_last_of("."));
     if (m_extension == ".gz")
     {
-      m_extension = m_target.mid(m_targetfilename.lastIndexOf("."));
-      m_targetfilename = m_targetfilename.mid(0,m_targetfilename.lastIndexOf("."));
+      m_extension = m_target.substr(m_targetfilename.find_last_of("."));
+      m_targetfilename = m_targetfilename.substr(0,m_targetfilename.find_last_of("."));
     }
 
-    if (m_outputdir.length() != 0)
-      m_targetfilename = m_outputdir + "/" + m_targetfilename.mid(m_targetfilename.lastIndexOf("/")+1);
+    if (m_outputdir.size() != 0)
+      m_targetfilename = m_outputdir + "/" + m_targetfilename.substr(m_targetfilename.find_last_of("/")+1);
+    std::string m_classfilename = m_targetfilename + m_outputsuffix + "-class.txt";
     #endif
-    QString m_classfilename = m_targetfilename + m_outputsuffix + "-class.txt";
     m_targetfilename = m_targetfilename + m_outputsuffix + m_extension;
     #ifdef QT_GUI
     if (m_verbose) std::cout << "Save target irescaled: " << m_targetfilename.latin1() << "...";
     m_rescaler.SaveImage(m_targetimg,m_targetfilename);
     #else
-    if (m_verbose) std::cout << "Save target irescaled: " << m_targetfilename.toStdString() << "...";
-    m_rescaler.SaveImage(m_targetimg,m_targetfilename.toStdString().c_str());
+    if (m_verbose) std::cout << "Save target irescaled: " << m_targetfilename << "...";
+    m_rescaler.SaveImage(m_targetimg,m_targetfilename.c_str() );
     #endif
 
     if (m_verbose) std::cout << " done!" << std::endl;
     #ifdef QT_GUI
     if (m_verbose) std::cout << "Save target class model info : " << m_classfilename.latin1() << " ...";
     #else
-    if (m_verbose) std::cout << "Save target class model info : " << m_classfilename.toStdString() << " ...";
+    if (m_verbose) std::cout << "Save target class model info : " << m_classfilename << " ...";
     #endif
 
     // recompute class means and write the model to disk
@@ -372,13 +407,13 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
     #ifdef QT_GUI
     ofstream efile(m_classfilename.latin1(), ios::out);
     #else
-    ofstream efile(m_classfilename.toStdString().c_str(), ios::out);
+    ofstream efile(m_classfilename.c_str(), ios::out);
     #endif
     if (!efile) {
       #ifdef QT_GUI
       cerr << "Error: open of file \"" << m_classfilename.latin1() << "\" failed." << endl;
       #else
-      cerr << "Error: open of file \"" << m_classfilename.toStdString() << "\" failed." << endl;
+      cerr << "Error: open of file \"" << m_classfilename << "\" failed." << endl;
       #endif
       exit(-1);
     }
@@ -415,17 +450,17 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
       std::cerr << "Warning: Source segmentation " << m_sourceems[i].latin1() << " could not be read!" << std::endl;
     }
     #else
-    if (m_verbose) std::cout << "Processing source: " << m_source[i].toStdString() << ": ";
-    m_sourceimg = m_rescaler.ReadImage(m_source[i].toStdString().c_str());
-    m_sourcesegimg = m_rescaler.ReadImage(m_sourceems[i].toStdString().c_str());
+    if (m_verbose) std::cout << "Processing source: " << m_source[i] << ": ";
+    m_sourceimg = m_rescaler.ReadImage(m_source[i].c_str());
+    m_sourcesegimg = m_rescaler.ReadImage(m_sourceems[i].c_str());
     if (m_sourceimg.IsNull())
     {
-      std::cerr << "Warning: Source segmentation " << m_source[i].toStdString() << " could not be read!" << std::endl;
+      std::cerr << "Warning: Source segmentation " << m_source[i] << " could not be read!" << std::endl;
     }
     else
     if (m_sourcesegimg.IsNull())
     {
-      std::cerr << "Warning: Source segmentation " << m_sourceems[i].toStdString() << " could not be read!" << std::endl;
+      std::cerr << "Warning: Source segmentation " << m_sourceems[i] << " could not be read!" << std::endl;
     }
     #endif
     else
@@ -459,20 +494,21 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
 
       if (m_outputdir.length() != 0)
         m_sourcefilename = m_outputdir + "/" + m_sourcefilename.mid(m_sourcefilename.findRev("/")+1);
+      QString m_classfilename = m_sourcefilename + m_outputsuffix + "-class.txt";
       #else
-      QString m_extension = m_source[i].mid(m_source[i].lastIndexOf("."));
-      QString m_sourcefilename = m_source[i].mid(0,m_source[i].lastIndexOf("."));
+      std::string m_extension = m_source[i].substr(m_source[i].find_last_of("."));
+      std::string m_sourcefilename = m_source[i].substr(0,m_source[i].find_last_of("."));
 
       if (m_extension == ".gz")
       {
-        m_extension = m_source[i].mid(m_sourcefilename.lastIndexOf("."));
-        m_sourcefilename = m_sourcefilename.mid(0,m_sourcefilename.lastIndexOf("."));
+        m_extension = m_source[i].substr(m_sourcefilename.find_last_of("."));
+        m_sourcefilename = m_sourcefilename.substr(0,m_sourcefilename.find_last_of("."));
       }
 
       if (m_outputdir.length() != 0)
-        m_sourcefilename = m_outputdir + "/" + m_sourcefilename.mid(m_sourcefilename.lastIndexOf("/")+1);
+        m_sourcefilename = m_outputdir + "/" + m_sourcefilename.substr(m_sourcefilename.find_last_of("/")+1);
+      std::string m_classfilename = m_sourcefilename + m_outputsuffix + "-class.txt";
       #endif
-      QString m_classfilename = m_sourcefilename + m_outputsuffix + "-class.txt";
       m_sourcefilename = m_sourcefilename + m_outputsuffix + m_extension;
       #ifdef QT_GUI
       if (m_verbose) std::cout << "Save source irescaled: " << m_sourcefilename.latin1() << " ...";
@@ -489,17 +525,17 @@ void IntensityRescalerCommandLine::Run(bool m_verbose)
         exit(-1);
       }
       #else
-      if (m_verbose) std::cout << "Save source irescaled: " << m_sourcefilename.toStdString() << " ...";
-      m_rescaler.SaveImage(m_sourceimg,m_sourcefilename.toStdString().c_str());
+      if (m_verbose) std::cout << "Save source irescaled: " << m_sourcefilename << " ...";
+      m_rescaler.SaveImage(m_sourceimg,m_sourcefilename.c_str());
       if (m_verbose) std::cout << " done!" << std::endl;
 
-      if (m_verbose) std::cout << "Save source class model info: " << m_classfilename.toStdString() << " ...";
+      if (m_verbose) std::cout << "Save source class model info: " << m_classfilename << " ...";
 
       // recompute class means and write the model to disk
       m_vectorlist = m_rescaler.ComputeMax(m_sourceimg,m_sourcesegimg);
-      ofstream efile(m_classfilename.toStdString().c_str(), ios::out);
+      ofstream efile(m_classfilename.c_str(), ios::out);
       if (!efile) {
-        cerr << "Error: open of file \"" << m_classfilename.toStdString() << "\" failed." << endl;
+        cerr << "Error: open of file \"" << m_classfilename << "\" failed." << endl;
         exit(-1);
       }
       #endif

@@ -1,4 +1,4 @@
-if(USE_QT_LIB)
+if(COMPILE_IntensityRescaler_GUI)
   subdirs(Qt)
 endif()
 
