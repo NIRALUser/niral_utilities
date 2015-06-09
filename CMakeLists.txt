@@ -92,6 +92,16 @@ if(COMPILE_MULTIATLASSEG)
   subdirs(MultiAtlasSeg)
 endif()
 
+option(COMPILE_MAURERDISTANCETRANSFORM "Compile MaurerDistanceTransform." OFF)
+if(COMPILE_MAURERDISTANCETRANSFORM)
+  subdirs(MaurerDistanceTransform)
+endif()
+
+option(COMPILE_POLYDATACOMPRESSION "Compile PolyDataCompression." OFF)
+if(COMPILE_POLYDATACOMPRESSION)
+  subdirs(PolyDataCompression)
+endif()
+
 option(COMPILE_Unsupported "Compile Unsupported Tools." OFF)
 if(COMPILE_Unsupported)
   subdirs(Unsupported)
