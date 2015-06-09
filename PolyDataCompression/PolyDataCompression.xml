@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+   <category>Filtering.Arithmetic</category>
+   <title>Threshold</title>
+   <description>Binary threshold of a image</description>
+   <version>1.0.4</version>
+   <parameters>
+      <label>IO</label>
+      <description>Input/Output parameters</description>
+      <string-enumeration>
+         <name>encoding</name>
+         <label>encoding</label>
+         <channel>input</channel>
+         <longflag>encoding</longflag>
+         <flag>e</flag>
+         <description>Data encoding: binary, ascii or appended</description>
+         <element>binary</element>
+         <element>ascii</element>
+         <element>appended</element>
+      </string-enumeration>
+      <string-enumeration>
+         <name>extension</name>
+         <label>extension</label>
+         <channel>input</channel>
+         <longflag>extension</longflag>
+         <flag>x</flag>
+         <description>File extension: vtk or vtp</description>
+         <element>vtk</element>
+         <element>vtp</element>
+         <default>vtp</default>
+      </string-enumeration>
+      <integer>
+         <name>compressionLevel</name>
+         <longflag>compressionLevel</longflag>
+         <label>compressionLevel</label>
+         <flag>c</flag>
+         <description>Compression level, between 0 and 9. Set by default at 1. Changes barely noticeable.</description>
+         <default>1</default>
+      </integer>
+      <boolean>
+         <name>overwrite</name>
+         <longflag>overwrite</longflag>
+         <label>Replace directly the input file by the output file, there is no temporary file.</label>
+         <channel>input</channel>
+         <description>Replace directly the input file by the output file, there is no temporary file.</description>
+      </boolean>
+      <string-vector>
+         <channel>input</channel>
+         <name>filelist</name>
+         <label>filelist</label>
+         <longflag>fileNameList</longflag>
+         <flag>f</flag>
+         <description>list of the filenames to be compressed</description>
+         </string-vector>
+   </parameters>
+</executable>
