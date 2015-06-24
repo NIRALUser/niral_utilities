@@ -109,8 +109,7 @@ using namespace std;
 #include "argio.h"
 #include "ImageMath.h"
 
-#define IMAGEMATH_VERSION "1.31"
-#define IMAGEMATH_DATE "January 2015"
+#define IMAGEMATH_VERSION "1.3.2"
 #define DEFAULT_SAMP 2
 // number of samples by default
 
@@ -439,7 +438,7 @@ ImagePointer RunCleanComponent(ImagePointer image, int cleanLabel, float cleanPe
 int main(const int argc, const char **argv)
 {
   if (argc <=1 || ipExistsArgument(argv, "-usage") || ipExistsArgument(argv, "-help")) {
-    cout << "ImageMath version:"<<IMAGEMATH_VERSION<<" ("<<IMAGEMATH_DATE<<")" << endl;
+    cout << "ImageMath version:"<<IMAGEMATH_VERSION<<" ("<<__DATE__<<")" << endl;
     cout << " computes base operations on an image" << endl;
     cout << "usage: ImageMath -version    Prints current version" << endl ;
     cout << "       ImageMath infile <options>" << endl;
@@ -459,7 +458,7 @@ int main(const int argc, const char **argv)
     cout << "-otsuPara nbThresholds,labelOffset,nbHistogramBins    optional parameters for otsuMultipleThresholds" <<endl;
     cout << "-threshold min,max     threshold: everything I < min , I > max is set to 0, otherwise 1" << endl;
     cout << "-threshMask min,max    mask threshold: everything I < min , I > max is set to 0, otherwise is left as is" << endl;
-    cout << "-mask infile2          use infile2 as a binary mask (intensities > 0 ) and combine with inputfile  " << endl ;
+    cout << "-mask infile2          use infile2 as a binary mask (intensities > 0 ) and combine with inputfile (DTI compatible)" << endl ;
     cout << "-constOper opID,val    apply the following operation to the image: I op val, op = +/0, -/1, */2, //3" << endl;
     cout << "-add infile2           apply the following operation to the image: I1 + I2" << endl;
     cout << "-sub infile2           apply the following operation to the image: I1 - I2" << endl;
@@ -469,7 +468,7 @@ int main(const int argc, const char **argv)
     cout << "-normalizeEMS count -EMSfile prob_1,prob_2,...,prob_count(infile should be grayscale template) normalizes the EMS prob maps" << endl;
     cout << "-Normalize prob_1 prob_2 ...   normalizes input probability maps using input image as a mask (sum of probability maps equals to NormValue)" << endl;
     cout << "  -NormValue Value         normalization value (default:255)" << endl;
-    cout << "-editPixdims px,py,pz   simply change the pixdims (without reslicing) of the image" << endl;
+    cout << "-editPixdims px,py,pz   simply change the pixdims (without reslicing) of the image (DTI compatible)" << endl;
     cout << "-dilate radius,val      apply isotropic dilation with ball element of given radius and value" << endl;
     cout << "-erode radius,val       apply isotropic erosion with ball element of given radius and value" << endl;
     cout << "-matchHistogram infile2  match the image histogram to the one in infile2" << endl;
@@ -483,16 +482,16 @@ int main(const int argc, const char **argv)
     cout << "-conComp n           For a binary image, rank all the connected components according to their sizes and create a binary image with the 'n' biggest ones" << endl;
     cout << "-cleanComp Label,perc  Extract Label 'label' from image, run connected components and clean up any components of size smaller tthn 'perc' percent size via majority vote over neighboring label" << endl;
     cout << "                       if Lbl=0 outputs the labeled image with all the components labeled according to their size" << endl;
-    cout << "-changeOrig px,py,pz [or filename]   Change the origin of the image" << endl;
+    cout << "-changeOrig px,py,pz [or filename]   Change the origin of the image (DTI compatible)" << endl;
     cout << "-createIm X,Y,Z,px,py,pz Create an empty image with the specified parameters: image dimensions X,Y,Z, image resolution px,py,pz" << endl;
-    cout << " -crop px,py,pz,w,h,d   cropimage: origin px,py,pz (startindex is 0) dimensions width(w),height(h), depth(d)" << endl;
-    cout << "-changeSp spx,spy,spz [or filename] Change the spacing of the image" << endl;
+    cout << " -crop px,py,pz,w,h,d   cropimage: origin px,py,pz (startindex is 0) dimensions width(w),height(h), depth(d) (DTI compatible)" << endl;
+    cout << "-changeSp spx,spy,spz [or filename] Change the spacing of the image (DTI compatible)" << endl;
     cout << "-max infile2           Compute the maximum between the corresponding pixels of the two input images" << endl;
     cout << "-min infile2           Compute the minimum between the corresponding pixels of the two input images" << endl;
     cout << "-avg infile2 infile3...       Compute the average image" << endl;
     cout << "-majorityVoting infile2 infile3...       Compute an accurate parcellation map considering a majority voting process" << endl;
     cout << "-weightedMajorityVoting infile2 infile3... -weights w1,w2,...     Compute an accurate parcellation map considering a weighted majority voting process" << endl;
-    cout << "-center                Center image" << endl;
+    cout << "-center                Center image (DTI compatible)" << endl;
     cout << "-flip [x,][y,][z]      Flip image" << endl;
     cout << "-NaNCor                Removes NaN and set the value of those voxels the average of the (non-NaN) neighbor values" << endl;
     cout << "-std infile2 infile3...             Compute the standard deviation from a set of images (one image has to be specified for the input, but it's not included in the process)" << endl;
@@ -512,7 +511,7 @@ int main(const int argc, const char **argv)
   }
   if( ipExistsArgument(argv, "-version") )
   {
-    cout << "ImageMath version:"<<IMAGEMATH_VERSION<<" ("<<IMAGEMATH_DATE<<")" << endl;
+    cout << "ImageMath version:"<<IMAGEMATH_VERSION<<" ("<<__DATE__<<")" << endl;
     return EXIT_SUCCESS ;
   }
 
