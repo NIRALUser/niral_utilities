@@ -3,6 +3,8 @@ project(convertITKformats)
 cmake_minimum_required(VERSION 2.8)
 cmake_policy(VERSION 2.8)
 
+message(WARNING "convertITKformats requires the ITK module ITKDeprecated.")
+
 find_package(ITK COMPONENTS
   ITKCommon
   ITKDeprecated
@@ -11,6 +13,7 @@ find_package(ITK COMPONENTS
   ITKImageIntensity
   ${ITK_IO_MODULES_USED}
 )
+
 if(ITK_FOUND)
    include(${ITK_USE_FILE})
 else()
