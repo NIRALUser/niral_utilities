@@ -122,6 +122,15 @@ DEPENDS ITK SlicerExecutionModel
 INSTALL
 )
 
+ExternalProjectMacro(
+ImageNoise
+GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ImageNoise.git"
+GIT_TAG "98e6a4056cc8d532d3e26201ba955342841fb515"
+ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+DEPENDS SlicerExecutionModel ITK
+INSTALL
+)
+
 option(COMPILE_Unsupported "Compile Unsupported Tools." OFF)
 if(COMPILE_Unsupported)
   subdirs(Unsupported)
