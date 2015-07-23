@@ -1,14 +1,16 @@
 project(NIRAL_UTILITIES)
 
-cmake_minimum_required(VERSION 2.8)
-cmake_policy(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
+cmake_policy(VERSION 3.1)
 
 set(CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_SOURCE_DIR}/CMake
   ${CMAKE_CURRENT_BINARY_DIR}/CMake
   ${CMAKE_MODULE_PATH}
   )
-
+include(gitSetup)
+include(ExternalProjectMacro)
+#-----------------------------------------------------------------------------
 
 if(CMAKE_COMPILER_2005)
   add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
@@ -101,6 +103,14 @@ option(COMPILE_POLYDATACOMPRESSION "Compile PolyDataCompression." OFF)
 if(COMPILE_POLYDATACOMPRESSION)
   subdirs(PolyDataCompression)
 endif()
+
+ExternalProjectMacro(
+ITKTransformTools
+GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ITKTransformTools.git"
+GIT_TAG "c7fb32d5d6f1cd6c0e57f1b5dfc0d1f58e371aae"
+ADDITIONAL_OPTIONS -DITK_DIR:PATH=${ITK_DIR} -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+INSTALL
+)
 
 option(COMPILE_Unsupported "Compile Unsupported Tools." OFF)
 if(COMPILE_Unsupported)
