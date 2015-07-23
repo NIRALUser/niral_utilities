@@ -118,7 +118,7 @@ ReadImageHeader
 GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ReadImageHeader.git"
 GIT_TAG "91484acae0e1fbb814ccccab329c77b1d1323362"
 ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
-DEPENDS ITK SlicerExecutionModel
+DEPENDS SlicerExecutionModel ITK
 INSTALL
 )
 
