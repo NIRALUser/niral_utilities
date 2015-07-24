@@ -99,11 +99,6 @@ if(COMPILE_MAURERDISTANCETRANSFORM)
   subdirs(MaurerDistanceTransform)
 endif()
 
-option(COMPILE_POLYDATACOMPRESSION "Compile PolyDataCompression." OFF)
-if(COMPILE_POLYDATACOMPRESSION)
-  subdirs(PolyDataCompression)
-endif()
-
 niral_utilitiesExternalProject(
 ITKTransformTools
 GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ITKTransformTools.git"
@@ -155,6 +150,15 @@ GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/3D4DImageConversion.git"
 GIT_TAG "5a53a98fce967a77c74d8e554d7231dc4c0ba695"
 ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
 DEPENDS SlicerExecutionModel ITK
+INSTALL
+)
+
+niral_utilitiesExternalProject(
+PolyDataCompression
+GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/PolyDataCompression.git"
+GIT_TAG "141b81712cb065fa890a1f49026495f2ea55fcc2"
+ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+DEPENDS SlicerExecutionModel ITK VTK
 INSTALL
 )
 
