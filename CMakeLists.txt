@@ -140,6 +140,15 @@ DEPENDS SlicerExecutionModel ITK
 INSTALL
 )
 
+niral_utilitiesExternalProject(
+NormalizeDWIGradientVectors
+GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/NormalizeDWIGradientVectors.git"
+GIT_TAG "e46bd5b7ca395ab7b290da621e329653287ac591"
+ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+DEPENDS ITK
+INSTALL
+)
+
 option(COMPILE_Unsupported "Compile Unsupported Tools." OFF)
 if(COMPILE_Unsupported)
   subdirs(Unsupported)
