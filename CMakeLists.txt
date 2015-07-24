@@ -46,8 +46,10 @@ ITKIOTransformHDF5
 include_directories( Common )
 
 option( BUILD_TESTING   "Build the testing tree" ON )
-include(CTest)
-include(ExternalData)
+if( BUILD_TESTING )
+  include(CTest)
+  include(ExternalData)
+endif()
 
 option(COMPILE_IMAGEMATH "Compile ImageMath." ON)
 if(COMPILE_IMAGEMATH)
