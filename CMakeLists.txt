@@ -149,6 +149,15 @@ DEPENDS ITK
 INSTALL
 )
 
+niral_utilitiesExternalProject(
+3D4DImageConversion
+GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/3D4DImageConversion.git"
+GIT_TAG "5a53a98fce967a77c74d8e554d7231dc4c0ba695"
+ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+DEPENDS SlicerExecutionModel ITK
+INSTALL
+)
+
 option(COMPILE_Unsupported "Compile Unsupported Tools." OFF)
 if(COMPILE_Unsupported)
   subdirs(Unsupported)
