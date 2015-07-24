@@ -3,7 +3,7 @@ include(CMakeParseArguments)
 include(ExternalProject)
 
 
-function( ExternalProjectMacro projectname)
+function( niral_utilitiesExternalProject projectname)
 set(options INSTALL)
 set(oneValueArgs GIT_REPOSITORY GIT_TAG)
 set(multiValueArgs ADDITIONAL_OPTIONS DEPENDS)

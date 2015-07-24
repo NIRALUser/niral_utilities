@@ -9,7 +9,7 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_MODULE_PATH}
   )
 include(gitSetup)
-include(ExternalProjectMacro)
+include(niral_utilitiesExternalProject)
 #-----------------------------------------------------------------------------
 
 if(CMAKE_COMPILER_2005)
@@ -104,7 +104,7 @@ if(COMPILE_POLYDATACOMPRESSION)
   subdirs(PolyDataCompression)
 endif()
 
-ExternalProjectMacro(
+niral_utilitiesExternalProject(
 ITKTransformTools
 GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ITKTransformTools.git"
 GIT_TAG "c7fb32d5d6f1cd6c0e57f1b5dfc0d1f58e371aae"
@@ -113,7 +113,7 @@ DEPENDS ITK
 INSTALL
 )
 
-ExternalProjectMacro(
+niral_utilitiesExternalProject(
 ReadImageHeader
 GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ReadImageHeader.git"
 GIT_TAG "91484acae0e1fbb814ccccab329c77b1d1323362"
@@ -122,7 +122,7 @@ DEPENDS SlicerExecutionModel ITK
 INSTALL
 )
 
-ExternalProjectMacro(
+niral_utilitiesExternalProject(
 ImageNoise
 GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ImageNoise.git"
 GIT_TAG "98e6a4056cc8d532d3e26201ba955342841fb515"
@@ -131,7 +131,7 @@ DEPENDS SlicerExecutionModel ITK
 INSTALL
 )
 
-ExternalProjectMacro(
+niral_utilitiesExternalProject(
 CombineDWIs
 GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/CombineDWIs.git"
 GIT_TAG "37d340b4b80a2b0735fbddcc450bf01d89b5b9bc"
