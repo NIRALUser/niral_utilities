@@ -131,6 +131,15 @@ DEPENDS SlicerExecutionModel ITK
 INSTALL
 )
 
+ExternalProjectMacro(
+CombineDWIs
+GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/CombineDWIs.git"
+GIT_TAG "37d340b4b80a2b0735fbddcc450bf01d89b5b9bc"
+ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+DEPENDS SlicerExecutionModel ITK
+INSTALL
+)
+
 option(COMPILE_Unsupported "Compile Unsupported Tools." OFF)
 if(COMPILE_Unsupported)
   subdirs(Unsupported)
