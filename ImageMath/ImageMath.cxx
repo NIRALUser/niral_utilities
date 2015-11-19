@@ -106,6 +106,8 @@ using namespace std;
 #include <itkShiftScaleImageFilter.h>
 #include <itkImageDuplicator.h>
 
+#include <itkConnectedComponentImageFilter.h>
+
 #include "argio.h"
 #include "ImageMath.h"
 
