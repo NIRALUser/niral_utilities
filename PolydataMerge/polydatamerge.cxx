@@ -75,6 +75,7 @@ int main(int argc, char* argv[])
  apd->AddInputData (polydata2);
  apd->AddInputData (polydata1);
  #endif
+ apd->Update();
  polydata=apd->GetOutput ();
 
   if( !fiberOutput.empty() )
