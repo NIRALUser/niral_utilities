@@ -66,11 +66,11 @@ public:
   itkNewMacro(Self);
 
   /** Print internal ivars */
-  void PrintSelf(std::ostream& os, Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, Indent indent) //const ITK_OVERRIDE
     { this->Superclass::PrintSelf( os, indent ); }
 
   // need to override GenerateData (This should be threaded)
-  void GenerateData() ITK_OVERRIDE;
+  void GenerateData();// ITK_OVERRIDE;
 
   OutputPixelType ComputeDisplacement(typename InputImageType::ConstPointer input,
                                      typename InputImageType::IndexType ind,

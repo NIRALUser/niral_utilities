@@ -19,18 +19,23 @@ include(${VTK_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR})
 
 
-find_package(GenerateCLP REQUIRED)
-if(GenerateCLP_FOUND)
-  include(${GenerateCLP_USE_FILE})
-else()
-  message(FATAL_ERROR
-          "GenerateCLP not found. Please set GenerateCLP_DIR.")
-endif()
+find_package(SlicerExecutionModel REQUIRED)
+include(${SlicerExecutionModel_USE_FILE})
 
-set(src polydatamerge.cpp)
-GENERATECLP(src polydatamerge.xml)
+set(LOCAL_NAME polydatamerge)
+set(LOCAL_LIBRARIES 
+	${ITK_LIBRARIES}
+	${VTK_LIBRARIES})
 
-add_executable(polydatamerge  ${src}  )
-target_link_libraries(polydatamerge  ${ITK_LIBRARIES} ${VTK_LIBRARIES})
-
+SEMMacroBuildCLI(
+    NAME ${LOCAL_NAME}
+    ${STATIC}
+    TARGET_LIBRARIES ${LOCAL_LIBRARIES}
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}
+    INSTALL_RUNTIME_DESTINATION ${INSTALL_RUNTIME_DESTINATION}
+    INSTALL_LIBRARY_DESTINATION ${INSTALL_LIBRARY_DESTINATION}
+    INSTALL_ARCHIVE_DESTINATION ${INSTALL_ARCHIVE_DESTINATION}
+    )
 install( TARGETS polydatamerge RUNTIME DESTINATION bin )
