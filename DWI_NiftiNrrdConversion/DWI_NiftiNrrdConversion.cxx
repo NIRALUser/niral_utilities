@@ -7,7 +7,7 @@
 #include "itkMetaDataDictionary.h"
 #include "itkMetaDataObject.h"
 #include "itkImageRegionIterator.h"
-#include "NiftiNrrdConversionCLP.h"
+#include "DWI_NiftiNrrdConversionCLP.h"
 
 typedef itk::Image<unsigned short, 4> ImageType;
 typedef itk::VectorImage < unsigned short , 3 > VectorImageType;
