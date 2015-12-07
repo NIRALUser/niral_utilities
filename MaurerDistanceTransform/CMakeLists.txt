@@ -6,7 +6,6 @@ project(MaurerDistanceTransform)
 # Find SlicerExecutionModel
 find_package(SlicerExecutionModel REQUIRED)
 include(${SlicerExecutionModel_USE_FILE})
-include(${GenerateCLP_USE_FILE})
  
 # Find ITK
 find_package(ITK COMPONENTS

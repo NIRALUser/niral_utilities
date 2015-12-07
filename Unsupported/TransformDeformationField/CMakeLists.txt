@@ -4,13 +4,6 @@ cmake_policy(VERSION 2.8)
 
 project(TransformDeformationField)
 
-find_package(GenerateCLP REQUIRED)
-if(GenerateCLP_FOUND)
-  include(${GenerateCLP_USE_FILE})
-else()
-  message(FATAL_ERROR "GenerateCLP not found. Please set GenerateCLP_DIR.")
-endif()
-
 find_package(ITK  REQUIRED)
 if(ITK_FOUND)
    include(${ITK_USE_FILE})
@@ -22,26 +15,28 @@ if( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
   message( FATAL_ERROR "TransformDeformationField needs ITKv3 to compile" )
 endif()
 
-set (CLP TransformDeformationField)
+find_package(SlicerExecutionModel REQUIRED)
+include(${SlicerExecutionModel_USE_FILE})
 
-set ( ${CLP}_SOURCE ${CLP}.cpp )
-generateclp(${CLP}_SOURCE ${CLP}.xml )
-
-Set( dtiProcessFiles
-dtiprocessFiles/deformationfieldio.h
-dtiprocessFiles/deformationfieldio.cxx
-dtiprocessFiles/itkHFieldToDeformationFieldImageFilter.h
-dtiprocessFiles/itkHFieldToDeformationFieldImageFilter.txx
-)
-
-add_executable(${CLP} ${${CLP}_SOURCE} ${dtiProcessFiles} )
-
-target_link_libraries (${CLP}
-  ModuleDescriptionParser
+set(LOCAL_NAME TransformDeformationField)
+set(LOCAL_LIBRARIES ModuleDescriptionParser
   ITKIO
   ITKAlgorithms
-  ITKBasicFilters
-)
+  ITKBasicFilters)
+
+INCLUDE_DIRECTORIES(dtiProcessFiles)
+
+SEMMacroBuildCLI(
+    NAME ${LOCAL_NAME}
+    ${STATIC}
+    TARGET_LIBRARIES ${LOCAL_LIBRARIES}
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}
+    INSTALL_RUNTIME_DESTINATION ${INSTALL_RUNTIME_DESTINATION}
+    INSTALL_LIBRARY_DESTINATION ${INSTALL_LIBRARY_DESTINATION}
+    INSTALL_ARCHIVE_DESTINATION ${INSTALL_ARCHIVE_DESTINATION}
+    )
 
 
-install( TARGETS ${CLP} RUNTIME DESTINATION bin )
+install( TARGETS ${LOCAL_NAME} RUNTIME DESTINATION bin )

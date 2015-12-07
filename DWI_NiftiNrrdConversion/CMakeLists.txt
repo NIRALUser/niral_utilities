@@ -3,13 +3,6 @@ cmake_policy(VERSION 2.8)
 
 project(NiftiNrrdConversion)
 
-find_package(GenerateCLP REQUIRED)
-if(GenerateCLP_FOUND)
-  include(${GenerateCLP_USE_FILE})
-else()
-   message(FATAL_ERROR, "GenerateCLP not found. Please set GenerateCLP_DIR.")
-endif()
-
 find_package(ITK COMPONENTS
   ITKCommon
   ITKIOImageBase
@@ -21,8 +14,23 @@ else()
   message(FATAL_ERROR "ITK not found. Please set ITK_DIR")
 endif()
 
-GENERATECLP(NiftiNrrdConversion.cxx NiftiNrrdConversion.xml)
-add_executable(DWI_NiftiNrrdConversion NiftiNrrdConversion.cxx)
-target_link_libraries(DWI_NiftiNrrdConversion ${ITK_LIBRARIES})
+find_package(SlicerExecutionModel REQUIRED)
+include(${SlicerExecutionModel_USE_FILE})
 
-install( TARGETS DWI_NiftiNrrdConversion RUNTIME DESTINATION bin )
+set(LOCAL_NAME DWI_NiftiNrrdConversion)
+set(LOCAL_LIBRARIES 
+	${ITK_LIBRARIES}
+	${VTK_LIBRARIES})
+
+SEMMacroBuildCLI(
+    NAME ${LOCAL_NAME}
+    ${STATIC}
+    TARGET_LIBRARIES ${LOCAL_LIBRARIES}
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}
+    INSTALL_RUNTIME_DESTINATION ${INSTALL_RUNTIME_DESTINATION}
+    INSTALL_LIBRARY_DESTINATION ${INSTALL_LIBRARY_DESTINATION}
+    INSTALL_ARCHIVE_DESTINATION ${INSTALL_ARCHIVE_DESTINATION}
+    )
+install( TARGETS ${LOCAL_NAME} RUNTIME DESTINATION bin )
