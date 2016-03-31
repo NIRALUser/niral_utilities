@@ -105,13 +105,14 @@ using namespace std;
 #include <itkImageToHistogramFilter.h>
 #include <itkShiftScaleImageFilter.h>
 #include <itkImageDuplicator.h>
+#include <itkBinaryThinningImageFilter.h>
 
 #include <itkConnectedComponentImageFilter.h>
 
 #include "argio.h"
 #include "ImageMath.h"
 
-#define IMAGEMATH_VERSION "1.3.2"
+#define IMAGEMATH_VERSION "1.3.3"
 #define DEFAULT_SAMP 2
 // number of samples by default
 
@@ -182,6 +183,8 @@ typedef itk::MinimumMaximumImageCalculator<ImageType> MaxFilterType;
 typedef itk::Statistics::MaskedImageToHistogramFilter< ImageType , ImageType > MaskedHistogramFilterType;
 typedef itk::Statistics::ImageToHistogramFilter< ImageType > HistogramFilterType;
 typedef itk::ShiftScaleImageFilter< ImageType, ImageType > ShiftScaleFilterType;
+
+typedef itk::BinaryThinningImageFilter<ImageType,ImageType> SkeletonFilterType;
 
 static int debug = 0;
 static const int BGVAL = 0;
@@ -508,6 +511,7 @@ int main(const int argc, const char **argv)
     cout << "-mosaic                Creates a mosaic image from 2 images" << endl ;
     cout << "  -mosaicStep size     Size of each window in the mosaic (default:10 voxels)" << endl;
     cout << "-setLocationTolerance  Sets the coordinate and direction tolerance allowed for the ITK filters" << endl ;
+    cout << "-skeleton              Copmute Skeleton via 3D thinning, assumes image is binary" << endl ;
     cout << endl << endl;
     return EXIT_SUCCESS ;
   }
@@ -595,6 +599,8 @@ int main(const int argc, const char **argv)
   char *mulFile    = ipGetStringArgument(argv, "-mul", NULL);
   bool divOn   = ipExistsArgument(argv, "-div");
   char *divFile    = ipGetStringArgument(argv, "-div", NULL);
+
+  bool skeletonOn = ipExistsArgument(argv, "-skeleton");
 
   bool OtsuOn   = ipExistsArgument(argv, "-otsu");
 
@@ -3205,12 +3211,12 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
 
   } else if( mosaic )
   {
-    if (debug) cout << "Loading: " << mosaic  << endl;
+    if (debug) std::cout << "Loading: " << mosaic  << std::endl;
     VolumeReaderType::Pointer imageReader = VolumeReaderType::New();
     imageReader->SetFileName(mosaic) ;
     imageReader->Update();
     //Resample images to same size
-    if (debug) cout << "Resampling: " << mosaic << endl;
+    if (debug) std::cout << "Resampling: " << mosaic << std::endl;
     typedef itk::LinearInterpolateImageFunction< ImageType , double > LinearInterpolateType ;
     LinearInterpolateType::Pointer interpolator = LinearInterpolateType::New() ;
     itk::ResampleImageFilter< ImageType , ImageType >::Pointer resampler ;
@@ -3220,7 +3226,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     resampler->SetInterpolator( interpolator ) ;
     resampler->Update() ;
     //iterates through both inputs and output image
-    if (debug) cout << "Creating mosaic. Step size: " << mosaicStepSize << endl ;
+    if (debug) std::cout << "Creating mosaic. Step size: " << mosaicStepSize << std::endl ;
     IteratorWithIndexType it1( inputImage , inputImage->GetLargestPossibleRegion() ) ;
     IteratorWithIndexType it2( resampler->GetOutput() , resampler->GetOutput()->GetLargestPossibleRegion() ) ;
     ImageType::Pointer outputImage = ImageType::New() ;
@@ -3242,6 +3248,16 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       }
     }
     inputImage = outputImage ;
+  } else if( skeletonOn )
+  {
+    // inputImage is 
+    SkeletonFilterType::Pointer skeletonFilter = SkeletonFilterType::New();
+    skeletonFilter->SetInput (inputImage);
+    skeletonFilter->Update();
+    inputImage = skeletonFilter->GetOutput() ;
+    outFileName.erase();
+    outFileName.append(base_string);
+    outFileName.append("_skeleton");
   }
   else {
     cout << "NOTHING TO DO, no operation selected..." << endl;
@@ -3291,8 +3307,8 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
   else
     {
       if (writeByte){
-    castBinaryFilterType::Pointer castFilter = castBinaryFilterType::New();
-    castFilter->SetInput(inputImage);
+	castBinaryFilterType::Pointer castFilter = castBinaryFilterType::New();
+	castFilter->SetInput(inputImage);
     try {
       castFilter->Update();
     }
