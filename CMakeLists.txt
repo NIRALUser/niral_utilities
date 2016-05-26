@@ -41,6 +41,12 @@ ITKIOTransformBase
 ITKIOHDF5
 ITKIOTransformMatlab
 ITKIOTransformHDF5
+ITKIOLSM
+ITKIOStimulate
+ITKIOBioRad
+ITKIOMRC
+ITKIOGE
+MGHIO
 )
 
 include_directories( Common )
