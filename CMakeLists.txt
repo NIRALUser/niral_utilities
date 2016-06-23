@@ -102,6 +102,11 @@ if(COMPILE_MULTIATLASSEG)
   subdirs(MultiAtlasSeg)
 endif()
 
+option(COMPILE_DTITensorNormalization "Compile DTITensorNormalization." OFF)
+if(COMPILE_DTITensorNormalization)
+  subdirs(DTITensorNormalization)
+endif()
+
 option(COMPILE_MAURERDISTANCETRANSFORM "Compile MaurerDistanceTransform." OFF)
 if(COMPILE_MAURERDISTANCETRANSFORM)
   subdirs(MaurerDistanceTransform)
