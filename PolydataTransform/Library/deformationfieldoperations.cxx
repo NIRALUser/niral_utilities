@@ -1,6 +1,10 @@
 #include "deformationfieldoperations.h"
 #include <string>
+#include <itkVector.h>
 #include <itkImageFileReader.h>
+// #include "itkMetaImageIOFactory.h"
+// #include "itkPNGImageIOFactory.h"
+// #include "itkImageIOFactoryRegisterManager.h"
 #include "itkHFieldToDeformationFieldImageFilter.h"
 
 DeformationImageType::Pointer readDeformationField(std::string warpfile, DeformationFieldType dft)
@@ -9,10 +13,9 @@ DeformationImageType::Pointer readDeformationField(std::string warpfile, Deforma
 
   DeformationImageReader::Pointer defreader = DeformationImageReader::New();
   defreader->SetFileName(warpfile.c_str());
-
   if(dft == HField)
     {
-
+      
     typedef itk::HFieldToDeformationFieldImageFilter<DeformationImageType> DeformationConvertType;
     DeformationConvertType::Pointer defconv = DeformationConvertType::New();
     defconv->SetInput(defreader->GetOutput());
@@ -23,10 +26,8 @@ DeformationImageType::Pointer readDeformationField(std::string warpfile, Deforma
     }
   else
     {
-
     defreader->Update();
     return defreader->GetOutput();
-
     }
 
 }

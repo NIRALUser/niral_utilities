@@ -30,7 +30,9 @@
 #include <itkVectorLinearInterpolateImageFunction.h>
 #include <itkVersion.h>
 
-#include "deformationfieldoperations.h"
+#include "fiberfileIO.hxx"
+// #include "deformationfieldoperations.h"
+#include "deformationfieldio.h"
 #include "dtitypes.h"
 #include "polydatatransformCLP.h"
 
@@ -50,16 +52,15 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  vtkSmartPointer<vtkPolyDataReader> reader = vtkSmartPointer<vtkPolyDataReader>::New();
-  std::cout << "Reading " << fiberFile<< std::endl;
-  reader->SetFileName(fiberFile.c_str());
-  reader->Update();
+  // vtkSmartPointer<vtkPolyDataReader> reader = vtkSmartPointer<vtkPolyDataReader>::New();
+  // std::cout << "Reading " << fiberFile<< std::endl;
+  // reader->SetFileName(fiberFile.c_str());
+  // reader->Update();
 
-  // Extract the polydata
-  vtkSmartPointer<vtkPolyData> polydata =
-    reader->GetOutput();
-
-
+  // // Extract the polydata
+  // vtkSmartPointer<vtkPolyData> polydata =
+  //   reader->GetOutput();
+  
   DeformationImageType::Pointer deformationfield;
   if( !hField.empty() )
   {
@@ -67,33 +68,54 @@ int main(int argc, char* argv[])
   }
   else if( !displacementField.empty() )
   {
+    std::cout << "1"<< std::endl;
     deformationfield = readDeformationField(displacementField, Displacement);
+    std::cout << "2"<< std::endl;
   }
   else
   {
+    std::cout << "3"<< std::endl;
     deformationfield = NULL;
   }
   typedef itk::VectorLinearInterpolateImageFunction<DeformationImageType, double> DeformationInterpolateType;
   DeformationInterpolateType::Pointer definterp;
   if(deformationfield)
   {
+    std::cout << "4"<< std::endl;
     definterp = DeformationInterpolateType::New();
     definterp->SetInputImage(deformationfield);
   }
   else
   {
+    std::cout << "5"<< std::endl;
     std::cout << "A deformation field has to be specified" << std::endl;
     return EXIT_FAILURE;
+  }
+  vtkPoints* inPts;
+  vtkIdType numPoints;
+  vtkPoints    * points = vtkPoints::New();
+  vtkSmartPointer<vtkPolyData> polydata;
+  if(fiberFile.rfind(".vtk")!= std::string::npos || fiberFile.rfind(".vtp")!= std::string::npos)
+  {
+    polydata = readVTKFile(fiberFile.c_str());
+  }
+
+  else if(fiberFile.rfind(".fcsv")!= std::string::npos)
+  {
+    polydata = readFCSVFile(fiberFile.c_str());
+  }
+  else
+  {
+    throw itk::ExceptionObject("Unknown file format for input fibers must be .vtp, .vtk or .fcsv");
   }
 
 
     typedef DeformationInterpolateType::ContinuousIndexType ContinuousIndexType;
     ContinuousIndexType ci, origci;
-    // For each point along the fiber
-     vtkIdType numPoints= polydata->GetNumberOfPoints();
-     vtkPoints* inPts = polydata->GetPoints();
-     vtkPoints    * points = vtkPoints::New();
 
+    // For each point along the fiber
+    numPoints= polydata->GetNumberOfPoints();
+    inPts = polydata->GetPoints();
 
     typedef DTIPointType::PointType PointType;
     PointType fiberpoint;
@@ -117,7 +139,6 @@ int main(int argc, char* argv[])
 	} else {
 	  fiberpoint[2] = + fiberpointtemp[2];	
 	}
-
         deformationfield->TransformPhysicalPointToContinuousIndex(fiberpoint,ci);
 	if( !deformationfield->GetLargestPossibleRegion().IsInside( ci ) )
         {
@@ -127,8 +148,7 @@ int main(int argc, char* argv[])
         for(unsigned int j =0; j < 3; j++)
         {
           fiberpoint[j] +=warp[j];
-        }
-	//convert LPS to RAS (vtk)
+        }	//convert LPS to RAS (vtk)
 	if (invx)
         {
 	  fiberpoint[0] = - fiberpoint[0];
@@ -159,31 +179,45 @@ int main(int argc, char* argv[])
     }
     polydata->SetPoints(points);
 
+  if(fiberOutput.rfind(".vtk")!= std::string::npos || fiberFile.rfind(".vtp")!= std::string::npos)
+  {
+    writeVTKFile(fiberOutput.c_str(), polydata);
+  }
 
+  else if(fiberOutput.rfind(".fcsv")!= std::string::npos)
+  {
+    writeFCSVFile(fiberOutput.c_str(), polydata);
+  }
+  else
+  {
+    throw itk::ExceptionObject("Unknown file format for output fibers must be .vtp, .vtk or .fcsv");
+  }
+  std::cout<<"Done!"<<std::endl;
+  std::cout<<"Number of fibers saved: "<<polydata->GetNumberOfLines()<<std::endl;
 
-  std::cout<<std::endl;
-  std::cout<<"Saving fibers...."<<std::endl;
-  std::cout<<fiberOutput<<std::endl;
-  vtkPolyDataWriter * fiberwriter = vtkPolyDataWriter::New();
-  fiberwriter->SetFileName(fiberOutput.c_str());
-  #if (VTK_MAJOR_VERSION < 6)
-  fiberwriter->SetInput(polydata);
-  #else
-  fiberwriter->SetInputData(polydata);
-  #endif
-  fiberwriter->SetFileTypeToBinary();
-  fiberwriter->Update();
-  try
-    {
-    fiberwriter->Write();
-    std::cout<<"Done!"<<std::endl;
-    std::cout<<"Number of fibers saved: "<<polydata->GetNumberOfLines()<<std::endl;
-    }
-  catch(...)
-    {
-    std::cout << "Error while saving fiber file." << std::endl;
-    throw;
-    }
+  // std::cout<<std::endl;
+  // std::cout<<"Saving fibers...."<<std::endl;
+  // std::cout<<fiberOutput<<std::endl;
+  // vtkPolyDataWriter * fiberwriter = vtkPolyDataWriter::New();
+  // fiberwriter->SetFileName(fiberOutput.c_str());
+  // #if (VTK_MAJOR_VERSION < 6)
+  // fiberwriter->SetInput(polydata);
+  // #else
+  // fiberwriter->SetInputData(polydata);
+  // #endif
+  // fiberwriter->SetFileTypeToBinary();
+  // fiberwriter->Update();
+  // try
+  //   {
+  //   fiberwriter->Write();
+  //   std::cout<<"Done!"<<std::endl;
+  //   std::cout<<"Number of fibers saved: "<<polydata->GetNumberOfLines()<<std::endl;
+  //   }
+  // catch(...)
+  //   {
+  //   std::cout << "Error while saving fiber file." << std::endl;
+  //   throw;
+  //   }
 
   return EXIT_SUCCESS;
 }

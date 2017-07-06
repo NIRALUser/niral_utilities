@@ -6,14 +6,14 @@
 	<contributor>Gwendoline Roger, Francois Budin</contributor>
 	<version>1.2.1</version>
 	<parameters advanced="false">
-		<geometry type="fiberbundle">
+		<file>
 			<name>fiberOutput</name>
 			<longflag>--fiber_output</longflag>
 			<flag>o</flag>
 			<label>Output Fiber Bundle</label>
-			<description>Output fiber file</description>
+			<description>Output fiber file(.vtk, .vtp or .fcsv)</description>
 			<channel>output</channel>
-		</geometry>
+		</file>
 		<image type="vector">
 			<name>hField</name>
 			<longflag>--h_field</longflag>
@@ -30,13 +30,13 @@
 			<description>Displacement Field for warp</description>
 			<channel>input</channel>
 		</image>
-		<geometry type="fiberbundle">
+		<file>
 			<name>fiberFile</name>
 			<longflag>--fiber_file</longflag>
 			<label>Input Fiber Bundle</label>
-			<description>DTI fiber file</description>
+			<description>DTI fiber file (.vtk, .vtp or .fcsv)</description>
 			<channel>input</channel>
-		</geometry>
+		</file>
 		<boolean>
 		  <name>invx</name>
 		  <longflag>--invertx</longflag>

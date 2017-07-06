@@ -1,15 +1,16 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(polydatatransform)
+#project(polydatatransform)
 
-find_package(ITK COMPONENTS
-  ITKCommon
-  ITKIOImageBase
-  ITKImageFunction
-  ITKSpatialObjects
-  ITKTransform
-  ${ITK_IO_MODULES_USED}
-)
+find_package(ITK REQUIRED)
+# find_package(ITK COMPONENTS
+#   ITKCommon
+#   ITKIOImageBase
+#   ITKImageFunction
+#   ITKSpatialObjects
+#   ITKTransform
+#   ${ITK_IO_MODULES_USED}
+# )
 include(${ITK_USE_FILE})
 
 find_package(VTK REQUIRED)
@@ -19,8 +20,8 @@ include(${VTK_USE_FILE})
 find_package(SlicerExecutionModel REQUIRED)
 include(${SlicerExecutionModel_USE_FILE})
 
-include_directories(${PROJECT_SOURCE_DIR}/Library)
-include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Library)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_subdirectory(Library)
 
@@ -41,4 +42,19 @@ SEMMacroBuildCLI(
     INSTALL_LIBRARY_DESTINATION ${INSTALL_LIBRARY_DESTINATION}
     INSTALL_ARCHIVE_DESTINATION ${INSTALL_ARCHIVE_DESTINATION}
     )
-install( TARGETS polydatatransform RUNTIME DESTINATION bin )
+
+file(GLOB LIBRARY_HEADERS Library/*.txx Library/*.h)
+
+set_target_properties(polydatatransform PROPERTIES
+  PUBLIC_HEADER "${LIBRARY_HEADERS}")
+
+install( TARGETS polydatatransform 
+    EXPORT niral_utilitiesTargets
+    RUNTIME DESTINATION bin 
+    PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}/niral_utilities")
+
+
+# Add all targets to the build-tree export set
+
+export(TARGETS polydatatransform
+  FILE "${PROJECT_BINARY_DIR}/niral_utilitiesTargets.cmake")
