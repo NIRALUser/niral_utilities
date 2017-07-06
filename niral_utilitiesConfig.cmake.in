@@ -1,0 +1,18 @@
+# - Config file for the niral_utilities package
+# It defines the following variables
+#  niral_utilities_INCLUDE_DIRS - include directories for niral_utilities
+#  niral_utilities_LIBRARIES    - libraries to link against
+#  niral_utilities_EXECUTABLE   - the bar executable
+ 
+# Compute paths
+get_filename_component(niral_utilities_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(niral_utilities_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
+ 
+# Our library dependencies (contains definitions for IMPORTED targets)
+if(NOT TARGET polydatatransform AND NOT niral_utilities_BINARY_DIR)
+  include("${niral_utilities_CMAKE_DIR}/niral_utilitiesTargets.cmake")
+endif()
+ 
+# These are IMPORTED targets created by niral_utilitiesTargets.cmake
+set(niral_utilities_LIBRARIES foo)
+set(niral_utilities_EXECUTABLE bar)
