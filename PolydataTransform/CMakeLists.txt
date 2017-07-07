@@ -43,7 +43,7 @@ SEMMacroBuildCLI(
     INSTALL_ARCHIVE_DESTINATION ${INSTALL_ARCHIVE_DESTINATION}
     )
 
-file(GLOB LIBRARY_HEADERS Library/*.txx Library/*.h)
+file(GLOB LIBRARY_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/Library/*.txx ${CMAKE_CURRENT_SOURCE_DIR}//Library/*.h)
 
 set_target_properties(polydatatransform PROPERTIES
   PUBLIC_HEADER "${LIBRARY_HEADERS}")
