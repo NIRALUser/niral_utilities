@@ -7,6 +7,7 @@
 # Compute paths
 get_filename_component(niral_utilities_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 set(niral_utilities_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
+include_directories(${niral_utilities_INCLUDE_DIRS})
  
 # Our library dependencies (contains definitions for IMPORTED targets)
 if(NOT TARGET polydatatransform AND NOT niral_utilities_BINARY_DIR)
@@ -14,5 +15,4 @@ if(NOT TARGET polydatatransform AND NOT niral_utilities_BINARY_DIR)
 endif()
  
 # These are IMPORTED targets created by niral_utilitiesTargets.cmake
-set(niral_utilities_LIBRARIES foo)
-set(niral_utilities_EXECUTABLE bar)
+set(niral_utilities_LIBRARIES "@CONF_LIBRARIES@")

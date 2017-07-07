@@ -1,5 +1,11 @@
 project(NIRAL_UTILITIES)
 
+set(NIRAL_UTILITIES_MAJOR_VERSION 2)
+set(NIRAL_UTILITIES_MINOR_VERSION 0)
+set(NIRAL_UTILITIES_PATCH_VERSION 1)
+set(NIRAL_UTILITIES_VERSION
+  ${NIRAL_UTILITIES_MAJOR_VERSION}.${NIRAL_UTILITIES_MINOR_VERSION}.${NIRAL_UTILITIES_PATCH_VERSION})
+
 cmake_minimum_required(VERSION 3.1)
 cmake_policy(VERSION 3.1)
 
@@ -49,6 +55,13 @@ ITKIOGE
 MGHIO
 )
 
+# Describe property
+define_property(GLOBAL PROPERTY niral_utilities_LIBRARIES
+    BRIEF_DOCS "Defined libraries"
+    FULL_DOCS "Defined libraries")
+# Initialize property
+set_property(GLOBAL PROPERTY niral_utilities_LIBRARIES "")
+
 include_directories( Common )
 
 option( BUILD_TESTING   "Build the testing tree" ON )
@@ -59,57 +72,57 @@ endif()
 
 option(COMPILE_IMAGEMATH "Compile ImageMath." ON)
 if(COMPILE_IMAGEMATH)
-  subdirs(ImageMath)
+  add_subdirectory(ImageMath)
 endif()
 
 option(COMPILE_IMAGESTAT "Compile ImageStat." OFF)
 if(COMPILE_IMAGESTAT)
-  subdirs(ImageStat)
+  add_subdirectory(ImageStat)
 endif()
 
 option(COMPILE_CROPTOOLS "Compile CropTools." ON)
 if(COMPILE_CROPTOOLS)
-  subdirs(CropTools)
+  add_subdirectory(CropTools)
 endif()
 
 option(COMPILE_CONVERTITKFORMATS "Compile convertITKformats." OFF)
 if(COMPILE_CONVERTITKFORMATS)
-  subdirs(convertITKformats)
+  add_subdirectory(convertITKformats)
 endif()
 
 option(COMPILE_DWI_NIFTINRRDCONVERSION "Compile DWI_NiftiNrrdConversion." ON)
 if(COMPILE_DWI_NIFTINRRDCONVERSION)
-  subdirs(DWI_NiftiNrrdConversion)
+  add_subdirectory(DWI_NiftiNrrdConversion)
 endif()
 
 option(COMPILE_POLYDATATRANSFORM "Compile PolydataTransform." ON)
 if(COMPILE_POLYDATATRANSFORM)
-  subdirs(PolydataTransform)
+  add_subdirectory(PolydataTransform)
 endif()
 
 option(COMPILE_POLYDATAMERGE "Compile PolydataMerge." ON)
 if(COMPILE_POLYDATAMERGE)
-  subdirs(PolydataMerge)
+  add_subdirectory(PolydataMerge)
 endif()
 
 option(COMPILE_CURVECOMPARE "Compile CurveCompare." OFF)
 if(COMPILE_CURVECOMPARE)
-  subdirs(CurveCompare)
+  add_subdirectory(CurveCompare)
 endif()
 
 option(COMPILE_MULTIATLASSEG "Compile MultiAtlasSeg." OFF)
 if(COMPILE_MULTIATLASSEG)
-  subdirs(MultiAtlasSeg)
+  add_subdirectory(MultiAtlasSeg)
 endif()
 
 option(COMPILE_DTITensorNormalization "Compile DTITensorNormalization." OFF)
 if(COMPILE_DTITensorNormalization)
-  subdirs(DTITensorNormalization)
+  add_subdirectory(DTITensorNormalization)
 endif()
 
 option(COMPILE_MAURERDISTANCETRANSFORM "Compile MaurerDistanceTransform." OFF)
 if(COMPILE_MAURERDISTANCETRANSFORM)
-  subdirs(MaurerDistanceTransform)
+  add_subdirectory(MaurerDistanceTransform)
 endif()
 
 niral_utilitiesExternalProject(
@@ -177,7 +190,7 @@ INSTALL
 
 option(COMPILE_Unsupported "Compile Unsupported Tools." OFF)
 if(COMPILE_Unsupported)
-  subdirs(Unsupported)
+  add_subdirectory(Unsupported)
 endif()
 
 # Offer the user the choice of overriding the installation directories
@@ -214,6 +227,8 @@ file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}"
    "${INSTALL_INCLUDE_DIR}")
 # ... for the build tree
 set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
+get_property(CONF_LIBRARIES GLOBAL PROPERTY niral_utilities_LIBRARIES)
+
 configure_file(niral_utilitiesConfig.cmake.in
   "${PROJECT_BINARY_DIR}/niral_utilitiesConfig.cmake" @ONLY)
 # ... for the install tree
