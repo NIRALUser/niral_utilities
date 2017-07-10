@@ -48,7 +48,6 @@ file(GLOB LIBRARY_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/Library/*.txx ${CMAKE_CURR
 set_target_properties(polydatatransform PROPERTIES
   PUBLIC_HEADER "${LIBRARY_HEADERS}")
 
-message(STATUS "Installing headers for polydatatransform: " ${LIBRARY_HEADERS})
 install( TARGETS polydatatransform 
     EXPORT niral_utilitiesTargets
     RUNTIME DESTINATION bin 
