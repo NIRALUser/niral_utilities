@@ -225,7 +225,7 @@ export(PACKAGE niral_utilities)
 file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}"
    "${INSTALL_INCLUDE_DIR}")
 # ... for the build tree
-set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
+set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/PolydataTransform/Library")
 get_property(CONF_LIBRARIES GLOBAL PROPERTY niral_utilities_LIBRARIES)
 configure_file(niral_utilitiesConfig.cmake.in
   "${PROJECT_BINARY_DIR}/niral_utilitiesConfig.cmake" @ONLY)
