@@ -2,7 +2,7 @@ project(NIRAL_UTILITIES)
 
 set(NIRAL_UTILITIES_MAJOR_VERSION 2)
 set(NIRAL_UTILITIES_MINOR_VERSION 0)
-set(NIRAL_UTILITIES_PATCH_VERSION 4)
+set(NIRAL_UTILITIES_PATCH_VERSION 5)
 set(NIRAL_UTILITIES_VERSION
   ${NIRAL_UTILITIES_MAJOR_VERSION}.${NIRAL_UTILITIES_MINOR_VERSION}.${NIRAL_UTILITIES_PATCH_VERSION})
 
@@ -227,11 +227,11 @@ file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}"
 # ... for the build tree
 set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
 get_property(CONF_LIBRARIES GLOBAL PROPERTY niral_utilities_LIBRARIES)
-
 configure_file(niral_utilitiesConfig.cmake.in
   "${PROJECT_BINARY_DIR}/niral_utilitiesConfig.cmake" @ONLY)
+
 # ... for the install tree
-set(CONF_INCLUDE_DIRS "\${NIRAL_UTILITIES_CMAKE_DIR}/${REL_INCLUDE_DIR}")
+set(CONF_INCLUDE_DIRS "\${niral_utilities_CMAKE_DIR}/${REL_INCLUDE_DIR}")
 configure_file(niral_utilitiesConfig.cmake.in
   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/niral_utilitiesConfig.cmake" @ONLY)
 # ... for both
