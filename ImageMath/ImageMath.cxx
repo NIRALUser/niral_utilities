@@ -283,9 +283,8 @@ void GetImageType( char* fileName ,
                    itk::ImageIOBase::IOPixelType &pixelType ,
                    itk::ImageIOBase::IOComponentType &componentType )
 {
-  typedef itk::Image< unsigned char , 3 > ImageType ;
-  itk::ImageFileReader< ImageType >::Pointer imageReader =
-    itk::ImageFileReader< ImageType >::New();
+  itk::ImageFileReader< BinaryImageType >::Pointer imageReader =
+    itk::ImageFileReader< BinaryImageType >::New();
   imageReader->SetFileName( fileName ) ;
   imageReader->UpdateOutputInformation() ;
   pixelType = imageReader->GetImageIO()->GetPixelType() ;
