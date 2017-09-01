@@ -144,12 +144,10 @@ int main(int argc, const char* argv[])
   typedef   RescaleIntensityImageFilter< IntImageType,  IntImageType> RescaleIntFilterType;
   typedef   MinimumMaximumImageCalculator<IntImageType> MinMaxIntCalcType;
   typedef   CastImageFilter< IntImageType , ImageType>  CastIntFilterType;
-  typedef   ImageRegionIterator< IntImageType >         IntIterator;
 
   typedef   double                                         DoublePixelType;
   typedef   Image<DoublePixelType,ImageDimension>          DoubleImageType;
   typedef   ImageFileReader< DoubleImageType >             VolumeDoubleReaderType;
-  typedef   RescaleIntensityImageFilter< DoubleImageType,  DoubleImageType> RescaleDoubleFilterType;
   typedef   MinimumMaximumImageCalculator<DoubleImageType> MinMaxDoubleCalcType;
   typedef   CastImageFilter< DoubleImageType , ImageType>  CastDoubleFilterType;
   typedef   ImageRegionIterator< DoubleImageType >         DoubleIterator;

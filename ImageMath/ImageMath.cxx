@@ -3005,7 +3005,6 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     //Resample Image
     typedef itk::NearestNeighborInterpolateImageFunction< ImageType , double > NearestNeighborInterpolateType ;
     NearestNeighborInterpolateType::Pointer interpolator = NearestNeighborInterpolateType::New() ;
-    typedef itk::ResampleImageFilter< ImageType, ImageType > ResamplerType ;
     itk::ResampleImageFilter< ImageType , ImageType >::Pointer resampler ;
     resampler = itk::ResampleImageFilter< ImageType , ImageType >::New() ;
     resampler->SetOutputParametersFromImage( inputImage ) ;

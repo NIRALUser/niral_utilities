@@ -76,7 +76,6 @@ int main(int argc, const char* argv[])
   typedef   float PixelType;
   typedef   Image<PixelType,ImageDimension>  ImageType;
 
-  typedef ImageFileReader< ImageType > VolumeReaderType;
   typedef ImageFileWriter< ImageType > VolumeWriterType;
   typedef ImageRegionIterator< ImageType > IteratorType;
 
