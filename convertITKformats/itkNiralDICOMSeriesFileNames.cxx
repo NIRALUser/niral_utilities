@@ -15,14 +15,16 @@
  *  limitations under the License.
  *
  *=========================================================================*/
-#ifndef _itkDICOMSeriesFileNames_h
-#define _itkDICOMSeriesFileNames_h
+#ifndef _itkNiralDICOMSeriesFileNames_h
+#define _itkNiralDICOMSeriesFileNames_h
 
 #include "itksys/SystemTools.hxx"
 #include "itksys/Directory.hxx"
-#include "itkDICOMSeriesFileNames.h"
+#include "itkNiralDICOMSeriesFileNames.h"
 
 namespace itk
+{
+namespace niral
 {
 DICOMSeriesFileNames
 ::DICOMSeriesFileNames():
@@ -272,6 +274,7 @@ DICOMSeriesFileNames
     os << indent << "FileNames[" << i << "]: " << m_FileNames[i] << std::endl;
     }
 }
+} //namespace Niral
 } //namespace ITK
 
 #endif

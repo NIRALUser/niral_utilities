@@ -15,7 +15,7 @@
 #include <itkMinimumMaximumImageCalculator.h>
 
 #ifdef DICOM_SUPPORT
-#include <itkDICOMSeriesFileNames.h>
+#include <itkNiralDICOMSeriesFileNames.h>
 #include <itkImageSeriesReader.h>
 #include <DICOMAppHelper.h>
 #include <DICOMParser.h>
@@ -253,15 +253,15 @@ int main(int argc, const char* argv[])
     }
     else if (dicomOn || dicom2On)
     {
-      DICOMSeriesFileNames::Pointer sortFilename = DICOMSeriesFileNames::New();
+      niral::DICOMSeriesFileNames::Pointer sortFilename = niral::DICOMSeriesFileNames::New();
       sortFilename->SetDirectory(inputFileName);
       if (dicomOn)
       {
-        sortFilename->SetFileNameSortingOrder(DICOMSeriesFileNames::SortBySliceLocation);
+        sortFilename->SetFileNameSortingOrder(niral::DICOMSeriesFileNames::SortBySliceLocation);
       }
       else
       {
-        sortFilename->SetFileNameSortingOrder(DICOMSeriesFileNames::SortByImagePositionPatient);
+        sortFilename->SetFileNameSortingOrder(niral::DICOMSeriesFileNames::SortByImagePositionPatient);
       }
       names = sortFilename->GetFileNames();
 

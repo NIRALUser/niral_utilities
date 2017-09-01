@@ -17,7 +17,7 @@
  *=========================================================================*/
 #ifndef itkDICOMSeriesFileNames_h
 #define itkDICOMSeriesFileNames_h
-#if !defined( ITK_LEGACY_REMOVE )
+//#if !defined( ITK_LEGACY_REMOVE )
 
 
 #include "itkObject.h"
@@ -29,6 +29,8 @@
 #include "DICOMAppHelper.h"
 
 namespace itk
+{
+namespace niral
 {
 /** \class DICOMSeriesFileNames
  * \brief Generate an ordered sequence of filenames.
@@ -171,7 +173,8 @@ private:
   TimeStamp m_DirectorySetTime;
   TimeStamp m_DirectoryScanTime;
 };
+} //namespace Niral
 } //namespace ITK
 
-#endif //#if !defined( ITK_LEGACY_REMOVE )
+//#endif //#if !defined( ITK_LEGACY_REMOVE )
 #endif // itkDICOMSeriesFileNames_h
