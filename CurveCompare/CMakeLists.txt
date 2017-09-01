@@ -1,7 +1,6 @@
 project(CurveCompare)
 
-cmake_minimum_required(VERSION 2.8)
-cmake_policy(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5)
 
 find_package(GenerateCLP REQUIRED)
 if(GenerateCLP_FOUND)

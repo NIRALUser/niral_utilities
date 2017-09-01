@@ -1,7 +1,6 @@
+cmake_minimum_required(VERSION 3.5)
 PROJECT(DTITensorNormalization)
 
-cmake_minimum_required(VERSION 3.1)
-cmake_policy(VERSION 3.1)
 
 
 

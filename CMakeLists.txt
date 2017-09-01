@@ -6,8 +6,7 @@ set(NIRAL_UTILITIES_PATCH_VERSION 5)
 set(NIRAL_UTILITIES_VERSION
   ${NIRAL_UTILITIES_MAJOR_VERSION}.${NIRAL_UTILITIES_MINOR_VERSION}.${NIRAL_UTILITIES_PATCH_VERSION})
 
-cmake_minimum_required(VERSION 3.1)
-cmake_policy(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5)
 
 set(CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_SOURCE_DIR}/CMake
@@ -213,37 +212,3 @@ foreach(p LIB BIN INCLUDE CMAKE)
     set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
   endif()
 endforeach()
-
-# The interesting stuff goes here
-# ===============================
- 
-# Export the package for use from the build-tree
-# (this registers the build-tree with a global CMake-registry)
-export(PACKAGE niral_utilities)
- 
-# Create the FooBarConfig.cmake and FooBarConfigVersion files
-file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}"
-   "${INSTALL_INCLUDE_DIR}")
-# ... for the build tree
-set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/PolydataTransform/Library")
-get_property(CONF_LIBRARIES GLOBAL PROPERTY niral_utilities_LIBRARIES)
-configure_file(niral_utilitiesConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/niral_utilitiesConfig.cmake" @ONLY)
-
-# ... for the install tree
-set(CONF_INCLUDE_DIRS "\${niral_utilities_CMAKE_DIR}/${REL_INCLUDE_DIR}")
-configure_file(niral_utilitiesConfig.cmake.in
-  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/niral_utilitiesConfig.cmake" @ONLY)
-# ... for both
-# configure_file(FooBarConfigVersion.cmake.in
-#   "${PROJECT_BINARY_DIR}/FooBarConfigVersion.cmake" @ONLY)
- 
-# Install the FooBarConfig.cmake and FooBarConfigVersion.cmake
-install(FILES
-  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/niral_utilitiesConfig.cmake"
-  #"${PROJECT_BINARY_DIR}/FooBarConfigVersion.cmake"
-  DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
- 
-# Install the export set for use with the install-tree
-install(EXPORT niral_utilitiesTargets DESTINATION
-  "${INSTALL_CMAKE_DIR}" COMPONENT dev)

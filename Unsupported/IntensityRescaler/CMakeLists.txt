@@ -1,7 +1,6 @@
 project(IntensityRescaler)
 
-cmake_minimum_required(VERSION 2.8)
-cmake_policy(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5)
 
 #snippet taken from: http://www.guyrutenberg.com/2014/01/05/enabling-c11-c0x-in-cmake/
 include(CheckCXXCompilerFlag)
