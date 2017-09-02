@@ -32,32 +32,32 @@ set(INSTALL_BIN_DIR bin CACHE PATH "Installation directory for executables")
 set(INSTALL_INCLUDE_DIR include CACHE PATH "Installation directory for header files")
 
 set(ITK_IO_MODULES_USED
-# IO Components
-ITKCommon
-ITKIOImageBase
-ITKIOGDCM
-ITKIOGIPL
-ITKIOMeta
-ITKIONIFTI
-ITKIONRRD
-ITKIOTIFF
-ITKIOJPEG
-ITKIOBMP
-ITKIOPNG
-ITKIOTransformInsightLegacy
-ITKIOVTK
-ITKIOSpatialObjects
-ITKIOTransformBase
-ITKIOHDF5
-ITKIOTransformMatlab
-ITKIOTransformHDF5
-ITKIOLSM
-ITKIOStimulate
-ITKIOBioRad
-ITKIOMRC
-ITKIOGE
-MGHIO
-)
+  # IO Components
+  ITKCommon
+  ITKIOImageBase
+  ITKIOGDCM
+  ITKIOGIPL
+  ITKIOMeta
+  ITKIONIFTI
+  ITKIONRRD
+  ITKIOTIFF
+  ITKIOJPEG
+  ITKIOBMP
+  ITKIOPNG
+  ITKIOTransformInsightLegacy
+  ITKIOVTK
+  ITKIOSpatialObjects
+  ITKIOTransformBase
+  ITKIOHDF5
+  ITKIOTransformMatlab
+  ITKIOTransformHDF5
+  ITKIOLSM
+  ITKIOStimulate
+  ITKIOBioRad
+  ITKIOMRC
+  ITKIOGE
+  MGHIO
+  )
 
 # Describe property
 define_property(GLOBAL PROPERTY niral_utilities_LIBRARIES
@@ -125,67 +125,67 @@ if(COMPILE_MAURERDISTANCETRANSFORM)
 endif()
 
 niral_utilitiesExternalProject(
-ITKTransformTools
-GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ITKTransformTools.git"
-GIT_TAG "c7fb32d5d6f1cd6c0e57f1b5dfc0d1f58e371aae"
-ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
-DEPENDS ITK
-INSTALL
-)
+  ITKTransformTools
+  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ITKTransformTools.git"
+  GIT_TAG "c7fb32d5d6f1cd6c0e57f1b5dfc0d1f58e371aae"
+  ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+  DEPENDS ITK
+  INSTALL
+  )
 
 niral_utilitiesExternalProject(
-ReadImageHeader
-GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ReadImageHeader.git"
-GIT_TAG "91484acae0e1fbb814ccccab329c77b1d1323362"
-ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
-DEPENDS SlicerExecutionModel ITK
-INSTALL
-)
+  ReadImageHeader
+  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ReadImageHeader.git"
+  GIT_TAG "91484acae0e1fbb814ccccab329c77b1d1323362"
+  ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+  DEPENDS SlicerExecutionModel ITK
+  INSTALL
+  )
 
 niral_utilitiesExternalProject(
-ImageNoise
-GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ImageNoise.git"
-GIT_TAG "98e6a4056cc8d532d3e26201ba955342841fb515"
-ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
-DEPENDS SlicerExecutionModel ITK
-INSTALL
-)
+  ImageNoise
+  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ImageNoise.git"
+  GIT_TAG "98e6a4056cc8d532d3e26201ba955342841fb515"
+  ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+  DEPENDS SlicerExecutionModel ITK
+  INSTALL
+  )
 
 niral_utilitiesExternalProject(
-CombineDWIs
-GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/CombineDWIs.git"
-GIT_TAG "37d340b4b80a2b0735fbddcc450bf01d89b5b9bc"
-ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
-DEPENDS SlicerExecutionModel ITK
-INSTALL
-)
+  CombineDWIs
+  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/CombineDWIs.git"
+  GIT_TAG "37d340b4b80a2b0735fbddcc450bf01d89b5b9bc"
+  ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+  DEPENDS SlicerExecutionModel ITK
+  INSTALL
+  )
 
 niral_utilitiesExternalProject(
-NormalizeDWIGradientVectors
-GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/NormalizeDWIGradientVectors.git"
-GIT_TAG "e46bd5b7ca395ab7b290da621e329653287ac591"
-ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
-DEPENDS ITK
-INSTALL
-)
+  NormalizeDWIGradientVectors
+  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/NormalizeDWIGradientVectors.git"
+  GIT_TAG "e46bd5b7ca395ab7b290da621e329653287ac591"
+  ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+  DEPENDS ITK
+  INSTALL
+  )
 
 niral_utilitiesExternalProject(
-3D4DImageConversion
-GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/3D4DImageConversion.git"
-GIT_TAG "5a53a98fce967a77c74d8e554d7231dc4c0ba695"
-ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
-DEPENDS SlicerExecutionModel ITK
-INSTALL
-)
+  3D4DImageConversion
+  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/3D4DImageConversion.git"
+  GIT_TAG "5a53a98fce967a77c74d8e554d7231dc4c0ba695"
+  ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+  DEPENDS SlicerExecutionModel ITK
+  INSTALL
+  )
 
 niral_utilitiesExternalProject(
-PolyDataCompression
-GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/PolyDataCompression.git"
-GIT_TAG "141b81712cb065fa890a1f49026495f2ea55fcc2"
-ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
-DEPENDS SlicerExecutionModel ITK VTK
-INSTALL
-)
+  PolyDataCompression
+  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/PolyDataCompression.git"
+  GIT_TAG "141b81712cb065fa890a1f49026495f2ea55fcc2"
+  ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+  DEPENDS SlicerExecutionModel ITK VTK
+  INSTALL
+  )
 
 # CurveCompare: It compares two fibers file with different metrics: euclidean
 # distance (closest points), tangent metric, curvature metric, overlap, probabilistic

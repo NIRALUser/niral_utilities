@@ -8,7 +8,7 @@ if( COMPILE_IntensityRescaler_GUI )
     ${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Display/Window3D
     ${QT_INCLUDE_DIR}
     ${GLUT_INCLUDE_DIR}
-   )
+    )
 
   link_libraries(
     ITKCommon
@@ -16,12 +16,12 @@ if( COMPILE_IntensityRescaler_GUI )
     ${QT_QT_LIBRARY}
     ${QT_LIBRARIES}
     ${GLUT_LIBRARIES}
-   )
+    )
 
   set(Display_MOC_SRCS
     Window2D/QtWindow2D.h
     Plot/IntensityCurveBox.h
-   )
+    )
 
   if(QT_WRAP_CPP)
     qt_wrap_cpp(Display Displaymoced_SRCS ${Display_MOC_SRCS})
@@ -40,7 +40,7 @@ if( COMPILE_IntensityRescaler_GUI )
     Plot/BarGraph2DBox.cxx
     Plot/IntensityCurveVTK.cxx
     Plot/IntensityCurveBox.cxx
-  )
+    )
 
   add_library(Display ${Display_SRCS} )
 
@@ -49,15 +49,15 @@ else()
     ${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Datatypes
     ${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Display/Common
     ${NIRAL_UTILITIES_SOURCE_DIR}/Libraries/Display/Plot
-   )
+    )
   link_libraries(
     ${VTK_LIBRARIES}
     vtkFiltering
-   )
+    )
 
   set(Display_SRCS
     Plot/IntensityCurveVTK.cxx
-  )
+    )
 
   add_library(Display ${Display_SRCS} )
 endif()

@@ -12,7 +12,7 @@ find_package(ITK COMPONENTS
   ITKStatistics
   ITKThresholding
   ${ITK_IO_MODULES_USED}
-)
+  )
 include(${ITK_USE_FILE})
 target_link_libraries( ImageStat ${ITK_LIBRARIES} )
 

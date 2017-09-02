@@ -26,7 +26,7 @@ ExternalData_Add_Test(ImageMathData NAME MultiOtsuNormalRun COMMAND $<TARGET_FIL
   -otsuMultipleThresholds
   -otsuPara
   3,0,128
-)
+  )
 
 # Add a build target to populate the real data.
 ExternalData_Add_Target(ImageMathData)

@@ -13,12 +13,14 @@ if( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
 endif()
 
 
-set( SOURCES ${SOURCES}
-itkCorrespondenceEvaluator.h itkCorrespondenceEvaluator.txx)
-
+set(SOURCES
+  ${SOURCES}
+  itkCorrespondenceEvaluator.h
+  itkCorrespondenceEvaluator.txx
+  )
 
 add_executable(CorrespondenceEvaluator ${SOURCES} main.cpp)
-target_link_libraries(  CorrespondenceEvaluator
-			ITKNumerics ITKCommon ITKBasicFilters ITKStatistics ITKIO
-)
+target_link_libraries(CorrespondenceEvaluator
+  ITKNumerics ITKCommon ITKBasicFilters ITKStatistics ITKIO
+  )
 

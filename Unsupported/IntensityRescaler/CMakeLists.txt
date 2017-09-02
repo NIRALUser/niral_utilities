@@ -59,7 +59,7 @@ if( COMPILE_IntensityRescaler_GUI )
     ${GLUT_INCLUDE_DIR}
     Libraries/IO/Qt
     Libraries/Display/Window2D
-  )
+    )
   if(WIN32)
     #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /subsystem:windows")
   endif()
@@ -71,20 +71,20 @@ if( COMPILE_IntensityRescaler_GUI )
   include(${CMAKE_ROOT}/Modules/FindGLU.cmake)
 
   set(IntensityRescaler_MOC_SRCS
-     IntensityRescalerGUIControls.h
-  )
+    IntensityRescalerGUIControls.h
+    )
   if(QT_WRAP_CPP)
     qt_wrap_cpp(IntensityRescaler IntensityRescalerMoced_SRCS ${IntensityRescaler_MOC_SRCS})
   endif()
   set( IntensityRescaler_GUI_CXX_SRCS 
     IntensityRescalerGUIControls.cxx
     BatchControls.cxx
-  )
+    )
   set(IntensityRescaler_GUI_SRCS
     Batch.ui
     HistoGUI.ui
     IntensityRescalerGUI.ui
-  )
+    )
   if(QT_WRAP_UI)
 	  qt_wrap_ui(IntensityRescaler IntensityRescaler_HDRS  IntensityRescaler_SRCS  ${IntensityRescaler_GUI_SRCS} )
   endif()
@@ -93,16 +93,16 @@ if( COMPILE_IntensityRescaler_GUI )
   add_definitions( -DQT_GUI )
 
   set(OPEN_GL_LIBRARIES
-      ${QT_GL_LIBRARY}
-      ${OPENGL_glu_LIBRARY}
-      ${OPENGL_LIBRARY}
-      ${GLUT_LIBRARIES}
-     )
+    ${QT_GL_LIBRARY}
+    ${OPENGL_glu_LIBRARY}
+    ${OPENGL_LIBRARY}
+    ${GLUT_LIBRARIES}
+    )
   set( QT_LIBRARIES_LIST
-  ${QT_QT_LIBRARY}
-  ${QT_LIBRARIES}
-  ${QT_QTMAIN_LIBRARY}
-  )
+    ${QT_QT_LIBRARY}
+    ${QT_LIBRARIES}
+    ${QT_QTMAIN_LIBRARY}
+    )
 else()
   add_definitions( -DQT_NO_GUI )
 endif()
@@ -111,7 +111,7 @@ set(IntensityRescaler_SRCS
   ${IntensityRescaler_GUI_CXX_SRCS}
   IntensityRescaler.cxx
   IntensityRescalerCommandLine.cxx
-)
+  )
 
 subdirs(Libraries)
 
@@ -125,7 +125,7 @@ target_link_libraries(IntensityRescaler
   ${OPEN_GL_LIBRARIES}
   ${VTK_LIBRARIES}
   vtkFiltering
- )
+  )
 
 install( TARGETS IntensityRescaler RUNTIME DESTINATION bin )
 

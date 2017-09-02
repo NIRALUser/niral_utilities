@@ -4,20 +4,15 @@ cmake_minimum_required(VERSION 3.5)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(ITK COMPONENTS
+find_package(ITK REQUIRED COMPONENTS
   ITKCommon
   ITKDICOMParser
   ITKIOImageBase
   ITKImageFilterBase
   ITKImageIntensity
   ${ITK_IO_MODULES_USED}
-)
-
-if(ITK_FOUND)
-   include(${ITK_USE_FILE})
-else()
-   message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-endif()
+  )
+include(${ITK_USE_FILE})
 
 #
 # To remove the requirement on ITK built with ITKV3_COMPATIBILITY option enabled.

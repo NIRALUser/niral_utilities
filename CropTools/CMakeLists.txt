@@ -6,7 +6,7 @@ if(CMAKE_COMPILER_2005)
   add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
 endif()
 
-find_package(ITK COMPONENTS
+find_package(ITK REQUIRED COMPONENTS
   ITKCommon
   ITKDiffusionTensorImage
   ITKIOImageBase
@@ -14,13 +14,8 @@ find_package(ITK COMPONENTS
   ITKImageFilterBase
   ITKImageGrid
   ${ITK_IO_MODULES_USED}
-)
-if(ITK_FOUND)
-   include(${ITK_USE_FILE})
-else()
-   message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-endif()
-
+  )
+include(${ITK_USE_FILE})
 
 add_executable(Crop4DImage Crop4DImage.cxx )
 target_link_libraries( Crop4DImage ${ITK_LIBRARIES} )
