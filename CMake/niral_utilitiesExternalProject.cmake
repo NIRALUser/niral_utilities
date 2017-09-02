@@ -44,9 +44,16 @@ function( niral_utilitiesExternalProject projectname)
       )
   endif()
 
+  # Disable the "You are in 'detached HEAD' state." warning.
+  set(git_config_arg)
+  if(CMAKE_VERSION VERSION_GREATER "3.7.2")
+    set(git_config_arg GIT_CONFIG "advice.detachedHead=false")
+  endif()
+
   ExternalProject_Add(${projectname}
     GIT_REPOSITORY ${${proj}_REPOSITORY}
     GIT_TAG ${${proj}_GIT_TAG}
+    ${git_config_arg}
     SOURCE_DIR ${proj}
     BINARY_DIR ${proj}-build
     CMAKE_GENERATOR ${gen}
