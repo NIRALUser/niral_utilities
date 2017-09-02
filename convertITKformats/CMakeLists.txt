@@ -33,12 +33,17 @@ include(${ITK_USE_FILE})
 
 add_definitions(-DDICOM_SUPPORT="True")
 
-add_executable( convertITKformats convertITKformats.cxx itkNiralDICOMSeriesFileNames.cxx)
-add_executable( convertITKformats4D convertITKformats4D.cxx itkNiralDICOMSeriesFileNames.cxx)
-add_executable( convertTextToImage convertTextToImage.cxx)
-
-target_link_libraries( convertITKformats ${ITK_LIBRARIES} )
-target_link_libraries( convertITKformats4D ${ITK_LIBRARIES} )
-target_link_libraries( convertTextToImage ${ITK_LIBRARIES} )
-
-install( TARGETS convertITKformats convertITKformats4D convertTextToImage RUNTIME DESTINATION bin )
+niral_add_executable(
+  NAME convertITKformats
+  TARGET_LIBRARIES ${ITK_LIBRARIES}
+  ADDITIONAL_SRCS itkNiralDICOMSeriesFileNames.cxx
+  )
+niral_add_executable(
+  NAME convertITKformats4D
+  TARGET_LIBRARIES ${ITK_LIBRARIES}
+  ADDITIONAL_SRCS itkNiralDICOMSeriesFileNames.cxx
+  )
+niral_add_executable(
+  NAME convertTextToImage
+  TARGET_LIBRARIES ${ITK_LIBRARIES}
+  )

@@ -10,7 +10,7 @@ if( "${position}" EQUAL "-1" )
   message( FATAL_ERROR "MultiAtlasSeg needs ITKv4 compiled with ITKReview enabled" )
 endif()
 
-add_executable(MultiAtlasSeg MultiAtlasSeg.cxx)
-target_link_libraries(MultiAtlasSeg ${ITK_LIBRARIES})
-
-install( TARGETS MultiAtlasSeg RUNTIME DESTINATION bin )
+niral_add_executable(
+  NAME MultiAtlasSeg
+  TARGET_LIBRARIES ${ITK_LIBRARIES}
+  )

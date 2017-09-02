@@ -32,11 +32,15 @@ add_library( ImageMathLib ImageMath.cxx )
 set_target_properties( ImageMathLib PROPERTIES COMPILE_FLAGS "-Dmain=ModuleEntryPoint" ) 
 target_link_libraries( ImageMathLib ${ITK_LIBRARIES} )
 
-add_executable( ImageMath ImageMathApp.cxx )
-target_link_libraries( ImageMath ImageMathLib )
+niral_add_executable(
+  NAME ImageMath
+  SRC ImageMathApp.cxx
+  ADDITIONAL_SRCS
+    ImageMathApp.cxx
+  TARGET_LIBRARIES
+    ImageMathLib
+  )
 
-install( TARGETS ImageMath RUNTIME DESTINATION bin )
-
-IF(BUILD_TESTING)
-  ADD_SUBDIRECTORY(Testing)
-ENDIF(BUILD_TESTING)
+if(BUILD_TESTING)
+  add_subdirectory(Testing)
+endif()

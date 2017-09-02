@@ -17,11 +17,10 @@ find_package(ITK REQUIRED COMPONENTS
   )
 include(${ITK_USE_FILE})
 
-add_executable(Crop4DImage Crop4DImage.cxx )
-target_link_libraries( Crop4DImage ${ITK_LIBRARIES} )
-add_executable(CropDTI CropDTI.cxx )
-target_link_libraries( CropDTI ${ITK_LIBRARIES} )
-add_executable(CropImage CropImage.cxx )
-target_link_libraries( CropImage ${ITK_LIBRARIES} )
 
-install( TARGETS Crop4DImage CropDTI CropImage RUNTIME DESTINATION bin )
+foreach(appname IN ITEMS Crop4DImage CropDTI CropImage)
+  niral_add_executable(
+    NAME ${appname}
+    TARGET_LIBRARIES ${ITK_LIBRARIES}
+    )
+endforeach()

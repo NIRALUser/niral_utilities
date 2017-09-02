@@ -24,6 +24,9 @@ find_package(ITK COMPONENTS
   ITKTransform
   ${ITK_IO_MODULES_USED}
 )
-add_executable(TextureBioMarkerTool TextureBioMarkerTool.cxx)
-target_link_libraries(TextureBioMarkerTool ${ITK_LIBRARIES})
+
+niral_add_executable(
+  NAME TextureBioMarkerTool
+  TARGET_LIBRARIES ${ITK_LIBRARIES}
+  )
 

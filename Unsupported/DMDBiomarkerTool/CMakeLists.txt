@@ -23,6 +23,8 @@ else()
   message(FATAL_ERROR "polyfit not found. Please set polyfit.")
 endif()
 
-add_executable(DMDBioMarkerTool DMDBioMarkerTool.cxx)
-target_link_libraries(DMDBioMarkerTool ${ITK_LIBRARIES} lapack)
+niral_add_executable(
+  NAME DMDBioMarkerTool
+  TARGET_LIBRARIES ${ITK_LIBRARIES} lapack
+  )
 

@@ -15,6 +15,7 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_MODULE_PATH}
   )
 include(gitSetup)
+include(niral_add_executable)
 include(niral_utilitiesExternalProject)
 
 #-----------------------------------------------------------------------------
