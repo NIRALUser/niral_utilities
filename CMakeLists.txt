@@ -146,7 +146,6 @@ niral_utilitiesExternalProject(
   GIT_TAG "c7fb32d5d6f1cd6c0e57f1b5dfc0d1f58e371aae"
   ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
   DEPENDS ITK
-  INSTALL
   )
 
 niral_utilitiesExternalProject(
@@ -155,7 +154,6 @@ niral_utilitiesExternalProject(
   GIT_TAG "91484acae0e1fbb814ccccab329c77b1d1323362"
   ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
   DEPENDS SlicerExecutionModel ITK
-  INSTALL
   )
 
 niral_utilitiesExternalProject(
@@ -164,7 +162,6 @@ niral_utilitiesExternalProject(
   GIT_TAG "98e6a4056cc8d532d3e26201ba955342841fb515"
   ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
   DEPENDS SlicerExecutionModel ITK
-  INSTALL
   )
 
 niral_utilitiesExternalProject(
@@ -173,7 +170,6 @@ niral_utilitiesExternalProject(
   GIT_TAG "37d340b4b80a2b0735fbddcc450bf01d89b5b9bc"
   ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
   DEPENDS SlicerExecutionModel ITK
-  INSTALL
   )
 
 niral_utilitiesExternalProject(
@@ -182,7 +178,6 @@ niral_utilitiesExternalProject(
   GIT_TAG "e46bd5b7ca395ab7b290da621e329653287ac591"
   ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
   DEPENDS ITK
-  INSTALL
   )
 
 niral_utilitiesExternalProject(
@@ -191,7 +186,6 @@ niral_utilitiesExternalProject(
   GIT_TAG "5a53a98fce967a77c74d8e554d7231dc4c0ba695"
   ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
   DEPENDS SlicerExecutionModel ITK
-  INSTALL
   )
 
 niral_utilitiesExternalProject(
@@ -200,7 +194,6 @@ niral_utilitiesExternalProject(
   GIT_TAG "141b81712cb065fa890a1f49026495f2ea55fcc2"
   ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
   DEPENDS SlicerExecutionModel ITK VTK
-  INSTALL
   )
 
 # CurveCompare: It compares two fibers file with different metrics: euclidean
@@ -212,7 +205,6 @@ niral_utilitiesExternalProject(
   GIT_TAG 6666b32d1fec977ffc2c84742e9b65620fc71b97
   ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
   DEPENDS SlicerExecutionModel ITK VTK
-  INSTALL
   )
 
 option(COMPILE_Unsupported "Compile Unsupported Tools." OFF)
