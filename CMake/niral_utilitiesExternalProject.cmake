@@ -38,6 +38,12 @@ function( niral_utilitiesExternalProject projectname)
       )
   endif()
 
+  if(DEFINED CMAKE_BUILD_TYPE)
+    list(APPEND _ep_ADDITIONAL_OPTIONS
+      -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
+      )
+  endif()
+
   ExternalProject_Add(${projectname}
     GIT_REPOSITORY ${${proj}_REPOSITORY}
     GIT_TAG ${${proj}_GIT_TAG}
@@ -45,7 +51,6 @@ function( niral_utilitiesExternalProject projectname)
     BINARY_DIR ${proj}-build
     CMAKE_GENERATOR ${gen}
     CMAKE_ARGS
-      -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
       -DCMAKE_SKIP_RPATH:BOOL=${CMAKE_SKIP_RPATH}
       -DCMAKE_MODULE_PATH:PATH=${CMAKE_MODULE_PATH}
       -DCMAKE_CXX_COMPILER:PATH=${CMAKE_CXX_COMPILER}

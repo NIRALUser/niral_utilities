@@ -8,6 +8,7 @@ set(NIRAL_UTILITIES_VERSION
 
 cmake_minimum_required(VERSION 3.5)
 
+#-----------------------------------------------------------------------------
 set(CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_SOURCE_DIR}/CMake
   ${CMAKE_CURRENT_BINARY_DIR}/CMake
@@ -15,12 +16,25 @@ set(CMAKE_MODULE_PATH
   )
 include(gitSetup)
 include(niral_utilitiesExternalProject)
-#-----------------------------------------------------------------------------
 
+#-----------------------------------------------------------------------------
 if(CMAKE_COMPILER_2005)
   add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
 endif()
 
+#-----------------------------------------------------------------------------
+# Set a default build type if none was specified
+#-----------------------------------------------------------------------------
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to 'Debug' as none was specified.")
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
+  mark_as_advanced(CMAKE_BUILD_TYPE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
+    "MinSizeRel" "RelWithDebInfo")
+endif()
+
+#-----------------------------------------------------------------------------
 if(${CMAKE_SOURCE_DIR} STREQUAL ${NIRAL_UTILITIES_SOURCE_DIR})
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${NIRAL_UTILITIES_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${NIRAL_UTILITIES_BINARY_DIR}/lib CACHE PATH "Single output directory for building all shared libraries.")
@@ -32,6 +46,7 @@ set(INSTALL_LIB_DIR lib CACHE PATH "Installation directory for libraries")
 set(INSTALL_BIN_DIR bin CACHE PATH "Installation directory for executables")
 set(INSTALL_INCLUDE_DIR include CACHE PATH "Installation directory for header files")
 
+#-----------------------------------------------------------------------------
 set(ITK_IO_MODULES_USED
   # IO Components
   ITKCommon
