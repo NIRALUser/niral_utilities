@@ -52,7 +52,6 @@ else()
     )
   link_libraries(
     ${VTK_LIBRARIES}
-    vtkFiltering
     )
 
   set(Display_SRCS

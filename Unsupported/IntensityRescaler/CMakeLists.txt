@@ -116,7 +116,6 @@ target_link_libraries(IntensityRescaler
   ${QT_LIBRARIES_LIST}
   ${OPEN_GL_LIBRARIES}
   ${VTK_LIBRARIES}
-  vtkFiltering
   )
 
 install( TARGETS IntensityRescaler RUNTIME DESTINATION bin )
