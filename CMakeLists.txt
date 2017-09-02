@@ -76,6 +76,10 @@ set(ITK_IO_MODULES_USED
   MGHIO
   )
 
+if(NOT VTK_RENDERING_BACKEND)
+  set(VTK_RENDERING_BACKEND OpenGL)
+endif()
+
 # Describe property
 define_property(GLOBAL PROPERTY niral_utilities_LIBRARIES
     BRIEF_DOCS "Defined libraries"
@@ -191,9 +195,12 @@ niral_utilitiesExternalProject(
 
 niral_utilitiesExternalProject(
   PolyDataCompression
-  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/PolyDataCompression.git"
-  GIT_TAG "141b81712cb065fa890a1f49026495f2ea55fcc2"
-  ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+  GIT_REPOSITORY "${git_protocol}://github.com/jcfr/PolyDataCompression.git"
+  GIT_TAG 474ad5f5107174aba37058458d2590aa00d74d66
+  ADDITIONAL_OPTIONS
+    -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+    -DVTK_RENDERING_BACKEND:STRING=${VTK_RENDERING_BACKEND}
+    -DBUILD_TESTING:BOOL=${BUILD_TESTING}
   DEPENDS SlicerExecutionModel ITK VTK
   )
 
