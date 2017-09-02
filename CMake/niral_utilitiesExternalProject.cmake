@@ -16,6 +16,8 @@ function( niral_utilitiesExternalProject projectname)
      return()
   endif()
 
+  message(STATUS "Adding external project: ${projectname}")
+
   if(_ep_INSTALL)
     set(install_cmd INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install )
   endif()
