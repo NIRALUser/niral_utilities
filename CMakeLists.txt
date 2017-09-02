@@ -22,8 +22,9 @@ if(CMAKE_COMPILER_2005)
 endif()
 
 if(${CMAKE_SOURCE_DIR} STREQUAL ${NIRAL_UTILITIES_SOURCE_DIR})
-  set(LIBRARY_OUTPUT_PATH ${NIRAL_UTILITIES_BINARY_DIR}/lib CACHE PATH "Single output directory for building all libraries.")
-  set(EXECUTABLE_OUTPUT_PATH ${NIRAL_UTILITIES_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${NIRAL_UTILITIES_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${NIRAL_UTILITIES_BINARY_DIR}/lib CACHE PATH "Single output directory for building all shared libraries.")
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${NIRAL_UTILITIES_BINARY_DIR}/lib CACHE PATH "Single output directory for building all static libraries.")
 endif()
 
 # Offer the user the choice of overriding the installation directories
