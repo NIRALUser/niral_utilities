@@ -5,7 +5,7 @@ include(ExternalProject)
 
 function( niral_utilitiesExternalProject projectname)
   set(options INSTALL)
-  set(oneValueArgs GIT_REPOSITORY GIT_TAG)
+  set(oneValueArgs GIT_REPOSITORY GIT_TAG GIT_SHALLOW)
   set(multiValueArgs ADDITIONAL_OPTIONS DEPENDS)
   cmake_parse_arguments(_ep "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
@@ -50,6 +50,11 @@ function( niral_utilitiesExternalProject projectname)
     set(git_config_arg GIT_CONFIG "advice.detachedHead=false")
   endif()
 
+  set(git_shallow_arg)
+  if(CMAKE_VERSION VERSION_GREATER "3.5.2" AND DEFINED _ep_GIT_SHALLOW)
+    set(git_shallow_arg GIT_SHALLOW ${_ep_GIT_SHALLOW})
+  endif()
+
   foreach(type IN ITEMS Debug MinSizeRel Release RelWithDebInfo)
     string(TOUPPER ${type} uc_type)
     if(CMAKE_CONFIGURATION_TYPES OR "${CMAKE_BUILD_TYPE}" STREQUAL "${type}")
@@ -64,6 +69,7 @@ function( niral_utilitiesExternalProject projectname)
     GIT_REPOSITORY ${${proj}_REPOSITORY}
     GIT_TAG ${${proj}_GIT_TAG}
     ${git_config_arg}
+    ${git_shallow_arg}
     SOURCE_DIR ${proj}
     BINARY_DIR ${proj}-build
     CMAKE_GENERATOR ${gen}
