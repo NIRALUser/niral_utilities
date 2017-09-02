@@ -3,12 +3,8 @@ cmake_minimum_required(VERSION 3.5)
 
 project(TransformDeformationField)
 
-find_package(ITK  REQUIRED)
-if(ITK_FOUND)
-   include(${ITK_USE_FILE})
-else()
-   message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-endif()
+find_package(ITK REQUIRED)
+include(${ITK_USE_FILE})
 
 if( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
   message( FATAL_ERROR "TransformDeformationField needs ITKv3 to compile" )
@@ -17,26 +13,14 @@ endif()
 find_package(SlicerExecutionModel REQUIRED)
 include(${SlicerExecutionModel_USE_FILE})
 
-set(LOCAL_NAME TransformDeformationField)
-set(LOCAL_LIBRARIES ModuleDescriptionParser
-  ITKIO
-  ITKAlgorithms
-  ITKBasicFilters
-  )
-
-INCLUDE_DIRECTORIES(dtiProcessFiles)
-
 SEMMacroBuildCLI(
-  NAME ${LOCAL_NAME}
+  NAME TransformDeformationField
   ${STATIC}
-  TARGET_LIBRARIES ${LOCAL_LIBRARIES}
-  RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
-  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}
-  INSTALL_RUNTIME_DESTINATION ${INSTALL_RUNTIME_DESTINATION}
-  INSTALL_LIBRARY_DESTINATION ${INSTALL_LIBRARY_DESTINATION}
-  INSTALL_ARCHIVE_DESTINATION ${INSTALL_ARCHIVE_DESTINATION}
+  TARGET_LIBRARIES
+    ITKIO
+    ITKAlgorithms
+    ITKBasicFilters
+  INCLUDE_DIRECTORIES
+    dtiProcessFiles
   )
 
-
-install( TARGETS ${LOCAL_NAME} RUNTIME DESTINATION bin )
