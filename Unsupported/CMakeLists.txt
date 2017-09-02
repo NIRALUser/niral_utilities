@@ -1,26 +1,26 @@
 message(WARNING "You are trying to build unsupported software. Beware, there might be errors")
 option(COMPILE_IntensityRescaler "Compile IntensityRescaler" OFF)
 if(COMPILE_IntensityRescaler)
-  subdirs(IntensityRescaler)
+  add_subdirectory(IntensityRescaler)
 endif()
 
 option(COMPILE_TRANSFORMDEFORMATIONFIELD "Compile TransformDeformationField." OFF)
 if(COMPILE_TRANSFORMDEFORMATIONFIELD)
-  subdirs(TransformDeformationField)
+  add_subdirectory(TransformDeformationField)
 endif()
 
 option(COMPILE_CORREVAL "Compile CorrespondenceEvaluator." OFF)
 if(COMPILE_CORREVAL)
-  subdirs(CorrespondenceEvaluator)
+  add_subdirectory(CorrespondenceEvaluator)
 endif()
 
 option(COMPILE_DMDBIOMARKERTOOL "Compile DMDBiomarkerTool." OFF)
 if(COMPILE_DMDBIOMARKERTOOL)
-  subdirs(DMDBiomarkerTool)
+  add_subdirectory(DMDBiomarkerTool)
 endif()
 
 option(COMPILE_TEXTUREBIOMARKERTOOL "Compile TextureBiomarkerTool." OFF)
 if(COMPILE_TEXTUREBIOMARKERTOOL)
-  subdirs(TextureBiomarkerTool)
+  add_subdirectory(TextureBiomarkerTool)
 endif()
 
