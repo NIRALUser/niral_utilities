@@ -1,4 +1,0 @@
-
-CurveCompare is available here : https://github.com/NIRALUser/CurveCompare.git
-It compares two fibers file with different metrics: euclidean distance (closest points), tangent metric, curvature metric, overlap, probabilistic overlap.
-CurveCompare works only with ITK4.

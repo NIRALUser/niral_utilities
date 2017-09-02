@@ -109,11 +109,6 @@ if(COMPILE_POLYDATAMERGE)
   add_subdirectory(PolydataMerge)
 endif()
 
-option(COMPILE_CURVECOMPARE "Compile CurveCompare." OFF)
-if(COMPILE_CURVECOMPARE)
-  add_subdirectory(CurveCompare)
-endif()
-
 option(COMPILE_MULTIATLASSEG "Compile MultiAtlasSeg." OFF)
 if(COMPILE_MULTIATLASSEG)
   add_subdirectory(MultiAtlasSeg)
@@ -191,6 +186,18 @@ ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
 DEPENDS SlicerExecutionModel ITK VTK
 INSTALL
 )
+
+# CurveCompare: It compares two fibers file with different metrics: euclidean
+# distance (closest points), tangent metric, curvature metric, overlap, probabilistic
+# overlap. Works only with ITK4.
+niral_utilitiesExternalProject(
+  CurveCompare
+  GIT_REPOSITORY "${git_protocol}://github.com/jcfr/CurveCompare.git"
+  GIT_TAG 6666b32d1fec977ffc2c84742e9b65620fc71b97
+  ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
+  DEPENDS SlicerExecutionModel ITK VTK
+  INSTALL
+  )
 
 option(COMPILE_Unsupported "Compile Unsupported Tools." OFF)
 if(COMPILE_Unsupported)
