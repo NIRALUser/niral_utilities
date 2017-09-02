@@ -18,8 +18,9 @@ function( niral_utilitiesExternalProject projectname)
 
   message(STATUS "Adding external project: ${projectname}")
 
-  if(_ep_INSTALL)
-    set(install_cmd INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install )
+  set(install_arg)
+  if(NOT _ep_INSTALL)
+    set(install_arg INSTALL_COMMAND ${CMAKE_COMMAND} -E echo)
   endif()
 
   foreach(var ${_ep_DEPENDS})
@@ -64,7 +65,6 @@ function( niral_utilitiesExternalProject projectname)
       -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY:PATH=${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}
       -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:PATH=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
       ${_ep_ADDITIONAL_OPTIONS}
-    INSTALL_COMMAND "" #Just in case we don't want to install this project. ${install_cmd} will be empty and nothing will be installed
-    ${install_cmd}
+    ${install_arg}
   )
 endfunction()
