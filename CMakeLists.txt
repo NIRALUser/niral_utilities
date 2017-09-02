@@ -158,8 +158,8 @@ niral_utilitiesExternalProject(
 
 niral_utilitiesExternalProject(
   ImageNoise
-  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ImageNoise.git"
-  GIT_TAG "98e6a4056cc8d532d3e26201ba955342841fb515"
+  GIT_REPOSITORY "${git_protocol}://github.com/jcfr/ImageNoise.git"
+  GIT_TAG "b44efbd71e4bc2b92a6595134d926dde7c7b5788"
   ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
   DEPENDS SlicerExecutionModel ITK
   )
