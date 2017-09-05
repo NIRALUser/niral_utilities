@@ -1,7 +1,6 @@
 project(TextureBioMarkerTool)
 
-cmake_minimum_required(VERSION 2.8)
-cmake_policy(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5)
 
 find_package(ITK COMPONENTS
   ITKAnisotropicSmoothing
@@ -25,6 +24,9 @@ find_package(ITK COMPONENTS
   ITKTransform
   ${ITK_IO_MODULES_USED}
 )
-add_executable(TextureBioMarkerTool TextureBioMarkerTool.cxx)
-target_link_libraries(TextureBioMarkerTool ${ITK_LIBRARIES})
+
+niral_add_executable(
+  NAME TextureBioMarkerTool
+  TARGET_LIBRARIES ${ITK_LIBRARIES}
+  )
 

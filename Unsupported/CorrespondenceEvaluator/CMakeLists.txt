@@ -12,13 +12,17 @@ if( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
   message( FATAL_ERROR "CorrespondenceEvaluator needs ITKv3 to compile" )
 endif()
 
-
-set( SOURCES ${SOURCES}
-itkCorrespondenceEvaluator.h itkCorrespondenceEvaluator.txx)
-
-
-add_executable(CorrespondenceEvaluator ${SOURCES} main.cpp)
-target_link_libraries(  CorrespondenceEvaluator
-			ITKNumerics ITKCommon ITKBasicFilters ITKStatistics ITKIO
-)
-
+niral_add_executable(
+  NAME CorrespondenceEvaluator
+  SRC main.cpp
+  ADDITIONAL_SRCS
+    itkCorrespondenceEvaluator.h
+    itkCorrespondenceEvaluator.txx
+  TARGET_LIBRARIES
+    ITKNumerics
+    ITKCommon
+    ITKBasicFilters
+    ITKStatistics
+    ITKIO
+    lapack
+  )

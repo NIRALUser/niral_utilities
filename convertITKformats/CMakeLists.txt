@@ -1,44 +1,49 @@
 project(convertITKformats)
 
-cmake_minimum_required(VERSION 2.8)
-cmake_policy(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5)
 
-message(WARNING "convertITKformats requires the ITK module ITKDeprecated.")
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(ITK COMPONENTS
+find_package(ITK REQUIRED COMPONENTS
   ITKCommon
-  ITKDeprecated
+  ITKDICOMParser
   ITKIOImageBase
   ITKImageFilterBase
   ITKImageIntensity
   ${ITK_IO_MODULES_USED}
-)
+  )
+include(${ITK_USE_FILE})
 
-if(ITK_FOUND)
-   include(${ITK_USE_FILE})
-else()
-   message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-endif()
+#
+# To remove the requirement on ITK built with ITKV3_COMPATIBILITY option enabled.
+# This project includes its own copy of itkDICOMSeriesFileNames.h and
+# itkDICOMSeriesFileNames.cxx:
+#
+# * to avoid conflicts when building against ITK build having ITKV3_COMPATIBILITY
+#   set to ON. The fileshave been renamed to itkNiralDICOMSeriesFileNames and
+#   namespace updated from "itk::" to "itk::niral::".
+#
+# * to find to which revision of ITK the files correspond, lookup the commit messages
+#   associated with itkNiralDICOMSeriesFileNames.(h|cxx) from this project history.
+#
+# * instead of expecting ITKDeprecated module, only ITKDICOMParser module is required.
+#   Since this module is enabled by default (it belongs on ITK_BUILD_DEFAULT_MODULES),
+#   and is not deprecated this is a reasonable expectation.
+#
 
-if( ${ITK_VERSION_MAJOR} VERSION_GREATER 3)
-  if( NOT ITKV3_COMPATIBILITY )
-    message(WARNING "convertITKformats: To support DICOM, ITK needs to be compiled with ITKV3_COMPATIBILITY set to ON")
-  else()
-    list( FIND ITK_MODULES_ENABLED ITKIODCMTK position )
-    if( ${position} GREATER -1 ) #not found: ${position}==-1
-      ADD_DEFINITIONS(-DDICOM_SUPPORT="True")
-    else()
-      message(WARNING "convertITKformats: To support DICOM, ITK needs to be compiled with ITKIODCMTK")
-    endif()
-  endif()
-endif()
+add_definitions(-DDICOM_SUPPORT="True")
 
-add_executable( convertITKformats convertITKformats.cxx)
-add_executable( convertITKformats4D convertITKformats4D.cxx)
-add_executable( convertTextToImage convertTextToImage.cxx)
-
-target_link_libraries( convertITKformats ${ITK_LIBRARIES} )
-target_link_libraries( convertITKformats4D ${ITK_LIBRARIES} )
-target_link_libraries( convertTextToImage ${ITK_LIBRARIES} )
-
-install( TARGETS convertITKformats convertITKformats4D convertTextToImage RUNTIME DESTINATION bin )
+niral_add_executable(
+  NAME convertITKformats
+  TARGET_LIBRARIES ${ITK_LIBRARIES}
+  ADDITIONAL_SRCS itkNiralDICOMSeriesFileNames.cxx
+  )
+niral_add_executable(
+  NAME convertITKformats4D
+  TARGET_LIBRARIES ${ITK_LIBRARIES}
+  ADDITIONAL_SRCS itkNiralDICOMSeriesFileNames.cxx
+  )
+niral_add_executable(
+  NAME convertTextToImage
+  TARGET_LIBRARIES ${ITK_LIBRARIES}
+  )

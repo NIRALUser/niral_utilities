@@ -1,14 +1,12 @@
+
+cmake_minimum_required(VERSION 3.5)
+
 project(DMDBioMarkerTool)
+
 #find_path(LAPACK_LIBRARY_DIR liblapack.a)
-cmake_minimum_required(VERSION 2.8)
-cmake_policy(VERSION 2.8)
 
 find_package(ITK REQUIRED)
-if(ITK_FOUND)
-  include(${ITK_USE_FILE})
-else()
-  message(FATAL_ERROR "ITK not found. Please set ITK_DIR.")
-endif()
+include(${ITK_USE_FILE})
 
 if( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
   message( FATAL_ERROR "TransformDeformationField needs ITKv3 to compile" )
@@ -28,6 +26,8 @@ else()
   message(FATAL_ERROR "polyfit not found. Please set polyfit.")
 endif()
 
-add_executable(DMDBioMarkerTool DMDBioMarkerTool.cxx)
-target_link_libraries(DMDBioMarkerTool ${ITK_LIBRARIES} lapack)
+niral_add_executable(
+  NAME DMDBioMarkerTool
+  TARGET_LIBRARIES ${ITK_LIBRARIES} lapack
+  )
 

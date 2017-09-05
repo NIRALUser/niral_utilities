@@ -15,7 +15,7 @@
 #include <itkMinimumMaximumImageCalculator.h>
 
 #ifdef DICOM_SUPPORT
-#include <itkDICOMSeriesFileNames.h>
+#include <itkNiralDICOMSeriesFileNames.h>
 #include <itkImageSeriesReader.h>
 #include <DICOMAppHelper.h>
 #include <DICOMParser.h>
@@ -144,12 +144,10 @@ int main(int argc, const char* argv[])
   typedef   RescaleIntensityImageFilter< IntImageType,  IntImageType> RescaleIntFilterType;
   typedef   MinimumMaximumImageCalculator<IntImageType> MinMaxIntCalcType;
   typedef   CastImageFilter< IntImageType , ImageType>  CastIntFilterType;
-  typedef   ImageRegionIterator< IntImageType >         IntIterator;
 
   typedef   double                                         DoublePixelType;
   typedef   Image<DoublePixelType,ImageDimension>          DoubleImageType;
   typedef   ImageFileReader< DoubleImageType >             VolumeDoubleReaderType;
-  typedef   RescaleIntensityImageFilter< DoubleImageType,  DoubleImageType> RescaleDoubleFilterType;
   typedef   MinimumMaximumImageCalculator<DoubleImageType> MinMaxDoubleCalcType;
   typedef   CastImageFilter< DoubleImageType , ImageType>  CastDoubleFilterType;
   typedef   ImageRegionIterator< DoubleImageType >         DoubleIterator;
@@ -253,15 +251,15 @@ int main(int argc, const char* argv[])
     }
     else if (dicomOn || dicom2On)
     {
-      DICOMSeriesFileNames::Pointer sortFilename = DICOMSeriesFileNames::New();
+      niral::DICOMSeriesFileNames::Pointer sortFilename = niral::DICOMSeriesFileNames::New();
       sortFilename->SetDirectory(inputFileName);
       if (dicomOn)
       {
-        sortFilename->SetFileNameSortingOrder(DICOMSeriesFileNames::SortBySliceLocation);
+        sortFilename->SetFileNameSortingOrder(niral::DICOMSeriesFileNames::SortBySliceLocation);
       }
       else
       {
-        sortFilename->SetFileNameSortingOrder(DICOMSeriesFileNames::SortByImagePositionPatient);
+        sortFilename->SetFileNameSortingOrder(niral::DICOMSeriesFileNames::SortByImagePositionPatient);
       }
       names = sortFilename->GetFileNames();
 
