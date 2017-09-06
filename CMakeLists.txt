@@ -163,8 +163,8 @@ niral_utilitiesExternalProject(
 
 niral_utilitiesExternalProject(
   ImageNoise
-  GIT_REPOSITORY "${git_protocol}://github.com/jcfr/ImageNoise.git"
-  GIT_TAG "b44efbd71e4bc2b92a6595134d926dde7c7b5788"
+  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ImageNoise.git"
+  GIT_TAG "687531cc4ec659f93465a013ef2da153513e16db"
   ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
   DEPENDS SlicerExecutionModel ITK
   )
@@ -195,8 +195,8 @@ niral_utilitiesExternalProject(
 
 niral_utilitiesExternalProject(
   PolyDataCompression
-  GIT_REPOSITORY "${git_protocol}://github.com/jcfr/PolyDataCompression.git"
-  GIT_TAG 474ad5f5107174aba37058458d2590aa00d74d66
+  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/PolyDataCompression.git"
+  GIT_TAG 4650c5470d5dd621a4e421b1611c415d1c1ffb9b
   ADDITIONAL_OPTIONS
     -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
     -DVTK_RENDERING_BACKEND:STRING=${VTK_RENDERING_BACKEND}
@@ -209,8 +209,8 @@ niral_utilitiesExternalProject(
 # overlap. Works only with ITK4.
 niral_utilitiesExternalProject(
   CurveCompare
-  GIT_REPOSITORY "${git_protocol}://github.com/jcfr/CurveCompare.git"
-  GIT_TAG 6666b32d1fec977ffc2c84742e9b65620fc71b97
+  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/CurveCompare.git"
+  GIT_TAG 52eaf02611b12f771f1c82c93bbb760945946de4
   ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
   DEPENDS SlicerExecutionModel ITK VTK
   )
