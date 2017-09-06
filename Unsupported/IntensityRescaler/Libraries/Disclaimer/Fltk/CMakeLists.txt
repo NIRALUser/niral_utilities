@@ -1,14 +1,14 @@
 
 include_directories(
- ${FLTK_INCLUDE_DIR}
- ${CMAKE_CURRENT_BINARY_DIR}
- ${CMAKE_CURRENT_SOURCE_DIR}
-)
+  ${FLTK_INCLUDE_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  )
 
 
 set(FltkDisclaimer_UI
   FltkDisclaimerGUI.fl
-)
+  )
 
 
 
@@ -18,7 +18,7 @@ set(FltkDisclaimer_SRCS
   FltkDisclaimer.cxx
   FltkDisclaimer.h
   FltkDisclaimerGUIBase.h
-)
+  )
 
 
 fltk_wrap_ui(FltkDisclaimer ${FltkDisclaimer_UI})

@@ -1,7 +1,6 @@
 project(IntensityRescaler)
 
-cmake_minimum_required(VERSION 2.8)
-cmake_policy(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5)
 
 #snippet taken from: http://www.guyrutenberg.com/2014/01/05/enabling-c11-c0x-in-cmake/
 include(CheckCXXCompilerFlag)
@@ -25,18 +24,10 @@ if( EXTRA_FLAG )
 endif()
 
 find_package(ITK REQUIRED)
-if(ITK_FOUND)
-   include(${ITK_USE_FILE})
-else()
-   message(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-endif()
+include(${ITK_USE_FILE})
 
 find_package(VTK REQUIRED)
-if(VTK_FOUND)
-  include(${VTK_USE_FILE})
-else()
-  message(FATAL_ERROR "VTK not found. Please set VTK_DIR.")
-endif()
+include(${VTK_USE_FILE})
 
 
 include_directories(
@@ -60,7 +51,7 @@ if( COMPILE_IntensityRescaler_GUI )
     ${GLUT_INCLUDE_DIR}
     Libraries/IO/Qt
     Libraries/Display/Window2D
-  )
+    )
   if(WIN32)
     #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /subsystem:windows")
   endif()
@@ -72,20 +63,20 @@ if( COMPILE_IntensityRescaler_GUI )
   include(${CMAKE_ROOT}/Modules/FindGLU.cmake)
 
   set(IntensityRescaler_MOC_SRCS
-     IntensityRescalerGUIControls.h
-  )
+    IntensityRescalerGUIControls.h
+    )
   if(QT_WRAP_CPP)
     qt_wrap_cpp(IntensityRescaler IntensityRescalerMoced_SRCS ${IntensityRescaler_MOC_SRCS})
   endif()
   set( IntensityRescaler_GUI_CXX_SRCS 
     IntensityRescalerGUIControls.cxx
     BatchControls.cxx
-  )
+    )
   set(IntensityRescaler_GUI_SRCS
     Batch.ui
     HistoGUI.ui
     IntensityRescalerGUI.ui
-  )
+    )
   if(QT_WRAP_UI)
 	  qt_wrap_ui(IntensityRescaler IntensityRescaler_HDRS  IntensityRescaler_SRCS  ${IntensityRescaler_GUI_SRCS} )
   endif()
@@ -94,16 +85,16 @@ if( COMPILE_IntensityRescaler_GUI )
   add_definitions( -DQT_GUI )
 
   set(OPEN_GL_LIBRARIES
-      ${QT_GL_LIBRARY}
-      ${OPENGL_glu_LIBRARY}
-      ${OPENGL_LIBRARY}
-      ${GLUT_LIBRARIES}
-     )
+    ${QT_GL_LIBRARY}
+    ${OPENGL_glu_LIBRARY}
+    ${OPENGL_LIBRARY}
+    ${GLUT_LIBRARIES}
+    )
   set( QT_LIBRARIES_LIST
-  ${QT_QT_LIBRARY}
-  ${QT_LIBRARIES}
-  ${QT_QTMAIN_LIBRARY}
-  )
+    ${QT_QT_LIBRARY}
+    ${QT_LIBRARIES}
+    ${QT_QTMAIN_LIBRARY}
+    )
 else()
   add_definitions( -DQT_NO_GUI )
 endif()
@@ -112,9 +103,9 @@ set(IntensityRescaler_SRCS
   ${IntensityRescaler_GUI_CXX_SRCS}
   IntensityRescaler.cxx
   IntensityRescalerCommandLine.cxx
-)
+  )
 
-subdirs(Libraries)
+add_subdirectory(Libraries)
 
 add_executable(IntensityRescaler ${IntensityRescaler_SRCS})
 
@@ -125,8 +116,7 @@ target_link_libraries(IntensityRescaler
   ${QT_LIBRARIES_LIST}
   ${OPEN_GL_LIBRARIES}
   ${VTK_LIBRARIES}
-  vtkFiltering
- )
+  )
 
 install( TARGETS IntensityRescaler RUNTIME DESTINATION bin )
 
