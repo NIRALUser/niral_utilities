@@ -1,6 +1,6 @@
-#NIRAL Utilities
+# NIRAL Utilities
 
-##What is it?
+## What is it?
 
 NIRAL Utilities are open-source applications developped at UNC-Chapel Hill in the Neuro Image Research and Analysis Lab (NIRAL). These utilities are C++ based command line applications that allow image analysis and processing using ITK or VTK libraries.
 
@@ -27,11 +27,11 @@ NormalizeDWIGradientVectors - Normalizes Diffusion Weighted Image gradient vecto
 
 Software in Unsupported directory is not build with the main CMakeLists.txt file. It has to be build manually.
 
-##License
+## License
 
 See License.txt
 
-##More information
+## More information
 
 Find the tool on [NITRC](http://www.nitrc.org/projects/niral_utilities/)
 
