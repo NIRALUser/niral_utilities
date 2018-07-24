@@ -95,6 +95,20 @@ if( BUILD_TESTING )
   include(ExternalData)
 endif()
 
+find_package(ITK)
+
+if(ITK_VERSION)
+  string(REPLACE "." ";" VERSION_LIST ${ITK_VERSION})
+  list(GET VERSION_LIST 0 ITK_VERSION_MAJOR)
+  list(GET VERSION_LIST 1 ITK_VERSION_MINOR)
+  list(GET VERSION_LIST 2 ITK_VERSION_PATCH)
+
+  if(ITK_VERSION_MAJOR GREATER 4 OR ITK_VERSION_MAJOR EQUAL 4 AND ITK_VERSION_MINOR GREATER 12)
+    message(STATUS "USING compilation flag -std=c++11")
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FAGS} -std=c++11)
+  endif()
+endif()
+
 option(COMPILE_IMAGEMATH "Compile ImageMath." ON)
 if(COMPILE_IMAGEMATH)
   add_subdirectory(ImageMath)
