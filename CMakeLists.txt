@@ -249,3 +249,32 @@ foreach(p LIB BIN INCLUDE CMAKE)
     set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
   endif()
 endforeach()
+
+
+
+
+
+
+### This is the config file for niral_utilities
+# Create the FooBarConfig.cmake and FooBarConfigVersion files
+file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}"
+   "${INSTALL_INCLUDE_DIR}")
+# ... for the build tree
+set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
+get_property(CONF_LIBRARIES GLOBAL PROPERTY niral_utilities_LIBRARIES)
+
+configure_file(niral_utilitiesConfig.cmake.in
+  "${PROJECT_BINARY_DIR}/niral_utilitiesConfig.cmake" @ONLY)
+# ... for the install tree
+set(CONF_INCLUDE_DIRS "\${NIRAL_UTILITIES_CMAKE_DIR}/${REL_INCLUDE_DIR}")
+configure_file(niral_utilitiesConfig.cmake.in
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/niral_utilitiesConfig.cmake" @ONLY)
+
+install(FILES
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/niral_utilitiesConfig.cmake"
+  #"${PROJECT_BINARY_DIR}/FooBarConfigVersion.cmake"
+  DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+ 
+# Install the export set for use with the install-tree
+install(EXPORT niral_utilitiesTargets DESTINATION
+"${INSTALL_CMAKE_DIR}" COMPONENT dev)
