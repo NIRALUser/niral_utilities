@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(polydatamerge)
-
 find_package(ITK REQUIRED COMPONENTS
   ITKCommon
   ITKIOImageBase
@@ -32,4 +30,12 @@ SEMMacroBuildCLI(
   INSTALL_LIBRARY_DESTINATION ${INSTALL_LIBRARY_DESTINATION}
   INSTALL_ARCHIVE_DESTINATION ${INSTALL_ARCHIVE_DESTINATION}
   )
-install( TARGETS polydatamerge RUNTIME DESTINATION bin )
+
+set_property(GLOBAL APPEND PROPERTY niral_utilities_LIBRARIES polydatamerge)
+
+
+install( TARGETS polydatamerge 
+  EXPORT niral_utilitiesTargets
+  RUNTIME DESTINATION bin 
+  PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}"
+  )
