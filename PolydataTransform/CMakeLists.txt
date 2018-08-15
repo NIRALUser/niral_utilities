@@ -5,7 +5,11 @@ cmake_minimum_required(VERSION 3.5)
 find_package(ITK REQUIRED)
 include(${ITK_USE_FILE})
 
-find_package(VTK REQUIRED)
+find_package(VTK REQUIRED COMPONENTS
+  vtkCommonCore
+  vtkFiltersCore
+  vtkIOLegacy
+  vtkIOXML)
 include(${VTK_USE_FILE})
 
 find_package(SlicerExecutionModel REQUIRED)
