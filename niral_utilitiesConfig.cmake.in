@@ -11,7 +11,9 @@ include_directories(${niral_utilities_INCLUDE_DIRS})
  
 # Our library dependencies (contains definitions for IMPORTED targets)
 if(NOT TARGET polydatatransform AND NOT niral_utilities_BINARY_DIR)
-  include("${niral_utilities_CMAKE_DIR}/niral_utilitiesTargets.cmake")
+  if(EXISTS "${niral_utilities_CMAKE_DIR}/niral_utilitiesTargets.cmake")
+   include("${niral_utilities_CMAKE_DIR}/niral_utilitiesTargets.cmake")
+  endif()
 endif()
  
 # These are IMPORTED targets created by niral_utilitiesTargets.cmake
