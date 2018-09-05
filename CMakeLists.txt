@@ -276,9 +276,12 @@ install(FILES
   DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
  
 # Install the export set for use with the install-tree
+if(${COMPILE_POLYDATAMERGE} or ${COMPILE_POLYDATATRANSFORM})
+ install(EXPORT niral_utilitiesTargets DESTINATION
+"${INSTALL_CMAKE_DIR}" COMPONENT dev)
+endif()
+
 export(TARGETS ${CONF_LIBRARIES}
   FILE "${PROJECT_BINARY_DIR}/niral_utilitiesTargets.cmake"
   )
-  
- install(EXPORT niral_utilitiesTargets DESTINATION
-"${INSTALL_CMAKE_DIR}" COMPONENT dev)
+
