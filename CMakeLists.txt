@@ -276,9 +276,9 @@ install(FILES
   DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
  
 # Install the export set for use with the install-tree
-install(EXPORT niral_utilitiesTargets DESTINATION
-"${INSTALL_CMAKE_DIR}" COMPONENT dev)
-
 export(TARGETS ${CONF_LIBRARIES}
   FILE "${PROJECT_BINARY_DIR}/niral_utilitiesTargets.cmake"
   )
+  
+ install(EXPORT niral_utilitiesTargets DESTINATION
+"${INSTALL_CMAKE_DIR}" COMPONENT dev)
