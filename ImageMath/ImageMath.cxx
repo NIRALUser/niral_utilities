@@ -2684,7 +2684,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     duplicator->Update();
 
     // Creating output image
-    ImagePointer MajVotingImage =  duplicator->GetOutput();
+    ImagePointer MajVotingImage = const_cast<ImageType*>(duplicator->GetOutput());
 
     //  Iterators initialization
     vector<ConstIteratorType> vConstLabelIterator;
@@ -2822,7 +2822,7 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     duplicator->Update();
 
     // Creating output image
-    ImagePointer MajVotingImage =  duplicator->GetOutput();
+    ImagePointer MajVotingImage =  const_cast<ImageType*>(duplicator->GetOutput());
 
     //  Iterators initialization
     vector<ConstIteratorType> vConstLabelIterator;
