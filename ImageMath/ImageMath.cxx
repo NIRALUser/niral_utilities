@@ -68,6 +68,7 @@ using namespace std;
 #include <itkNeighborhoodIterator.h>
 #include <itkCastImageFilter.h>
 #include <itkMaskImageFilter.h>
+#include <itkAbsImageFilter.h>
 #include <itkAddImageFilter.h>
 #include <itkMultiplyImageFilter.h>
 #include <itkDivideImageFilter.h>
@@ -112,7 +113,7 @@ using namespace std;
 #include "argio.h"
 #include "ImageMath.h"
 
-#define IMAGEMATH_VERSION "1.3.3"
+#define IMAGEMATH_VERSION "1.4.0"
 #define DEFAULT_SAMP 2
 // number of samples by default
 
@@ -150,6 +151,7 @@ typedef ThresholdImageFilter< ImageType > maskThreshFilterType;
 typedef BinaryThresholdImageFilter< ImageType , ImageType > threshFilterType;
 typedef BinaryThresholdImageFilter< ShortImageType , ImageType > ShortthreshFilterType;
 typedef MaskImageFilter< ImageType, ImageType, ImageType >  maskFilterType;
+typedef AbsImageFilter< ImageType, ImageType > absFilterType;
 typedef AddImageFilter< ImageType, ImageType,  ImageType > addFilterType;
 typedef SquareImageFilter< ImageType, ImageType > squareFilterType;
 typedef SubtractImageFilter< ImageType, ImageType,  ImageType > subFilterType;
@@ -469,6 +471,7 @@ int main(const int argc, const char **argv)
     cout << "-mul infile2           apply the following operation to the image: I1 * I2" << endl;
     cout << "-div infile2           apply the following operation to the image: I1 / I2" << endl;
     cout << "-pwr arg               compute each voxels to power arg" << endl;
+    cout << "-abs                   compute absolute value" << endl;
     cout << "-normalizeEMS count -EMSfile prob_1,prob_2,...,prob_count(infile should be grayscale template) normalizes the EMS prob maps" << endl;
     cout << "-Normalize prob_1 prob_2 ...   normalizes input probability maps using input image as a mask (sum of probability maps equals to NormValue)" << endl;
     cout << "  -NormValue Value         normalization value (default:255)" << endl;
@@ -590,6 +593,7 @@ int main(const int argc, const char **argv)
   bool maskOn   = ipExistsArgument(argv, "-mask");
   char *maskFile    = ipGetStringArgument(argv, "-mask", NULL);
 
+  bool absoluteOn   = ipExistsArgument(argv, "-abs");
   bool addOn   = ipExistsArgument(argv, "-add");
   char *addFile    = ipGetStringArgument(argv, "-add", NULL);
   bool subOn   = ipExistsArgument(argv, "-sub");
@@ -1498,7 +1502,27 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
       }
       inputImage = maskFilter->GetOutput();
     }
-  } else if (addOn) {
+  }else if(absoluteOn) {
+    
+    outFileName.erase();
+    outFileName.append(base_string);
+    outFileName.append("_abs");
+
+    absFilterType::Pointer absFilter = absFilterType::New();
+    absFilter->SetInput(inputImage);
+    absFilter->SetCoordinateTolerance( locationTolerance ) ;
+    absFilter->SetDirectionTolerance( locationTolerance ) ;
+    try {
+      absFilter->Update();
+    }
+    catch (ExceptionObject & err) {
+      cerr << "ExceptionObject caught!" << endl;
+      cerr << err << endl;
+      return EXIT_FAILURE;
+    }
+    inputImage = absFilter->GetOutput();
+
+  }else if (addOn) {
     outFileName.erase();
     outFileName.append(base_string);
     outFileName.append("_add");
