@@ -266,7 +266,7 @@ get_property(CONF_LIBRARIES GLOBAL PROPERTY niral_utilities_LIBRARIES)
 configure_file(niral_utilitiesConfig.cmake.in
   "${PROJECT_BINARY_DIR}/niral_utilitiesConfig.cmake" @ONLY)
 # ... for the install tree
-set(CONF_INCLUDE_DIRS "\${NIRAL_UTILITIES_CMAKE_DIR}/${REL_INCLUDE_DIR}")
+set(CONF_INCLUDE_DIRS "\${niral_utilities_CMAKE_DIR}/${REL_INCLUDE_DIR}")
 configure_file(niral_utilitiesConfig.cmake.in
   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/niral_utilitiesConfig.cmake" @ONLY)
 
