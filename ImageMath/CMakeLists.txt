@@ -44,3 +44,18 @@ niral_add_executable(
 if(BUILD_TESTING)
   add_subdirectory(Testing)
 endif()
+
+file(GLOB LIBRARY_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/*.txx ${CMAKE_CURRENT_SOURCE_DIR}/*.hxx ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
+
+set_target_properties(ImageMath PROPERTIES
+  PUBLIC_HEADER "${LIBRARY_HEADERS}"
+  )
+
+install( TARGETS ImageMath 
+  EXPORT niral_utilitiesTargets
+  RUNTIME DESTINATION bin 
+  PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}"
+  )
+# Add all targets to the build-tree export set
+
+set_property(GLOBAL APPEND PROPERTY niral_utilities_LIBRARIES ImageMath)
