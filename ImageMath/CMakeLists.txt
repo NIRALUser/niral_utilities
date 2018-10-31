@@ -53,7 +53,7 @@ set_target_properties(ImageMath PROPERTIES
 
 install( TARGETS ImageMath 
   EXPORT niral_utilitiesTargets
-  RUNTIME DESTINATION ${INSTALL_RUNTIME_DESTINATION} 
+  RUNTIME DESTINATION bin
   PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}"
   )
 # Add all targets to the build-tree export set
