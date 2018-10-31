@@ -36,6 +36,6 @@ set_property(GLOBAL APPEND PROPERTY niral_utilities_LIBRARIES polydatamerge)
 
 install( TARGETS polydatamerge 
   EXPORT niral_utilitiesTargets
-  RUNTIME DESTINATION bin 
+  RUNTIME DESTINATION ${INSTALL_RUNTIME_DESTINATION}
   PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}"
   )
