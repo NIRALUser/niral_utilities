@@ -47,3 +47,10 @@ niral_add_executable(
   NAME convertTextToImage
   TARGET_LIBRARIES ${ITK_LIBRARIES}
   )
+
+
+install( TARGETS convertITKformats 
+  EXPORT niral_utilitiesTargets
+  RUNTIME DESTINATION bin
+  PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}"
+  )
