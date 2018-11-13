@@ -54,3 +54,5 @@ install( TARGETS convertITKformats
   RUNTIME DESTINATION bin
   PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}"
   )
+
+set_property(GLOBAL APPEND PROPERTY niral_utilities_LIBRARIES convertITKformats)
