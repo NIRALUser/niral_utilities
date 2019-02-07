@@ -21,6 +21,8 @@
 #include <vtkPolyDataWriter.h>
 #include <vtkLine.h>
 #include <vtkVersion.h>
+#include <vtkTransform.h>
+#include <vtkTransformPolyDataFilter.h>
 
 // ITK includes
 #include <itkDiffusionTensor3D.h>
@@ -29,6 +31,7 @@
 #include <itkInterpolateImageFunction.h>
 #include <itkVectorLinearInterpolateImageFunction.h>
 #include <itkVersion.h>
+#include <itkTransformFileReader.h>
 
 #include "fiberfileIO.hxx"
 // #include "deformationfieldoperations.h"
@@ -51,6 +54,82 @@ int main(int argc, char* argv[])
     std::cerr << "An output fiber file has to be specified" << std::endl;
     return EXIT_FAILURE;
   }
+
+  if (hField.empty() && displacementField.empty()){
+    /* Linear transforms */
+
+    vtkSmartPointer<vtkPolyData> polydata;
+    vtkSmartPointer<vtkTransform> transform = vtkSmartPointer<vtkTransform>::New();
+    int noTransformCount = 0;
+
+    if(fiberFile.rfind(".vtk")!= std::string::npos || fiberFile.rfind(".vtp")!= std::string::npos)
+    {
+      polydata = readVTKFile(fiberFile.c_str());
+    }
+
+    else if(fiberFile.rfind(".fcsv")!= std::string::npos)
+    {
+      polydata = readFCSVFile(fiberFile.c_str());
+    }
+    else
+    {
+      throw itk::ExceptionObject("Unknown file format for input polydata must be .vtp, .vtk or .fcsv");
+    }
+
+    if ((translationVector[0] != 0) || (translationVector[1] != 0) || (translationVector[2] != 0)){
+      transform->Translate(translationVector[0],translationVector[1],translationVector[2]);
+    }
+    else{noTransformCount++;}
+    if((rotationVector[0] != 0) && ((rotationVector[1] != 0) || (rotationVector[2] != 0) || (rotationVector[3] != 0))){
+      transform->RotateWXYZ(rotationVector[0],rotationVector[1],rotationVector[2],rotationVector[3]);
+    }
+    else{noTransformCount++;}
+    if(rotationX != 0){
+      transform->RotateX(rotationX);
+    }
+    else{noTransformCount++;}
+    if(rotationY != 0){
+      transform->RotateY(rotationY);
+    }
+    else{noTransformCount++;}
+    if(rotationZ != 0){
+      transform->RotateZ(rotationZ);
+    }
+    else{noTransformCount++;}
+    if((scaling[0] != 1) || (scaling[1] != 1) || (scaling[2] != 1)){
+      transform->Scale(scaling[0], scaling[1], scaling[2]);
+    }
+    else{noTransformCount++;}
+
+    if (noTransformCount == 6){
+      std::cout << "A transform has to be specified" << std::endl;
+      return EXIT_FAILURE;
+    }
+    else{
+      vtkSmartPointer<vtkTransformPolyDataFilter> transformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New(); 
+      transformFilter->SetInputData(polydata); 
+      transformFilter->SetTransform(transform); 
+      transformFilter->Update();
+      polydata = transformFilter->GetOutput();
+      if(fiberOutput.rfind(".vtk")!= std::string::npos || fiberFile.rfind(".vtp")!= std::string::npos){
+        writeVTKFile(fiberOutput.c_str(), polydata);
+      }
+
+      else if(fiberOutput.rfind(".fcsv")!= std::string::npos)
+      {
+        writeFCSVFile(fiberOutput.c_str(), polydata);
+      }
+      else
+      {
+        throw itk::ExceptionObject("Unknown file format for output polydata must be .vtp, .vtk or .fcsv");
+        return EXIT_FAILURE;
+      }
+      std::cout<<"Done!"<<std::endl;
+      return EXIT_SUCCESS;
+    }
+    
+  }
+
 
   // vtkSmartPointer<vtkPolyDataReader> reader = vtkSmartPointer<vtkPolyDataReader>::New();
   // std::cout << "Reading " << fiberFile<< std::endl;
