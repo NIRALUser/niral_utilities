@@ -31,7 +31,6 @@
 #include <itkInterpolateImageFunction.h>
 #include <itkVectorLinearInterpolateImageFunction.h>
 #include <itkVersion.h>
-#include <itkTransformFileReader.h>
 
 #include "fiberfileIO.hxx"
 // #include "deformationfieldoperations.h"
