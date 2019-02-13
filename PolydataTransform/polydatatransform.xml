@@ -8,10 +8,10 @@
 	<parameters advanced="false">
 		<file>
 			<name>fiberOutput</name>
-			<longflag>--fiber_output</longflag>
+			<longflag>--polydata_output</longflag>
 			<flag>o</flag>
-			<label>Output Fiber Bundle</label>
-			<description>Output fiber file(.vtk, .vtp or .fcsv)</description>
+			<label>Output polyData</label>
+			<description>Output polyData file(.vtk, .vtp or .fcsv)</description>
 			<channel>output</channel>
 		</file>
 		<image type="vector">
@@ -32,9 +32,9 @@
 		</image>
 		<file>
 			<name>fiberFile</name>
-			<longflag>--fiber_file</longflag>
-			<label>Input Fiber Bundle</label>
-			<description>DTI fiber file (.vtk, .vtp or .fcsv)</description>
+			<longflag>--polydata_input</longflag>
+			<label>Input polyData Bundle</label>
+			<description>Input polyData file (.vtk, .vtp or .fcsv)</description>
 			<channel>input</channel>
 		</file>
 		<boolean>
@@ -58,5 +58,47 @@
 		  <description>Invert Z axis prior to transform, as well as after transform</description>
 		  <default>false</default>
 		</boolean>
+		<float-vector>
+			<name>translationVector</name>
+			<longflag>--translate</longflag>
+			<label>Translate polydata</label>
+			<description>Apply translation with the given (x,y,z) vector as parameters</description>
+			<default>0,0,0</default>
+		</float-vector>
+		<float-vector>
+			<name>rotationVector</name>
+			<longflag>--rotateWXYZ</longflag>
+			<label>Rotate polydata</label>
+			<description>Rotation polydata of the angle given by the first coordinate around the axis formed by the three next coordinates</description>
+			<default>0,0,0,0</default>
+		</float-vector>
+		<float>
+			<name>rotationX</name>
+			<longflag>--rotateX</longflag>
+			<label>Rotate polydata</label>
+			<description>Rotation polydata of the angle W around X axis</description>
+			<default>0</default>
+		</float>
+		<float>
+			<name>rotationY</name>
+			<longflag>--rotateY</longflag>
+			<label>Rotate polydata</label>
+			<description>Rotation polydata of the angle W around Y axis</description>
+			<default>0</default>
+		</float>
+		<float>
+			<name>rotationZ</name>
+			<longflag>--rotateZ</longflag>
+			<label>Rotate polydata</label>
+			<description>Rotation polydata of the angle W around Z axis</description>
+			<default>0</default>
+		</float>
+		<float-vector>
+			<name>scaling</name>
+			<longflag>--scale</longflag>
+			<label>Scale polydata</label>
+			<description>Scale polydata by the given vector</description>
+			<default>1,1,1</default>
+		</float-vector>
 	</parameters>
 </executable>
