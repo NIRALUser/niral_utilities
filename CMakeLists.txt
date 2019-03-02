@@ -18,6 +18,16 @@ include(gitSetup)
 include(niral_add_executable)
 include(niral_utilitiesExternalProject)
 
+if(NOT COMMAND SETIFEMPTY)
+  macro(SETIFEMPTY)
+    set(KEY ${ARGV0})
+    set(VALUE ${ARGV1})
+    if(NOT ${KEY})
+      set(${ARGV})
+    endif()
+  endmacro()
+endif()
+
 #-----------------------------------------------------------------------------
 if(CMAKE_COMPILER_2005)
   add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
@@ -108,6 +118,10 @@ if(ITK_VERSION)
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FAGS} -std=c++11)
   endif()
 endif()
+
+setifempty(INSTALL_RUNTIME_DESTINATION bin)
+setifempty(INSTALL_LIBRARY_DESTINATION lib)
+setifempty(INSTALL_ARCHIVE_DESTINATION lib)
 
 option(COMPILE_IMAGEMATH "Compile ImageMath." ON)
 if(COMPILE_IMAGEMATH)
