@@ -110,6 +110,10 @@ using namespace std;
 
 #include <itkConnectedComponentImageFilter.h>
 
+#include <itkSaltAndPepperNoiseImageFilter.h>
+#include <itkShotNoiseImageFilter.h>
+#include <itkSpeckleNoiseImageFilter.h>
+
 #include "argio.h"
 #include "ImageMath.h"
 
@@ -187,6 +191,12 @@ typedef itk::Statistics::ImageToHistogramFilter< ImageType > HistogramFilterType
 typedef itk::ShiftScaleImageFilter< ImageType, ImageType > ShiftScaleFilterType;
 
 typedef itk::BinaryThinningImageFilter<ImageType,ImageType> SkeletonFilterType;
+
+
+typedef itk::SaltAndPepperNoiseImageFilter<ImageType, ImageType> SaltAndPepperNoiseImageFilterType;
+typedef itk::SpeckleNoiseImageFilter<ImageType, ImageType> SpeckleNoiseImageFilterType;
+typedef itk::ShotNoiseImageFilter<ImageType, ImageType> ShotNoiseImageFilterType;
+
 
 static int debug = 0;
 static const int BGVAL = 0;
@@ -514,6 +524,9 @@ int main(const int argc, const char **argv)
     cout << "  -mosaicStep size     Size of each window in the mosaic (default:10 voxels)" << endl;
     cout << "-setLocationTolerance  Sets the coordinate and direction tolerance allowed for the ITK filters" << endl ;
     cout << "-skeleton              Copmute Skeleton via 3D thinning, assumes image is binary" << endl ;
+    cout << "-saltAndPepper prob    Add salt and pepper noise to the image with 'prob' probability" << endl;
+    cout << "-shotNoise scale       Add shot noise to the image with scale parameter" << endl;
+    cout << "-speckle stdev         Add spckle noise to the image with standard deviation 'stdev'" << endl;
     cout << endl << endl;
     return EXIT_SUCCESS ;
   }
@@ -622,6 +635,28 @@ int main(const int argc, const char **argv)
       tmin = (PixelType) textend[0];
       tmax = (PixelType) textend[1];
     }
+  }
+
+  //NOISE FILTERS
+  bool saltAndPepperOn    = ipExistsArgument(argv, "-saltAndPepper");
+  char * saltAndPepper_str      = ipGetStringArgument(argv, "-saltAndPepper", NULL);
+  double saltAndPepper_prob = 0;
+  if (saltAndPepper_str) {
+    saltAndPepper_prob = ipGetDoubleArgument(argv,"-saltAndPepper",0);
+  }
+
+  bool shotNoiseOn    = ipExistsArgument(argv, "-shotNoise");
+  char * shotNoise_str      = ipGetStringArgument(argv, "-shotNoise", NULL);
+  double shotNoise_scale = 0;
+  if (shotNoise_str) {
+    shotNoise_scale = ipGetDoubleArgument(argv,"-shotNoise",0);
+  }
+
+  bool speckleNoiseOn    = ipExistsArgument(argv, "-speckle");
+  char * speckleNoise_str      = ipGetStringArgument(argv, "-speckle", NULL);
+  double speckleNoise_stdev = 0;
+  if (speckleNoise_str) {
+    speckleNoise_stdev = ipGetDoubleArgument(argv,"-speckle",0);
   }
 
   tmp_str      = ipGetStringArgument(argv, "-otsuPara", NULL);
@@ -3280,8 +3315,28 @@ delete []probFiles ; // Added because 'new' by Adrien Kaiser 01/22/2013 for wind
     outFileName.erase();
     outFileName.append(base_string);
     outFileName.append("_skeleton");
-  }
-  else {
+  } else if(saltAndPepperOn){
+    cout << "Salt and pepper, prob: " << saltAndPepper_prob <<endl;
+    SaltAndPepperNoiseImageFilterType::Pointer saltAndPepperFilter = SaltAndPepperNoiseImageFilterType::New();
+    saltAndPepperFilter->SetInput(inputImage);
+    saltAndPepperFilter->SetProbability(saltAndPepper_prob);
+    saltAndPepperFilter->Update();
+    inputImage = saltAndPepperFilter->GetOutput();
+  } else if(shotNoiseOn){
+    cout << "Shot noise, scale: " << shotNoise_scale <<endl;
+    ShotNoiseImageFilterType::Pointer shotNoiseFilter = ShotNoiseImageFilterType::New();
+    shotNoiseFilter->SetInput(inputImage);
+    shotNoiseFilter->SetScale(shotNoise_scale);
+    shotNoiseFilter->Update();
+    inputImage = shotNoiseFilter->GetOutput();
+  } else if(speckleNoiseOn){
+    cout << "Speckle noise, stdev: " << speckleNoise_stdev <<endl;
+    SpeckleNoiseImageFilterType::Pointer speckleFilter = SpeckleNoiseImageFilterType::New();
+    speckleFilter->SetInput(inputImage);
+    speckleFilter->SetStandardDeviation(speckleNoise_stdev);
+    speckleFilter->Update();
+    inputImage = speckleFilter->GetOutput();
+  } else {
     cout << "NOTHING TO DO, no operation selected..." << endl;
     return EXIT_FAILURE ;
   }
