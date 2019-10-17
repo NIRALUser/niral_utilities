@@ -117,7 +117,7 @@ using namespace std;
 #include "argio.h"
 #include "ImageMath.h"
 
-#define IMAGEMATH_VERSION "1.4.0"
+#define IMAGEMATH_VERSION "1.5.0"
 #define DEFAULT_SAMP 2
 // number of samples by default
 
