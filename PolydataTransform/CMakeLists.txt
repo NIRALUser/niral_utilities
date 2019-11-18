@@ -8,6 +8,7 @@ include(${ITK_USE_FILE})
 find_package(VTK REQUIRED COMPONENTS
   vtkCommonCore
   vtkFiltersCore
+  vtkFiltersGeneral
   vtkIOLegacy
   vtkIOXML)
 include(${VTK_USE_FILE})
