@@ -104,7 +104,7 @@ static int debug = 0;
 int main(const int argc, const char **argv)
 {
 	if (argc <=1 || ipExistsArgument(argv, "-usage") || ipExistsArgument(argv, "-help")) {
-		std::cout << "ImageStat 1.6 version (4/17/14)" << std::endl;
+		std::cout << "ImageStat 1.7 version (4/29/2020)" << std::endl;
 		std::cout << " computes base statistics of an image" << std::endl;
 		std::cout << "usage: ImageStat infile [-outbase outbase] [-mask maskfile]  [-verbose]"<< std::endl;
 		std::cout << "       [-histo [-min xmin] [-max xmax] [-samp s]] " << std::endl;
