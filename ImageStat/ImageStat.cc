@@ -122,7 +122,7 @@ int main(const int argc, const char **argv)
 		std::cout << "-samp s        Number of Samples for histogram/volume [DEFAULT xmax-xmin]" << std::endl << std::endl; 
 		std::cout << "-threeSlice[C x,y,z]   create three orthogonal views through the image center or the optionally supplied coordinate" << std::endl;
 		std::cout << "-info          print image info on standard out" << std::endl;
-		std::cout << "-label labelfile    give volume, mean intensity, standard deviation, min, max, quantiles for each label" << std::endl;
+		std::cout << "-label labelfile    give volume, mean intensity, standard deviation, median, min, max, quantiles for each label" << std::endl;
 		std::cout << "      -display   display the results on the standard output (if -volumeSummary and/or -intensitySummary used, display theresults of these options)" << std::endl;
 		std::cout << "      -quantile [list of numbers separate by a coma]   quantile value [DEFAULT: 1 5 33 50 66 95 99]" << std::endl;
 		std::cout << "      -maskForLabel maskForLabelfile   binary mask" << std::endl;
