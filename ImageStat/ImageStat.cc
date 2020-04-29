@@ -576,7 +576,7 @@ int main(const int argc, const char **argv)
 			VectorType spacing = inputImage->GetSpacing ();
 			float pixVol = spacing[0] * spacing[1] * spacing[2];
 
-			double tab [5][labelList.size()];
+			double tab [6][labelList.size()];
 			double quantiles_tab[labelList.size()][tabSize];
 
 			for (int j=0; j<(int)labelList.size() ; j++ )
@@ -615,12 +615,16 @@ int main(const int argc, const char **argv)
 					sdSum = sdSum + ((Subsample->GetMeasurementVectorByIndex(k)[0]) - mean)*((Subsample->GetMeasurementVectorByIndex(k)[0]) - mean)*(Subsample->GetMeasurementVectorByIndex(k)[1]);
 				}
 				double standardDeviation = sqrt((1/totalProb)*sdSum) ;
+
+				int activeDimension = 0;
+				SubsampleType::MeasurementType median =itk::Statistics::Algorithm::QuickSelect< SubsampleType >( Subsample, activeDimension, 0, Subsample->Size(), Subsample->Size()/2 );
 			
 				tab[0][j]=totalProb*pixVol;
 				tab[1][j]=mean;
 				tab[2][j]=standardDeviation;
-				tab[3][j]=Subsample->GetMeasurementVectorByIndex(0)[0];
-				tab[4][j]=Subsample->GetMeasurementVectorByIndex(Subsample->Size()-1)[0];
+				tab[3][j]=median;
+				tab[4][j]=Subsample->GetMeasurementVectorByIndex(0)[0];
+				tab[5][j]=Subsample->GetMeasurementVectorByIndex(Subsample->Size()-1)[0];
 
 				//quantiles
 				float size = Subsample->Size();
@@ -669,12 +673,13 @@ int main(const int argc, const char **argv)
 			  efile.precision(6);
 			  efile<<"##########################################################################"<<endl;
 			  efile<<"# File format :"<<endl;
-			  efile<<"# LABEL \t VOLUME \t MEAN \t STD \t MIN \t MAX \t QUANTILES"<<endl;
+			  efile<<"# LABEL \t VOLUME \t MEAN \t STD \t MEDIAN \t MIN \t MAX \t QUANTILES"<<endl;
 			  efile<<"# Fields :"<<endl;
 			  efile<<"#\t LABEL         Label number"<<endl;
 			  efile<<"#\t VOLUME        Volume of voxels that have that label in cubic mm"<<endl;
 			  efile<<"#\t MEAN          Mean intensity of those voxels"<<endl;
-			  efile<<"#\t STD            Standard deviation of those voxels"<<endl;
+			  efile<<"#\t STD           Standard deviation of those voxels"<<endl;
+			  efile<<"#\t MEDIAN        Median of those voxels"<<endl;
 			  efile<<"#\t MIN           Min intensity of those voxels"<<endl;
 			  efile<<"#\t MAX           Max intensity of those voxels"<<endl;
 			  efile<<"#\t QUANTILES     Quantile values [DEFAULT: 1 5 33 50 66 95 99]"<<endl;
@@ -690,6 +695,7 @@ int main(const int argc, const char **argv)
 				  efile << "\t \t" << tab[2][j];
 				  efile << "\t \t" << tab[3][j];
 				  efile << "\t \t" << tab[4][j];
+				  efile << "\t \t" << tab[5][j];
 				  if(displayOn)
 				    {
 				      std::cout << l;
@@ -698,6 +704,7 @@ int main(const int argc, const char **argv)
 				      std::cout << "\t \t" << tab[2][j];
 				      std::cout << "\t \t" << tab[3][j];
 				      std::cout << "\t \t" << tab[4][j];
+				      std::cout << "\t \t" << tab[5][j];
 				    }
 				  for(int i=0; i<tabSize; i++)
 				    {
@@ -756,8 +763,8 @@ int main(const int argc, const char **argv)
 			    exit(-1);
 			  }
 			  efile.precision(6);
-			  std::string rowname [11]={"MEAN","STD","MIN","MAX","QUANTILES 1%","QUANTILES 5%","QUANTILES 33%","QUANTILES 50%","QUANTILES 66%","QUANTILES 95%","QUANTILES 99%"};
-			  for (int i=0;i<4;i++)
+			  std::string rowname [12]={"MEAN","STD","MEDIAN", "MIN","MAX","QUANTILES 1%","QUANTILES 5%","QUANTILES 33%","QUANTILES 50%","QUANTILES 66%","QUANTILES 95%","QUANTILES 99%"};
+			  for (int i=0;i<5;i++)
 			    {
 			      efile << inputFileNameTail;
 			      efile<<","<<rowname [i];
@@ -791,11 +798,11 @@ int main(const int argc, const char **argv)
 			  for(int k=0; k<tabSize; k++)
 			    {
 			      efile << inputFileNameTail;
-			      efile<<","<<rowname [k+4];
+			      efile<<","<<rowname [k+5];
 			      if(displayOn)
 				{
 				  std::cout << inputFileNameTail;
-				  std::cout<<","<<rowname [k+4];
+				  std::cout<<","<<rowname [k+5];
 				}
 			      // display results for all labels, even if some of them are empty
 			      int j = 0;
