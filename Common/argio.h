@@ -24,7 +24,7 @@
 // In c++11 the override keyword allows you to explicity define that a function
 // is intended to override the base-class version.  This makes the code more
 // managable and fixes a set of common hard-to-find bugs.
-#define ITK_OVERRIDE override
+#define override override
 // In c++11 there is an explicit nullptr type that introduces a new keyword to
 // serve as a distinguished null pointer constant: nullptr. It is of type
 // nullptr_t, which is implicitly convertible and comparable to any pointer type
@@ -38,7 +38,7 @@
 // Use cautiously.
 #define ITK_NOEXCEPT noexcept
 #else
-#define ITK_OVERRIDE
+#define override
 #define nullptr  NULL
 #define ITK_NOEXCEPT throw()
 #endif
