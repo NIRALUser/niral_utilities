@@ -162,11 +162,6 @@ if(COMPILE_CONVERTITKFORMATS)
   add_subdirectory(convertITKformats)
 endif()
 
-option(COMPILE_DWI_NIFTINRRDCONVERSION "Compile DWI_NiftiNrrdConversion." ON)
-if(COMPILE_DWI_NIFTINRRDCONVERSION)
-  add_subdirectory(DWI_NiftiNrrdConversion)
-endif()
-
 option(COMPILE_POLYDATATRANSFORM "Compile PolydataTransform." ON)
 if(COMPILE_POLYDATATRANSFORM)
   add_subdirectory(PolydataTransform)
@@ -180,11 +175,6 @@ endif()
 option(COMPILE_MULTIATLASSEG "Compile MultiAtlasSeg." OFF)
 if(COMPILE_MULTIATLASSEG)
   add_subdirectory(MultiAtlasSeg)
-endif()
-
-option(COMPILE_DTITensorNormalization "Compile DTITensorNormalization." OFF)
-if(COMPILE_DTITensorNormalization)
-  add_subdirectory(DTITensorNormalization)
 endif()
 
 option(COMPILE_MAURERDISTANCETRANSFORM "Compile MaurerDistanceTransform." OFF)
@@ -209,14 +199,6 @@ niral_utilitiesExternalProject(
   )
 
 niral_utilitiesExternalProject(
-  ImageNoise
-  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ImageNoise.git"
-  GIT_TAG "687531cc4ec659f93465a013ef2da153513e16db"
-  ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
-  DEPENDS SlicerExecutionModel ITK
-  )
-
-niral_utilitiesExternalProject(
   CombineDWIs
   GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/CombineDWIs.git"
   GIT_TAG "37d340b4b80a2b0735fbddcc450bf01d89b5b9bc"
@@ -230,14 +212,6 @@ niral_utilitiesExternalProject(
   GIT_TAG "e46bd5b7ca395ab7b290da621e329653287ac591"
   ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
   DEPENDS ITK
-  )
-
-niral_utilitiesExternalProject(
-  3D4DImageConversion
-  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/3D4DImageConversion.git"
-  GIT_TAG "5a53a98fce967a77c74d8e554d7231dc4c0ba695"
-  ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
-  DEPENDS SlicerExecutionModel ITK
   )
 
 niral_utilitiesExternalProject(
