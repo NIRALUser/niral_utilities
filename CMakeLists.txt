@@ -118,7 +118,7 @@ set(ITK_IO_MODULES_USED
   )
 
 if(NOT VTK_RENDERING_BACKEND)
-  set(VTK_RENDERING_BACKEND OpenGL)
+  set(VTK_RENDERING_BACKEND OpenGL2)
 endif()
 
 # Describe property
