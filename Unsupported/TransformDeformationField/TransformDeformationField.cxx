@@ -17,7 +17,7 @@
 #include <list>
 #include <itkVectorLinearInterpolateImageFunction.h>
 #include "itkTransformDeformationFieldFilter.h"
-#include "vnl/vnl_math.h"
+#include "itkMath.h"
 #include <itkVectorResampleImageFilter.h>
 #include <vector>
 #include <string>
