@@ -122,8 +122,8 @@ int main( int argc, char * argv[] )
         return EXIT_FAILURE;
     }
 
-    int NUMBER_OF_CASE = atoi(argv[argc - 1]);
-    int NUMBER_OF_ATLAS = atoi(argv[argc - 2]);
+    int NUMBER_OF_CASE = std::stoi(argv[argc - 1]);
+    int NUMBER_OF_ATLAS = std::stoi(argv[argc - 2]);
 
     bool option_V = ipExistsArgument(argv, "-v");
     bool option_S = ipExistsArgument(argv, "-s");
@@ -173,7 +173,7 @@ int main( int argc, char * argv[] )
         typedef itk::Image< float, 3 >                         OrientedImageType;
         char filename[1024];
         int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, usedCase[25] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 1, 1, 1};
-        int segLabel = atoi(argv[2]), fixCase = atoi(argv[3]), numIteration = 1, numCaseUsed = DATASET_SIZE, numCaseWillUse = DATASET_SIZE;
+        int segLabel = std::stoi(argv[2]), fixCase = std::stoi(argv[3]), numIteration = 1, numCaseUsed = DATASET_SIZE, numCaseWillUse = DATASET_SIZE;
         bool terminateCriteria = 1;
     //    char *quotationMark = "\"";
         std::string commandLine;
@@ -245,7 +245,7 @@ int main( int argc, char * argv[] )
                     CNum  = 0;
                     while (CNum <= 0 || CNum >= 1) {
                         readParameter.getline(pa, 256, ',');
-                        CNum = atof(pa);
+                        CNum = std::stod(pa);
                     }
                     spe[j] = CNum;
                     std::cout << j << "  " ;
@@ -253,7 +253,7 @@ int main( int argc, char * argv[] )
                         CNum  = 0;
                         while (CNum <= 0 || CNum >= 1) {
                             readParameter.getline(pa, 256, ',');
-                            CNum = atof(pa);
+                            CNum = std::stod(pa);
                         }
                         sen[j * NUMBER_OF_MUSCLE + k] = CNum;
                         averageSen[j] += sen[j * NUMBER_OF_MUSCLE + k];
@@ -291,7 +291,7 @@ int main( int argc, char * argv[] )
         typedef itk::Image< float, 3 >                         OrientedImageType;
         char filename[1024];
         int cases[25] = {39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 69, 71, 73, 88, 95, 107}, usedCase[25] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        int segLabel = atoi(argv[2]), fixCase = atoi(argv[3]), numIteration = 1, numCaseUsed = DATASET_SIZE, numCaseWillUse = DATASET_SIZE;
+        int segLabel = std::stoi(argv[2]), fixCase = std::stoi(argv[3]), numIteration = 1, numCaseUsed = DATASET_SIZE, numCaseWillUse = DATASET_SIZE;
         bool terminateCriteria = 1;
      //   char *quotationMark = "\"";
         std::string commandLine;
@@ -713,7 +713,7 @@ int main( int argc, char * argv[] )
         float RecFemUni = 0, CraSarUni = 0, AddUni = 0, BicFemUni = 0, GraUni = 0, SemTenUni = 0;
         float RecFemSum = 0, CraSarSum = 0, AddSum = 0, BicFemSum = 0, GraSum = 0, SemTenSum = 0;
         float averagePerformance = 0;
-        int evaluateCase = atoi(argv[4]);
+        int evaluateCase = std::stoi(argv[4]);
 
         for(indexInput[2] = 0; indexInput[2] < (int)size[2]; indexInput[2]++) {
             for(indexInput[1] = 0; indexInput[1] < (int)size[1]; indexInput[1]++) {
@@ -902,7 +902,7 @@ int main( int argc, char * argv[] )
     if( option_Z ) {
         float graph[NUMBER_OF_CASE][NUMBER_OF_CASE][2], circularity[NUMBER_OF_CASE]; //include deformation from two directions
         float intensityE, harmonicE, shapeE, tmpHE = 0;
-        int startNode = atoi(argv[2]), endNode = atoi(argv[3]), floydRoute[NUMBER_OF_CASE];
+        int startNode = std::stoi(argv[2]), endNode = std::stoi(argv[3]), floydRoute[NUMBER_OF_CASE];
         std::ostringstream strFixCase;
         strFixCase << argv[argc - 3];
         std::ifstream efile( "harmonicEnergyNormalizedIdentical.txt");
@@ -995,7 +995,7 @@ int main( int argc, char * argv[] )
             startNode = DijkstraNode;
         }
         //search shortest route from startNode to endNode using Floyd algorithm
-        startNode = atoi(argv[2]); endNode = atoi(argv[3]);
+        startNode = std::stoi(argv[2]); endNode = std::stoi(argv[3]);
         int floydNode = startNode, lengthPathFloyd = 0;
         bool changes = 1;
         float directDistance = graph[startNode][endNode][0], currentDistance = graph[startNode][endNode][0], cumDistance = 0;
@@ -1181,9 +1181,9 @@ int main( int argc, char * argv[] )
         int graphHistogram[120] = {0};
     //    gama = 0;
 
-        beta = atof(argv[5]);
-        alpha = atof(argv[6]);
-        gama = atof(argv[7]);
+        beta = std::stod(argv[5]);
+        alpha = std::stod(argv[6]);
+        gama = std::stod(argv[7]);
 
         for (int i = 0; i < NUMBER_OF_CASE; i++){
             floydRoute[i] = MAX_NODE;
@@ -1309,8 +1309,8 @@ int main( int argc, char * argv[] )
 
 
         //search shortest route from startNode to endNode using Floyd algorithm
-        //startNode = atoi(argv[5]);
-        //endNode = atoi(argv[6]);
+        //startNode = std::stoi(argv[5]);
+        //endNode = std::stoi(argv[6]);
         endNode = NUMBER_OF_ATLAS;
         for (int i = 0; i < NUMBER_OF_ATLAS; i++){
              startNode = i;
@@ -1373,9 +1373,9 @@ int main( int argc, char * argv[] )
         int onlyOneAtlas = 0;
         gama = 0;
 
-        beta = atof(argv[argc - 5]);
-        alpha = atof(argv[argc - 4]);
-        gama = atof(argv[argc - 3]);
+        beta = std::stod(argv[argc - 5]);
+        alpha = std::stod(argv[argc - 4]);
+        gama = std::stod(argv[argc - 3]);
 
         DIR *dir;
         struct dirent *ent;
@@ -1467,9 +1467,9 @@ int main( int argc, char * argv[] )
         int onlyOneAtlas = 0;
         gama = 0;
 
-        beta = atof(argv[argc - 5]);
-        alpha = atof(argv[argc - 4]);
-        gama = atof(argv[argc - 3]);
+        beta = std::stod(argv[argc - 5]);
+        alpha = std::stod(argv[argc - 4]);
+        gama = std::stod(argv[argc - 3]);
 
         std::cout << "weights: " << beta << "  " << alpha << "  " << gama << std::endl;
         std::cout << "labelfolder: " << labelfolder << std::endl;

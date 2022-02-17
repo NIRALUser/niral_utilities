@@ -134,9 +134,9 @@ vtkSmartPointer<vtkPolyData> readFCSVFile (std::string filename)
             for (int i = 0; i < NbPoints; ++i)
             {
                 double pt[3];
-                pt[0] = atof(words[i][1].c_str());
-                pt[1] = atof(words[i][2].c_str());
-                pt[2] = atof(words[i][3].c_str());
+                pt[0] = std::stod(words[i][1].c_str());
+                pt[1] = std::stod(words[i][2].c_str());
+                pt[2] = std::stod(words[i][3].c_str());
                 points->InsertPoint(i,pt[0],pt[1],pt[2]);
             }
             polydata->SetPoints(points);

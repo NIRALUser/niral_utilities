@@ -204,7 +204,7 @@ int main( int argc, char* argv[] )
     //    runlengthefile << caseID << ":  " << "\n";
         runlengthefile.close();
         if ( strchr (argv[1], 'r') != NULL ) { // specify intesnity range
-            muscleFeatT2.runlengthFeat3DROI ( segMuscleLeft->GetOutput(), t2LeftFemurSmooth, runlengthfeaturefilename, voxelVol, atoi(argv[argc - 2]), atoi(argv[argc - 1]) );  // use T2w
+            muscleFeatT2.runlengthFeat3DROI ( segMuscleLeft->GetOutput(), t2LeftFemurSmooth, runlengthfeaturefilename, voxelVol, std::stoi(argv[argc - 2]), std::stoi(argv[argc - 1]) );  // use T2w
         }
         else {
             muscleFeatT2.runlengthFeat3DROI ( segMuscleLeft->GetOutput(), t2LeftFemurSmooth, runlengthfeaturefilename, voxelVol, 0, 0);  // use T2w
@@ -219,7 +219,7 @@ int main( int argc, char* argv[] )
      //   cooccurrenceefile << caseID << ":  " << "\n";
         cooccurrenceefile.close();
         if ( strchr (argv[1], 'r') != NULL )  // specify intesnity range
-            muscleFeatT2.cooccurrenceFeat3DROI ( segMuscleLeft->GetOutput(), t2LeftFemurSmooth, cooccurrencefeaturefilename, voxelVol, atoi(argv[argc - 2]), atoi(argv[argc - 1]));
+            muscleFeatT2.cooccurrenceFeat3DROI ( segMuscleLeft->GetOutput(), t2LeftFemurSmooth, cooccurrencefeaturefilename, voxelVol, std::stoi(argv[argc - 2]), std::stoi(argv[argc - 1]));
         else
             muscleFeatT2.cooccurrenceFeat3DROI ( segMuscleLeft->GetOutput(), t2LeftFemurSmooth, cooccurrencefeaturefilename, voxelVol, 0, 0);
         #endif
@@ -231,7 +231,7 @@ int main( int argc, char* argv[] )
         std::ofstream efile( histogramfeaturefilename.c_str() , std::ios::app );
         efile.close();
         if ( strchr (argv[1], 'r') != NULL )  // specify intesnity range
-            muscleFeatT2.histogramFeat3DROI ( segMuscleLeft->GetOutput(), segMuscleLeft->GetOutput(), t2LeftFemurSmooth, voxelVol, histogramfeaturefilename, TRUE, atoi(argv[argc - 2]), atoi(argv[argc - 1]));
+            muscleFeatT2.histogramFeat3DROI ( segMuscleLeft->GetOutput(), segMuscleLeft->GetOutput(), t2LeftFemurSmooth, voxelVol, histogramfeaturefilename, TRUE, std::stoi(argv[argc - 2]), std::stoi(argv[argc - 1]));
         else
             muscleFeatT2.histogramFeat3DROI ( segMuscleLeft->GetOutput(), segMuscleLeft->GetOutput(), t2LeftFemurSmooth, voxelVol, histogramfeaturefilename, TRUE, 0, 0);
 

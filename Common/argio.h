@@ -54,7 +54,7 @@ typedef char* charp ;
 
 inline float fatof( const char *str )
 {
-  return (float) atof( str ) ;
+  return (float) std::stod( str ) ;
 }
 
 // command line parsing
@@ -153,7 +153,7 @@ inline int ipGetIntArgument( const char **argv , const char *keystr , const int 
     {
       if( argv[ i + 1 ] )
       {
-        return atoi( argv[ i + 1 ] ) ;
+        return std::stoi( argv[ i + 1 ] ) ;
       }
       else
       {
@@ -195,7 +195,7 @@ inline double ipGetDoubleArgument( const char **argv , const char *keystr , cons
     {
       if( argv[ i + 1 ] )
       {
-        return atof( argv[ i + 1 ] ) ;
+        return std::stod( argv[ i + 1 ] ) ;
       }
       else
       {
@@ -432,7 +432,7 @@ inline int ipExtractIntTokens( int *tokenval , const char *tokenstr , const int 
     {
       tokenp++ ; // skip separator
     }
-    tokenval[ i++ ] = atoi( tmp_token ) ;
+    tokenval[ i++ ] = std::stoi( tmp_token ) ;
   }
   delete [] tmp_token ;
   return i ;
@@ -504,7 +504,7 @@ inline int ipExtractDoubleTokens( double *tokenval , const char *tokenstr , cons
     {
       tokenp++ ; // skip separator
     }
-    tokenval[ i++ ] = atof( tmp_token ) ;
+    tokenval[ i++ ] = std::stod( tmp_token ) ;
   }
   delete [] tmp_token ;
   return i ;

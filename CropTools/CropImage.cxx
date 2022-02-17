@@ -148,8 +148,8 @@ int main(int argc, const char* argv[])
     //Get the arguments associated with interl option
     ipGetStringMultipArgument(argv,"-interl",values,maxnbarg);
     //Give the number of pair ID/name
-    nbinter = atoi(values[0]);
-    axisinter = atoi(values[1]);
+    nbinter = std::stoi(values[0]);
+    axisinter = std::stoi(values[1]);
     coilid_filename = values[2];
 
     if(axisinter < 0 || axisinter > 2) {
