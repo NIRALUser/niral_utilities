@@ -36,11 +36,11 @@
 // specification adds the run-time check that the method does not
 // throw, if it does throw then std::terminate will be called.
 // Use cautiously.
-#define ITK_NOEXCEPT noexcept
+#define noexcept noexcept
 #else
 #define override
 #define nullptr  NULL
-#define ITK_NOEXCEPT throw()
+#define noexcept throw()
 #endif
 #endif
 
