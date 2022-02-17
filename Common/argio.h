@@ -30,7 +30,7 @@
 // nullptr_t, which is implicitly convertible and comparable to any pointer type
 // or pointer-to-member type. It is not implicitly convertible or comparable to
 // integral types, except for bool.
-#define ITK_NULLPTR  nullptr
+#define nullptr  nullptr
 // In C++11 the throw-list specification has been deprecated,
 // replaces with the noexcept specifier. Using this function
 // specification adds the run-time check that the method does not
@@ -39,7 +39,7 @@
 #define ITK_NOEXCEPT noexcept
 #else
 #define ITK_OVERRIDE
-#define ITK_NULLPTR  NULL
+#define nullptr  NULL
 #define ITK_NOEXCEPT throw()
 #endif
 #endif
@@ -86,7 +86,7 @@ inline T ipGetArgument( const char **argv , const char *keystr ,
 
 inline charp ipGetStringArgument( const char **argv , const char keystr[] , const char defval[] )
 {
-  char *_defval = ( defval ? strdup( defval ) : ITK_NULLPTR ) ;
+  char *_defval = ( defval ? strdup( defval ) : nullptr ) ;
   for( int i = 1 ; argv[ i ] ; i++ )
   {
     if( !strcmp( argv[ i ] , keystr ) )
@@ -268,8 +268,8 @@ inline int ipLineWordCount( const char *s )
 inline char *ipGetBaseName( const char *string )
 {
   unsigned int i ;
-  char *ret = ITK_NULLPTR ;
-  char *retp = ITK_NULLPTR ;
+  char *ret = nullptr ;
+  char *retp = nullptr ;
   if( !( ret = strdup( string ) ) )
   {
     fprintf( stderr , "Error: ipGetBaseName [%s, line %d]: strdup() failed:" ,
