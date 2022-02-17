@@ -17,7 +17,7 @@
 =========================================================================*/
 
 #include "FltkDisclaimer.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 FltkDisclaimer::FltkDisclaimer( )
     : FltkDisclaimerGUI()

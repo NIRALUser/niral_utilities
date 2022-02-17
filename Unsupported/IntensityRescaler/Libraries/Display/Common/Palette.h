@@ -1,7 +1,7 @@
 #ifndef _PALETTE_H
 #define _PALETTE_H
 
-#include <math.h>
+#include <cmath>
 
 class Palette
 {

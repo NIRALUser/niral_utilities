@@ -53,7 +53,7 @@
 #include "itkLabelGeometryImageFilter.h"
 #include "itkConnectedThresholdImageFilter.h"
 
-#include <math.h>
+#include <cmath>
 #include <iostream>
 #include <fstream>
 

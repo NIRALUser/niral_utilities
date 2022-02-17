@@ -67,12 +67,12 @@
 #include <itksys/Process.h>
 
 #include <algorithm>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>      /* need functions 'toupper' and tolower'   */
-#include <float.h>      /* defines LDBL_MAX*/
-#include <math.h>
-#include <time.h>       /* for date marking of output data files   */
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cctype>      /* need functions 'toupper' and tolower'   */
+#include <cfloat>      /* defines LDBL_MAX*/
+#include <cmath>
+#include <ctime>       /* for date marking of output data files   */
 
 

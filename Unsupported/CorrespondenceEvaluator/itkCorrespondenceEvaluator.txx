@@ -3,8 +3,8 @@
 
 #include "itkCorrespondenceEvaluator.h"
 #include <fstream>
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
 
 namespace itk
 {

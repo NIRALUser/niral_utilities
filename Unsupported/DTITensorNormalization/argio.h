@@ -11,11 +11,11 @@
 #ifndef __ARGIO_H__
 #define __ARGIO_H__
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include <ctype.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cerrno>
+#include <cstring>
+#include <cctype>
 
 
 

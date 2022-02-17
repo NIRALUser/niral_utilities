@@ -2,8 +2,8 @@
 #define _XMLINIIO_H
 
 #include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 #include <vector>
 
 #include "XMLWriter.h"

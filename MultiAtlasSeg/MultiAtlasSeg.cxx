@@ -50,9 +50,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 #include <dirent.h>
 
 #include "itkMeanSquaresImageToImageMetric.h"
