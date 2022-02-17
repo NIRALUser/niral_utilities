@@ -25,9 +25,10 @@ function( niral_utilitiesExternalProject projectname)
 
   foreach(var ${_ep_DEPENDS})
     find_package(${var} REQUIRED)
-    if(NOT "${var}" STREQUAL "VTK")
-      include(${${var}_USE_FILE})
+    if("${var}" STREQUAL "VTK")
+     continue()
     endif()
+    include(${${var}_USE_FILE})
     list(APPEND _ep_ADDITIONAL_OPTIONS -D${var}_DIR:PATH=${${var}_DIR})
   endforeach()
 

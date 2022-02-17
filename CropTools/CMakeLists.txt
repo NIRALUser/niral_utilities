@@ -1,12 +1,10 @@
 project(CropTools)
 
-cmake_minimum_required(VERSION 3.5)
-
 if(CMAKE_COMPILER_2005)
   add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
 endif()
 
-find_package(ITK REQUIRED COMPONENTS
+find_package(ITK 5.3 REQUIRED COMPONENTS
   ITKCommon
   ITKDiffusionTensorImage
   ITKIOImageBase

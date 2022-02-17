@@ -13,6 +13,7 @@ set(MultiOtsuOutput ${TEMP_DIR}/MultiOtsuOutput.nrrd)
 add_executable(ImageMathTest ImageMathTest.cxx)
 target_link_libraries(ImageMathTest ImageMathLib)
 
+if(0) # This test fails because test data is no longer downloadable from the deprecated server
 #Normal use of MultiOtsu functionality
 ExternalData_Add_Test(ImageMathData NAME MultiOtsuNormalRun COMMAND $<TARGET_FILE:ImageMathTest>
 #add_test(NAME MultiOtsuNormalRun COMMAND $<TARGET_FILE:ImageMathTest>
@@ -27,6 +28,7 @@ ExternalData_Add_Test(ImageMathData NAME MultiOtsuNormalRun COMMAND $<TARGET_FIL
   -otsuPara
   3,0,128
   )
+endif()
 
 # Add a build target to populate the real data.
 ExternalData_Add_Target(ImageMathData)

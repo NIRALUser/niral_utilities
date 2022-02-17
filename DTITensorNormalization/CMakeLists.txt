@@ -1,8 +1,6 @@
-cmake_minimum_required(VERSION 3.5)
-
 project(DTITensorNormalization)
 
-find_package(ITK REQUIRED)
+find_package(ITK 5.3 REQUIRED)
 include(${ITK_USE_FILE})
 
 niral_add_executable(

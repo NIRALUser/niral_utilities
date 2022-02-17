@@ -1,10 +1,8 @@
 project(convertITKformats)
 
-cmake_minimum_required(VERSION 3.5)
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(ITK REQUIRED COMPONENTS
+find_package(ITK 5.3 REQUIRED COMPONENTS
   ITKCommon
   ITKDICOMParser
   ITKIOImageBase

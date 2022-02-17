@@ -1,11 +1,8 @@
-
-cmake_minimum_required(VERSION 3.5)
-
 project(DMDBioMarkerTool)
 
 #find_path(LAPACK_LIBRARY_DIR liblapack.a)
 
-find_package(ITK REQUIRED)
+find_package(ITK 5.3 REQUIRED)
 include(${ITK_USE_FILE})
 
 if( ${ITK_VERSION_MAJOR} VERSION_GREATER 3 )
