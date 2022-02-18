@@ -21,7 +21,7 @@
 #include "itkColorTable.h"
 
 
-#include <math.h>
+#include <cmath>
 #include <qgl.h>
 
 

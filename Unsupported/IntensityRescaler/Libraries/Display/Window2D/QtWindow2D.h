@@ -25,7 +25,7 @@
 #include "Palette.h"
 #include "NeuroLibOpenGLSliceTexture.h"
 
-#include <math.h>
+#include <cmath>
 #include <qgl.h>
 #include <qslider.h>
 #include <qlabel.h>

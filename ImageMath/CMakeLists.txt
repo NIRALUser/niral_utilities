@@ -1,12 +1,10 @@
 project(ImageMath)
 
-cmake_minimum_required(VERSION 3.5)
-
 if(CMAKE_COMPILER_2005)
   add_definitions(-D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE)
 endif()
 
-find_package(ITK 4.4.0 REQUIRED COMPONENTS
+find_package(ITK 5.3 REQUIRED COMPONENTS
   ITKAnisotropicSmoothing
   ITKBinaryMathematicalMorphology
   ITKCommon
@@ -24,6 +22,7 @@ find_package(ITK 4.4.0 REQUIRED COMPONENTS
   ITKThresholding
   ITKTransform
   ITKTestKernel
+  ITKImageNoise
   ${ITK_IO_MODULES_USED}
   )
 include(${ITK_USE_FILE})

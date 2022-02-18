@@ -1,18 +1,18 @@
-cmake_minimum_required(VERSION 3.5)
+project(polydatamerge)
 
-find_package(ITK REQUIRED COMPONENTS
+
+find_package(ITK 5.3 REQUIRED COMPONENTS
   ITKCommon
   ITKIOImageBase
   ${ITK_IO_MODULES_USED}
   )
 include(${ITK_USE_FILE})
 
-find_package(VTK REQUIRED COMPONENTS
-  vtkCommonCore
-  vtkFiltersCore
-  vtkIOLegacy
+find_package(VTK 9 REQUIRED COMPONENTS
+  CommonCore
+  FiltersCore
+  IOLegacy
   )
-include(${VTK_USE_FILE})
 
 find_package(SlicerExecutionModel REQUIRED)
 include(${SlicerExecutionModel_USE_FILE})

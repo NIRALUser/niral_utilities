@@ -1,4 +1,33 @@
-project(NIRAL_UTILITIES)
+#-----------------------------------------------------------------------------
+# Define cmake build policies that affect compilation and linkage default behaviors
+#
+# Set the NEWEST_VALIDATED_POLICIES_VERSION string to the newest cmake version
+# policies that provide successful builds. By setting NEWEST_VALIDATED_POLICIES_VERSION
+# to a value greater than the oldest policies, all policies between
+# OLDEST_VALIDATED_POLICIES_VERSION and CMAKE_VERSION (used for this build)
+# are set to their NEW behaivor, thereby suppressing policy warnings related to policies
+# between the OLDEST_VALIDATED_POLICIES_VERSION and CMAKE_VERSION.
+#
+# CMake versions greater than the NEWEST_VALIDATED_POLICIES_VERSION policies will
+# continue to generate policy warnings "CMake Warning (dev)...Policy CMP0XXX is not set:"
+#
+set(OLDEST_VALIDATED_POLICIES_VERSION "3.16.3")
+set(NEWEST_VALIDATED_POLICIES_VERSION "3.19.7")
+cmake_minimum_required(VERSION ${OLDEST_VALIDATED_POLICIES_VERSION}...${NEWEST_VALIDATED_POLICIES_VERSION} FATAL_ERROR)
+
+#-----------------------------------------------------------------------------
+# Enable C++14
+#-----------------------------------------------------------------------------
+if(NOT DEFINED CMAKE_CXX_STANDARD)
+    set(CMAKE_CXX_STANDARD 14)
+endif()
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+message(STATUS "${_msg} - C++${CMAKE_CXX_STANDARD}")
+if(NOT CMAKE_CXX_STANDARD MATCHES "^(14|17|20)$")
+  message(FATAL_ERROR "CMAKE_CXX_STANDARD must be set to 14, 17, or 20")
+endif()
+
 
 set(NIRAL_UTILITIES_MAJOR_VERSION 2)
 set(NIRAL_UTILITIES_MINOR_VERSION 0)
@@ -6,7 +35,9 @@ set(NIRAL_UTILITIES_PATCH_VERSION 7)
 set(NIRAL_UTILITIES_VERSION
   ${NIRAL_UTILITIES_MAJOR_VERSION}.${NIRAL_UTILITIES_MINOR_VERSION}.${NIRAL_UTILITIES_PATCH_VERSION})
 
-cmake_minimum_required(VERSION 3.5)
+project(NIRAL_UTILITIES 
+    VERSION ${NIRAL_UTILITIES_MAJOR_VERSION}.${NIRAL_UTILITIES_MINOR_VERSION}.${NIRAL_UTILITIES_PATCH_VERSION}
+    LANGUAGES CXX C)
 
 #-----------------------------------------------------------------------------
 set(CMAKE_MODULE_PATH
@@ -87,7 +118,7 @@ set(ITK_IO_MODULES_USED
   )
 
 if(NOT VTK_RENDERING_BACKEND)
-  set(VTK_RENDERING_BACKEND OpenGL)
+  set(VTK_RENDERING_BACKEND OpenGL2)
 endif()
 
 # Describe property
@@ -105,19 +136,7 @@ if( BUILD_TESTING )
   include(ExternalData)
 endif()
 
-find_package(ITK)
-
-if(ITK_VERSION)
-  string(REPLACE "." ";" VERSION_LIST ${ITK_VERSION})
-  list(GET VERSION_LIST 0 ITK_VERSION_MAJOR)
-  list(GET VERSION_LIST 1 ITK_VERSION_MINOR)
-  list(GET VERSION_LIST 2 ITK_VERSION_PATCH)
-
-  if(ITK_VERSION_MAJOR GREATER 4 OR ITK_VERSION_MAJOR EQUAL 4 AND ITK_VERSION_MINOR GREATER 12)
-    message(STATUS "USING compilation flag -std=c++11")
-    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FAGS} -std=c++11)
-  endif()
-endif()
+find_package(ITK 5.3 REQUIRED)
 
 setifempty(INSTALL_RUNTIME_DESTINATION bin)
 setifempty(INSTALL_LIBRARY_DESTINATION lib)
@@ -143,11 +162,6 @@ if(COMPILE_CONVERTITKFORMATS)
   add_subdirectory(convertITKformats)
 endif()
 
-option(COMPILE_DWI_NIFTINRRDCONVERSION "Compile DWI_NiftiNrrdConversion." ON)
-if(COMPILE_DWI_NIFTINRRDCONVERSION)
-  add_subdirectory(DWI_NiftiNrrdConversion)
-endif()
-
 option(COMPILE_POLYDATATRANSFORM "Compile PolydataTransform." ON)
 if(COMPILE_POLYDATATRANSFORM)
   add_subdirectory(PolydataTransform)
@@ -161,11 +175,6 @@ endif()
 option(COMPILE_MULTIATLASSEG "Compile MultiAtlasSeg." OFF)
 if(COMPILE_MULTIATLASSEG)
   add_subdirectory(MultiAtlasSeg)
-endif()
-
-option(COMPILE_DTITensorNormalization "Compile DTITensorNormalization." OFF)
-if(COMPILE_DTITensorNormalization)
-  add_subdirectory(DTITensorNormalization)
 endif()
 
 option(COMPILE_MAURERDISTANCETRANSFORM "Compile MaurerDistanceTransform." OFF)
@@ -190,14 +199,6 @@ niral_utilitiesExternalProject(
   )
 
 niral_utilitiesExternalProject(
-  ImageNoise
-  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/ImageNoise.git"
-  GIT_TAG "687531cc4ec659f93465a013ef2da153513e16db"
-  ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
-  DEPENDS SlicerExecutionModel ITK
-  )
-
-niral_utilitiesExternalProject(
   CombineDWIs
   GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/CombineDWIs.git"
   GIT_TAG "37d340b4b80a2b0735fbddcc450bf01d89b5b9bc"
@@ -211,14 +212,6 @@ niral_utilitiesExternalProject(
   GIT_TAG "e46bd5b7ca395ab7b290da621e329653287ac591"
   ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
   DEPENDS ITK
-  )
-
-niral_utilitiesExternalProject(
-  3D4DImageConversion
-  GIT_REPOSITORY "${git_protocol}://github.com/NIRALUser/3D4DImageConversion.git"
-  GIT_TAG "5a53a98fce967a77c74d8e554d7231dc4c0ba695"
-  ADDITIONAL_OPTIONS -DCMAKE_INSTALL_PREFIX:PATH=${NIRAL_UTILITIES_BINARY_DIR}
-  DEPENDS SlicerExecutionModel ITK
   )
 
 niral_utilitiesExternalProject(

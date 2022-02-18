@@ -18,7 +18,7 @@
 
 #include "QtDisclaimer.h"
 #include <qlabel.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 QtDisclaimer::QtDisclaimer( QWidget* parent,  const char* name, bool modal, WFlags fl )
     : QtDisclaimerGUI( parent, name, modal,  fl )

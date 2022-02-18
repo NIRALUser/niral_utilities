@@ -23,7 +23,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <stdio.h>
+#include <cstdio>
 #include <vector>
 #include <string>
 

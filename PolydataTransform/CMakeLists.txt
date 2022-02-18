@@ -1,17 +1,15 @@
-cmake_minimum_required(VERSION 3.5)
+project(polydatatransform)
 
-#project(polydatatransform)
-
-find_package(ITK REQUIRED)
+find_package(ITK 5.3 REQUIRED)
 include(${ITK_USE_FILE})
 
-find_package(VTK REQUIRED COMPONENTS
-  vtkCommonCore
-  vtkFiltersCore
-  vtkFiltersGeneral
-  vtkIOLegacy
-  vtkIOXML)
-include(${VTK_USE_FILE})
+find_package(VTK 9 REQUIRED COMPONENTS
+  CommonCore
+  FiltersCore
+  FiltersGeneral
+  IOLegacy
+  IOXML)
+# include(${VTK_USE_FILE})
 
 find_package(SlicerExecutionModel REQUIRED)
 include(${SlicerExecutionModel_USE_FILE})

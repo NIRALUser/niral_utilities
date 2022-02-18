@@ -11,11 +11,11 @@
 #ifndef __ARGIO_H__
 #define __ARGIO_H__
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include <ctype.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cerrno>
+#include <cstring>
+#include <cctype>
 
 
 //Copied from itkMacro.h (7a870297f818f32a22fe720b30577cc58ce91634)
@@ -24,23 +24,23 @@
 // In c++11 the override keyword allows you to explicity define that a function
 // is intended to override the base-class version.  This makes the code more
 // managable and fixes a set of common hard-to-find bugs.
-#define ITK_OVERRIDE override
+#define override override
 // In c++11 there is an explicit nullptr type that introduces a new keyword to
 // serve as a distinguished null pointer constant: nullptr. It is of type
 // nullptr_t, which is implicitly convertible and comparable to any pointer type
 // or pointer-to-member type. It is not implicitly convertible or comparable to
 // integral types, except for bool.
-#define ITK_NULLPTR  nullptr
+#define nullptr  nullptr
 // In C++11 the throw-list specification has been deprecated,
 // replaces with the noexcept specifier. Using this function
 // specification adds the run-time check that the method does not
 // throw, if it does throw then std::terminate will be called.
 // Use cautiously.
-#define ITK_NOEXCEPT noexcept
+#define noexcept noexcept
 #else
-#define ITK_OVERRIDE
-#define ITK_NULLPTR  NULL
-#define ITK_NOEXCEPT throw()
+#define override
+#define nullptr  NULL
+#define noexcept throw()
 #endif
 #endif
 
@@ -54,7 +54,7 @@ typedef char* charp ;
 
 inline float fatof( const char *str )
 {
-  return (float) atof( str ) ;
+  return (float) std::stod( str ) ;
 }
 
 // command line parsing
@@ -86,7 +86,7 @@ inline T ipGetArgument( const char **argv , const char *keystr ,
 
 inline charp ipGetStringArgument( const char **argv , const char keystr[] , const char defval[] )
 {
-  char *_defval = ( defval ? strdup( defval ) : ITK_NULLPTR ) ;
+  char *_defval = ( defval ? strdup( defval ) : nullptr ) ;
   for( int i = 1 ; argv[ i ] ; i++ )
   {
     if( !strcmp( argv[ i ] , keystr ) )
@@ -153,7 +153,7 @@ inline int ipGetIntArgument( const char **argv , const char *keystr , const int 
     {
       if( argv[ i + 1 ] )
       {
-        return atoi( argv[ i + 1 ] ) ;
+        return std::stoi( argv[ i + 1 ] ) ;
       }
       else
       {
@@ -195,7 +195,7 @@ inline double ipGetDoubleArgument( const char **argv , const char *keystr , cons
     {
       if( argv[ i + 1 ] )
       {
-        return atof( argv[ i + 1 ] ) ;
+        return std::stod( argv[ i + 1 ] ) ;
       }
       else
       {
@@ -268,8 +268,8 @@ inline int ipLineWordCount( const char *s )
 inline char *ipGetBaseName( const char *string )
 {
   unsigned int i ;
-  char *ret = ITK_NULLPTR ;
-  char *retp = ITK_NULLPTR ;
+  char *ret = nullptr ;
+  char *retp = nullptr ;
   if( !( ret = strdup( string ) ) )
   {
     fprintf( stderr , "Error: ipGetBaseName [%s, line %d]: strdup() failed:" ,
@@ -432,7 +432,7 @@ inline int ipExtractIntTokens( int *tokenval , const char *tokenstr , const int 
     {
       tokenp++ ; // skip separator
     }
-    tokenval[ i++ ] = atoi( tmp_token ) ;
+    tokenval[ i++ ] = std::stoi( tmp_token ) ;
   }
   delete [] tmp_token ;
   return i ;
@@ -504,7 +504,7 @@ inline int ipExtractDoubleTokens( double *tokenval , const char *tokenstr , cons
     {
       tokenp++ ; // skip separator
     }
-    tokenval[ i++ ] = atof( tmp_token ) ;
+    tokenval[ i++ ] = std::stod( tmp_token ) ;
   }
   delete [] tmp_token ;
   return i ;

@@ -104,7 +104,7 @@ int main( int argc, char *argv[] )
 	}
       if (( !strcmp ( "-numSpec", argv[i] ) ) )
 	{
-	  N = atoi(argv[i+1]);
+	  N = std::stoi(argv[i+1]);
 	}
     }
   }

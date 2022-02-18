@@ -1,6 +1,6 @@
 #include "Rotation3D.h"
 #define M_PI 3.14159265358
-#include <math.h>
+#include <cmath>
 
 Rotation3D::Rotation3D()
 {

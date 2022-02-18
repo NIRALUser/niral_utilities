@@ -115,7 +115,7 @@ int main( int argc, char* argv[] )
 
     if ( argc > 4 ) {
         if ( strchr (argv[4], 'm') != NULL ) {
-            t2mm_slice = atoi(argv[5]);
+            t2mm_slice = std::stoi(argv[5]);
             std::cout << "number of slices: " << t2mm_slice << std::endl;
         }
     }

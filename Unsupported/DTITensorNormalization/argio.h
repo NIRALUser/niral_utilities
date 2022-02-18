@@ -11,11 +11,11 @@
 #ifndef __ARGIO_H__
 #define __ARGIO_H__
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include <ctype.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cerrno>
+#include <cstring>
+#include <cctype>
 
 
 
@@ -25,7 +25,7 @@ const int ipMAXTOKLEN = 255; // max. length of a token
 typedef char* charp;
 
 inline float fatof(const char *str) {
-  return (float) atof(str);
+  return (float) std::stod(str);
 }
 
 // command line parsing
@@ -91,7 +91,7 @@ inline int ipGetIntArgument(const char **argv, const char *keystr, const int def
   //return ipGetArgument(argv, keystr, atoi, defval);{
   for (int i=1; argv[i]; i++)
     if (strstr(argv[i],keystr))
-      if (argv[i+1]) return atoi(argv[i+1]);
+      if (argv[i+1]) return std::stoi(argv[i+1]);
       else {
   fprintf(stderr,"Error: ipGetArgument: argument value of option \"%s\" is missing!\n", 
     argv[i]);
@@ -121,7 +121,7 @@ inline double ipGetDoubleArgument(const char **argv, const char *keystr, const d
   //return ipGetArgument(argv, keystr, atof, defval);
   for (int i=1; argv[i]; i++)
     if (strstr(argv[i],keystr))
-      if (argv[i+1]) return atof(argv[i+1]);
+      if (argv[i+1]) return std::stod(argv[i+1]);
       else {
   fprintf(stderr,"Error: ipGetArgument: argument value of option \"%s\" is missing!\n", 
     argv[i]);
@@ -281,7 +281,7 @@ inline int ipExtractIntTokens(int *tokenval, const char *tokenstr, const int n) 
      ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
       *(tmp_tokenp++) = *(tokenp++);
     if(*tokenp) tokenp++; // skip separator
-    tokenval[i++] = atoi(tmp_token);
+    tokenval[i++] = std::stoi(tmp_token);
   }
   
   delete [] tmp_token;
@@ -331,7 +331,7 @@ inline int ipExtractDoubleTokens(double *tokenval, const char *tokenstr, const i
      ((tmp_tokenp - tmp_token) < ipMAXTOKLEN)) 
       *(tmp_tokenp++) = *(tokenp++);
     if(*tokenp) tokenp++; // skip separator
-    tokenval[i++] = atof(tmp_token);
+    tokenval[i++] = std::stod(tmp_token);
   }
   
   delete [] tmp_token;

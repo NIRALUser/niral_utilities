@@ -1,8 +1,6 @@
-cmake_minimum_required(VERSION 3.5)
-
 project(NiftiNrrdConversion)
 
-find_package(ITK REQUIRED COMPONENTS
+find_package(ITK 5.3 REQUIRED COMPONENTS
   ITKCommon
   ITKIOImageBase
   ${ITK_IO_MODULES_USED}

@@ -1,8 +1,6 @@
 project(ImageStat)
 
-cmake_minimum_required(VERSION 3.5)
-
-find_package(ITK REQUIRED COMPONENTS
+find_package(ITK 5.3 REQUIRED COMPONENTS
   ITKCommon
   ITKDistanceMap
   ITKIOImageBase

@@ -1,8 +1,6 @@
 project(TextureBioMarkerTool)
 
-cmake_minimum_required(VERSION 3.5)
-
-find_package(ITK COMPONENTS
+find_package(ITK 5.3 COMPONENTS
   ITKAnisotropicSmoothing
   ITKBinaryMathematicalMorphology
   ITKCommon

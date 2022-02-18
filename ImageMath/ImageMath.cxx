@@ -44,11 +44,11 @@ extern "C" {
 
 using namespace std;
 
-#include <string.h>
+#include <cstring>
 #include <sys/types.h>
-#include <stdlib.h>    // for exit, system
-#include <math.h>
-#include <errno.h>
+#include <cstdlib>    // for exit, system
+#include <cmath>
+#include <cerrno>
 
 #include <itkImage.h>
 #include <itkImageFileReader.h>

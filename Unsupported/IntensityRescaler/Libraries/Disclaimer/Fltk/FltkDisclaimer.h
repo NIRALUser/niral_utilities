@@ -26,7 +26,7 @@
 #include "FltkDisclaimerGUI.h"
 #include "Disclaimer.h"
 #include <vector>
-#include <string.h>
+#include <cstring>
 
 class FltkDisclaimer : public FltkDisclaimerGUI, public Disclaimer
 {

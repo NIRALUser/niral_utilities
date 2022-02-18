@@ -1,8 +1,6 @@
 project(MultiAtlasSeg)
 
-cmake_minimum_required(VERSION 3.5)
-
-find_package(ITK REQUIRED)
+find_package(ITK 5.3 REQUIRED)
 include(${ITK_USE_FILE})
 
 list( FIND ITK_MODULES_ENABLED ITKReview position)
